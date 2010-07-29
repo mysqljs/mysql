@@ -31,4 +31,5 @@ node-mysql is licensed under the MIT license.
 * [Joyent](http://www.joyent.com/)
 
 This is a big effort. If your company could benefit from a top-notch MySQL driver
-for node, a small sponsorship payment would be greatly appreciated.
+for node, a small sponsorship payment would be greatly appreciated. Contact
+me at [felix@debuggable.com](mailto:felix@debuggable.com) for details.
