@@ -1,4 +1,4 @@
-# MySQL
+# node-mysql
 
 ## Purpose
 
@@ -12,9 +12,19 @@ A node.js module implementing the
 * Portability: Should run anywhere node runs
 * Completeness: The goal is to support the full MySQL API.
 
-## Current state
+## Todo
 
-Not ready for anything yet.
+At this point this module is not ready for anything yet.
+
+* Authentication
+* High level API
+* Queries
+* Prepared Statements
+* ...
+
+## License
+
+node-mysql is licensed under the MIT license.
 
 ## Sponsors
 
@@ -22,11 +32,3 @@ Not ready for anything yet.
 
 This is a big effort. If your company could benefit from a top-notch MySQL driver
 for node, a small sponsorship payment would be greatly appreciated.
-
-## Todo
-
-* Authentication
-* High level API
-* Queries
-* Prepared Statements
-* ...
