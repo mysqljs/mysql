@@ -20,6 +20,8 @@ At this point this module is not ready for anything yet.
 * High level API
 * Queries
 * Prepared Statements
+* Test using no Password
+* Charsets handling
 * ...
 
 ## License
