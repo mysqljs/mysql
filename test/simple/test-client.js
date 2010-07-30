@@ -127,7 +127,7 @@ test(function connect() {
 });
 
 test(function _sendAuthenticationPacket() {
-  var GREETING = {scrambleBuf: new Buffer(21), number: 1}
+  var GREETING = {scrambleBuffer: new Buffer(20), number: 1}
     , TOKEN = new Buffer(8)
     , PACKET;
 
@@ -137,7 +137,7 @@ test(function _sendAuthenticationPacket() {
 
   gently.expect(HIJACKED['./auth'], 'token', function(password, scramble) {
     assert.strictEqual(password, client.password);
-    assert.strictEqual(scramble, GREETING.scrambleBuf);
+    assert.strictEqual(scramble, GREETING.scrambleBuffer);
     return TOKEN;
   });
 

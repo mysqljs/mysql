@@ -15,7 +15,7 @@ test(function sha1() {
         , 0, 110, 143, 145, 158
         , 12, 81, 92, 102, 219
         , 186, 57, 130, 247, 133
-      ] )
+      ] ).toString('binary')
     );
 });
 
@@ -24,7 +24,7 @@ test(function xor() {
     , b = new Buffer([220, 170])         // 11011100 10101010
     , expected = new Buffer([118, 118]); // 01110110 01110110
 
-  assert.deepEqual(auth.xor(a, b), expected);
+  assert.deepEqual(auth.xor(a.toString('binary'), b.toString('binary')), expected);
 });
 
 test(function token() {

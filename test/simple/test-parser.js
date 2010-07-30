@@ -60,13 +60,13 @@ test(function write() {
     assert.equal(packet.threadId, Math.pow(256, 3));
 
     parser.write(new Buffer([1]));
-    assert.equal(packet.scrambleBuff[0], 1);
-    assert.equal(packet.scrambleBuff.length, 8 + 13);
+    assert.equal(packet.scrambleBuffer[0], 1);
+    assert.equal(packet.scrambleBuffer.length, 8 + 12);
     assert.equal(parser.state, Parser.GREETING_SCRAMBLE_BUFF_1);
 
     parser.write(new Buffer([2, 3, 4, 5, 6, 7, 8]));
     assert.deepEqual
-      ( packet.scrambleBuff.slice(0, 8)
+      ( packet.scrambleBuffer.slice(0, 8)
       , new Buffer([1, 2, 3, 4, 5, 6, 7, 8])
       );
     assert.equal(parser.state, Parser.GREETING_SCRAMBLE_BUFF_1);
@@ -90,22 +90,22 @@ test(function write() {
     assert.equal(parser.state, Parser.GREETING_FILLER_2);
 
     parser.write(new Buffer([9]));
-    assert.equal(packet.scrambleBuff[8], 9);
+    assert.equal(packet.scrambleBuffer[8], 9);
     assert.equal(parser.state, Parser.GREETING_SCRAMBLE_BUFF_2);
 
     gently.expect(parser, 'emit', function(event, val) {
       assert.equal(event, 'packet');
-      assert.ok(!('index' in packet));
+      assert.ok(!('index' in val));
       assert.strictEqual(val, packet);
       assert.equal(parser.state, Parser.IDLE);
       assert.equal(parser.greeted, true);
       assert.strictEqual(parser.packet, null);
     });
 
-    parser.write(new Buffer([10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21]));
+    parser.write(new Buffer([10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 0]));
     assert.deepEqual
-      ( packet.scrambleBuff.slice(9, 21)
-      , new Buffer([10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21])
+      ( packet.scrambleBuffer.slice(9, 20)
+      , new Buffer([10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20])
       );
   })();
 
