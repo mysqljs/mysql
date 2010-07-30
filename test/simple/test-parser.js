@@ -42,12 +42,12 @@ test(function write() {
     parser.write(new Buffer([42]));
     assert.strictEqual(packet.number, 42);
     assert.strictEqual(packet.number, 42);
-    assert.equal(packet.type, Parser.GREETING_PACKET);
     assert.equal(parser.state, Parser.GREETING_PROTOCOL_VERSION);
   })();
 
-  (function testGreeting() {
+  (function testGreetingPacket() {
     parser.write(new Buffer([15]));
+    assert.equal(packet.type, Parser.GREETING_PACKET);
     assert.equal(packet.protocolVersion, 15);
     assert.equal(parser.state, Parser.GREETING_SERVER_VERSION);
 
@@ -99,6 +99,7 @@ test(function write() {
       assert.strictEqual(val, packet);
       assert.equal(parser.state, Parser.IDLE);
       assert.equal(parser.greeted, true);
+      assert.strictEqual(parser.packet, null);
     });
 
     parser.write(new Buffer([10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21]));
@@ -106,5 +107,44 @@ test(function write() {
       ( packet.scrambleBuff.slice(9, 21)
       , new Buffer([10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21])
       );
+  })();
+
+  (function testErrorPacket() {
+    parser.state = Parser.IDLE;
+    parser.greeted = true;
+
+    parser.write(new Buffer([12, 0, 0, 1]));
+    assert.equal(parser.state, Parser.FIELD_COUNT);
+    var packet = parser.packet;
+
+    parser.write(new Buffer([0xff]));
+    assert.equal(packet.type, Parser.ERROR_PACKET);
+    assert.equal(parser.state, Parser.ERROR_NUMBER);
+    assert.strictEqual(packet.errorNumber, 0);
+
+    parser.write(new Buffer([5, 2]));
+    assert.equal(packet.errorNumber, Math.pow(256, 0) * 5 + Math.pow(256, 1) * 2);
+
+    parser.write(new Buffer('#'));
+    assert.equal(packet.sqlStateMarker, '#');
+    assert.equal(parser.state, Parser.ERROR_SQL_STATE);
+
+    parser.write(new Buffer('abcde'));
+    assert.equal(packet.sqlState, 'abcde');
+
+    parser.write(new Buffer('er'));
+    assert.equal(parser.state, Parser.ERROR_MESSAGE);
+    assert.equal(packet.errorMessage, 'er');
+
+    gently.expect(parser, 'emit', function(event, val) {
+      assert.equal(event, 'packet');
+      assert.ok(!('index' in val));
+      assert.strictEqual(val, packet);
+      assert.equal(packet.errorMessage, 'err');
+      assert.equal(parser.state, Parser.IDLE);
+      assert.strictEqual(parser.packet, null);
+    });
+
+    parser.write(new Buffer('r'));
   })();
 });

@@ -25,11 +25,14 @@ test(function constructor() {
       assert.strictEqual(client.user, null);
       assert.strictEqual(client.password, null);
       assert.strictEqual(client.database, null);
-      assert.strictEqual(client.connection, null);
+
       assert.strictEqual(client.flags, Client.defaultFlags);
       assert.strictEqual(client.maxPacketSize, 0x01000000);
       assert.strictEqual(client.charsetNumber, 8);
-      assert.strictEqual(client.parser, null);
+
+      assert.strictEqual(client._connection, null);
+      assert.strictEqual(client._parser, null);
+      assert.strictEqual(client._callback, null);
   })();
 
   (function testMixin() {
@@ -76,10 +79,12 @@ test(function connect() {
     });
   });
 
-  client.connect();
+  var CB = function() {};
+  client.connect(CB);
 
-  assert.strictEqual(client.connection, CONNECTION);
-  assert.strictEqual(client.parser, PARSER);
+  assert.strictEqual(client._connection, CONNECTION);
+  assert.strictEqual(client._parser, PARSER);
+  assert.strictEqual(client._callback, CB);
 
   (function testConnectionError() {
     var ERR = new Error('ouch');
@@ -109,10 +114,20 @@ test(function connect() {
 
     onParser.packet(PACKET);
   })();
+
+  (function testOnParserErrorPacket() {
+    var PACKET = {type: Parser.ERROR_PACKET};
+
+    gently.expect(client, '_error', function(packet) {
+      assert.strictEqual(packet, PACKET);
+    });
+
+    onParser.packet(PACKET);
+  })();
 });
 
 test(function _sendAuthenticationPacket() {
-  var GREETING = {scrambleBuf: new Buffer(21)}
+  var GREETING = {scrambleBuf: new Buffer(21), number: 1}
     , TOKEN = new Buffer(8)
     , PACKET;
 
@@ -126,7 +141,7 @@ test(function _sendAuthenticationPacket() {
     return TOKEN;
   });
 
-  gently.expect(OutgoingPacketStub, 'new', function(size) {
+  gently.expect(OutgoingPacketStub, 'new', function(size, number) {
     assert.equal
       ( size
       ,   4 + 4 + 1 + 23
@@ -134,6 +149,7 @@ test(function _sendAuthenticationPacket() {
         + TOKEN.length + 1
         + client.database.length + 1
       );
+    assert.equal(number, GREETING.number + 1);
     PACKET = this;
 
     gently.expect(PACKET, 'writeNumber', function(bytes, number) {
@@ -166,7 +182,46 @@ test(function _sendAuthenticationPacket() {
     gently.expect(PACKET, 'writeNullTerminated', function(database) {
       assert.strictEqual(database, client.database);
     });
+
+    gently.expect(client, 'write', function(packet) {
+      assert.strictEqual(packet, PACKET);
+    });
   });
 
   client._sendAuthenticationPacket(GREETING);
+});
+
+test(function write() {
+  var PACKET = {buffer: []}
+    , CONNECTION = client._connection = {};
+
+  gently.expect(CONNECTION, 'write', function(buffer) {
+    assert.strictEqual(buffer, PACKET.buffer);
+  });
+
+  client.write(PACKET);
+});
+
+test(function _error() {
+  var packet = {errorMessage: 'Super', errorNumber: 127};
+
+  (function testNoCallback() {
+    gently.expect(client, 'emit', function(event, err) {
+      assert.equal(event, 'error');
+      assert.equal(err.message, packet.errorMessage);
+      assert.equal(err.number, packet.errorNumber);
+    });
+
+    client._error(packet);
+  })();
+
+  (function testCallback() {
+    client._callback = function() {};
+
+    gently.expect(client, '_callback', function(err) {
+      assert.equal(err.message, packet.errorMessage);
+    });
+
+    client._error(packet);
+  })();
 });
