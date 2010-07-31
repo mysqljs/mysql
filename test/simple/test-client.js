@@ -30,6 +30,7 @@ test(function constructor() {
       assert.strictEqual(client.maxPacketSize, 0x01000000);
       assert.strictEqual(client.charsetNumber, 8);
 
+      assert.deepEqual(client._queue, []);
       assert.strictEqual(client._connection, null);
       assert.strictEqual(client._parser, null);
       assert.strictEqual(client._callback, null);
@@ -108,7 +109,7 @@ test(function connect() {
   (function testOnParserGreetingPacket() {
     var PACKET = {type: Parser.GREETING_PACKET};
 
-    gently.expect(client, '_sendAuthenticationPacket', function(packet) {
+    gently.expect(client, '_greetingPacket', function(packet) {
       assert.strictEqual(packet, PACKET);
     });
 
@@ -118,15 +119,26 @@ test(function connect() {
   (function testOnParserErrorPacket() {
     var PACKET = {type: Parser.ERROR_PACKET};
 
-    gently.expect(client, '_error', function(packet) {
+    gently.expect(client, '_errorPacket', function(packet) {
       assert.strictEqual(packet, PACKET);
     });
 
     onParser.packet(PACKET);
   })();
+
+  (function testOnParserOkPacket() {
+    var PACKET = {type: Parser.OK_PACKET};
+
+    gently.expect(client, '_okPacket', function(packet) {
+      assert.strictEqual(packet, PACKET);
+    });
+
+    onParser.packet(PACKET);
+
+  })();
 });
 
-test(function _sendAuthenticationPacket() {
+test(function _greetingPacket() {
   var GREETING = {scrambleBuffer: new Buffer(20), number: 1}
     , TOKEN = new Buffer(8)
     , PACKET;
@@ -188,7 +200,7 @@ test(function _sendAuthenticationPacket() {
     });
   });
 
-  client._sendAuthenticationPacket(GREETING);
+  client._greetingPacket(GREETING);
 });
 
 test(function write() {
@@ -202,26 +214,63 @@ test(function write() {
   client.write(PACKET);
 });
 
-test(function _error() {
+test(function _errorPacket() {
   var packet = {errorMessage: 'Super', errorNumber: 127};
 
-  (function testNoCallback() {
+  gently.expect(client, '_dequeue', function(err) {
+    assert.ok(err instanceof Error);
+    assert.equal(err.message, packet.errorMessage);
+    assert.equal(err.number, packet.errorNumber);
+  });
+  
+  client._errorPacket(packet);
+});
+
+test(function _okPacket() {
+  var packet =
+    { affectedRows: 127
+    , insertId: 23
+    , serverStatus: 2
+    , message: 'hello world\0\0'
+    };
+
+  gently.expect(client, '_dequeue', function(err, result) {
+    assert.strictEqual(err, null);
+    packet.message = 'hello world';
+    assert.notStrictEqual(result, packet);
+    assert.deepEqual(result, packet);
+  });
+
+  client._okPacket(packet);
+});
+
+test(function _dequeue() {
+  (function testErrorWithCb() {
+    var ERR = new Error('oh no!');
+    client._callback = gently.expect(function errCb(err) {
+      assert.strictEqual(err, ERR);
+    });
+
+    client._dequeue(ERR);
+  })();
+
+  (function testErrWithoutCb() {
+    var ERR = new Error('oh no!');
+    client._callback = null;
+
     gently.expect(client, 'emit', function(event, err) {
       assert.equal(event, 'error');
-      assert.equal(err.message, packet.errorMessage);
-      assert.equal(err.number, packet.errorNumber);
+      assert.strictEqual(err, ERR);
     });
 
-    client._error(packet);
+    client._dequeue(ERR);
   })();
+});
 
-  (function testCallback() {
-    client._callback = function() {};
+test(function end() {
+  client._connection = {};
 
-    gently.expect(client, '_callback', function(err) {
-      assert.equal(err.message, packet.errorMessage);
-    });
+  gently.expect(client._connection, 'end');
 
-    client._error(packet);
-  })();
+  client.end();
 });
