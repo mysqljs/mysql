@@ -111,7 +111,6 @@ test(function write() {
 
   (function testErrorPacket() {
     parser.state = Parser.IDLE;
-    parser.greeted = true;
 
     parser.write(new Buffer([12, 0, 0, 1]));
     assert.equal(parser.state, Parser.FIELD_COUNT);
@@ -146,5 +145,36 @@ test(function write() {
     });
 
     parser.write(new Buffer('r'));
+  })();
+
+  (function testOkPacket() {
+    parser.state = Parser.IDLE;
+
+    parser.write(new Buffer([13, 0, 0, 1]));
+    var packet = parser.packet;
+
+    parser.write(new Buffer([0x00]));
+    assert.equal(packet.type, Parser.OK_PACKET);
+    assert.equal(parser.state, Parser.AFFECTED_ROWS);
+
+    parser.write(new Buffer([252, 17, 23]));
+    assert.equal(packet.affectedRows, Math.pow(256, 0) * 17 + Math.pow(256, 1) * 23);
+
+    parser.write(new Buffer([240]));
+    assert.equal(packet.insertId, 240);
+
+    parser.write(new Buffer([42, 113]));
+    assert.equal(packet.serverStatus, Math.pow(256, 0) * 42 + Math.pow(256, 1) * 113);
+
+    gently.expect(parser, 'emit', function(event, val) {
+      assert.equal(event, 'packet');
+      assert.ok(!('index' in val));
+      assert.strictEqual(val, packet);
+      assert.equal(packet.message, 'abcdef');
+      assert.equal(parser.state, Parser.IDLE);
+      assert.strictEqual(parser.packet, null);
+    });
+
+    parser.write(new Buffer('abcdef'));
   })();
 });

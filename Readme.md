@@ -22,6 +22,7 @@ At this point this module is not ready for anything yet.
 * Prepared Statements
 * Test using no Password
 * Charsets handling
+* Import Error code constants
 * ...
 
 ## License
