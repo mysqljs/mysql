@@ -2,12 +2,13 @@ require('../common');
 var StreamStub = GENTLY.stub('net', 'Stream')
   , ParserStub = GENTLY.stub('./parser')
   , OutgoingPacketStub = GENTLY.stub('./outgoing_packet')
-  , Parser = require('mysql/parser')
-  , Client = require('mysql/client');
+  , Parser = require('mysql/parser');
 
 for (var k in Parser) {
   ParserStub[k] = Parser[k];
 }
+
+var Client = require('mysql/client');
 
 function test(test) {
   client = new Client();
@@ -109,39 +110,18 @@ test(function connect() {
     onConnection.data(BUFFER );
   })();
 
-  (function testOnParserGreetingPacket() {
-    var PACKET = {type: Parser.GREETING_PACKET};
-
-    gently.expect(client, '_greetingPacket', function(packet) {
-      assert.strictEqual(packet, PACKET);
-    });
-
-    onParser.packet(PACKET);
-  })();
-
-  (function testOnParserErrorPacket() {
+  (function testPacketDispatch() {
     var PACKET = {type: Parser.ERROR_PACKET};
 
-    gently.expect(client, '_errorPacket', function(packet) {
+    client[Parser.ERROR_PACKET] = gently.expect(function(packet) {
       assert.strictEqual(packet, PACKET);
     });
 
     onParser.packet(PACKET);
-  })();
-
-  (function testOnParserOkPacket() {
-    var PACKET = {type: Parser.OK_PACKET};
-
-    gently.expect(client, '_okPacket', function(packet) {
-      assert.strictEqual(packet, PACKET);
-    });
-
-    onParser.packet(PACKET);
-
   })();
 });
 
-test(function _greetingPacket() {
+test(function GREETING_PACKET() {
   var GREETING = {scrambleBuffer: new Buffer(20), number: 1}
     , TOKEN = new Buffer(8)
     , PACKET;
@@ -203,7 +183,7 @@ test(function _greetingPacket() {
     });
   });
 
-  client._greetingPacket(GREETING);
+  client[Parser.GREETING_PACKET](GREETING);
 });
 
 test(function write() {
@@ -226,7 +206,7 @@ test(function _errorPacket() {
     assert.equal(err.number, packet.errorNumber);
   });
   
-  client._errorPacket(packet);
+  client[Parser.ERROR_PACKET](packet);
 });
 
 test(function _okPacket() {
@@ -244,7 +224,7 @@ test(function _okPacket() {
     assert.deepEqual(result, packet);
   });
 
-  client._okPacket(packet);
+  client[Parser.OK_PACKET](packet);
 });
 
 test(function _enqueue() {
