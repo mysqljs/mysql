@@ -33,6 +33,26 @@ client.query
       if (err) {
         throw err;
       }
+    })
+  );
+
+client.query
+  ( 'INSERT INTO '+TEST_TABLE+' '
+  + 'SET title = ?, text = ?'
+  , ['super cool', 'this is a nice long text']
+  , gently.expect(function insertCb(err) {
+      if (err) {
+        throw err;
+      }
+    })
+  );
+
+client.query
+  ( 'SELECT * FROM '+TEST_TABLE
+  , gently.expect(function selectCb(err) {
+      if (err) {
+        throw err;
+      }
 
       client.end();
     })
