@@ -282,8 +282,16 @@ test(function _dequeue() {
 
 test(function query() {
   var PACKET
-    , SQL = 'SELECT über'
+    , SQL = 'SELECT * FROM über WHERE name = ?'
+    , FORMATED_SQL = "SELECT * FROM über WHERE name = 'nice'"
+    , PARAMS = ['nice']
     , CB = function() {};
+
+  gently.expect(client, 'format', function(sql, params) {
+    assert.strictEqual(sql, SQL);
+    assert.strictEqual(params, PARAMS);
+    return FORMATED_SQL;
+  });
 
   gently.expect(client, '_enqueue', function(fn, cb) {
     assert.strictEqual(cb, CB);
@@ -293,7 +301,7 @@ test(function query() {
   gently.expect(OutgoingPacketStub, 'new', function(size) {
     PACKET = this;
 
-    assert.equal(size, Buffer.byteLength(SQL, 'utf-8') + 1);
+    assert.equal(size, Buffer.byteLength(FORMATED_SQL, 'utf-8') + 1);
 
     gently.expect(PACKET, 'writeNumber', function(bytes, number) {
       assert.strictEqual(bytes, 1);
@@ -301,7 +309,7 @@ test(function query() {
     });
 
     gently.expect(PACKET, 'write', function(str, encoding) {
-      assert.equal(str, SQL);
+      assert.equal(str, FORMATED_SQL);
       assert.equal(encoding, 'utf-8');
     });
 
@@ -310,7 +318,47 @@ test(function query() {
     });
   });
 
-  client.query(SQL, CB);
+  client.query(SQL, PARAMS, CB);
+
+  (function testNoParams() {
+    gently.expect(client, '_enqueue', function(fn, cb) {
+      assert.strictEqual(cb, CB);
+    });
+
+    client.query(SQL, CB);
+  })();
+});
+
+test(function format() {
+  var sql = client.format('? + ? = ?', [1, 2, 'great']);
+  assert.equal(sql, '1 + 2 = \'great\'');
+
+  assert.throws(function() {
+    var sql = client.format('? + ? = ?', [1, 2]);
+  });
+
+  assert.throws(function() {
+    var sql = client.format('? + ? = ?', [1, 2, 3, 4]);
+  });
+});
+
+test(function escape() {
+  assert.equal(client.escape(undefined), 'NULL');
+  assert.equal(client.escape(null), 'NULL');
+  assert.equal(client.escape(false), 'false');
+  assert.equal(client.escape(true), 'true');
+  assert.equal(client.escape(5), '5');
+
+  assert.equal(client.escape('Super'), "'Super'");
+  assert.equal(client.escape('Sup\0er'), "'Sup\\0er'");
+  assert.equal(client.escape('Sup\ber'), "'Sup\\ber'");
+  assert.equal(client.escape('Sup\ner'), "'Sup\\ner'");
+  assert.equal(client.escape('Sup\rer'), "'Sup\\rer'");
+  assert.equal(client.escape('Sup\ter'), "'Sup\\ter'");
+  assert.equal(client.escape('Sup\\er'), "'Sup\\\\er'");
+  assert.equal(client.escape('Sup\u001aer'), "'Sup\\Zer'");
+  assert.equal(client.escape('Sup\'er'), "'Sup\\'er'");
+  assert.equal(client.escape('Sup"er'), "'Sup\\\"er'");
 });
 
 test(function end() {
