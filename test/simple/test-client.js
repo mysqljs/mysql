@@ -33,7 +33,6 @@ test(function constructor() {
       assert.deepEqual(client._queue, []);
       assert.strictEqual(client._connection, null);
       assert.strictEqual(client._parser, null);
-      assert.strictEqual(client._callback, null);
   })();
 
   (function testMixin() {
@@ -51,7 +50,13 @@ test(function connect() {
   var CONNECTION
     , PARSER
     , onConnection = {}
-    , onParser = {};
+    , onParser = {}
+    , CB = function() {};
+
+  gently.expect(client, '_enqueue', function(task, cb) {
+    assert.strictEqual(cb, CB);
+    task();
+  });
 
   gently.expect(StreamStub, 'new', function() {
     CONNECTION = this;
@@ -80,12 +85,10 @@ test(function connect() {
     });
   });
 
-  var CB = function() {};
   client.connect(CB);
 
   assert.strictEqual(client._connection, CONNECTION);
   assert.strictEqual(client._parser, PARSER);
-  assert.strictEqual(client._callback, CB);
 
   (function testConnectionError() {
     var ERR = new Error('ouch');
@@ -244,27 +247,90 @@ test(function _okPacket() {
   client._okPacket(packet);
 });
 
+test(function _enqueue() {
+  var FN = gently.expect(function fn() {
+    
+      })
+    , CB = function() {
+      
+      };
+
+  client._enqueue(FN, CB);
+  assert.equal(client._queue.length, 1);
+  assert.strictEqual(client._queue[0].fn, FN);
+  assert.strictEqual(client._queue[0].cb, CB);
+
+  // Make sure fn is only called once
+  client._enqueue(FN, CB);
+  assert.equal(client._queue.length, 2);
+  assert.strictEqual(client._queue[1].fn, FN);
+  assert.strictEqual(client._queue[1].cb, CB);
+});
+
 test(function _dequeue() {
   (function testErrorWithCb() {
-    var ERR = new Error('oh no!');
-    client._callback = gently.expect(function errCb(err) {
-      assert.strictEqual(err, ERR);
-    });
+    var ERR = new Error('oh no!')
+      , CB = gently.expect(function cb(err) {
+          assert.strictEqual(err, ERR);
+        });
 
+    client._queue = [{cb: CB}];  
     client._dequeue(ERR);
+    assert.equal(client._queue.length, 0);
   })();
 
   (function testErrWithoutCb() {
     var ERR = new Error('oh no!');
-    client._callback = null;
-
+    client._queue = [{}];
+  
     gently.expect(client, 'emit', function(event, err) {
       assert.equal(event, 'error');
       assert.strictEqual(err, ERR);
     });
-
+  
     client._dequeue(ERR);
   })();
+
+  (function testExecuteNext() {
+    var FN = gently.expect(function fn() {});
+    client._queue = [{}, {fn: FN}];
+
+    client._dequeue();
+    assert.equal(client._queue.length, 1);
+  })();
+});
+
+test(function query() {
+  var PACKET
+    , SQL = 'SELECT über'
+    , CB = function() {};
+
+  gently.expect(client, '_enqueue', function(fn, cb) {
+    assert.strictEqual(cb, CB);
+    fn();
+  });
+
+  gently.expect(OutgoingPacketStub, 'new', function(size) {
+    PACKET = this;
+
+    assert.equal(size, Buffer.byteLength(SQL, 'utf-8') + 1);
+
+    gently.expect(PACKET, 'writeNumber', function(bytes, number) {
+      assert.strictEqual(bytes, 1);
+      assert.strictEqual(number, Client.COM_QUERY);
+    });
+
+    gently.expect(PACKET, 'write', function(str, encoding) {
+      assert.equal(str, SQL);
+      assert.equal(encoding, 'utf-8');
+    });
+
+    gently.expect(client, 'write', function(packet) {
+      assert.strictEqual(packet, PACKET);
+    });
+  });
+
+  client.query(SQL, CB);
 });
 
 test(function end() {
