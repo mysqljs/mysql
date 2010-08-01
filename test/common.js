@@ -11,6 +11,8 @@ global.TEST_CONFIG =
   , database: 'node_mysql_test'
   };
 
+global.TEST_TABLE = 'posts';
+
 global.Gently = require('gently');
 global.assert = require('assert');
 global.p = function(val) {
