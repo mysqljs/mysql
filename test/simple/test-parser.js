@@ -12,7 +12,7 @@ function test(test) {
 }
 
 test(function constructor() {
-  assert.strictEqual(parser.state, Parser.IDLE);
+  assert.strictEqual(parser.state, Parser.PACKET_LENGTH);
   assert.strictEqual(parser.packet, null);
   assert.strictEqual(parser.greeted, false);
   assert.ok(parser instanceof EventEmitter);
@@ -21,7 +21,7 @@ test(function constructor() {
 test(function write() {
   var packet;
   (function testPacketLength() {
-    var LENGTH = 54;
+    var LENGTH = 56;
     parser.write(new Buffer([LENGTH]));
 
     assert.equal(parser.state, Parser.PACKET_LENGTH);
@@ -70,7 +70,7 @@ test(function write() {
       packet.scrambleBuffer.slice(0, 8),
       new Buffer([1, 2, 3, 4, 5, 6, 7, 8])
     );
-    assert.equal(parser.state, Parser.GREETING_SCRAMBLE_BUFF_1);
+    assert.equal(parser.state, Parser.GREETING_FILLER_1);
 
     parser.write(new Buffer([0]));
     assert.equal(parser.state, Parser.GREETING_SERVER_CAPABILITIES);
@@ -88,7 +88,7 @@ test(function write() {
     parser.write(new Buffer([0]));
     assert.equal(parser.state, Parser.GREETING_FILLER_2);
     parser.write(new Buffer(12));
-    assert.equal(parser.state, Parser.GREETING_FILLER_2);
+    assert.equal(parser.state, Parser.GREETING_SCRAMBLE_BUFF_2);
 
     parser.write(new Buffer([9]));
     assert.equal(packet.scrambleBuffer[8], 9);
@@ -98,21 +98,19 @@ test(function write() {
       assert.equal(event, 'packet');
       assert.ok(!('index' in val));
       assert.strictEqual(val, packet);
-      assert.equal(parser.state, Parser.IDLE);
+      assert.equal(parser.state, Parser.PACKET_LENGTH);
       assert.equal(parser.greeted, true);
-      assert.strictEqual(parser.packet, null);
     });
 
-    parser.write(new Buffer([10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 0]));
+    parser.write(new Buffer([10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 0]));
     assert.deepEqual(
       packet.scrambleBuffer.slice(9, 20),
       new Buffer([10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20])
     );
+    assert.strictEqual(parser.packet, null);
   })();
 
   (function testErrorPacket() {
-    parser.state = Parser.IDLE;
-
     parser.write(new Buffer([12, 0, 0, 1]));
     assert.equal(parser.state, Parser.FIELD_COUNT);
     var packet = parser.packet;
@@ -120,7 +118,6 @@ test(function write() {
     parser.write(new Buffer([0xff]));
     assert.equal(packet.type, Parser.ERROR_PACKET);
     assert.equal(parser.state, Parser.ERROR_NUMBER);
-    assert.strictEqual(packet.errorNumber, 0);
 
     parser.write(new Buffer([5, 2]));
     assert.equal(packet.errorNumber, Math.pow(256, 0) * 5 + Math.pow(256, 1) * 2);
@@ -145,7 +142,7 @@ test(function write() {
   })();
 
   (function testOkPacket() {
-    parser.state = Parser.IDLE;
+    parser.state = Parser.PACKET_LENGTH;
 
     parser.write(new Buffer([13, 0, 0, 1]));
     var packet = parser.packet;
@@ -172,7 +169,7 @@ test(function write() {
   })();
 
   (function testResultHeaderPacket() {
-    parser.state = Parser.IDLE;
+    parser.state = Parser.PACKET_LENGTH;
 
     parser.write(new Buffer([1, 0, 0, 1]));
     var packet = parser.packet;
@@ -187,7 +184,7 @@ test(function write() {
   })();
 
   (function testResultHeaderPacketWithExtra() {
-    parser.state = Parser.IDLE;
+    parser.state = Parser.PACKET_LENGTH;
 
     parser.write(new Buffer([2, 0, 0, 1]));
     var packet = parser.packet;
