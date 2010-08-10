@@ -2,6 +2,7 @@ require('../common');
 var StreamStub = GENTLY.stub('net', 'Stream')
   , ParserStub = GENTLY.stub('./parser')
   , OutgoingPacketStub = GENTLY.stub('./outgoing_packet')
+  , ResultStreamStub = GENTLY.stub('./result_stream')
   , Parser = require('mysql/parser');
 
 for (var k in Parser) {
@@ -205,7 +206,7 @@ test(function _errorPacket() {
     assert.equal(err.message, packet.errorMessage);
     assert.equal(err.number, packet.errorNumber);
   });
-  
+
   client[Parser.ERROR_PACKET](packet);
 });
 
@@ -229,22 +230,22 @@ test(function _okPacket() {
 
 test(function _enqueue() {
   var FN = gently.expect(function fn() {
-    
+
       })
     , CB = function() {
-      
+
       };
 
   client._enqueue(FN, CB);
   assert.equal(client._queue.length, 1);
   assert.strictEqual(client._queue[0].fn, FN);
-  assert.strictEqual(client._queue[0].cb, CB);
+  assert.strictEqual(client._queue[0].delegate, CB);
 
   // Make sure fn is only called once
   client._enqueue(FN, CB);
   assert.equal(client._queue.length, 2);
   assert.strictEqual(client._queue[1].fn, FN);
-  assert.strictEqual(client._queue[1].cb, CB);
+  assert.strictEqual(client._queue[1].delegate, CB);
 });
 
 test(function _dequeue() {
@@ -254,7 +255,7 @@ test(function _dequeue() {
           assert.strictEqual(err, ERR);
         });
 
-    client._queue = [{cb: CB}];  
+    client._queue = [{delegate: CB}];
     client._dequeue(ERR);
     assert.equal(client._queue.length, 0);
   })();
@@ -262,12 +263,12 @@ test(function _dequeue() {
   (function testErrWithoutCb() {
     var ERR = new Error('oh no!');
     client._queue = [{}];
-  
+
     gently.expect(client, 'emit', function(event, err) {
       assert.equal(event, 'error');
       assert.strictEqual(err, ERR);
     });
-  
+
     client._dequeue(ERR);
   })();
 
@@ -285,12 +286,17 @@ test(function query() {
     , SQL = 'SELECT * FROM über WHERE name = ?'
     , FORMATED_SQL = "SELECT * FROM über WHERE name = 'nice'"
     , PARAMS = ['nice']
+    , RESULT_STREAM
     , CB = function() {};
 
   gently.expect(client, 'format', function(sql, params) {
     assert.strictEqual(sql, SQL);
     assert.strictEqual(params, PARAMS);
     return FORMATED_SQL;
+  });
+
+  gently.expect(ResultStreamStub, 'new', function() {
+    RESULT_STREAM = this;
   });
 
   gently.expect(client, '_enqueue', function(fn, cb) {
@@ -321,6 +327,8 @@ test(function query() {
   client.query(SQL, PARAMS, CB);
 
   (function testNoParams() {
+    gently.expect(ResultStreamStub, 'new');
+
     gently.expect(client, '_enqueue', function(fn, cb) {
       assert.strictEqual(cb, CB);
     });

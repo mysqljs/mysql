@@ -47,13 +47,22 @@ client.query
     })
   );
 
-client.query
+var query = client.query
   ( 'SELECT * FROM '+TEST_TABLE
-  , gently.expect(function selectCb(err) {
+  , gently.expect(function selectCb(err, results) {
       if (err) {
         throw err;
       }
 
+      console.log('rows: %j', rows);
       client.end();
     })
   );
+
+// query
+//   .on('fields', function(fields) {
+//     console.log('fields: %j', fields);
+//   })
+//   .on('row', function(row) {
+//     console.log('row: %j', row);
+//   });
