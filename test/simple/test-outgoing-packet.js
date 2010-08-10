@@ -1,6 +1,6 @@
 require('../common');
-var OutgoingPacket = require('mysql/outgoing_packet')
-  , Buffer = require('buffer').Buffer;
+var OutgoingPacket = require('mysql/outgoing_packet'),
+    Buffer = require('buffer').Buffer;
 
 function test(test) {
   gently = new Gently();
@@ -11,10 +11,10 @@ function test(test) {
 test(function constructor() {
   var packet = new OutgoingPacket(10, 5);
   assert.equal(packet.buffer.length, 14);
-  assert.deepEqual
-    ( packet.buffer.slice(0, 3)
-    , new Buffer([10, 0, 0])
-    );
+  assert.deepEqual(
+    packet.buffer.slice(0, 3),
+    new Buffer([10, 0, 0])
+  );
   assert.equal(packet.buffer[3], 5);
   assert.equal(packet.index, 4);
 });
@@ -22,26 +22,26 @@ test(function constructor() {
 test(function writeNumber() {
   var packet = new OutgoingPacket(4);
   packet.writeNumber(4, 257);
-  assert.deepEqual
-    ( packet.buffer.slice(4, 8)
-    , new Buffer([1, 1, 0, 0])
-    )
+  assert.deepEqual(
+    packet.buffer.slice(4, 8),
+    new Buffer([1, 1, 0, 0])
+  );
 });
 
 test(function writeFiller() {
   var packet = new OutgoingPacket(5);
   packet.writeFiller(5);
   assert.equal(packet.index, 9);
-  assert.deepEqual
-    ( packet.buffer.slice(4, 9)
-    , new Buffer([0, 0, 0, 0, 0])
-    );
+  assert.deepEqual(
+    packet.buffer.slice(4, 9),
+    new Buffer([0, 0, 0, 0, 0])
+  );
 });
 
 test(function write() {
   (function testBuffer() {
-    var packet = new OutgoingPacket(3)
-      , BUFFER = new Buffer([1, 2, 3]);
+    var packet = new OutgoingPacket(3),
+        BUFFER = new Buffer([1, 2, 3]);
 
     packet.write(BUFFER);
     assert.equal(packet.index, 7);
@@ -49,8 +49,8 @@ test(function write() {
   })();
 
   (function testString() {
-    var packet = new OutgoingPacket(3)
-      , STRING = 'abc';
+    var packet = new OutgoingPacket(3),
+        STRING = 'abc';
 
     packet.write(STRING);
     assert.equal(packet.index, 7);
@@ -59,8 +59,8 @@ test(function write() {
 });
 
 test(function writeNullTerminated() {
-  var packet = new OutgoingPacket(4)
-    , BUFFER = new Buffer([17, 23, 42]);
+  var packet = new OutgoingPacket(4),
+      BUFFER = new Buffer([17, 23, 42]);
 
   packet.buffer[7] = 100; // set last byte to non-0
 
@@ -115,18 +115,18 @@ test(function writeLengthCoded() {
   })();
 
   (function testBuffer() {
-    var packet = new OutgoingPacket(4)
-      , BUFFER = new Buffer([17, 23, 42]);
-  
+    var packet = new OutgoingPacket(4),
+        BUFFER = new Buffer([17, 23, 42]);
+
     packet.writeLengthCoded(BUFFER);
     assert.equal(packet.buffer[4], 3);
     assert.deepEqual(packet.buffer.slice(5, 8), BUFFER);
   })();
 
   (function testString() {
-    var packet = new OutgoingPacket(6)
-      , STRING = 'über';
-  
+    var packet = new OutgoingPacket(6),
+        STRING = 'über';
+
     packet.writeLengthCoded(STRING);
     assert.equal(packet.buffer[4], 5);
     assert.equal(packet.buffer.slice(5, 10).toString(), STRING);

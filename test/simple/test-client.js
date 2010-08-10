@@ -1,9 +1,9 @@
 require('../common');
-var StreamStub = GENTLY.stub('net', 'Stream')
-  , ParserStub = GENTLY.stub('./parser')
-  , OutgoingPacketStub = GENTLY.stub('./outgoing_packet')
-  , ResultStreamStub = GENTLY.stub('./result_stream')
-  , Parser = require('mysql/parser');
+var StreamStub = GENTLY.stub('net', 'Stream'),
+    ParserStub = GENTLY.stub('./parser'),
+    OutgoingPacketStub = GENTLY.stub('./outgoing_packet'),
+    ResultStreamStub = GENTLY.stub('./result_stream'),
+    Parser = require('mysql/parser');
 
 for (var k in Parser) {
   ParserStub[k] = Parser[k];
@@ -49,11 +49,11 @@ test(function constructor() {
 });
 
 test(function connect() {
-  var CONNECTION
-    , PARSER
-    , onConnection = {}
-    , onParser = {}
-    , CB = function() {};
+  var CONNECTION,
+      PARSER,
+      onConnection = {},
+      onParser = {},
+      CB = function() {};
 
   gently.expect(client, '_enqueue', function(task, cb) {
     assert.strictEqual(cb, CB);
@@ -123,9 +123,9 @@ test(function connect() {
 });
 
 test(function GREETING_PACKET() {
-  var GREETING = {scrambleBuffer: new Buffer(20), number: 1}
-    , TOKEN = new Buffer(8)
-    , PACKET;
+  var GREETING = {scrambleBuffer: new Buffer(20), number: 1},
+      TOKEN = new Buffer(8),
+      PACKET;
 
   client.user = 'root';
   client.password = 'hello world';
@@ -138,13 +138,13 @@ test(function GREETING_PACKET() {
   });
 
   gently.expect(OutgoingPacketStub, 'new', function(size, number) {
-    assert.equal
-      ( size
-      ,   4 + 4 + 1 + 23
-        + client.user.length + 1
-        + TOKEN.length + 1
-        + client.database.length + 1
-      );
+    assert.equal(size, (
+      4 + 4 + 1 + 23 +
+      client.user.length + 1 +
+      TOKEN.length + 1 +
+      client.database.length + 1
+    ));
+
     assert.equal(number, GREETING.number + 1);
     PACKET = this;
 
@@ -188,8 +188,8 @@ test(function GREETING_PACKET() {
 });
 
 test(function write() {
-  var PACKET = {buffer: []}
-    , CONNECTION = client._connection = {};
+  var PACKET = {buffer: []},
+      CONNECTION = client._connection = {};
 
   gently.expect(CONNECTION, 'write', function(buffer) {
     assert.strictEqual(buffer, PACKET.buffer);
@@ -211,12 +211,12 @@ test(function _errorPacket() {
 });
 
 test(function _okPacket() {
-  var packet =
-    { affectedRows: 127
-    , insertId: 23
-    , serverStatus: 2
-    , message: 'hello world\0\0'
-    };
+  var packet = {
+    affectedRows: 127,
+    insertId: 23,
+    serverStatus: 2,
+    message: 'hello world\0\0',
+  };
 
   gently.expect(client, '_dequeue', function(err, result) {
     assert.strictEqual(err, null);
@@ -229,12 +229,8 @@ test(function _okPacket() {
 });
 
 test(function _enqueue() {
-  var FN = gently.expect(function fn() {
-
-      })
-    , CB = function() {
-
-      };
+  var FN = gently.expect(function fn() {}),
+      CB = function() {};
 
   client._enqueue(FN, CB);
   assert.equal(client._queue.length, 1);
@@ -250,8 +246,8 @@ test(function _enqueue() {
 
 test(function _dequeue() {
   (function testErrorWithCb() {
-    var ERR = new Error('oh no!')
-      , CB = gently.expect(function cb(err) {
+    var ERR = new Error('oh no!'),
+        CB = gently.expect(function cb(err) {
           assert.strictEqual(err, ERR);
         });
 
@@ -282,12 +278,12 @@ test(function _dequeue() {
 });
 
 test(function query() {
-  var PACKET
-    , SQL = 'SELECT * FROM über WHERE name = ?'
-    , FORMATED_SQL = "SELECT * FROM über WHERE name = 'nice'"
-    , PARAMS = ['nice']
-    , RESULT_STREAM
-    , CB = function() {};
+  var PACKET,
+      SQL = 'SELECT * FROM über WHERE name = ?',
+      FORMATED_SQL = "SELECT * FROM über WHERE name = 'nice'",
+      PARAMS = ['nice'],
+      RESULT_STREAM,
+      CB = function() {};
 
   gently.expect(client, 'format', function(sql, params) {
     assert.strictEqual(sql, SQL);

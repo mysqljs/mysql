@@ -1,8 +1,8 @@
 require('../common');
-var EventEmitter = require('events').EventEmitter
-  , Parser = require('mysql/parser')
-  , parser
-  , gently;
+var EventEmitter = require('events').EventEmitter,
+    Parser = require('mysql/parser'),
+    parser,
+    gently;
 
 function test(test) {
   parser = new Parser();
@@ -34,10 +34,10 @@ test(function write() {
 
     parser.write(new Buffer([0]));
     parser.write(new Buffer([0]));
-    assert.strictEqual
-      ( packet.length
-      , Math.pow(256, 0) * LENGTH + Math.pow(256, 1) * 0 + Math.pow(256, 2) * 0
-      );
+    assert.strictEqual(
+      packet.length,
+      Math.pow(256, 0) * LENGTH + Math.pow(256, 1) * 0 + Math.pow(256, 2) * 0
+    );
   })();
 
   (function testPacketSize() {
@@ -66,10 +66,10 @@ test(function write() {
     assert.equal(parser.state, Parser.GREETING_SCRAMBLE_BUFF_1);
 
     parser.write(new Buffer([2, 3, 4, 5, 6, 7, 8]));
-    assert.deepEqual
-      ( packet.scrambleBuffer.slice(0, 8)
-      , new Buffer([1, 2, 3, 4, 5, 6, 7, 8])
-      );
+    assert.deepEqual(
+      packet.scrambleBuffer.slice(0, 8),
+      new Buffer([1, 2, 3, 4, 5, 6, 7, 8])
+    );
     assert.equal(parser.state, Parser.GREETING_SCRAMBLE_BUFF_1);
 
     parser.write(new Buffer([0]));
@@ -104,10 +104,10 @@ test(function write() {
     });
 
     parser.write(new Buffer([10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 0]));
-    assert.deepEqual
-      ( packet.scrambleBuffer.slice(9, 20)
-      , new Buffer([10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20])
-      );
+    assert.deepEqual(
+      packet.scrambleBuffer.slice(9, 20),
+      new Buffer([10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20])
+    );
   })();
 
   (function testErrorPacket() {

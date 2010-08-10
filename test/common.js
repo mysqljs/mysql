@@ -3,13 +3,13 @@ var path = require('path')
 
 require.paths.unshift(path.dirname(__dirname)+'/lib');
 
-global.TEST_CONFIG =
-  { host: 'localhost'
-  , port: 3306
-  , user: 'root'
-  , password: 'root'
-  , database: 'node_mysql_test'
-  };
+global.TEST_CONFIG = {
+  host: 'localhost',
+  port: 3306,
+  user: 'root',
+  password: 'root',
+  database: 'node_mysql_test',
+};
 
 global.TEST_TABLE = 'posts';
 
