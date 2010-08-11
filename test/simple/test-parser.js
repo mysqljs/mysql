@@ -281,10 +281,61 @@ test(function write() {
 
     gently.expect(parser, 'emit', function(event, val) {
       assert.equal(event, 'packet');
+      assert.equal(parser.receivingFieldPackets, false);
+      assert.equal(parser.receivingRowPackets, true);
     });
 
     assert.equal(parser.state, Parser.EOF_SERVER_STATUS);
     parser.write(new Buffer([42, 113]));
     assert.equal(packet.serverStatus, Math.pow(256, 0) * 42 + Math.pow(256, 1) * 113);
+  })();
+
+  (function testRowPacket() {
+    parser.write(new Buffer([20, 0, 0, 1]));
+    var packet = parser.packet;
+
+    parser.write(new Buffer([16]));
+    assert.equal(parser.state, Parser.COLUMN_VALUE_STRING);
+    assert.equal(packet.type, Parser.ROW_DATA_PACKET);
+
+    gently.expect(parser, 'emit', function(event, val) {
+      assert.equal(event, 'packet');
+      assert.equal(val.columnLength, 16);
+    });
+
+    gently.expect(packet, 'emit', function(event, val, remaining) {
+      assert.equal(event, 'data');
+      assert.equal(val.toString(), 'hi, ');
+      assert.equal(remaining, 12);
+    });
+
+    parser.write(new Buffer('hi, '));
+
+    gently.expect(packet, 'emit', function(event, val, remaining) {
+      assert.equal(event, 'data');
+      assert.equal(val.toString(), 'how');
+      assert.equal(remaining, 9);
+    });
+
+    parser.write(new Buffer('how'));
+
+    gently.expect(packet, 'emit', function(event, val, remaining) {
+      assert.equal(event, 'data');
+      assert.equal(val.toString(), ' are you?');
+      assert.equal(remaining, 0);
+    });
+
+    gently.expect(parser, 'emit', function(event, val) {
+      assert.equal(event, 'packet');
+      assert.equal(val.columnLength, 32);
+    });
+
+    gently.expect(packet, 'emit', function(event, val, remaining) {
+      assert.equal(event, 'data');
+      assert.equal(val.toString(), 'Fine!');
+      assert.equal(remaining, 27);
+    });
+
+    parser.write(new Buffer(' are you? Fine!'));
   })();
 });
