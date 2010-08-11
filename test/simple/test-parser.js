@@ -15,6 +15,10 @@ test(function constructor() {
   assert.strictEqual(parser.state, Parser.PACKET_LENGTH);
   assert.strictEqual(parser.packet, null);
   assert.strictEqual(parser.greeted, false);
+  assert.strictEqual(parser.receivingFieldPackets, false);
+  assert.strictEqual(parser.receivingRowPackets, false);
+  assert.strictEqual(parser._lengthCodedLength, null);
+  assert.strictEqual(parser._lengthCodedStringLength, null);
   assert.ok(parser instanceof EventEmitter);
 });
 
@@ -142,8 +146,6 @@ test(function write() {
   })();
 
   (function testOkPacket() {
-    parser.state = Parser.PACKET_LENGTH;
-
     parser.write(new Buffer([13, 0, 0, 1]));
     var packet = parser.packet;
 
@@ -169,8 +171,6 @@ test(function write() {
   })();
 
   (function testResultHeaderPacket() {
-    parser.state = Parser.PACKET_LENGTH;
-
     parser.write(new Buffer([1, 0, 0, 1]));
     var packet = parser.packet;
 
@@ -184,7 +184,7 @@ test(function write() {
   })();
 
   (function testResultHeaderPacketWithExtra() {
-    parser.state = Parser.PACKET_LENGTH;
+    parser.receivingFieldPackets = false;
 
     parser.write(new Buffer([2, 0, 0, 1]));
     var packet = parser.packet;
@@ -200,5 +200,91 @@ test(function write() {
     });
 
     parser.write(new Buffer([51]));
+  })();
+
+  (function testFieldPacket() {
+    parser.write(new Buffer([43, 0, 0, 1]));
+    var packet = parser.packet;
+
+    assert.equal(parser.state, Parser.FIELD_CATALOG_LENGTH);
+    parser.write(new Buffer([3]));
+    assert.equal(packet.type, Parser.FIELD_PACKET);
+    parser.write(new Buffer('abc'));
+    assert.equal(packet.catalog, 'abc');
+
+    assert.equal(parser.state, Parser.FIELD_DB_LENGTH);
+    parser.write(new Buffer([5]));
+    parser.write(new Buffer('hello'));
+    assert.equal(packet.db, 'hello');
+
+    assert.equal(parser.state, Parser.FIELD_TABLE_LENGTH);
+    parser.write(new Buffer([2]));
+    parser.write(new Buffer('ab'));
+    assert.equal(packet.table, 'ab');
+
+    assert.equal(parser.state, Parser.FIELD_ORIGINAL_TABLE_LENGTH);
+    parser.write(new Buffer([4]));
+    parser.write(new Buffer('1234'));
+    assert.equal(packet.originalTable, '1234');
+
+    assert.equal(parser.state, Parser.FIELD_NAME_LENGTH);
+    parser.write(new Buffer([1]));
+    parser.write(new Buffer('o'));
+    assert.equal(packet.name, 'o');
+
+    assert.equal(parser.state, Parser.FIELD_ORIGINAL_NAME_LENGTH);
+    parser.write(new Buffer([9]));
+    parser.write(new Buffer('wonderful'));
+    assert.equal(packet.originalName, 'wonderful');
+
+    assert.equal(parser.state, Parser.FIELD_FILLER_1);
+    parser.write(new Buffer([0]));
+
+    assert.equal(parser.state, Parser.FIELD_CHARSET_NR);
+    parser.write(new Buffer([42, 113]));
+    assert.equal(packet.charsetNumber, Math.pow(256, 0) * 42 + Math.pow(256, 1) * 113);
+
+    assert.equal(parser.state, Parser.FIELD_LENGTH);
+    parser.write(new Buffer([42, 113, 50, 30]));
+    assert.equal(packet.fieldLength, 42 + (256 * 113) + (256 * 256) * 50 + (256 * 256 * 256 * 30));
+
+    assert.equal(parser.state, Parser.FIELD_TYPE);
+    parser.write(new Buffer([58]));
+    assert.equal(packet.fieldType, 58);
+
+    assert.equal(parser.state, Parser.FIELD_FLAGS);
+    parser.write(new Buffer([42, 113]));
+    assert.equal(packet.flags, Math.pow(256, 0) * 42 + Math.pow(256, 1) * 113);
+
+    assert.equal(parser.state, Parser.FIELD_DECIMALS);
+    parser.write(new Buffer([58]));
+    assert.equal(packet.decimals, 58);
+
+    gently.expect(parser, 'emit', function(event, val) {
+      assert.equal(event, 'packet');
+    });
+
+    assert.equal(parser.state, Parser.FIELD_FILLER_2);
+    parser.write(new Buffer([0, 0]));
+  })();
+
+  (function testEofPacket() {
+    parser.write(new Buffer([5, 0, 0, 1]));
+    var packet = parser.packet;
+
+    parser.write(new Buffer([0xfe]));
+    assert.equal(packet.type, Parser.EOF_PACKET);
+
+    assert.equal(parser.state, Parser.EOF_WARNING_COUNT);
+    parser.write(new Buffer([42, 113]));
+    assert.equal(packet.warningCount, Math.pow(256, 0) * 42 + Math.pow(256, 1) * 113);
+
+    gently.expect(parser, 'emit', function(event, val) {
+      assert.equal(event, 'packet');
+    });
+
+    assert.equal(parser.state, Parser.EOF_SERVER_STATUS);
+    parser.write(new Buffer([42, 113]));
+    assert.equal(packet.serverStatus, Math.pow(256, 0) * 42 + Math.pow(256, 1) * 113);
   })();
 });
