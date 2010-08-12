@@ -332,6 +332,14 @@ test(function write() {
     });
 
     parser.write(new Buffer(' are you?\u0005Fine!'));
-    console.log(packet);
+    console.log(parser);
+  })();
+
+  (function testEofPacketAfterRowPacket() {
+    parser.write(new Buffer([5, 0, 0, 1]));
+    var packet = parser.packet;
+
+    parser.write(new Buffer([0xfe]));
+    assert.equal(packet.type, Parser.EOF_PACKET);
   })();
 });
