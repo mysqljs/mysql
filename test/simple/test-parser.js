@@ -291,7 +291,7 @@ test(function write() {
   })();
 
   (function testRowPacket() {
-    parser.write(new Buffer([20, 0, 0, 1]));
+    parser.write(new Buffer([23, 0, 0, 1]));
     var packet = parser.packet;
 
     gently.expect(parser, 'emit', function(event, val) {
@@ -332,7 +332,9 @@ test(function write() {
     });
 
     parser.write(new Buffer(' are you?\u0005Fine!'));
-    console.log(parser);
+
+    assert.equal(parser.packet, null);
+    assert.equal(parser.state, Parser.PACKET_LENGTH);
   })();
 
   (function testEofPacketAfterRowPacket() {

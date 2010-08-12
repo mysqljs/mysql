@@ -47,6 +47,17 @@ client.query(
   })
 );
 
+client.query(
+  'INSERT INTO '+TEST_TABLE+' '+
+  'SET title = ?, text = ?',
+  ['another entry', 'because 2 entries make a better test'],
+  gently.expect(function insertCb(err) {
+    if (err) {
+      throw err;
+    }
+  })
+);
+
 var query = client.query(
   'SELECT * FROM '+TEST_TABLE,
   gently.expect(function selectCb(err, results) {
