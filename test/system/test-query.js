@@ -28,7 +28,7 @@ client.query(
 
 client.query(
   'CREATE TEMPORARY TABLE '+TEST_TABLE+
-  '(id INT(11), title VARCHAR(255), text TEXT);',
+  '(id INT(11) AUTO_INCREMENT, title VARCHAR(255), text TEXT, PRIMARY KEY (id));',
   gently.expect(function createTableCb(err) {
     if (err) {
       throw err;

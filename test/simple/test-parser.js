@@ -294,14 +294,14 @@ test(function write() {
     parser.write(new Buffer([20, 0, 0, 1]));
     var packet = parser.packet;
 
+    gently.expect(parser, 'emit', function(event, val) {
+      assert.equal(event, 'packet');
+    });
+
     parser.write(new Buffer([16]));
     assert.equal(parser.state, Parser.COLUMN_VALUE_STRING);
     assert.equal(packet.type, Parser.ROW_DATA_PACKET);
-
-    gently.expect(parser, 'emit', function(event, val) {
-      assert.equal(event, 'packet');
-      assert.equal(val.columnLength, 16);
-    });
+    assert.equal(packet.columnLength, 16);
 
     gently.expect(packet, 'emit', function(event, val, remaining) {
       assert.equal(event, 'data');
@@ -325,17 +325,13 @@ test(function write() {
       assert.equal(remaining, 0);
     });
 
-    gently.expect(parser, 'emit', function(event, val) {
-      assert.equal(event, 'packet');
-      assert.equal(val.columnLength, 32);
-    });
-
     gently.expect(packet, 'emit', function(event, val, remaining) {
       assert.equal(event, 'data');
       assert.equal(val.toString(), 'Fine!');
-      assert.equal(remaining, 27);
+      assert.equal(remaining, 0);
     });
 
-    parser.write(new Buffer(' are you? Fine!'));
+    parser.write(new Buffer(' are you?\u0005Fine!'));
+    console.log(packet);
   })();
 });
