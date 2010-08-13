@@ -2,7 +2,7 @@ require('../common');
 var StreamStub = GENTLY.stub('net', 'Stream'),
     ParserStub = GENTLY.stub('./parser'),
     OutgoingPacketStub = GENTLY.stub('./outgoing_packet'),
-    ResultStreamStub = GENTLY.stub('./result_stream'),
+    QueryStub = GENTLY.stub('./query'),
     Parser = require('mysql/parser');
 
 for (var k in Parser) {
@@ -275,6 +275,30 @@ test(function _dequeue() {
     client._dequeue();
     assert.equal(client._queue.length, 1);
   })();
+
+  (function testQueryDelegateOk() {
+    var query = new QueryStub(), RESULT = {};
+    client._queue = [{delegate: query}];
+
+    gently.expect(query, 'emit', function (event, result) {
+      assert.equal(event, 'end');
+      assert.strictEqual(result, RESULT);
+    });
+
+    client._dequeue(null, RESULT);
+  })();
+
+  (function testQueryDelegateErr() {
+    var query = new QueryStub(), ERR = new Error('not good');
+    client._queue = [{delegate: query}];
+
+    gently.expect(query, 'emit', function (event, err) {
+      assert.equal(event, 'error');
+      assert.strictEqual(err, ERR);
+    });
+
+    client._dequeue(ERR);
+  })();
 });
 
 test(function query() {
@@ -282,54 +306,100 @@ test(function query() {
       SQL = 'SELECT * FROM über WHERE name = ?',
       FORMATED_SQL = "SELECT * FROM über WHERE name = 'nice'",
       PARAMS = ['nice'],
-      RESULT_STREAM,
-      CB = function() {};
+      CB_STUB,
+      CB,
+      QUERY,
+      queryEmit = {};
 
-  gently.expect(client, 'format', function(sql, params) {
-    assert.strictEqual(sql, SQL);
-    assert.strictEqual(params, PARAMS);
-    return FORMATED_SQL;
-  });
-
-  gently.expect(ResultStreamStub, 'new', function() {
-    RESULT_STREAM = this;
-  });
-
-  gently.expect(client, '_enqueue', function(fn, cb) {
-    assert.strictEqual(cb, CB);
-    fn();
-  });
-
-  gently.expect(OutgoingPacketStub, 'new', function(size) {
-    PACKET = this;
-
-    assert.equal(size, Buffer.byteLength(FORMATED_SQL, 'utf-8') + 1);
-
-    gently.expect(PACKET, 'writeNumber', function(bytes, number) {
-      assert.strictEqual(bytes, 1);
-      assert.strictEqual(number, Client.COM_QUERY);
+  (function testRegular() {
+    gently.expect(client, 'format', function(sql, params) {
+      assert.strictEqual(sql, SQL);
+      assert.strictEqual(params, PARAMS);
+      return FORMATED_SQL;
     });
 
-    gently.expect(PACKET, 'write', function(str, encoding) {
-      assert.equal(str, FORMATED_SQL);
-      assert.equal(encoding, 'utf-8');
+    gently.expect(QueryStub, 'new', function() {
+      QUERY = this;
+
+      var events = ['error', 'end'];
+      gently.expect(QUERY, 'on', events.length, function (event, fn) {
+        assert.equal(event, events.shift());
+        queryEmit[event] = fn;
+        return this;
+      });
+
+      gently.expect(client, '_enqueue', function(fn, query) {
+        assert.strictEqual(query, QUERY);
+        fn();
+      });
+
+      gently.expect(OutgoingPacketStub, 'new', function(size) {
+        PACKET = this;
+
+        assert.equal(size, 1 + Buffer.byteLength(FORMATED_SQL, 'utf-8'));
+
+        gently.expect(PACKET, 'writeNumber', function(bytes, number) {
+          assert.strictEqual(bytes, 1);
+          assert.strictEqual(number, Client.COM_QUERY);
+        });
+
+        gently.expect(PACKET, 'write', function(str, encoding) {
+          assert.equal(str, FORMATED_SQL);
+          assert.equal(encoding, 'utf-8');
+        });
+
+        gently.expect(client, 'write', function(packet) {
+          assert.strictEqual(packet, PACKET);
+        });
+      });
     });
 
-    gently.expect(client, 'write', function(packet) {
-      assert.strictEqual(packet, PACKET);
-    });
-  });
+    CB_STUB = function() {
+      CB.apply(this, arguments);
+    };
 
-  client.query(SQL, PARAMS, CB);
+    var r = client.query(SQL, PARAMS, CB_STUB);
+    assert.strictEqual(r, QUERY);
+
+    (function testQueryError() {
+      var ERR = new Error('ouch');
+
+      CB = gently.expect(function errCb(err) {
+        assert.strictEqual(err, ERR);
+      });
+
+      queryEmit['error'](ERR);
+    })();
+
+    (function testQueryEnd() {
+      var RESULT = {};
+
+      CB = gently.expect(function okCb(err, result) {
+        assert.strictEqual(result, RESULT);
+      });
+
+      queryEmit['end'](RESULT);
+    })();
+  })();
 
   (function testNoParams() {
-    gently.expect(ResultStreamStub, 'new');
+    gently.expect(QueryStub, 'new', function() {
+      gently.expect(this, 'on', 2, function() {
+        return this;
+      });
 
-    gently.expect(client, '_enqueue', function(fn, cb) {
-      assert.strictEqual(cb, CB);
+      gently.expect(client, '_enqueue');
     });
 
     client.query(SQL, CB);
+  })();
+
+  (function testNoCb() {
+    gently.expect(QueryStub, 'new', function() {
+      gently.expect(client, '_enqueue');
+    });
+
+    client.query(SQL);
   })();
 });
 

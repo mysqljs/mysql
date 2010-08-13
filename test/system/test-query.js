@@ -44,19 +44,20 @@ client.query(
     if (err) {
       throw err;
     }
+
+    console.log('INSERT');
   })
 );
 
-client.query(
+var query = client.query(
   'INSERT INTO '+TEST_TABLE+' '+
   'SET title = ?, text = ?',
-  ['another entry', 'because 2 entries make a better test'],
-  gently.expect(function insertCb(err) {
-    if (err) {
-      throw err;
-    }
-  })
+  ['another entry', 'because 2 entries make a better test']
 );
+
+query.on('ok', gently.expect(function () {
+  console.log('ok fired!');
+}));
 
 var query = client.query(
   'SELECT * FROM '+TEST_TABLE,
