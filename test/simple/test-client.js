@@ -187,6 +187,16 @@ test(function GREETING_PACKET() {
   client[Parser.GREETING_PACKET](GREETING);
 });
 
+test(function RESULT_SET_HEADER_PACKET() {
+  var PACKET = {};
+
+  gently.expect(client, '_delegateToQuery', function (packet) {
+    assert.strictEqual(packet, PACKET);
+  });
+
+  client[Parser.RESULT_SET_HEADER_PACKET](PACKET);
+});
+
 test(function write() {
   var PACKET = {buffer: []},
       CONNECTION = client._connection = {};

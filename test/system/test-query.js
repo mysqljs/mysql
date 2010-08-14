@@ -3,7 +3,7 @@ var Client = require('mysql').Client,
     client = Client(TEST_CONFIG),
     gently = new Gently();
 
-// our test db does not exist yet, so don't try to connect to it
+// our test db might not exist yet, so don't try to connect to it
 client.database = '';
 
 client.connect();
@@ -44,8 +44,6 @@ client.query(
     if (err) {
       throw err;
     }
-
-    console.log('INSERT');
   })
 );
 
@@ -55,8 +53,7 @@ var query = client.query(
   ['another entry', 'because 2 entries make a better test']
 );
 
-query.on('ok', gently.expect(function () {
-  console.log('ok fired!');
+query.on('end', gently.expect(function insertOkCb() {
 }));
 
 var query = client.query(
