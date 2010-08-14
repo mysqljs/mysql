@@ -188,13 +188,59 @@ test(function GREETING_PACKET() {
 });
 
 test(function RESULT_SET_HEADER_PACKET() {
-  var PACKET = {};
+  var PACKET = {type: Parser.RESULT_SET_HEADER_PACKET};
 
-  gently.expect(client, '_delegateToQuery', function (packet) {
-    assert.strictEqual(packet, PACKET);
-  });
+  (function testQueueEmptyError() {
+    gently.expect(client, 'emit', function (event, err) {
+      assert.equal(event, 'error');
+      assert.equal(err.message, 'unexpected query packet, no packet was expected');
+    });
 
-  client[Parser.RESULT_SET_HEADER_PACKET](PACKET);
+    client[Parser.RESULT_SET_HEADER_PACKET](PACKET);
+  })();
+
+  (function testUnexpectedOrderError() {
+    client._queue = [{delegate: {}}];
+
+    gently.expect(client, 'emit', function (event, err) {
+      assert.equal(event, 'error');
+      assert.equal(err.message, 'unexpected query packet, another packet was expected');
+    });
+
+    client[Parser.RESULT_SET_HEADER_PACKET](PACKET);
+  })();
+
+
+  (function testDelegation() {
+    var QUERY = new QueryStub();
+    client._queue = [{delegate: QUERY}];
+
+    gently.expect(QUERY, Parser.RESULT_SET_HEADER_PACKET, function () {
+    });
+
+    client[Parser.RESULT_SET_HEADER_PACKET](PACKET);
+  })();
+});
+
+test(function FIELD_PACKET() {
+  assert.strictEqual(
+    client[Parser.FIELD_PACKET],
+    client[Parser.RESULT_SET_HEADER_PACKET]
+  );
+});
+
+test(function EOF_PACKET() {
+  assert.strictEqual(
+    client[Parser.EOF_PACKET],
+    client[Parser.RESULT_SET_HEADER_PACKET]
+  );
+});
+
+test(function ROW_DATA_PACKET() {
+  assert.strictEqual(
+    client[Parser.ROW_DATA_PACKET],
+    client[Parser.RESULT_SET_HEADER_PACKET]
+  );
 });
 
 test(function write() {
