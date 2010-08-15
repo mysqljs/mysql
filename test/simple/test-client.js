@@ -146,7 +146,7 @@ test(function query() {
     gently.expect(QueryStub, 'new', function() {
       QUERY = this;
 
-      var events = ['error', 'fields', 'row', 'end'];
+      var events = ['error', 'field', 'row', 'end'];
       gently.expect(QUERY, 'on', events.length, function (event, fn) {
         assert.equal(event, events.shift());
         queryEmit[event] = fn;
@@ -208,18 +208,21 @@ test(function query() {
     })();
 
     (function testFieldsAndRows() {
-      var FIELDS = {}
-        , ROW_1 = {}
-        , ROW_2 = {};
+      var FIELD_1 = {name: 'A'},
+          FIELD_2 = {name: 'B'},
+          ROW_1 = {},
+          ROW_2 = {};
 
-      queryEmit.fields(FIELDS);
+      queryEmit.field(FIELD_1);
+      queryEmit.field(FIELD_2);
       queryEmit.row(ROW_1);
       queryEmit.row(ROW_2);
 
       CB = gently.expect(function okCb(err, rows, fields) {
         assert.strictEqual(rows[0], ROW_1);
         assert.strictEqual(rows[1], ROW_2);
-        assert.strictEqual(fields, FIELDS);
+        assert.strictEqual(fields.A, FIELD_1);
+        assert.strictEqual(fields.B, FIELD_2);
       });
 
       gently.expect(client, '_dequeue');

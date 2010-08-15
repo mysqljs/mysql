@@ -38,4 +38,31 @@ test(function _handlePacket() {
 
     query._handlePacket(PACKET);
   })();
+
+  (function testFieldPacket() {
+    var PACKET = {type: Parser.FIELD_PACKET, name: 'my_field'};
+
+    gently.expect(query, 'emit', function (event, packet) {
+      assert.equal(event, 'field');
+      assert.strictEqual(packet, PACKET);
+    });
+
+    query._handlePacket(PACKET);
+
+    assert.deepEqual(query._fields, [PACKET.name]);
+  })();
+
+  (function testEofPacket() {
+    var PACKET = {type: Parser.EOF_PACKET};
+
+    query._handlePacket(PACKET);
+    assert.equal(query._eofs, 1);
+
+    gently.expect(query, 'emit', function (event) {
+      assert.equal(event, 'end');
+    });
+
+    query._handlePacket(PACKET);
+    assert.equal(query._eofs, 2);
+  })();
 });

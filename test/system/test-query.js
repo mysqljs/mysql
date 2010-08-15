@@ -58,12 +58,12 @@ query.on('end', gently.expect(function insertOkCb(packet) {
 
 var query = client.query(
   'SELECT * FROM '+TEST_TABLE,
-  gently.expect(function selectCb(err, results) {
+  gently.expect(function selectCb(err, results, fields) {
     if (err) {
       throw err;
     }
 
-    console.log('rows: %j', rows);
+    console.log(results, fields);
     client.end();
   })
 );
