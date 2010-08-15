@@ -215,8 +215,8 @@ test(function RESULT_SET_HEADER_PACKET() {
     var QUERY = new QueryStub();
     client._queue = [{delegate: QUERY}];
 
-    gently.expect(QUERY, Parser.RESULT_SET_HEADER_PACKET, function () {
-    });
+    //gently.expect(QUERY, Parser.RESULT_SET_HEADER_PACKET, function () {
+    //});
 
     client[Parser.RESULT_SET_HEADER_PACKET](PACKET);
   })();
@@ -298,6 +298,13 @@ test(function _enqueue() {
   assert.equal(client._queue.length, 2);
   assert.strictEqual(client._queue[1].fn, FN);
   assert.strictEqual(client._queue[1].delegate, CB);
+
+  // Test that queries get assigned to ._query
+  //var QUERY = new QueryStub();
+  //client._queue = [];
+  //client._enqueue(FN, QUERY);
+
+  //assert.strictEqual(client._query, :);
 });
 
 test(function _dequeue() {
@@ -377,7 +384,7 @@ test(function query() {
     gently.expect(QueryStub, 'new', function() {
       QUERY = this;
 
-      var events = ['error', 'end'];
+      var events = ['error', 'fields', 'row', 'end'];
       gently.expect(QUERY, 'on', events.length, function (event, fn) {
         assert.equal(event, events.shift());
         queryEmit[event] = fn;
@@ -417,37 +424,48 @@ test(function query() {
     var r = client.query(SQL, PARAMS, CB_STUB);
     assert.strictEqual(r, QUERY);
 
-    (function testQueryError() {
-      var ERR = new Error('ouch');
-
-      CB = gently.expect(function errCb(err) {
-        assert.strictEqual(err, ERR);
-      });
-
-      queryEmit['error'](ERR);
+    (function testQueryErr() {
+      assert.strictEqual(queryEmit.error, CB_STUB);
     })();
 
-    (function testQueryEnd() {
+    (function testQuerySimpleEnd() {
       var RESULT = {};
-
       CB = gently.expect(function okCb(err, result) {
         assert.strictEqual(result, RESULT);
       });
 
-      queryEmit['end'](RESULT);
+      queryEmit.end(RESULT);
+    })();
+
+    (function testFieldsAndRows() {
+      var FIELDS = {}
+        , ROW_1 = {}
+        , ROW_2 = {};
+
+      queryEmit.fields(FIELDS);
+      queryEmit.row(ROW_1);
+      queryEmit.row(ROW_2);
+
+      CB = gently.expect(function okCb(err, rows, fields) {
+        assert.strictEqual(rows[0], ROW_1);
+        assert.strictEqual(rows[1], ROW_2);
+        assert.strictEqual(fields, FIELDS);
+      });
+
+      queryEmit.end();
     })();
   })();
 
   (function testNoParams() {
     gently.expect(QueryStub, 'new', function() {
-      gently.expect(this, 'on', 2, function() {
+      gently.expect(this, 'on', 4, function() {
         return this;
       });
 
       gently.expect(client, '_enqueue');
     });
 
-    client.query(SQL, CB);
+    client.query(SQL, CB_STUB);
   })();
 
   (function testNoCb() {
