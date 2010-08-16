@@ -97,6 +97,29 @@ The name of the database to connect to (optional).
 
 Connection flags send to the server.
 
+### client.connect([cb])
+
+Initiates a connection to the specified host server.
+
+### client.query(sql, [params, cb])
+
+Sends a `sql` query to the server. `'?'` characters can be used as placeholders
+for an array of `params` that will be safely escaped before sending the final
+query.
+
+### client.format(sql, params)
+
+Allows to safely insert a list of `params` into a `sql` string using the
+placeholder mechanism described above.
+
+### client.escape(val)
+
+Escapes a single `val` for use inside of a sql string.
+
+### client.end()
+
+Closes the connection to the server.
+
 ## Todo
 
 At this point this module is not ready for anything yet.
