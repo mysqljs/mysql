@@ -123,7 +123,7 @@ Escapes a single `val` for use inside of a sql string.
 
 Closes the connection to the server.
 
-### client Event: 'error' (err)
+### client event: 'error' (err)
 
 When the client has no callback / delegate for an error, it is emitted with this
 event instead.
@@ -133,20 +133,20 @@ event instead.
 Query objects are not meant to be invoked manually. To get a query object, use
 the `client.query` API.
 
-### query Event: 'error' (err)
+### query event: 'error' (err)
 
 Emitted when mysql returns an error packet for the query.
 
-### query Event: 'field' (field)
+### query event: 'field' (field)
 
 Emitted upon receiving a field packet from mysql.
 
-### query Event: 'row' (row)
+### query event: 'row' (row)
 
 Emitted upon receiving a row. An option for streaming the contents of the row
 itself will be made available soon.
 
-### query Event: 'end' ([result])
+### query event: 'end' ([result])
 
 Emitted once the query is finished. In case there is no result set, a `result`
 parameter is provided which contains the information from the mysql OK packet.
