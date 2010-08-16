@@ -5,12 +5,32 @@
 A node.js module implementing the
 [MySQL protocol](http://forge.mysql.com/wiki/MySQL_Internals_ClientServer_Protocol).
 
+## Sponsors
+
+* [Joyent](http://www.joyent.com/)
+
+I'm working on this driver because I need it for my own startup
+([transloadit.com][transloadit]), but it's a big project (~100-200 hours) with
+obvious benefits to other companies who are using MySql.
+
+So if your company could benefit from a well-engineered node.js mysql driver,
+I would greatly appriciate any sponsorship you may be able to provide. Contact
+me at [felix@debuggable.com](mailto:felix@debuggable.com) for details.
+
+Of course I'm also happy about code contributions. If you're interested in
+working on features, just get in touch so we can talk about API design and
+testing.
+
+[transloadit]: http://transloadit.com/
+
 ## Design Goals
 
+* TDD: All code is written using test driven development, code coverage should approach 100%
 * Simplicity: The MySQL protocol is easy, a good parser should reflect that
 * Efficiency: Use fast algorithms, buffers and as little memory as possible.
 * Portability: Should run anywhere node runs
 * Completeness: The goal is to support the full MySQL API.
+* Compatibility: MySql >= 4.1
 
 ## Tutorial
 
@@ -164,11 +184,3 @@ At this point the module is ready to be tried out, but a lot of things are yet t
 ## License
 
 node-mysql is licensed under the MIT license.
-
-## Sponsors
-
-* [Joyent](http://www.joyent.com/)
-
-This is a big effort. If your company could benefit from a top-notch MySQL driver
-for node, a small sponsorship payment would be greatly appreciated. Contact
-me at [felix@debuggable.com](mailto:felix@debuggable.com) for details.
