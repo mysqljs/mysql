@@ -122,7 +122,7 @@ Closes the connection to the server.
 
 ## Todo
 
-At this point this module is not ready for anything yet.
+At this point the module is ready to be tried out, but a lot of things are yet to be done:
 
 * Prepared Statements
 * Test using no Password
