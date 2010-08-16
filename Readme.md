@@ -16,9 +16,6 @@ A node.js module implementing the
 
 At this point this module is not ready for anything yet.
 
-* Query
-* RESULT_PACKETS
-* High level API
 * Prepared Statements
 * Test using no Password
 * Charsets handling
