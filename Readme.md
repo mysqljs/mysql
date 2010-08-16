@@ -18,7 +18,7 @@ A node.js module implementing the
         client = new Client();
 
     client.user = 'root';
-    client.password = 'password';
+    client.password = 'root';
 
     client.connect();
 
@@ -65,6 +65,37 @@ A node.js module implementing the
         client.end();
       })
     );
+
+## API
+
+### new mysql.Client([options])
+
+Creates a new client instance. Any client property can be set using the
+`options array.
+
+### client.host = 'localhost'
+
+The host to connect to.
+
+### client.port = 3306
+
+The port to connect to.
+
+### client.user = null
+
+The username to authenticate as.
+
+### client.password = null
+
+The password to use.
+
+### client.database = null
+
+The name of the database to connect to (optional).
+
+### client.flags = Client.defaultFlags
+
+Connection flags send to the server.
 
 ## Todo
 
