@@ -65,4 +65,28 @@ test(function _handlePacket() {
     query._handlePacket(PACKET);
     assert.equal(query._eofs, 2);
   })();
+
+  (function testRowPacket() {
+    query._fields = ['a', 'b'];
+
+    var PACKET = new EventEmitter();
+    PACKET.type = Parser.ROW_DATA_PACKET;
+
+    gently.expect(PACKET, 'on', function (event, fn) {
+      assert.equal(event, 'data');
+
+      fn(new Buffer('hello '), 5);
+      fn(new Buffer('world'), 0);
+
+      gently.expect(query, 'emit', function (event, row) {
+        assert.equal(event, 'row');
+        assert.equal(row.a, 'hello world');
+        assert.equal(row.b, 'sunny');
+      });
+
+      fn(new Buffer('sunny'), 0);
+    });
+
+    query._handlePacket(PACKET);
+  })();
 });

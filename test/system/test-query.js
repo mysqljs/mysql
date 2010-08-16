@@ -28,7 +28,7 @@ client.query(
 
 client.query(
   'CREATE TEMPORARY TABLE '+TEST_TABLE+
-  '(id INT(11) AUTO_INCREMENT, title VARCHAR(255), text TEXT, PRIMARY KEY (id));',
+  '(id INT(11) AUTO_INCREMENT, title VARCHAR(255), text TEXT, created DATETIME, PRIMARY KEY (id));',
   gently.expect(function createTableCb(err) {
     if (err) {
       throw err;
@@ -38,8 +38,8 @@ client.query(
 
 client.query(
   'INSERT INTO '+TEST_TABLE+' '+
-  'SET title = ?, text = ?',
-  ['super cool', 'this is a nice long text'],
+  'SET title = ?, text = ?, created = ?',
+  ['super cool', 'this is a nice long text', '2010-08-16 10:00:23'],
   gently.expect(function insertCb(err) {
     if (err) {
       throw err;
@@ -49,8 +49,8 @@ client.query(
 
 var query = client.query(
   'INSERT INTO '+TEST_TABLE+' '+
-  'SET title = ?, text = ?',
-  ['another entry', 'because 2 entries make a better test']
+  'SET title = ?, text = ?, created = ?',
+  ['another entry', 'because 2 entries make a better test', '2010-08-16 12:42:15']
 );
 
 query.on('end', gently.expect(function insertOkCb(packet) {
@@ -63,15 +63,8 @@ var query = client.query(
       throw err;
     }
 
-    console.log(results, fields);
+    console.log(results);
+    console.log(fields);
     client.end();
   })
 );
-
-// query
-//   .on('fields', function(fields) {
-//     console.log('fields: %j', fields);
-//   })
-//   .on('row', function(row) {
-//     console.log('row: %j', row);
-//   });
