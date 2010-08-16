@@ -14,8 +14,10 @@ I'm working on this driver because I need it for my own startup
 obvious benefits to other companies who are using MySql.
 
 So if your company could benefit from a well-engineered node.js mysql driver,
-I would greatly appriciate any sponsorship you may be able to provide. Contact
-me at [felix@debuggable.com](mailto:felix@debuggable.com) for details.
+I would greatly appriciate any sponsorship you may be able to provide. All
+sponsors will get lifetime display in this readme, priority support on problems,
+and votes on roadmap decisions. If you are interested, contact me at
+[felix@debuggable.com](mailto:felix@debuggable.com) for details.
 
 Of course I'm also happy about code contributions. If you're interested in
 working on features, just get in touch so we can talk about API design and
