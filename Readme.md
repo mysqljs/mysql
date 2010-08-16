@@ -107,6 +107,9 @@ Sends a `sql` query to the server. `'?'` characters can be used as placeholders
 for an array of `params` that will be safely escaped before sending the final
 query.
 
+This method returns a `Query` object which can be used to stream incoming row
+data.
+
 ### client.format(sql, params)
 
 Allows to safely insert a list of `params` into a `sql` string using the
@@ -119,6 +122,34 @@ Escapes a single `val` for use inside of a sql string.
 ### client.end()
 
 Closes the connection to the server.
+
+### client Event: 'error' (err)
+
+When the client has no callback / delegate for an error, it is emitted with this
+event instead.
+
+### new mysql.Query()
+
+Query objects are not meant to be invoked manually. To get a query object, use
+the `client.query` API.
+
+### query Event: 'error' (err)
+
+Emitted when mysql returns an error packet for the query.
+
+### query Event: 'field' (field)
+
+Emitted upon receiving a field packet from mysql.
+
+### query Event: 'row' (row)
+
+Emitted upon receiving a row. An option for streaming the contents of the row
+itself will be made available soon.
+
+### query Event: 'end' ([result])
+
+Emitted once the query is finished. In case there is no result set, a `result`
+parameter is provided which contains the information from the mysql OK packet.
 
 ## Todo
 
