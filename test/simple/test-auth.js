@@ -28,13 +28,20 @@ test(function xor() {
 });
 
 test(function token() {
-  var SCRAMBLE = new Buffer([0, 1, 2, 3, 4, 5]),
-      PASS = 'root',
-      STAGE_1 = auth.sha1(PASS),
-      TOKEN = auth.xor(
-        auth.sha1(new Buffer(SCRAMBLE + auth.sha1(STAGE_1), 'binary')),
-        STAGE_1
-       );
+  var SCRAMBLE = new Buffer([0, 1, 2, 3, 4, 5]);
 
-  assert.deepEqual(auth.token('root', SCRAMBLE), TOKEN);
+  (function testRegular() {
+    var PASS = 'root',
+        STAGE_1 = auth.sha1(PASS),
+        TOKEN = auth.xor(
+          auth.sha1(new Buffer(SCRAMBLE + auth.sha1(STAGE_1), 'binary')),
+          STAGE_1
+         );
+
+    assert.deepEqual(auth.token('root', SCRAMBLE), TOKEN);
+  })();
+
+  (function testNoPassword() {
+    assert.deepEqual(auth.token(null, SCRAMBLE), new Buffer(0));
+  })();
 });
