@@ -36,7 +36,7 @@ testing.
 
 ## Tutorial
 
-    var Client = new require('mysql').Client,
+    var Client = require('mysql').Client,
         client = new Client();
 
     client.user = 'root';
