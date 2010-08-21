@@ -15,6 +15,7 @@ test(function constructor() {
   assert.strictEqual(parser.state, Parser.PACKET_LENGTH);
   assert.strictEqual(parser.packet, null);
   assert.strictEqual(parser.greeted, false);
+  assert.strictEqual(parser.authenticated, false);
   assert.strictEqual(parser.receivingFieldPackets, false);
   assert.strictEqual(parser.receivingRowPackets, false);
   assert.strictEqual(parser._lengthCodedLength, null);
@@ -114,6 +115,18 @@ test(function write() {
     assert.strictEqual(parser.packet, null);
   })();
 
+  (function testUseOldPasswordProtocolPacket() {
+    parser.write(new Buffer([1, 0, 0, 1]));
+
+    gently.expect(parser, 'emit', function(event, val) {
+      assert.equal(event, 'packet');
+      assert.equal(val.type, Parser.USE_OLD_PASSWORD_PROTOCOL_PACKET);
+    });
+
+    parser.write(new Buffer([254]));
+  })();
+
+
   (function testErrorPacket() {
     parser.write(new Buffer([12, 0, 0, 1]));
     assert.equal(parser.state, Parser.FIELD_COUNT);
@@ -151,6 +164,7 @@ test(function write() {
 
     parser.write(new Buffer([0x00]));
     assert.equal(packet.type, Parser.OK_PACKET);
+    assert.equal(parser.authenticated, true);
     assert.equal(parser.state, Parser.AFFECTED_ROWS);
 
     parser.write(new Buffer([252, 17, 23]));
