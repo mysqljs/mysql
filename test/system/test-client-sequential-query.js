@@ -7,8 +7,6 @@ var Client = require('mysql').Client,
 client.database = '';
 client.connect();
 
-client.debug = true;
-
 client.query('SELECT 1 as field_a, 2 as field_b', function(err, results) {
   if (err) throw err;
 

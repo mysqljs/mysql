@@ -343,5 +343,6 @@ test(function write() {
 
     parser.write(new Buffer([0xfe]));
     assert.equal(packet.type, Parser.EOF_PACKET);
+    assert.equal(parser.receivingRowPackets, false);
   })();
 });
