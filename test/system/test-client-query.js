@@ -11,7 +11,7 @@ client.connect();
 client.query(
   'CREATE DATABASE '+TEST_CONFIG.database,
   gently.expect(function createDbCb(err) {
-    if (err && err.errorNumber != Client.ERROR_DB_CREATE_EXISTS) {
+    if (err && err.number != Client.ERROR_DB_CREATE_EXISTS) {
       throw err;
     }
   })

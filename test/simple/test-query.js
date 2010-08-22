@@ -1,5 +1,6 @@
 require('../common');
-var Query = require('mysql/query'),
+var ClientStub = GENTLY.stub('./client'),
+    Query = require('mysql/query'),
     EventEmitter = require('events').EventEmitter,
     Parser = require('mysql/parser'),
     query,
@@ -18,22 +19,32 @@ test(function constructor() {
 
 test(function _handlePacket() {
   (function testOkPacket() {
-    var PACKET = {type: Parser.OK_PACKET};
+    var PACKET = {type: Parser.OK_PACKET}, USER_OBJECT = {};
+
+    gently.expect(ClientStub, '_packetToUserObject', function (packet) {
+      assert.strictEqual(packet, PACKET);
+      return USER_OBJECT;
+    });
 
     gently.expect(query, 'emit', function (event, packet) {
       assert.equal(event, 'end');
-      assert.strictEqual(packet, PACKET);
+      assert.strictEqual(packet, USER_OBJECT);
     });
 
     query._handlePacket(PACKET);
   })();
 
   (function testErrorPacket() {
-    var PACKET = {type: Parser.ERROR_PACKET};
+    var PACKET = {type: Parser.ERROR_PACKET}, USER_OBJECT = {};
+
+    gently.expect(ClientStub, '_packetToUserObject', function (packet) {
+      assert.strictEqual(packet, PACKET);
+      return USER_OBJECT;
+    });
 
     gently.expect(query, 'emit', function (event, packet) {
       assert.equal(event, 'error');
-      assert.strictEqual(packet, PACKET);
+      assert.strictEqual(packet, USER_OBJECT);
     });
 
     query._handlePacket(PACKET);

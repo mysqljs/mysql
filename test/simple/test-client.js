@@ -349,6 +349,8 @@ test(function _dequeue() {
 });
 
 test(function _handlePacket() {
+  var USER_OBJECT = {};
+
   (function testGreeting() {
     var PACKET = {type: Parser.GREETING_PACKET};
 
@@ -360,10 +362,16 @@ test(function _handlePacket() {
   })();
 
   (function testNormalOk() {
-    var PACKET = {type: Parser.OK_PACKET},
-        TASK = {delegate: gently.expect(function okCb(err, packet) {
-          assert.strictEqual(packet, PACKET);
-        })};
+    var PACKET = {type: Parser.OK_PACKET};
+
+    gently.expect(Client, '_packetToUserObject', function (packet) {
+      assert.strictEqual(packet, PACKET);
+      return USER_OBJECT;
+    });
+
+    var TASK = {delegate: gently.expect(function okCb(err, packet) {
+        assert.strictEqual(packet, USER_OBJECT);
+      })};
     gently.expect(client, '_dequeue');
 
     client._queue = [TASK];
@@ -379,10 +387,16 @@ test(function _handlePacket() {
   })();
 
   (function testNormalError() {
-    var PACKET = {type: Parser.ERROR_PACKET},
-        TASK = {delegate: gently.expect(function errCb(packet) {
-          assert.strictEqual(packet, PACKET);
-        })};
+    var PACKET = {type: Parser.ERROR_PACKET};
+
+    gently.expect(Client, '_packetToUserObject', function (packet) {
+      assert.strictEqual(packet, PACKET);
+      return USER_OBJECT;
+    });
+
+    var TASK = {delegate: gently.expect(function errCb(packet) {
+        assert.strictEqual(packet, USER_OBJECT);
+      })};
     gently.expect(client, '_dequeue');
 
     client._queue = [TASK];
@@ -393,9 +407,14 @@ test(function _handlePacket() {
     var PACKET = {type: Parser.ERROR_PACKET};
     client._queue = [{}];
 
+    gently.expect(Client, '_packetToUserObject', function (packet) {
+      assert.strictEqual(packet, PACKET);
+      return USER_OBJECT;
+    });
+
     gently.expect(client, 'emit', function(event, err) {
       assert.equal(event, 'error');
-      assert.strictEqual(err, PACKET);
+      assert.strictEqual(err, USER_OBJECT);
     });
     gently.expect(client, '_dequeue');
     client._handlePacket(PACKET);
@@ -479,4 +498,44 @@ test(function _sendPacket() {
   });
 
   client._sendAuth(GREETING);
+});
+
+test(function _packetToUserObject() {
+  gently.restore(Client, '_packetToUserObject');
+
+  (function testOkPacket() {
+    var PACKET = {
+      type: Parser.OK_PACKET,
+      length: 65,
+      received: 65,
+      number: 92,
+      foo: 'bar',
+    };
+
+    var ok = Client._packetToUserObject(PACKET);
+
+    assert.notStrictEqual(PACKET, ok);
+    assert.ok(!(ok instanceof Error));
+    assert.equal(ok.foo, PACKET.foo);
+    assert.equal(ok.type, undefined);
+    assert.equal(ok.length, undefined);
+    assert.equal(ok.received, undefined);
+  })();
+
+  (function testErrorPacket() {
+    var PACKET = {
+      type: Parser.ERROR_PACKET,
+      foo: 'bar',
+      errorMessage: 'oh no',
+      errorNumber: 1007
+    };
+
+    var err = Client._packetToUserObject(PACKET);
+
+    assert.ok(err instanceof Error);
+    assert.equal(err.message, 'oh no');
+    assert.equal(err.errorMessage, undefined);
+    assert.equal(err.number, 1007);
+    assert.equal(err.errorNumber, undefined);
+  })();
 });
