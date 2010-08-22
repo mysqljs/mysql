@@ -257,8 +257,13 @@ test(function query() {
 
       gently.expect(client, '_enqueue', function() {
         (function testQueryErr() {
+          var ERR = new Error('oh oh');
+          gently.expect(client, 'emit', function (event, err) {
+            assert.equal(event, 'error');
+            assert.strictEqual(err, ERR);
+          });
           gently.expect(client, '_dequeue');
-          queryEmit.error();
+          queryEmit.error(ERR);
         })();
 
         (function testQuerySimpleEnd() {
