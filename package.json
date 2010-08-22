@@ -1,0 +1,6 @@
+{ "name" : "mysql"
+, "version": "0.1.0"
+, "dependencies": {"gently": ">=0.8.0"}
+, "directories" : { "lib" : "./lib/mysql" }
+, "main" : "./lib/mysql/index"
+}
