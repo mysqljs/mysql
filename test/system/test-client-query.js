@@ -63,8 +63,8 @@ var query = client.query(
       throw err;
     }
 
-    console.log(results);
-    console.log(fields);
+    assert.equal(results.length, 2);
+    assert.equal(results[1].title, 'another entry');
     client.end();
   })
 );
