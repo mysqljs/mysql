@@ -28,6 +28,8 @@ test(function constructor() {
       assert.strictEqual(client.password, null);
       assert.strictEqual(client.database, null);
 
+      assert.strictEqual(client.debug, false);
+
       assert.strictEqual(client.flags, Client.defaultFlags);
       assert.strictEqual(client.maxPacketSize, 0x01000000);
       assert.strictEqual(client.charsetNumber, 8);
