@@ -97,7 +97,7 @@ testing.
 ### new mysql.Client([options])
 
 Creates a new client instance. Any client property can be set using the
-`options array.
+`options` array.
 
 ### client.host = 'localhost'
 
