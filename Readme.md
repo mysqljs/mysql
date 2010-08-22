@@ -119,6 +119,10 @@ The password to use.
 
 The name of the database to connect to (optional).
 
+### client.debug = false
+
+Prints incoming and outgoing packets, useful for development / testing purposes.
+
 ### client.flags = Client.defaultFlags
 
 Connection flags send to the server.
