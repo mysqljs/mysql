@@ -25,6 +25,10 @@ testing.
 
 [transloadit]: http://transloadit.com/
 
+## Installation
+
+    npm install mysql
+
 ## Design Goals
 
 * TDD: All code is written using test driven development, code coverage should approach 100%
