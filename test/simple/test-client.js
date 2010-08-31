@@ -26,7 +26,7 @@ test(function constructor() {
       assert.strictEqual(client.port, 3306);
       assert.strictEqual(client.user, null);
       assert.strictEqual(client.password, null);
-      assert.strictEqual(client.database, null);
+      assert.strictEqual(client.database, '');
 
       assert.strictEqual(client.debug, false);
 

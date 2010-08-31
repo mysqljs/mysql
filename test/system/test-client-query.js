@@ -3,13 +3,10 @@ var Client = require('mysql').Client,
     client = Client(TEST_CONFIG),
     gently = new Gently();
 
-// our test db might not exist yet, so don't try to connect to it
-client.database = '';
-
 client.connect();
 
 client.query(
-  'CREATE DATABASE '+TEST_CONFIG.database,
+  'CREATE DATABASE '+TEST_DB,
   gently.expect(function createDbCb(err) {
     if (err && err.number != Client.ERROR_DB_CREATE_EXISTS) {
       throw err;
@@ -18,7 +15,7 @@ client.query(
 );
 
 client.query(
-  'USE '+TEST_CONFIG.database,
+  'USE '+TEST_DB,
   gently.expect(function useDbCb(err) {
     if (err) {
       throw err;
