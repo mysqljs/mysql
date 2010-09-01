@@ -72,16 +72,19 @@ void scramble_323(char *to, const char *message, const char *password)
 }
 
 int main() {
-  const char password[] = "root";
-  uint password_len = 4;
+  const char password1[] = "root";
+  const char password2[] = "long password test";
+  const char password3[] = "saf789yasfbsd89f";
   ulong result[2];
 
-  printf("hash_password(\"%s\"):\n", password);
+  hash_password((ulong*)result, password1, strlen(password1));
+  printf("hash_password(\"%s\") = %08x%08x\n", password1, result[0], result[1]);
 
-  hash_password(result, password, password_len);
+  hash_password((ulong*)result, password2, strlen(password2));
+  printf("hash_password(\"%s\") = %08x%08x\n", password2, result[0], result[1]);
 
-  printf("result 1: %ld\n", result[0]);
-  printf("result 2: %ld\n", result[1]);
+  hash_password((ulong*)result, password3, strlen(password3));
+  printf("hash_password(\"%s\") = %08x%08x\n", password3, result[0], result[1]);
 
   return 23;
 }
