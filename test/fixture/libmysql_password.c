@@ -77,6 +77,7 @@ int main() {
   const char password3[] = "saf789yasfbsd89f";
   ulong result[2];
   struct rand_struct rand_st;
+  int i;
 
   // test hash_password
   hash_password((ulong*)result, password1, strlen(password1));
@@ -102,6 +103,13 @@ int main() {
   randominit(&rand_st, 0xFFFFFFFF, 0xFFFFFFFF);
   printf("randominit(0xFFFFFFFF,0xFFFFFFFF) = %08x, %08x\n", rand_st.seed1, rand_st.seed2);
 
+
+  // test my_rnd
+  randominit(&rand_st, 3252345, 7149734);
+  printf("randominit(3252345, 7149734) = %08x, %08x\n", rand_st.seed1, rand_st.seed2);
+  for (i=0; i<10; i++){
+	  printf("my_rnd() : %.16f\n", my_rnd(&rand_st));
+  }
 
   return 23;
 }
