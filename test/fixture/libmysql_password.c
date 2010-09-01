@@ -76,7 +76,9 @@ int main() {
   const char password2[] = "long password test";
   const char password3[] = "saf789yasfbsd89f";
   ulong result[2];
+  struct rand_struct rand_st;
 
+  // test hash_password
   hash_password((ulong*)result, password1, strlen(password1));
   printf("hash_password(\"%s\") = %08x%08x\n", password1, result[0], result[1]);
 
@@ -85,6 +87,21 @@ int main() {
 
   hash_password((ulong*)result, password3, strlen(password3));
   printf("hash_password(\"%s\") = %08x%08x\n", password3, result[0], result[1]);
+
+
+  // test randominit
+  randominit(&rand_st, 0, 0);
+  printf("randominit(0x00000000,0x00000000) = %08x, %08x\n", rand_st.seed1, rand_st.seed2);
+
+  randominit(&rand_st, 0xFFFF, 0xFFFF);
+  printf("randominit(0x0000FFFF,0x0000FFFF) = %08x, %08x\n", rand_st.seed1, rand_st.seed2);
+
+  randominit(&rand_st, 0x50000000, 0x50000000);
+  printf("randominit(0x50000000,0x50000000) = %08x, %08x\n", rand_st.seed1, rand_st.seed2);
+
+  randominit(&rand_st, 0xFFFFFFFF, 0xFFFFFFFF);
+  printf("randominit(0xFFFFFFFF,0xFFFFFFFF) = %08x, %08x\n", rand_st.seed1, rand_st.seed2);
+
 
   return 23;
 }
