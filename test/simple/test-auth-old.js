@@ -40,6 +40,15 @@ function test_myrnd_sequence(seed1, seed2, expected){
 	}
 }
 
+function test_scramble323(message, password, bytes){
+	var expected = new Buffer(bytes);
+	var actual = auth.scramble323(new Buffer(message), password);
+
+	sys.print('test_scramble323('+message+', '+password+')...');
+	assert.deepEqual(actual, expected);
+	sys.print('ok\n');
+}
+
 test_hash_password('root',			[0x67, 0x45, 0x7E, 0x22, 0x6a, 0x1a, 0x15, 0xbd]);
 test_hash_password('long password test',	[0x6c, 0x24, 0x68, 0x41, 0x2c, 0xa6, 0x86, 0x56]);
 test_hash_password('saf789yasfbsd89f',		[0x6c, 0x9b, 0x2f, 0x07, 0x17, 0xeb, 0x95, 0xc6]);
@@ -63,6 +72,5 @@ test_myrnd_sequence(3252345, 7149734, [
 	0.9215386229767824,
 ]);
 
-
-var b = auth.scramble323(new Buffer("8bytesofstuff"), "root");
-console.log(b);
+test_scramble323("8bytesofstuff", "root", [0x5a, 0x4d, 0x46, 0x47, 0x43, 0x53, 0x58, 0x5f]);
+test_scramble323("e8cf00cec9ec825af22", "saf789yasfbsd", [0x4d, 0x54, 0x5b, 0x47, 0x5f, 0x52, 0x4d, 0x45]);
