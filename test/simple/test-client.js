@@ -34,6 +34,7 @@ test(function constructor() {
       assert.strictEqual(client.maxPacketSize, 0x01000000);
       assert.strictEqual(client.charsetNumber, 8);
 
+      assert.strictEqual(client._greeting, null);
       assert.deepEqual(client._queue, []);
       assert.strictEqual(client._connection, null);
       assert.strictEqual(client._parser, null);
@@ -364,10 +365,11 @@ test(function _handlePacket() {
   })();
 
   (function testUseOldPasswordProtocol() {
+    client._greeting = {};
     var PACKET = {type: Parser.USE_OLD_PASSWORD_PROTOCOL_PACKET};
 
-    gently.expect(client, '_sendOldAuth', function (packet) {
-      assert.strictEqual(packet, PACKET);
+    gently.expect(client, '_sendOldAuth', function (greeting) {
+      assert.strictEqual(greeting, client._greeting);
     });
 
     client._handlePacket(PACKET);
@@ -510,6 +512,7 @@ test(function _sendAuth() {
   });
 
   client._sendAuth(GREETING);
+  assert.strictEqual(client._greeting, GREETING);
 });
 
 test(function _packetToUserObject() {
@@ -553,65 +556,37 @@ test(function _packetToUserObject() {
 });
 
 test(function _sendOldAuth() {
-  var GREETING = {scrambleBuffer: new Buffer(20), number: 1},
+  var GREETING = {scrambleBuffer: new Buffer(8), number: 1},
       TOKEN = new Buffer(8),
       PACKET;
 
   client.user = 'root';
   client.password = 'hello world';
 
-  //gently.expect(HIJACKED['./auth'], 'token', function(password, scramble) {
-    //assert.strictEqual(password, client.password);
-    //assert.strictEqual(scramble, GREETING.scrambleBuffer);
-    //return TOKEN;
-  //});
+  gently.expect(HIJACKED['./auth'], 'scramble323', function(scramble, password) {
+    assert.strictEqual(scramble, GREETING.scrambleBuffer);
+    assert.strictEqual(password, client.password);
+    return TOKEN;
+  });
 
-  //gently.expect(OutgoingPacketStub, 'new', function(size, number) {
-    //assert.equal(size, (
-      //4 + 4 + 1 + 23 +
-      //client.user.length + 1 +
-      //TOKEN.length + 1 +
-      //client.database.length + 1
-    //));
+  gently.expect(OutgoingPacketStub, 'new', function(size, number) {
+    assert.equal(size, TOKEN.length + 1);
 
-    //assert.equal(number, GREETING.number + 1);
-    //PACKET = this;
+    assert.equal(number, GREETING.number + 3);
+    PACKET = this;
 
-    //gently.expect(PACKET, 'writeNumber', function(bytes, number) {
-      //assert.strictEqual(bytes, 4);
-      //assert.strictEqual(client.flags, number);
-    //});
+    gently.expect(PACKET, 'write', function(token) {
+      assert.strictEqual(token, TOKEN);
+    });
 
-    //gently.expect(PACKET, 'writeNumber', function(bytes, number) {
-      //assert.strictEqual(bytes, 4);
-      //assert.strictEqual(client.maxPacketSize, number);
-    //});
+    gently.expect(PACKET, 'writeFiller', function(bytes) {
+      assert.strictEqual(bytes, 1);
+    });
 
-    //gently.expect(PACKET, 'writeNumber', function(bytes, number) {
-      //assert.strictEqual(bytes, 1);
-      //assert.strictEqual(client.charsetNumber, number);
-    //});
-
-    //gently.expect(PACKET, 'writeFiller', function(bytes) {
-      //assert.strictEqual(bytes, 23);
-    //});
-
-    //gently.expect(PACKET, 'writeNullTerminated', function(user) {
-      //assert.strictEqual(user, client.user);
-    //});
-
-    //gently.expect(PACKET, 'writeLengthCoded', function(token) {
-      //assert.strictEqual(token, TOKEN);
-    //});
-
-    //gently.expect(PACKET, 'writeNullTerminated', function(database) {
-      //assert.strictEqual(database, client.database);
-    //});
-
-    //gently.expect(client, 'write', function(packet) {
-      //assert.strictEqual(packet, PACKET);
-    //});
-  //});
+    gently.expect(client, 'write', function(packet) {
+      assert.strictEqual(packet, PACKET);
+    });
+  });
 
   client._sendOldAuth(GREETING);
 });
