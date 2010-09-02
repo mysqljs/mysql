@@ -60,8 +60,16 @@ void scramble_323(char *to, const char *message, const char *password)
     const char *message_end= message + SCRAMBLE_LENGTH_323;
     hash_password(hash_pass,password, (uint) strlen(password));
     hash_password(hash_message, message, SCRAMBLE_LENGTH_323);
+
+printf("hash_pass = %08x%08x\n", hash_pass[0], hash_pass[1]);
+printf("hash_message = %08x%08x\n", hash_message[0], hash_message[1]);
+
     randominit(&rand_st,hash_pass[0] ^ hash_message[0],
                hash_pass[1] ^ hash_message[1]);
+
+printf("rs.seed1: %d\n", rand_st.seed1);
+printf("rs.seed2: %d\n", rand_st.seed2);
+
     for (; message < message_end; message++)
       *to++= (char) (floor(my_rnd(&rand_st)*31)+64);
     extra=(char) (floor(my_rnd(&rand_st)*31));
@@ -76,6 +84,7 @@ int main() {
   const char password2[] = "long password test";
   const char password3[] = "saf789yasfbsd89f";
   ulong result[2];
+  char scrm[9]; // SCRAMBLE_LENGTH_323+1
   struct rand_struct rand_st;
   int i;
 
@@ -110,6 +119,11 @@ int main() {
   for (i=0; i<10; i++){
 	  printf("my_rnd() : %.16f\n", my_rnd(&rand_st));
   }
+
+
+  // test scramble_323
+  scramble_323(scrm, "8bytesofstuff", "root");
+  printf("scramble: %02x %02x %02x %02x %02x %02x %02x %02x %02x\n", scrm[0], scrm[1], scrm[2], scrm[3], scrm[4], scrm[5], scrm[6], scrm[7], scrm[8]);
 
   return 23;
 }

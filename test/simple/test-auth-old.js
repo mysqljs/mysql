@@ -60,6 +60,9 @@ test_myrnd_sequence(3252345, 7149734, [
 	0.2488940062456708,
 	0.2570431151027261,
 	0.5385335875102631,
-	0.9215386229767824,	
+	0.9215386229767824,
 ]);
 
+
+var b = auth.scramble323(new Buffer("8bytesofstuff"), "root");
+console.log(b);
