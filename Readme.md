@@ -5,6 +5,13 @@
 A node.js module implementing the
 [MySQL protocol](http://forge.mysql.com/wiki/MySQL_Internals_ClientServer_Protocol).
 
+## Contributors
+
+* Bert Belder ([piscisaureus](http://github.com/felixge/node-mysql/commits/master?author=piscisaureus))
+* Alan Gutierrez ([bigeasy](http://github.com/felixge/node-mysql/commits/master?author=bigeasy))
+* Brian ([mscdex](http://github.com/felixge/node-mysql/commits/master?author=mscdex))
+* Cal Henderson ([iamcal](http://github.com/felixge/node-mysql/commits/master?author=iamcal))
+
 ## Sponsors
 
 * [Joyent](http://www.joyent.com/)
