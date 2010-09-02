@@ -45,15 +45,3 @@ test(function token() {
     assert.deepEqual(auth.token(null, SCRAMBLE), new Buffer(0));
   })();
 });
-
-(function testHashPassword() {
-  var BUFFER;
-  gently.expect(auth, 'int32Write', 2, function (buffer, number, offset) {
-    assert.equal(number, [1732607522, 1780094397][offset / 4]);
-    assert.equal(buffer.length, 8);
-    BUFFER = buffer;
-  });
-
-  var result = auth.hashPassword('root');
-  assert.strictEqual(result, BUFFER);
-})();
