@@ -192,10 +192,9 @@ parameter is provided which contains the information from the mysql OK packet.
 
 At this point the module is ready to be tried out, but a lot of things are yet to be done:
 
+* Auto-cast mysql types into JS types
 * Prepared Statements
-* Test using no Password
 * Charsets handling
-* Import Error code constants
 * ...
 
 ## License
