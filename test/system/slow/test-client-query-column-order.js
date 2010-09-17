@@ -1,5 +1,5 @@
-require('../common');
-var REPEATS = 1000,
+require('../../common');
+var REPEATS = 500,
     Client = require('mysql').Client,
     client = Client(TEST_CONFIG),
     fs = require('fs'),
