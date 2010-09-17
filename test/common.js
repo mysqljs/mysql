@@ -12,6 +12,7 @@ global.TEST_CONFIG = {
 };
 
 global.TEST_TABLE = 'posts';
+global.TEST_FIXTURES = path.join(__dirname, 'fixture');
 
 global.Gently = require('gently');
 global.assert = require('assert');
