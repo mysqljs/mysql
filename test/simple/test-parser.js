@@ -343,6 +343,7 @@ test(function write() {
       assert.equal(event, 'data');
       assert.equal(val.toString(), 'Fine!');
       assert.equal(remaining, 0);
+      assert.equal(packet.index, 0);
     });
 
     parser.write(new Buffer(' are you?\u0005Fine!'));
