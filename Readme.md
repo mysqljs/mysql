@@ -192,10 +192,14 @@ parameter is provided which contains the information from the mysql OK packet.
 
 At this point the module is ready to be tried out, but a lot of things are yet to be done:
 
-* Auto-cast mysql types into JS types
+* Handle timeouts / reconnect
+* Remaining mysql commands
 * Prepared Statements
 * Charsets handling
-* ...
+* Packet's > 16 MB
+* Compression
+* Performance profiling
+* ?
 
 ## License
 
