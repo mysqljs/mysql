@@ -28,6 +28,7 @@ test(function constructor() {
       assert.strictEqual(client.password, null);
       assert.strictEqual(client.database, '');
 
+      assert.strictEqual(client.typeCast, true);
       assert.strictEqual(client.debug, false);
 
       assert.strictEqual(client.flags, Client.defaultFlags);
@@ -139,6 +140,8 @@ test(function query() {
       QUERY,
       queryEmit = {};
 
+  client.typeCast = 'super';
+
   (function testRegular() {
     gently.expect(client, 'format', function(sql, params) {
       assert.strictEqual(sql, SQL);
@@ -146,8 +149,10 @@ test(function query() {
       return FORMATED_SQL;
     });
 
-    gently.expect(QueryStub, 'new', function() {
+    gently.expect(QueryStub, 'new', function(properties) {
       QUERY = this;
+
+      assert.equal(properties.typeCast, client.typeCast);
 
       var events = ['error', 'field', 'row', 'end'];
       gently.expect(QUERY, 'on', events.length, function (event, fn) {

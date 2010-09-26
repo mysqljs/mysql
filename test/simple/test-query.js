@@ -15,6 +15,8 @@ function test(test) {
 
 test(function constructor() {
   assert.ok(query instanceof EventEmitter);
+  assert.strictEqual(query.typeCast, true);
+  assert.equal(new Query({foo: 'bar'}).foo, 'bar');
 });
 
 test(function _handlePacket() {
@@ -60,7 +62,7 @@ test(function _handlePacket() {
 
     query._handlePacket(PACKET);
 
-    assert.deepEqual(query._fields, [PACKET.name]);
+    assert.strictEqual(query._fields[0], PACKET);
   })();
 
   (function testEofPacket() {
@@ -78,7 +80,7 @@ test(function _handlePacket() {
   })();
 
   (function testRowPacket() {
-    query._fields = ['a', 'b'];
+    query._fields = [{name: 'a', fieldType: -1}, {name: 'b', fieldType: -1}];
 
     var PACKET = new EventEmitter();
     PACKET.type = Parser.ROW_DATA_PACKET;
@@ -100,4 +102,44 @@ test(function _handlePacket() {
 
     query._handlePacket(PACKET);
   })();
+
+  function typeCast(type, strValue) {
+    query._fields = [{name: 'my_field', fieldType: type}];
+
+    var PACKET = new EventEmitter(), r;
+    PACKET.type = Parser.ROW_DATA_PACKET;
+
+    gently.expect(PACKET, 'on', function (event, fn) {
+      assert.equal(event, 'data');
+
+      gently.expect(query, 'emit', function (event, row) {
+        assert.equal(event, 'row');
+        r = row.my_field;
+      });
+
+      fn(new Buffer(strValue), 0);
+    });
+
+    query._handlePacket(PACKET);
+    return r;
+  }
+
+  assert.deepEqual(typeCast(Query.FIELD_TYPE_TIMESTAMP, '2010-10-05 06:23:42'), new Date('2010-10-05 06:23:42Z'));
+
+  assert.deepEqual(typeCast(Query.FIELD_TYPE_TIMESTAMP, '2010-10-05'), new Date('2010-10-05Z'));
+  assert.deepEqual(typeCast(Query.FIELD_TYPE_DATE, '2010-10-05'), new Date('2010-10-05Z'));
+  assert.deepEqual(typeCast(Query.FIELD_TYPE_DATETIME, '2010-10-05'), new Date('2010-10-05Z'));
+  assert.deepEqual(typeCast(Query.FIELD_TYPE_NEWDATE, '2010-10-05'), new Date('2010-10-05Z'));
+
+  assert.strictEqual(typeCast(Query.FIELD_TYPE_TINY, '08'), 8);
+  assert.strictEqual(typeCast(Query.FIELD_TYPE_SHORT, '08'), 8);
+  assert.strictEqual(typeCast(Query.FIELD_TYPE_LONG, '08'), 8);
+  assert.strictEqual(typeCast(Query.FIELD_TYPE_LONGLONG, '08'), 8);
+  assert.strictEqual(typeCast(Query.FIELD_TYPE_INT24, '08'), 8);
+  assert.strictEqual(typeCast(Query.FIELD_TYPE_YEAR, '08'), 8);
+
+  assert.strictEqual(typeCast(Query.FIELD_TYPE_DECIMAL, '2.8'), 2.8);
+  assert.strictEqual(typeCast(Query.FIELD_TYPE_FLOAT, '2.8'), 2.8);
+  assert.strictEqual(typeCast(Query.FIELD_TYPE_DOUBLE, '2.8'), 2.8);
+  assert.strictEqual(typeCast(Query.FIELD_TYPE_NEWDECIMAL, '2.8'), 2.8);
 });

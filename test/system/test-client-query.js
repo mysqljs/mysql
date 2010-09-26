@@ -62,6 +62,8 @@ var query = client.query(
 
     assert.equal(results.length, 2);
     assert.equal(results[1].title, 'another entry');
+    assert.ok(typeof results[1].id == 'number');
+    assert.ok(results[1].created instanceof Date);
     client.end();
   })
 );
