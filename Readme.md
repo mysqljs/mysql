@@ -15,6 +15,7 @@ A node.js module implementing the
 ## Sponsors
 
 * [Joyent](http://www.joyent.com/)
+* [pinkbike.com](http://pinkbike.com/)
 
 I'm working on this driver because I need it for my own startup
 ([transloadit.com][transloadit]), but it's a big project (~100-200 hours) with
