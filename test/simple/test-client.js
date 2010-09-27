@@ -7,7 +7,7 @@ var StreamStub = GENTLY.stub('net', 'Stream'),
 
 for (var k in Parser) {
   ParserStub[k] = Parser[k];
-}
+};
 
 var Client = require('mysql/client');
 
@@ -16,7 +16,7 @@ function test(test) {
   gently = new Gently();
   test();
   gently.verify(test.name);
-}
+};
 
 test(function constructor() {
   (function testDefaultProperties() {
@@ -529,7 +529,7 @@ test(function _packetToUserObject() {
       length: 65,
       received: 65,
       number: 92,
-      foo: 'bar',
+      foo: 'bar'
     };
 
     var ok = Client._packetToUserObject(PACKET);
