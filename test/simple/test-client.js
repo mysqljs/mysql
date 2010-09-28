@@ -33,7 +33,7 @@ test(function constructor() {
 
       assert.strictEqual(client.flags, Client.defaultFlags);
       assert.strictEqual(client.maxPacketSize, 0x01000000);
-      assert.strictEqual(client.charsetNumber, 8);
+      assert.strictEqual(client.charsetNumber, Client.UTF8_UNICODE_CI);
 
       assert.strictEqual(client._greeting, null);
       assert.deepEqual(client._queue, []);
