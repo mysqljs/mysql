@@ -196,7 +196,6 @@ At this point the module is ready to be tried out, but a lot of things are yet t
 * Handle timeouts / reconnect
 * Remaining mysql commands
 * Prepared Statements
-* Charsets handling
 * Packet's > 16 MB
 * Compression
 * Performance profiling
