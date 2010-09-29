@@ -9,6 +9,8 @@ for (var k in Parser) {
   ParserStub[k] = Parser[k];
 };
 
+QueryStub.prototype._paused = false;
+
 var Client = require('mysql/client');
 
 function test(test) {
@@ -184,6 +186,10 @@ test(function query() {
         gently.expect(client, 'write', function(packet) {
           assert.strictEqual(packet, PACKET);
         });
+
+        gently.expect(QUERY, 'on', function (event, fn) {
+          assert.equal(event, 'throttle');
+        });
       });
     });
 
@@ -196,6 +202,11 @@ test(function query() {
 
     (function testQueryErr() {
       var ERR = new Error('oh no');
+
+      gently.expect(QUERY, 'removeListener', function (event, fn) {
+        assert.equal(event, 'throttle');
+      });
+
       CB = gently.expect(function errCb(err) {
         assert.strictEqual(err, ERR);
       });
@@ -207,6 +218,11 @@ test(function query() {
 
     (function testQuerySimpleEnd() {
       var RESULT = {};
+
+      gently.expect(QUERY, 'removeListener', function (event, fn) {
+        assert.equal(event, 'throttle');
+      });
+
       CB = gently.expect(function okCb(err, result) {
         assert.strictEqual(result, RESULT);
       });
@@ -225,6 +241,10 @@ test(function query() {
       queryEmit.field(FIELD_2);
       queryEmit.row(ROW_1);
       queryEmit.row(ROW_2);
+
+      gently.expect(QUERY, 'removeListener', function (event, fn) {
+        assert.equal(event, 'throttle');
+      });
 
       CB = gently.expect(function okCb(err, rows, fields) {
         assert.strictEqual(rows[0], ROW_1);
@@ -266,16 +286,28 @@ test(function query() {
       gently.expect(client, '_enqueue', function() {
         (function testQueryErr() {
           var ERR = new Error('oh oh');
+
+          gently.expect(QUERY, 'removeListener', function (event, fn) {
+            assert.equal(event, 'throttle');
+          });
+
           gently.expect(client, 'emit', function (event, err) {
             assert.equal(event, 'error');
             assert.strictEqual(err, ERR);
           });
+
           gently.expect(client, '_dequeue');
+
           queryEmit.error(ERR);
         })();
 
         (function testQuerySimpleEnd() {
+          gently.expect(QUERY, 'removeListener', function (event, fn) {
+            assert.equal(event, 'throttle');
+          });
+
           gently.expect(client, '_dequeue');
+
           queryEmit.end();
         })();
       });
