@@ -194,6 +194,7 @@ parameter is provided which contains the information from the mysql OK packet.
 At this point the module is ready to be tried out, but a lot of things are yet to be done:
 
 * Handle timeouts / reconnect
+* Pause / resume
 * Remaining mysql commands
 * Prepared Statements
 * Packet's > 16 MB
