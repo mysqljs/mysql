@@ -176,6 +176,10 @@ the `client.query` API.
 Tells the query to stop emitting 'field', 'row', 'end' and 'error' events
 until query.resume() is called.
 
+Beware that when multiple queries are sent through the same client connection,
+these queries are executed one after the other. As long as a query is paused,
+subsequent queries using the same client won't be executed.
+
 ### query.resume()
 
 Make the query emit events again after it has been paused with query.pause().
