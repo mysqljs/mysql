@@ -157,7 +157,7 @@ placeholder mechanism described above.
 
 Escapes a single `val` for use inside of a sql string.
 
-### client.end()
+### client.end([cb])
 
 Closes the connection to the server.
 
