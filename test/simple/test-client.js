@@ -10,6 +10,9 @@ for (var k in Parser) {
 };
 
 QueryStub.prototype._paused = false;
+QueryStub.prototype.listeners = function() {
+  return [];
+};
 
 var Client = require('mysql/client');
 
