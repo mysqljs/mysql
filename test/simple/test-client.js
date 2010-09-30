@@ -9,6 +9,10 @@ for (var k in Parser) {
   ParserStub[k] = Parser[k];
 };
 
+QueryStub.prototype.listeners = function() {
+  return [];
+};
+
 var Client = require('mysql/client');
 
 function test(test) {
