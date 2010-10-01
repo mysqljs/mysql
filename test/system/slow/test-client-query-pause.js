@@ -286,7 +286,7 @@ addTest(function testThrowsUpdate(done) {
 addTest(function testThrowsError(done) {
   var query = client.query('bad $#%^!! query');
 
-  client.on('error', gently.expect(function errCb(packet) {
+  query.on('error', gently.expect(function errCb(packet) {
     assert.throws(function() {
       query.pause();
     });
