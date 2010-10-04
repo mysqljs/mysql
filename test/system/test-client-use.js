@@ -7,7 +7,8 @@ client.connect(gently.expect(function connectCb(err, result) {
 
     assert.strictEqual(result.affectedRows, 0);
   
-    client.selectDB('mysql', function() {   
+    //With callback
+    client.use('mysql', function() {   
         client.query('show tables', function(err, rows, fields) {
             //console.log('Showing tables from mysql database: ', rows.length);
             var name = '';
@@ -15,7 +16,7 @@ client.connect(gently.expect(function connectCb(err, result) {
                 name = i.replace('Tables_in_', '').toLowerCase();
             }
             assert.equal(name, 'mysql');
-            client.selectDB('information_schema', function() {
+            client.use('information_schema', function() {
                 client.query('show tables', function(err, rows, fields) {
                     //console.log('Show tables from information_schema: ', rows.length);
                     var name = '';
@@ -27,6 +28,17 @@ client.connect(gently.expect(function connectCb(err, result) {
                 });
             });
         });
+    });
+    
+    //Without callback
+    client.use('mysql');
+    client.query('show tables', function(err, rows, fields) {
+        //console.log('Showing tables from mysql database: ', rows.length);
+        var name = '';
+        for (var i in fields) {
+            name = i.replace('Tables_in_', '').toLowerCase();
+        }
+        assert.equal(name, 'mysql');
     });
 
 }));
