@@ -76,7 +76,7 @@ test(function connect() {
       assert.equal(host, client.host);
     });
 
-    var events = ['error', 'data'];
+    var events = ['error', 'data', 'end'];
     gently.expect(CONNECTION, 'on', events.length, function(event, fn) {
       assert.equal(event, events.shift());
       onConnection[event] = fn;
@@ -327,9 +327,22 @@ test(function escape() {
 });
 
 test(function end() {
-  client._connection = {};
+  gently.expect(OutgoingPacketStub, 'new', function(size, number) {
+    var PACKET = this;
+    assert.equal(size, 1);
 
-  gently.expect(client._connection, 'end');
+    gently.expect(PACKET, 'writeNumber', function(bytes, number) {
+      assert.equal(bytes, 1);
+      assert.equal(number, Client.COM_QUIT);
+    });
+
+    gently.expect(client, 'write', function(packet) {
+      assert.strictEqual(packet, PACKET);
+    });
+
+    // The MySQL server is responsible for closing the connection, but as the client
+    // isn't really connected and PACKET is only a stub that can't be tested here.
+  });
 
   client.end();
 });
