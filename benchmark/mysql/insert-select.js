@@ -1,4 +1,4 @@
-require('../test/common');
+require('../../test/common');
 var Client = require('mysql/client'),
     client = Client(TEST_CONFIG);
 
@@ -21,8 +21,6 @@ client.query(
     if (err) throw err;
 
     var start = +new Date, inserts = 0, total = 10000;
-    console.log('performing %d inserts ...\n', total);
-
     function insertOne() {
       client.query('INSERT INTO '+TEST_TABLE+' SET title = ?', ['super'], function() {
         inserts++;
