@@ -33,7 +33,18 @@ client.query(
               insertsPerSecond = inserts / duration;
 
           console.log('%d inserts / second', insertsPerSecond.toFixed(2));
-          client.end();
+
+          client.typeCast = false;
+          var selectStart = +new Date;
+          client
+            .query('SELECT * FROM '+TEST_TABLE)
+            .on('row', function(row) {})
+            .on('end', function() {
+              var duration = (+new Date - selectStart) / 1000,
+                  rowsPerSecond = inserts / duration;
+              console.log('%d rows / second', rowsPerSecond.toFixed(2));
+              client.end();
+            });
         }
       });
     }
