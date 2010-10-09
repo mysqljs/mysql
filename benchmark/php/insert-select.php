@@ -22,7 +22,7 @@ mysql_query('CREATE TEMPORARY TABLE '.$table.' ('.
 
 $start = microtime(true);
 for ($i = 0; $i < $INSERTS; $i++) {
-  mysql_query('INSERT INTO '.$table.' SET title = "super";', $connection);
+  mysql_query('INSERT INTO '.$table.' SET title = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";', $connection);
 }
 $duration = (microtime(true) - $start);
 $insertsPerSecond = $INSERTS / $duration;
@@ -30,7 +30,7 @@ echo sprintf("%d inserts / second\n", $insertsPerSecond);
 
 $start = microtime(true);
 $q = mysql_query('SELECT * FROM '.$table);
-while ($a = mysql_fetch_row($q)) {
+while ($a = mysql_fetch_assoc($q)) {
 }
 $duration = (microtime(true) - $start);
 $rowsPerSecond = $INSERTS / $duration;

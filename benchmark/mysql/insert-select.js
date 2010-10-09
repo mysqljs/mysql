@@ -22,7 +22,7 @@ client.query(
 
     var start = +new Date, inserts = 0, total = 10000;
     function insertOne() {
-      client.query('INSERT INTO '+TEST_TABLE+' SET title = ?', ['super'], function() {
+      client.query('INSERT INTO '+TEST_TABLE+' SET title = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"', function() {
         inserts++;
         if (inserts < total) {
           insertOne();
