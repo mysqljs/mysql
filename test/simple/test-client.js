@@ -317,6 +317,32 @@ test(function escape() {
   assert.equal(client.escape('Sup"er'), "'Sup\\\"er'");
 });
 
+test(function ping() {
+  var CB = function() {},
+      PACKET;
+
+  gently.expect(client, '_enqueue', function (fn, cb) {
+    gently.expect(OutgoingPacketStub, 'new', function(size, number) {
+      PACKET = this;
+      assert.equal(size, 1);
+
+      gently.expect(this, 'writeNumber', function (length, val) {
+        assert.equal(length, 1);
+        assert.equal(val, Client.COM_PING);
+      });
+
+      gently.expect(client, 'write', function (packet) {
+        assert.strictEqual(packet, PACKET);
+      });
+    });
+    fn();
+
+    assert.strictEqual(cb, CB);
+  });
+
+  client.ping(CB);
+});
+
 test(function end() {
   var CB = function() {},
       PACKET;
