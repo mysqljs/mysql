@@ -318,11 +318,34 @@ test(function escape() {
 });
 
 test(function end() {
+  var CB = function() {},
+      PACKET;
+
   client._connection = {};
 
-  gently.expect(client._connection, 'end');
+  gently.expect(client, '_enqueue', function (fn, cb) {
+    gently.expect(OutgoingPacketStub, 'new', function(size, number) {
+      PACKET = this;
+      assert.equal(size, 1);
 
-  client.end();
+      gently.expect(this, 'writeNumber', function (length, val) {
+        assert.equal(length, 1);
+        assert.equal(val, Client.COM_QUIT);
+      });
+
+      gently.expect(client, 'write', function (packet) {
+        assert.strictEqual(packet, PACKET);
+      });
+
+      gently.expect(client._connection, 'on', function (event, fn) {
+        assert.equal(event, 'end');
+        assert.strictEqual(fn, CB);
+      });
+    });
+    fn();
+  });
+
+  client.end(CB);
 });
 
 test(function _enqueue() {
