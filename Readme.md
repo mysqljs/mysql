@@ -157,9 +157,16 @@ placeholder mechanism described above.
 
 Escapes a single `val` for use inside of a sql string.
 
+### client.destroy([cb])
+
+Forces the client connection to be destroyed right away. This is not a
+nice way to terminate the connection, use with caution.
+
 ### client.end([cb])
 
-Closes the connection to the server.
+Schedule a COM_QUIT packet for closing the connection. All currently queued
+queries will still execute before the graceful termination of the connection
+is attempted.
 
 ### client event: 'error' (err)
 

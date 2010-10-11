@@ -343,6 +343,13 @@ test(function ping() {
   client.ping(CB);
 });
 
+test(function destroy() {
+  var CONNECTION = client._connection = {};
+
+  gently.expect(CONNECTION, 'destroy');
+  client.destroy();
+});
+
 test(function end() {
   var CB = function() {},
       PACKET;
