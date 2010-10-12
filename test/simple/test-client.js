@@ -374,6 +374,8 @@ test(function end() {
         assert.equal(event, 'end');
         assert.strictEqual(fn, CB);
       });
+
+      gently.expect(client, '_dequeue');
     });
     fn();
   });
