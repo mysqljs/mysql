@@ -159,7 +159,7 @@ test(function write() {
   })();
 
   (function testOkPacket() {
-    parser.write(new Buffer([13, 0, 0, 1]));
+    parser.write(new Buffer([15, 0, 0, 1]));
     var packet = parser.packet;
 
     parser.write(new Buffer([0x00]));
@@ -175,6 +175,11 @@ test(function write() {
 
     parser.write(new Buffer([42, 113]));
     assert.equal(packet.serverStatus, Math.pow(256, 0) * 42 + Math.pow(256, 1) * 113);
+
+    parser.write(new Buffer([32, 153]));
+    assert.equal(packet.warningCount, Math.pow(256, 0) * 32 + Math.pow(256, 1) * 153);
+
+    assert.strictEqual(packet.message, '');
 
     gently.expect(parser, 'emit', function(event, val) {
       assert.equal(event, 'packet');
