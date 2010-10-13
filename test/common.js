@@ -1,7 +1,6 @@
-var path = require('path')
-  , sys = require('sys');
-
+var path = require('path');
 require.paths.unshift(path.dirname(__dirname)+'/lib');
+var sys = require('mysql/sys');
 
 global.TEST_DB = 'node_mysql_test';
 global.TEST_CONFIG = {
