@@ -31,6 +31,7 @@ test(function constructor() {
       assert.strictEqual(client.typeCast, true);
       assert.strictEqual(client.debug, false);
       assert.strictEqual(client.ending, false);
+      assert.strictEqual(client.connected, false);
 
       assert.strictEqual(client.flags, Client.defaultFlags);
       assert.strictEqual(client.maxPacketSize, 0x01000000);
@@ -121,7 +122,14 @@ test(function connect() {
     onConnection.data(BUFFER );
   })();
 
+  (function testEndBeforeConnected() {
+    gently.expect(client, '_prequeue', 0);
+    onConnection.end();
+  })();
+
   (function testUnexpectedEnd() {
+    client.connected = true;
+
     gently.expect(client, '_prequeue', function(fn) {
       assert.strictEqual(fn, CONNECT_FN);
     });
