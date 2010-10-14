@@ -9,10 +9,6 @@ for (var k in Parser) {
   ParserStub[k] = Parser[k];
 };
 
-QueryStub.prototype.listeners = function() {
-  return [];
-};
-
 var Client = require('mysql/client');
 
 function test(test) {
@@ -297,12 +293,28 @@ test(function query() {
       });
 
       gently.expect(client, '_enqueue', function() {
-        (function testQueryErr() {
+        (function testQueryErrWithoutListener() {
           var ERR = new Error('oh oh');
+          gently.expect(QUERY, 'listeners', function (event) {
+            assert.equal(event, 'error');
+            return [1];
+          });
+
           gently.expect(client, 'emit', function (event, err) {
             assert.equal(event, 'error');
             assert.strictEqual(err, ERR);
           });
+          gently.expect(client, '_dequeue');
+          queryEmit.error(ERR);
+        })();
+
+        (function testQueryErrWithListener() {
+          var ERR = new Error('oh oh');
+          gently.expect(QUERY, 'listeners', function (event) {
+            assert.equal(event, 'error');
+            return [1, 2];
+          });
+          gently.expect(client, 'emit', 0);
           gently.expect(client, '_dequeue');
           queryEmit.error(ERR);
         })();
