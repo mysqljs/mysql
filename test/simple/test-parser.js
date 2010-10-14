@@ -205,20 +205,22 @@ test(function write() {
   (function testResultHeaderPacketWithExtra() {
     parser.receivingFieldPackets = false;
 
-    parser.write(new Buffer([2, 0, 0, 1]));
+    parser.write(new Buffer([5, 0, 0, 1]));
     var packet = parser.packet;
 
     parser.write(new Buffer([23]));
-    assert.equal(parser.state, Parser.EXTRA);
+    assert.equal(parser.state, Parser.EXTRA_LENGTH);
     assert.equal(packet.fieldCount, 23);
+
+    parser.write(new Buffer([3]));
 
     gently.expect(parser, 'emit', function(event, val) {
       assert.equal(event, 'packet');
       assert.equal(val.type, Parser.RESULT_SET_HEADER_PACKET);
-      assert.equal(val.extra, 51);
+      assert.equal(val.extra, 'abc');
     });
 
-    parser.write(new Buffer([51]));
+    parser.write(new Buffer('abc'));
   })();
 
   (function testFieldPacket() {
