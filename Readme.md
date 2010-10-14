@@ -148,6 +148,18 @@ query.
 This method returns a `Query` object which can be used to stream incoming row
 data.
 
+### client.ping([cb])
+
+Sends a ping command to the server.
+
+### client.useDatbase(database, [cb])
+
+Same as issuing a `'USE <database>'` query.
+
+### client.statistics([cb])
+
+Returns some server statistics provided by MySql.
+
 ### client.format(sql, params)
 
 Allows to safely insert a list of `params` into a `sql` string using the
