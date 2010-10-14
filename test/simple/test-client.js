@@ -403,6 +403,38 @@ test(function ping() {
   client.ping(CB);
 });
 
+test(function useDatabase() {
+  var CB = function() {},
+      DB = 'foo',
+      PACKET;
+
+  gently.expect(client, '_enqueue', function (fn, cb) {
+    gently.expect(OutgoingPacketStub, 'new', function(size, number) {
+      PACKET = this;
+      assert.equal(size, 1 + Buffer.byteLength(DB, 'utf-8'));
+
+      gently.expect(this, 'writeNumber', function (length, val) {
+        assert.equal(length, 1);
+        assert.equal(val, Client.COM_INIT_DB);
+      });
+
+      gently.expect(PACKET, 'write', function(str, encoding) {
+        assert.equal(str, DB);
+        assert.equal(encoding, 'utf-8');
+      });
+
+      gently.expect(client, 'write', function (packet) {
+        assert.strictEqual(packet, PACKET);
+      });
+    });
+    fn();
+
+    assert.strictEqual(cb, CB);
+  });
+
+  client.useDatabase(DB, CB);
+});
+
 test(function destroy() {
   var CONNECTION = client._connection = {};
 
