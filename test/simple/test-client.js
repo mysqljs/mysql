@@ -135,12 +135,16 @@ test(function connect() {
     });
 
     onConnection.end();
+    assert.equal(client.connected, false);
   })();
 
   (function testExpectedEnd() {
+    client.connected = false;
     client.ending = true;
+
     onConnection.end();
     assert.equal(client.ending, false);
+    assert.equal(client.connected, false);
   })();
 });
 
@@ -492,14 +496,17 @@ test(function _handlePacket() {
 
     client._queue = [TASK];
     client._handlePacket(PACKET);
+    assert.equal(client.connected, true);
   })();
 
   (function testNoDelegateOk() {
     var PACKET = {type: Parser.OK_PACKET};
     client._queue = [{}];
+    client.connected = false;
 
     gently.expect(client, '_dequeue');
     client._handlePacket(PACKET);
+    assert.equal(client.connected, true);
   })();
 
   (function testNormalError() {
