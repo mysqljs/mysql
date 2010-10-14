@@ -207,6 +207,7 @@ At this point the module is ready to be tried out, but a lot of things are yet t
 * Packet's > 16 MB
 * Compression
 * Performance profiling
+* Handle re-connect after bad credential error (should query queue be kept?)
 * ?
 
 ## License
