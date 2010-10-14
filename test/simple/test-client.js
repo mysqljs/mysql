@@ -30,6 +30,7 @@ test(function constructor() {
 
       assert.strictEqual(client.typeCast, true);
       assert.strictEqual(client.debug, false);
+      assert.strictEqual(client.ending, false);
 
       assert.strictEqual(client.flags, Client.defaultFlags);
       assert.strictEqual(client.maxPacketSize, 0x01000000);
@@ -56,10 +57,12 @@ test(function connect() {
   var CONNECTION,
       PARSER,
       onConnection = {},
-      CB = function() {};
+      CB = function() {},
+      CONNECT_FN;
 
   gently.expect(client, '_enqueue', function(task, cb) {
     assert.strictEqual(cb, CB);
+    CONNECT_FN = task;
     task();
   });
 
@@ -71,7 +74,7 @@ test(function connect() {
       assert.equal(host, client.host);
     });
 
-    var events = ['error', 'data'];
+    var events = ['error', 'data', 'end'];
     gently.expect(CONNECTION, 'on', events.length, function(event, fn) {
       assert.equal(event, events.shift());
       onConnection[event] = fn;
@@ -116,6 +119,20 @@ test(function connect() {
     });
 
     onConnection.data(BUFFER );
+  })();
+
+  (function testUnexpectedEnd() {
+    gently.expect(client, '_prequeue', function(fn) {
+      assert.strictEqual(fn, CONNECT_FN);
+    });
+
+    onConnection.end();
+  })();
+
+  (function testExpectedEnd() {
+    client.ending = true;
+    onConnection.end();
+    assert.equal(client.ending, false);
   })();
 });
 
@@ -357,6 +374,8 @@ test(function end() {
   client._connection = {};
 
   gently.expect(client, '_enqueue', function (fn, cb) {
+    assert.equal(client.ending, true);
+
     gently.expect(OutgoingPacketStub, 'new', function(size, number) {
       PACKET = this;
       assert.equal(size, 1);
@@ -381,6 +400,18 @@ test(function end() {
   });
 
   client.end(CB);
+});
+
+test(function _prequeue() {
+  var FN = gently.expect(function fn() {}),
+      CB = function() {};
+
+  client._queue.push(1);
+
+  client._prequeue(FN, CB);
+  assert.equal(client._queue.length, 2);
+  assert.strictEqual(client._queue[0].fn, FN);
+  assert.strictEqual(client._queue[0].delegate, CB);
 });
 
 test(function _enqueue() {
