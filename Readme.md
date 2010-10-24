@@ -37,6 +37,11 @@ testing.
 
     npm install mysql
 
+Or if you don't want to use npm / run the latest source:
+
+    cd ~/.node_libraries
+    git clone git://github.com/felixge/node-mysql.git mysql
+
 ## Design Goals
 
 * TDD: All code is written using test driven development, code coverage should approach 100%
