@@ -42,6 +42,11 @@ Or if you don't want to use npm / run the latest source:
     cd ~/.node_libraries
     git clone git://github.com/felixge/node-mysql.git mysql
 
+## Compatibility
+
+This module should run in any node version >= v0.1.102 (July 26, 2010).
+However, using a current version of node is encouraged.
+
 ## Design Goals
 
 * TDD: All code is written using test driven development, code coverage should approach 100%
