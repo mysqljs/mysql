@@ -162,7 +162,7 @@ data.
 
 Sends a ping command to the server.
 
-### client.useDatbase(database, [cb])
+### client.useDatabase(database, [cb])
 
 Same as issuing a `'USE <database>'` query.
 
