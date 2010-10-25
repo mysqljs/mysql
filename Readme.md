@@ -11,6 +11,7 @@ A node.js module implementing the
 * Alan Gutierrez ([bigeasy](http://github.com/felixge/node-mysql/commits/master?author=bigeasy))
 * Brian ([mscdex](http://github.com/felixge/node-mysql/commits/master?author=mscdex))
 * Cal Henderson ([iamcal](http://github.com/felixge/node-mysql/commits/master?author=iamcal))
+* Frank Grimm ([FrankGrimm](http://github.com/felixge/node-mysql/commits/master?author=FrankGrimm))
 
 ## Sponsors
 
