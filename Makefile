@@ -1,6 +1,8 @@
-test:
+test-simple:
 	@find test/simple/test-*.js | xargs -n 1 -t node
+test-system:
 	@find test/system/test-*.js | xargs -n 1 -t node
+test: test-simple test-system
 test-all: test
 	@find test/system/slow/test-*.js | xargs -n 1 -t node
 benchmark-node-mysql:
