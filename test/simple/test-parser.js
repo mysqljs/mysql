@@ -58,7 +58,7 @@ test(function write() {
     assert.equal(parser.state, Parser.GREETING_SERVER_VERSION);
 
     var VERSION = 'MySql 5.1';
-    parser.write(new Buffer(VERSION+'\0'));
+    parser.write(new Buffer(VERSION+'\0\0'));
     assert.equal(packet.serverVersion, VERSION);
     assert.equal(parser.state, Parser.GREETING_THREAD_ID);
 
