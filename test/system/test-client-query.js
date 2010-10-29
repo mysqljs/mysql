@@ -47,7 +47,7 @@ client.query(
 var query = client.query(
   'INSERT INTO '+TEST_TABLE+' '+
   'SET title = ?, text = ?, created = ?',
-  ['another entry', 'because 2 entries make a better test', '2010-08-16 12:42:15']
+  ['another entry', 'because 2 entries make a better test', null]
 );
 
 query.on('end', gently.expect(function insertOkCb(packet) {
@@ -63,7 +63,8 @@ var query = client.query(
     assert.equal(results.length, 2);
     assert.equal(results[1].title, 'another entry');
     assert.ok(typeof results[1].id == 'number');
-    assert.ok(results[1].created instanceof Date);
+    assert.ok(results[0].created instanceof Date);
+    assert.strictEqual(results[1].created, null);
     client.end();
   })
 );
