@@ -4,7 +4,7 @@ var sys = require('mysql/sys');
 
 if (module.parent.filename.match(/test\/system/)) {
   try {
-    global.TEST_CONFIG = require('./config.js');
+    global.TEST_CONFIG = require('./config');
   } catch (e) {
     console.log('Skipping. See test/config.template.js for more information.');
     process.exit(0);
