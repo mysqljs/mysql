@@ -2,14 +2,16 @@ var path = require('path');
 require.paths.unshift(path.dirname(__dirname)+'/lib');
 var sys = require('mysql/sys');
 
-global.TEST_DB = 'node_mysql_test';
-global.TEST_CONFIG = {
-  host: 'localhost',
-  port: 3306,
-  user: 'root',
-  password: 'root'
-};
+if (module.parent.filename.match(/test\/system/)) {
+  try {
+    global.TEST_CONFIG = require('./config.js');
+  } catch (e) {
+    console.log('Skipping. See test/config.template.js for more information.');
+    process.exit(0);
+  }
+}
 
+global.TEST_DB = 'node_mysql_test';
 global.TEST_TABLE = 'posts';
 global.TEST_FIXTURES = path.join(__dirname, 'fixture');
 
