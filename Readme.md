@@ -4,6 +4,12 @@
 
 A pure node.js JavaScript Client implementing the [MySQL protocol](http://forge.mysql.com/wiki/MySQL_Internals_ClientServer_Protocol).
 
+## Current status
+
+This module was developed for [Transloadit](http://transloadit.com/), a service focused on uploading
+and encoding images and videos. It is currently used in production there, but since the service is not
+very heavy on database interaction your milage may vary.
+
 ## Contributors
 
 * Bert Belder ([piscisaureus](http://github.com/felixge/node-mysql/commits/master?author=piscisaureus))
@@ -17,15 +23,13 @@ A pure node.js JavaScript Client implementing the [MySQL protocol](http://forge.
 * [Joyent](http://www.joyent.com/)
 * [pinkbike.com](http://pinkbike.com/)
 
-I'm working on this driver because I need it for my own startup
-([transloadit.com][transloadit]), but it's a big project (~100-200 hours) with
-obvious benefits to other companies who are using MySql.
+This is a rather large project requiring a significant amount of my limited resources.
 
-So if your company could benefit from a well-engineered node.js mysql driver,
-I would greatly appriciate any sponsorship you may be able to provide. All
-sponsors will get lifetime display in this readme, priority support on problems,
-and votes on roadmap decisions. If you are interested, contact me at
-[felix@debuggable.com](mailto:felix@debuggable.com) for details.
+If your company could benefit from a well-engineered non-blocking mysql driver, and
+wants to support this project, I would greatly appriciate any sponsorship you may be
+able to provide. All sponsors will get lifetime display in this readme, priority
+support on problems, and votes on roadmap decisions. If you are interested, contact
+me at [felix@debuggable.com](mailto:felix@debuggable.com) for details.
 
 Of course I'm also happy about code contributions. If you're interested in
 working on features, just get in touch so we can talk about API design and
