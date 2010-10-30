@@ -20,8 +20,8 @@ very heavy on database interaction your milage may vary.
 
 ## Sponsors
 
-* [Joyent](http://www.joyent.com/)
-* [pinkbike.com](http://pinkbike.com/)
+* [Joyent](http://www.joyent.com/) - Main sponsor, you should check out their [node.js hosting](https://no.de/).
+* [pinkbike.com](http://pinkbike.com/) - The most awesome biking site there is
 
 This is a rather large project requiring a significant amount of my limited resources.
 
