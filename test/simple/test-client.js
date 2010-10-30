@@ -74,16 +74,16 @@ test(function connect() {
   gently.expect(StreamStub, 'new', function() {
     CONNECTION = this;
 
-    gently.expect(CONNECTION, 'connect', function(port, host) {
-      assert.equal(port, client.port);
-      assert.equal(host, client.host);
-    });
-
     var events = ['error', 'data', 'end'];
     gently.expect(CONNECTION, 'on', events.length, function(event, fn) {
       assert.equal(event, events.shift());
       onConnection[event] = fn;
       return this;
+    });
+
+    gently.expect(CONNECTION, 'connect', function(port, host) {
+      assert.equal(port, client.port);
+      assert.equal(host, client.host);
     });
   });
 
