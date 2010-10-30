@@ -1,6 +1,6 @@
 { "name" : "mysql"
-, "version": "0.7.0"
+, "version": "0.8.0"
 , "devDependencies": {"gently": ">=0.8.0"}
 , "main" : "./lib/mysql"
-, "scripts" : { "test" : "make test-all" }
+, "scripts" : { "test" : "make test" }
 }
