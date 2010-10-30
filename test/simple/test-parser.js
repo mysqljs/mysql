@@ -45,10 +45,27 @@ test(function write() {
     );
   })();
 
-  (function testPacketSize() {
+  (function testPacketNumber() {
     parser.write(new Buffer([42]));
     assert.strictEqual(packet.number, 42);
     assert.equal(parser.state, Parser.GREETING_PROTOCOL_VERSION);
+  })();
+
+  (function testGreetingErrorPacket() {
+    parser.write(new Buffer([0xff]));
+    assert.equal(packet.type, Parser.ERROR_PACKET);
+    assert.equal(parser.state, Parser.ERROR_NUMBER);
+
+    parser.write(new Buffer([5, 2]));
+    assert.equal(packet.errorNumber, Math.pow(256, 0) * 5 + Math.pow(256, 1) * 2);
+
+    parser.write(new Buffer('Hello World'));
+    assert.equal(packet.errorMessage, 'Hello World');
+
+    // Reset back to previous state
+    packet.type = Parser.GREETING_PACKET;
+    packet.received = 0;
+    parser.state = Parser.GREETING_PROTOCOL_VERSION;
   })();
 
   (function testGreetingPacket() {
