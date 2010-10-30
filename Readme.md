@@ -2,8 +2,7 @@
 
 ## Purpose
 
-A node.js module implementing the
-[MySQL protocol](http://forge.mysql.com/wiki/MySQL_Internals_ClientServer_Protocol).
+A pure node.js JavaScript Client implementing the [MySQL protocol](http://forge.mysql.com/wiki/MySQL_Internals_ClientServer_Protocol).
 
 ## Contributors
 
