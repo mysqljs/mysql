@@ -2,7 +2,8 @@ var path = require('path');
 require.paths.unshift(path.dirname(__dirname)+'/lib');
 var sys = require('mysql/sys');
 
-if (module.parent.filename.match(/test\/system/)) {
+var parent = module.parent.filename;
+if (parent.match(/test\/system/) || parent.match(/benchmark/)) {
   try {
     global.TEST_CONFIG = require('./config');
   } catch (e) {
