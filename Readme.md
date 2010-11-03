@@ -223,6 +223,14 @@ itself will be made available soon.
 Emitted once the query is finished. In case there is no result set, a `result`
 parameter is provided which contains the information from the mysql OK packet.
 
+## FAQ
+
+### How can I retrieve the id from the last inserted record?
+
+    client.query('INSERT INTO my_table SET title = ?', function(err, info) {
+      console.log(info.insertId);
+    });
+
 ## Todo
 
 At this point the module is ready to be tried out, but a lot of things are yet to be done:
