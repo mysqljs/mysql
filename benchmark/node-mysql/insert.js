@@ -10,8 +10,9 @@ client.query('CREATE DATABASE '+TEST_DB, function(err) {
   }
 });
 client.query('USE '+TEST_DB);
+client.query('DROP TABLE IF EXISTS '+TEST_TABLE);
 client.query(
-  'CREATE TEMPORARY TABLE '+TEST_TABLE+' ('+
+  'CREATE TABLE '+TEST_TABLE+' ('+
   'id INT(11) AUTO_INCREMENT, '+
   'title VARCHAR(255), '+
   'text TEXT, '+
@@ -32,19 +33,7 @@ client.query(
 
           console.log('%d inserts / second', insertsPerSecond.toFixed(2));
           console.log('%d ms', +new Date - start);
-
-          client.typeCast = false;
-          var selectStart = +new Date;
-          client
-            .query('SELECT * FROM '+TEST_TABLE)
-            .on('row', function(row) {})
-            .on('end', function() {
-              var duration = (+new Date - selectStart) / 1000,
-                  rowsPerSecond = inserts / duration;
-              console.log('%d rows / second', rowsPerSecond.toFixed(2));
-              console.log('%d ms', +new Date - selectStart);
-              client.end();
-            });
+          client.end();
         }
       });
     }
