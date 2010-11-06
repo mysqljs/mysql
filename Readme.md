@@ -225,6 +225,12 @@ parameter is provided which contains the information from the mysql OK packet.
 
 ## FAQ
 
+### How do I compile this module?
+
+This module is written entirely in JavaScript. There is no dependency on external
+C libraries such as libmysql. That means you don't have to compile this module
+at all.
+
 ### How can I retrieve the id from the last inserted record?
 
     client.query('INSERT INTO my_table SET title = ?', function(err, info) {
