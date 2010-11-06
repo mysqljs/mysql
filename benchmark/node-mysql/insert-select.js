@@ -31,6 +31,7 @@ client.query(
               insertsPerSecond = inserts / duration;
 
           console.log('%d inserts / second', insertsPerSecond.toFixed(2));
+          console.log('%d ms', +new Date - start);
 
           client.typeCast = false;
           var selectStart = +new Date;

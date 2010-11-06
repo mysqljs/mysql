@@ -27,6 +27,7 @@ for ($i = 0; $i < $INSERTS; $i++) {
 $duration = (microtime(true) - $start);
 $insertsPerSecond = $INSERTS / $duration;
 echo sprintf("%d inserts / second\n", $insertsPerSecond);
+echo sprintf("%d ms\n", $duration * 1000);
 
 $start = microtime(true);
 $q = mysql_query('SELECT * FROM '.$table);
