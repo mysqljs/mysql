@@ -1,3 +1,5 @@
+// Last v8 profile when running this test for 500k rows:
+// https://gist.github.com/f85c38010c038e5efe2e
 require('../../test/common');
 var Client = require('mysql/client'),
     client = Client(TEST_CONFIG),
@@ -22,7 +24,7 @@ function query() {
       rows++;
     })
     .on('end', function() {
-      if (rows < 100000) {
+      if (rows < 10000) {
         query();
         return;
       }
