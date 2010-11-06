@@ -35,4 +35,5 @@ while ($a = mysql_fetch_assoc($q)) {
 $duration = (microtime(true) - $start);
 $rowsPerSecond = $INSERTS / $duration;
 echo sprintf("%d rows / second\n", $rowsPerSecond);
+echo sprintf("%d ms\n", $duration * 1000);
 ?>

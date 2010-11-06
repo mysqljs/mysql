@@ -41,6 +41,7 @@ client.query(
               var duration = (+new Date - selectStart) / 1000,
                   rowsPerSecond = inserts / duration;
               console.log('%d rows / second', rowsPerSecond.toFixed(2));
+              console.log('%d ms', +new Date - selectStart);
               client.end();
             });
         }
