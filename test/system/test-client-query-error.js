@@ -1,5 +1,7 @@
 require('../common');
-var Client = require('mysql').Client;
+var Client = require('mysql').Client,
+    INVALID_QUERY_1 = 'first invalid #*&% query',
+    INVALID_QUERY_2 = 'another #*&% wrong query';
 
 (function testErrorCallback() {
   // The query callback should receive an error,
@@ -12,8 +14,9 @@ var Client = require('mysql').Client;
     if (error) throw error;
   }));
 
-  client.query('invalid #*&% query', [], gently.expect(function queryCb(error) {
+  client.query(INVALID_QUERY_1, [], gently.expect(function queryCb(error) {
     assert.ok(error);
+    assert.strictEqual(error.sql, INVALID_QUERY_1);
     client.end();
     gently.verify('testErrorCallback');
   }));
@@ -31,10 +34,11 @@ var Client = require('mysql').Client;
     if (error) throw error;
   }));
 
-  query = client.query('invalid #*&% query');
+  query = client.query(INVALID_QUERY_2);
 
   query.on('error', gently.expect(function errCb(error) {
     assert.ok(error);
+    assert.strictEqual(error.sql, INVALID_QUERY_2);
     client.end();
     gently.verify('testQueryError');
   }));
@@ -52,10 +56,11 @@ var Client = require('mysql').Client;
     if (error) throw error;
   }));
 
-  query = client.query('invalid #*&% query');
+  query = client.query(INVALID_QUERY_1);
 
   client.on('error', gently.expect(function errCb(error) {
     assert.ok(error);
+    assert.strictEqual(error.sql, INVALID_QUERY_1);
     client.end();
     gently.verify('testClientError');
   }));
@@ -76,13 +81,14 @@ var Client = require('mysql').Client;
     if (error) throw error;
   }));
 
-  query = client.query('invalid #*&% query');
+  query = client.query(INVALID_QUERY_2);
 
   query.on('error', dummyHandler);
   query.removeListener('error', dummyHandler);
 
   client.on('error', gently.expect(function errCb(error) {
     assert.ok(error);
+    assert.strictEqual(error.sql, INVALID_QUERY_2);
     client.end();
     gently.verify('testRemoveListener');
   }));
@@ -99,8 +105,9 @@ var Client = require('mysql').Client;
     if (error) throw error;
   }));
 
-  client.query('invalid #*&% query', [], gently.expect(function queryCb(error) {
+  client.query(INVALID_QUERY_1, [], gently.expect(function queryCb(error) {
     assert.ok(error);
+    assert.strictEqual(error.sql, INVALID_QUERY_1);
   }));
 
   client.query('SHOW STATUS', [], gently.expect(function queryCb(error, rows, fields) {
@@ -109,12 +116,14 @@ var Client = require('mysql').Client;
     assert.equal(Object.keys(fields).length, 2);
   }));
 
-  client.query('invalid #*&% query', [], gently.expect(function queryCb(error) {
+  client.query(INVALID_QUERY_1, [], gently.expect(function queryCb(error) {
     assert.ok(error);
+    assert.strictEqual(error.sql, INVALID_QUERY_1);
   }));
 
-  client.query('invalid #*&% query', [], gently.expect(function errCb(error) {
+  client.query(INVALID_QUERY_2, [], gently.expect(function errCb(error) {
     assert.ok(error);
+    assert.strictEqual(error.sql, INVALID_QUERY_2);
     client.end();
     gently.verify('testSerialError');
   }));
