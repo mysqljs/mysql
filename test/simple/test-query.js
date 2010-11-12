@@ -16,6 +16,7 @@ function test(test) {
 test(function constructor() {
   assert.ok(query instanceof EventEmitter);
   assert.strictEqual(query.typeCast, true);
+  assert.strictEqual(query.sql, null);
   assert.equal(new Query({foo: 'bar'}).foo, 'bar');
 });
 
@@ -41,6 +42,7 @@ test(function _handlePacket() {
 
     gently.expect(ClientStub, '_packetToUserObject', function (packet) {
       assert.strictEqual(packet, PACKET);
+      assert.strictEqual(packet.sql, query.sql);
       return USER_OBJECT;
     });
 
@@ -49,6 +51,7 @@ test(function _handlePacket() {
       assert.strictEqual(packet, USER_OBJECT);
     });
 
+    query.sql = 'SELECT bla FROM foo';
     query._handlePacket(PACKET);
   })();
 

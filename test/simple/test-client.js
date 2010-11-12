@@ -197,6 +197,7 @@ test(function query() {
       QUERY = this;
 
       assert.equal(properties.typeCast, client.typeCast);
+      assert.equal(properties.sql, FORMATED_SQL);
 
       var events = ['error', 'field', 'row', 'end'];
       gently.expect(QUERY, 'on', events.length, function (event, fn) {
