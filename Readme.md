@@ -68,18 +68,20 @@ However, using a current version of node is encouraged.
 
     client.user = 'root';
     client.password = 'root';
+    var TEST_DATABASE = 'nodejs_mysl_test',
+        TEST_TABLE = 'test';
 
     client.connect();
 
-    client.query('CREATE DATABASE '+TEST_CONFIG.database, function() {
-      if (err && err.errorNumber != Client.ERROR_DB_CREATE_EXISTS) {
+    client.query('CREATE DATABASE '+TEST_DATABASE, function(err) {
+      if (err && err.number != Client.ERROR_DB_CREATE_EXISTS) {
         throw err;
       }
     });
 
     // If no callback is provided, any errors will be emitted as `'error'`
     // events by the client
-    client.query('USE '+TEST_CONFIG.database);
+    client.query('USE '+TEST_DATABASE);
 
     client.query(
       'CREATE TEMPORARY TABLE '+TEST_TABLE+
@@ -87,13 +89,13 @@ However, using a current version of node is encouraged.
       'title VARCHAR(255), '+
       'text TEXT, '+
       'created DATETIME, '+
-      'PRIMARY KEY (id));',
+      'PRIMARY KEY (id))'
     );
 
     client.query(
       'INSERT INTO '+TEST_TABLE+' '+
       'SET title = ?, text = ?, created = ?',
-      ['super cool', 'this is a nice text', '2010-08-16 10:00:23'],
+      ['super cool', 'this is a nice text', '2010-08-16 10:00:23']
     );
 
     var query = client.query(
