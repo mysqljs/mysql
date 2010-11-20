@@ -64,12 +64,12 @@ However, using a current version of node is encouraged.
 ## Tutorial
 
     var Client = require('mysql').Client,
-        client = new Client();
+        client = new Client(),
+        TEST_DATABASE = 'nodejs_mysl_test',
+        TEST_TABLE = 'test';
 
     client.user = 'root';
     client.password = 'root';
-    var TEST_DATABASE = 'nodejs_mysl_test',
-        TEST_TABLE = 'test';
 
     client.connect();
 
@@ -106,7 +106,7 @@ However, using a current version of node is encouraged.
 
     client.query(
       'SELECT * FROM '+TEST_TABLE,
-      gently.expect(function selectCb(err, results, fields) {
+      function selectCb(err, results, fields) {
         if (err) {
           throw err;
         }
@@ -114,7 +114,7 @@ However, using a current version of node is encouraged.
         console.log(results);
         console.log(fields);
         client.end();
-      })
+      }
     );
 
 ## API
