@@ -1,3 +1,5 @@
+SHELL := /bin/bash
+
 test-simple:
 	@find test/simple/test-*.js | xargs -n 1 -t node
 test-system:
