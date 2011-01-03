@@ -165,6 +165,9 @@ query.
 This method returns a `Query` object which can be used to stream incoming row
 data.
 
+**Warning:** `sql` statements with multiple queries separated by semicolons
+are not supported yet.
+
 ### client.ping([cb])
 
 Sends a ping command to the server.
@@ -251,6 +254,7 @@ At this point the module is ready to be tried out, but a lot of things are yet t
 * Performance profiling
 * Handle re-connect after bad credential error (should query queue be kept?)
 * Deal with stale connections / other potential network issues
+* Decide how to handle queries with multiple statements
 
 ## License
 
