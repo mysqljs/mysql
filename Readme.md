@@ -156,7 +156,7 @@ Connection flags send to the server.
 
 Initiates a connection to the specified host server.
 
-### client.query(sql, [params, cb])
+### client.query(sql, [params], cb)
 
 Sends a `sql` query to the server. `'?'` characters can be used as placeholders
 for an array of `params` that will be safely escaped before sending the final
