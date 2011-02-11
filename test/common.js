@@ -24,3 +24,10 @@ global.p = function(val) {
 
 global.GENTLY = new Gently();
 global.HIJACKED = GENTLY.hijacked;
+
+// Stupid new feature in node that complains about gently attaching too many
+// listeners to process 'exit'. This is a workaround until I can think of a
+// better way to deal with this.
+if (process.setMaxListeners) {
+  process.setMaxListeners(Infinity);
+}
