@@ -1,6 +1,6 @@
 var path = require('path');
 require.paths.unshift(path.dirname(__dirname)+'/lib');
-var sys = require('mysql/sys');
+var util = require('util');
 
 var parent = module.parent.filename;
 if (parent.match(/test\/system/) || parent.match(/benchmark/)) {
@@ -19,7 +19,7 @@ global.TEST_FIXTURES = path.join(__dirname, 'fixture');
 global.Gently = require('gently');
 global.assert = require('assert');
 global.p = function(val) {
-  sys.error(sys.inspect(val));
+  util.error(util.inspect(val));
 };
 
 global.GENTLY = new Gently();
