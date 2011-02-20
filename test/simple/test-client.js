@@ -365,6 +365,8 @@ test(function escape() {
   assert.equal(client.escape(false), 'false');
   assert.equal(client.escape(true), 'true');
   assert.equal(client.escape(5), '5');
+  assert.equal(client.escape({foo:'bar'}), "'[object Object]'");
+  assert.equal(client.escape([1,2,3]), "'1,2,3'");
 
   assert.equal(client.escape('Super'), "'Super'");
   assert.equal(client.escape('Sup\0er'), "'Sup\\0er'");
