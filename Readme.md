@@ -266,21 +266,21 @@ At this point the module is ready to be tried out, but a lot of things are yet t
 * Fix issue #49 / `client.escape()` throwing exceptions on objects. (Nick Payne)
 * Drop < v0.4.x compatibility. From now on you need node v0.4.x to use this module.
 
-[See Commits](https://github.com/felixge/node-formidable/compare/v0.9.0...v0.9.1)
+[See Commits](https://github.com/felixge/node-mysql/compare/v0.9.0...v0.9.1)
 
 ### Older releases
 
 These releases were done before starting to maintain the above Changelog:
 
-* [v0.9.0](https://github.com/felixge/node-formidable/compare/v0.8.0...v0.9.0)
-* [v0.8.0](https://github.com/felixge/node-formidable/compare/v0.7.0...v0.9.0)
-* [v0.7.0](https://github.com/felixge/node-formidable/compare/v0.6.0...v0.9.0)
-* [v0.6.0](https://github.com/felixge/node-formidable/compare/v0.5.0...v0.9.0)
-* [v0.5.0](https://github.com/felixge/node-formidable/compare/v0.4.0...v0.9.0)
-* [v0.4.0](https://github.com/felixge/node-formidable/compare/v0.3.0...v0.9.0)
-* [v0.3.0](https://github.com/felixge/node-formidable/compare/v0.2.0...v0.9.0)
-* [v0.2.0](https://github.com/felixge/node-formidable/compare/v0.1.0...v0.9.0)
-* [v0.1.0](https://github.com/felixge/node-formidable/commits/v0.1.0)
+* [v0.9.0](https://github.com/felixge/node-mysql/compare/v0.8.0...v0.9.0)
+* [v0.8.0](https://github.com/felixge/node-mysql/compare/v0.7.0...v0.9.0)
+* [v0.7.0](https://github.com/felixge/node-mysql/compare/v0.6.0...v0.9.0)
+* [v0.6.0](https://github.com/felixge/node-mysql/compare/v0.5.0...v0.9.0)
+* [v0.5.0](https://github.com/felixge/node-mysql/compare/v0.4.0...v0.9.0)
+* [v0.4.0](https://github.com/felixge/node-mysql/compare/v0.3.0...v0.9.0)
+* [v0.3.0](https://github.com/felixge/node-mysql/compare/v0.2.0...v0.9.0)
+* [v0.2.0](https://github.com/felixge/node-mysql/compare/v0.1.0...v0.9.0)
+* [v0.1.0](https://github.com/felixge/node-mysql/commits/v0.1.0)
 
 ## License
 
