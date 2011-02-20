@@ -49,8 +49,10 @@ Or if you don't want to use npm / run the latest source:
 
 ## Compatibility
 
-This module should run in any node version >= v0.1.102 (July 26, 2010).
-However, using a current version of node is encouraged.
+This module is compatible with node v0.4.x.
+
+If you need to work with an older node version, download v0.9.0. It supports
+node >= v0.1.102.
 
 ## Design Goals
 
@@ -255,6 +257,29 @@ At this point the module is ready to be tried out, but a lot of things are yet t
 * Handle re-connect after bad credential error (should query queue be kept?)
 * Deal with stale connections / other potential network issues
 * Decide how to handle queries with multiple statements
+
+## Changelog
+
+### v0.9.1 (not yet released)
+
+* Fix issue #49 / `client.escape()` throwing exceptions on objects. (Nick Payne)
+* Drop < v0.4.x compatibility. From now on you need node v0.4.x to use this module.
+
+[See Commits](https://github.com/felixge/node-formidable/compare/v0.9.0...v0.9.1)
+
+### Older releases
+
+These releases were done before starting to maintain the above Changelog:
+
+* [v0.9.0](https://github.com/felixge/node-formidable/compare/v0.8.0...v0.9.0)
+* [v0.8.0](https://github.com/felixge/node-formidable/compare/v0.7.0...v0.9.0)
+* [v0.7.0](https://github.com/felixge/node-formidable/compare/v0.6.0...v0.9.0)
+* [v0.6.0](https://github.com/felixge/node-formidable/compare/v0.5.0...v0.9.0)
+* [v0.5.0](https://github.com/felixge/node-formidable/compare/v0.4.0...v0.9.0)
+* [v0.4.0](https://github.com/felixge/node-formidable/compare/v0.3.0...v0.9.0)
+* [v0.3.0](https://github.com/felixge/node-formidable/compare/v0.2.0...v0.9.0)
+* [v0.2.0](https://github.com/felixge/node-formidable/compare/v0.1.0...v0.9.0)
+* [v0.1.0](https://github.com/felixge/node-formidable/commits/v0.1.0)
 
 ## License
 
