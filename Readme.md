@@ -18,6 +18,7 @@ very heavy on database interaction your milage may vary.
 * Brian ([mscdex](http://github.com/felixge/node-mysql/commits/master?author=mscdex))
 * Cal Henderson ([iamcal](http://github.com/felixge/node-mysql/commits/master?author=iamcal))
 * Frank Grimm ([FrankGrimm](http://github.com/felixge/node-mysql/commits/master?author=FrankGrimm))
+* Nick Payne ([makeusabrew](http://github.com/felixge/node-mysql/commits/master?author=makeusabrew))
 
 ## Sponsors
 
