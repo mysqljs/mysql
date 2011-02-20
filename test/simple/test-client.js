@@ -3,8 +3,7 @@ var StreamStub = GENTLY.stub('net', 'Stream'),
     ParserStub = GENTLY.stub('./parser'),
     OutgoingPacketStub = GENTLY.stub('./outgoing_packet'),
     QueryStub = GENTLY.stub('./query'),
-    Parser = require('mysql/parser'),
-    netConstants = require('mysql/net_constants');
+    Parser = require('mysql/parser');
 
 for (var k in Parser) {
   ParserStub[k] = Parser[k];
@@ -119,7 +118,7 @@ test(function connect() {
 
   (function testConnectionRefusedError() {
     var ERR = new Error('ouch');
-    ERR.errno = netConstants.ECONNREFUSED;
+    ERR.code = 'ECONNREFUSED';
 
     CB_DELEGATE = gently.expect(function connectCallback(err) {
       assert.strictEqual(err, ERR);
