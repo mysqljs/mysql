@@ -261,7 +261,7 @@ At this point the module is ready to be tried out, but a lot of things are yet t
 
 ## Changelog
 
-### v0.9.1 (not yet released)
+### v0.9.1
 
 * Fix issue #49 / `client.escape()` throwing exceptions on objects. (Nick Payne)
 * Drop < v0.4.x compatibility. From now on you need node v0.4.x to use this module.
