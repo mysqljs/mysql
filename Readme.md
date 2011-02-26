@@ -171,6 +171,21 @@ data.
 **Warning:** `sql` statements with multiple queries separated by semicolons
 are not supported yet.
 
+### client.insert(table, params, [cb])
+### client.replace(table, params, [cb])
+
+Build and send an insert/replace statement to the server, params should be an object where keys are column names and values are converted to sql values.
+
+This method returns a `Query` object which can be used to stream incoming row
+data.
+
+### client.update(table, params, where, [cb])
+
+Build and send an update statement to the server, params works the same way as the insert method above. `where` can be an object or a string and will be used as the where sql part. If an object is supplied, keys will be treated as column names and values as sql values.
+
+This method returns a `Query` object which can be used to stream incoming row
+data.
+
 ### client.ping([cb])
 
 Sends a ping command to the server.
