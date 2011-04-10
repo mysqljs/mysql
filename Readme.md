@@ -68,7 +68,7 @@ node >= v0.1.102.
 
     var Client = require('mysql').Client,
         client = new Client(),
-        TEST_DATABASE = 'nodejs_mysl_test',
+        TEST_DATABASE = 'nodejs_mysql_test',
         TEST_TABLE = 'test';
 
     client.user = 'root';
