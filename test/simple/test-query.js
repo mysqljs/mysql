@@ -131,12 +131,12 @@ test(function _handlePacket() {
     return r;
   }
 
-  assert.deepEqual(typeCast(Query.FIELD_TYPE_TIMESTAMP, '2010-10-05 06:23:42'), new Date('2010-10-05 06:23:42Z'));
+  assert.deepEqual(typeCast(Query.FIELD_TYPE_TIMESTAMP, '2010-10-05 06:23:42 UTC'), new Date('2010-10-05 06:23:42Z'));
 
-  assert.deepEqual(typeCast(Query.FIELD_TYPE_TIMESTAMP, '2010-10-05'), new Date('2010-10-05Z'));
-  assert.deepEqual(typeCast(Query.FIELD_TYPE_DATE, '2010-10-05'), new Date('2010-10-05Z'));
-  assert.deepEqual(typeCast(Query.FIELD_TYPE_DATETIME, '2010-10-05'), new Date('2010-10-05Z'));
-  assert.deepEqual(typeCast(Query.FIELD_TYPE_NEWDATE, '2010-10-05'), new Date('2010-10-05Z'));
+  assert.deepEqual(typeCast(Query.FIELD_TYPE_TIMESTAMP, '2010-10-05 UTC'), new Date('2010-10-05Z'));
+  assert.deepEqual(typeCast(Query.FIELD_TYPE_DATE, '2010-10-05 UTC'), new Date('2010-10-05Z'));
+  assert.deepEqual(typeCast(Query.FIELD_TYPE_DATETIME, '2010-10-05 UTC'), new Date('2010-10-05Z'));
+  assert.deepEqual(typeCast(Query.FIELD_TYPE_NEWDATE, '2010-10-05 UTC'), new Date('2010-10-05Z'));
 
   assert.strictEqual(typeCast(Query.FIELD_TYPE_TINY, '08'), 8);
   assert.strictEqual(typeCast(Query.FIELD_TYPE_SHORT, '08'), 8);
