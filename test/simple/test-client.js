@@ -366,6 +366,7 @@ test(function escape() {
   assert.equal(client.escape(5), '5');
   assert.equal(client.escape({foo:'bar'}), "'[object Object]'");
   assert.equal(client.escape([1,2,3]), "'1,2,3'");
+  assert.equal(client.escape(new Date(Date.UTC(2011,6,6,6,6,6,6))), "'2011-07-06T06:06:06.006Z'");
 
   assert.equal(client.escape('Super'), "'Super'");
   assert.equal(client.escape('Sup\0er'), "'Sup\\0er'");
