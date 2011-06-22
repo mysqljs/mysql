@@ -33,10 +33,24 @@ client.query(
   })
 );
 
+var args = ['super cool', 'this is a nice long text', '2010-08-16 10:00:23'];
+
 client.query(
   'INSERT INTO '+TEST_TABLE+' '+
   'SET title = ?, text = ?, created = ?',
-  ['super cool', 'this is a nice long text', '2010-08-16 10:00:23'],
+  args,
+  gently.expect(function insertCb(err) {
+    if (err) {
+      throw err;
+    }
+  })
+);
+
+// Insert a second time.
+client.query(
+  'INSERT INTO '+TEST_TABLE+' '+
+  'SET title = ?, text = ?, created = ?',
+  args,
   gently.expect(function insertCb(err) {
     if (err) {
       throw err;
@@ -60,11 +74,11 @@ var query = client.query(
       throw err;
     }
 
-    assert.equal(results.length, 2);
-    assert.equal(results[1].title, 'another entry');
-    assert.ok(typeof results[1].id == 'number');
+    assert.equal(results.length, 3);
+    assert.equal(results[2].title, 'another entry');
+    assert.ok(typeof results[2].id == 'number');
     assert.ok(results[0].created instanceof Date);
-    assert.strictEqual(results[1].created, null);
+    assert.strictEqual(results[2].created, null);
     client.end();
   })
 );
