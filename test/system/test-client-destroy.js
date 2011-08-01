@@ -1,8 +1,7 @@
-require('../common');
-var Client = require('mysql').Client;
-
-var gently = new Gently(),
-    client = new Client(TEST_CONFIG);
+var common = require('../common');
+var mysql = require(common.dir.lib + '/mysql');
+var client = mysql.createClient(TEST_CONFIG);
+var gently = new Gently();
 
 client.connect(function() {
   throw new Error('Destroy did not prevent client from connecting.');

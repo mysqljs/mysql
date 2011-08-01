@@ -1,14 +1,14 @@
-require('../../common');
-var REPEATS = 500,
-    Client = require('mysql').Client,
-    client = Client(TEST_CONFIG),
-    fs = require('fs'),
-    gently = new Gently();
+var common = require('../../common');
+var mysql = require(common.dir.lib + '/mysql');
+var client = mysql.createClient(TEST_CONFIG);
+var gently = new Gently();
+var REPEATS = 500;
+var fs = require('fs');
 
 client.connect();
 
 client.query('CREATE DATABASE '+TEST_DB, function(err) {
-  if (err && err.number != Client.ERROR_DB_CREATE_EXISTS) {
+  if (err && err.number != mysql.ERROR_DB_CREATE_EXISTS) {
     throw err;
   }
 });

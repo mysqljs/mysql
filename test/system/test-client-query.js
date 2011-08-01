@@ -1,14 +1,14 @@
-require('../common');
-var Client = require('mysql').Client,
-    client = Client(TEST_CONFIG),
-    gently = new Gently();
+var common = require('../common');
+var mysql = require(common.dir.lib + '/mysql');
+var client = mysql.createClient(TEST_CONFIG);
+var gently = new Gently();
 
 client.connect();
 
 client.query(
   'CREATE DATABASE '+TEST_DB,
   gently.expect(function createDbCb(err) {
-    if (err && err.number != Client.ERROR_DB_CREATE_EXISTS) {
+    if (err && err.number != mysql.ERROR_DB_CREATE_EXISTS) {
       throw err;
     }
   })

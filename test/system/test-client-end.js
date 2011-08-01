@@ -1,9 +1,9 @@
-require('../common');
-var Client = require('mysql').Client;
+var common = require('../common');
+var mysql = require(common.dir.lib + '/mysql');
 
 (function testImmediateEnd() {
-  var gently = new Gently(),
-      client = new Client(TEST_CONFIG);
+  var gently = new Gently();
+  var client = mysql.createClient(TEST_CONFIG);
 
   client.connect(gently.expect(function connectCb(err, result) {
     assert.ifError(err);
@@ -18,8 +18,8 @@ var Client = require('mysql').Client;
 })();
 
 (function testEndAfterQuery() {
-  var gently = new Gently(),
-      client = new Client(TEST_CONFIG);
+  var gently = new Gently();
+  var client = mysql.createClient(TEST_CONFIG);
 
   client.connect(gently.expect(function connectCb(err, result) {
     assert.ifError(err);

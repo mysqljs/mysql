@@ -1,6 +1,8 @@
 require('../common');
-var client = require('mysql').Client(TEST_CONFIG),
-    gently = new Gently();
+var common = require('../common');
+var mysql = require(common.dir.lib + '/mysql');
+var client = mysql.createClient(TEST_CONFIG);
+var gently = new Gently();
 
 client.connect();
 

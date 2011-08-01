@@ -1,15 +1,15 @@
-require('../common');
-var Client = require('mysql').Client,
-    client = new Client(TEST_CONFIG),
-    gently = new Gently(),
-    timeoutHappened = false,
-    timeout = setTimeout(function() {
-      if (!timeoutHappened) {
-        throw new Error('MySql timeout did not happen');
-      }
+var common = require('../common');
+var mysql = require(common.dir.lib + '/mysql');
+var client = mysql.createClient(TEST_CONFIG);
+var gently = new Gently();
+var timeoutHappened = false;
+var timeout = setTimeout(function() {
+  if (!timeoutHappened) {
+    throw new Error('MySql timeout did not happen');
+  }
 
-      gently.verify();
-    }, 5000);
+  gently.verify();
+}, 5000);
 
 client.connect();
 

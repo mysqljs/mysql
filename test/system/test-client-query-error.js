@@ -1,14 +1,15 @@
-require('../common');
-var Client = require('mysql').Client,
-    INVALID_QUERY_1 = 'first invalid #*&% query',
-    INVALID_QUERY_2 = 'another #*&% wrong query';
+var common = require('../common');
+var mysql = require(common.dir.lib + '/mysql');
+
+var INVALID_QUERY_1 = 'first invalid #*&% query';
+var INVALID_QUERY_2 = 'another #*&% wrong query';
 
 (function testErrorCallback() {
   // The query callback should receive an error,
   // the client should not throw.
 
-  var gently = new Gently(),
-      client = new Client(TEST_CONFIG);
+  var gently = new Gently();
+  var client = mysql.createClient(TEST_CONFIG);
 
   client.connect(gently.expect(function connectCb(error) {
     if (error) throw error;
@@ -26,9 +27,9 @@ var Client = require('mysql').Client,
   // The query 'error' handler should be called,
   // the client should not throw.
 
-  var gently = new Gently(),
-      client = new Client(TEST_CONFIG),
-      query;
+  var gently = new Gently();
+  var client = mysql.createClient(TEST_CONFIG);
+  var query;
 
   client.connect(gently.expect(function connectCb(error) {
     if (error) throw error;
@@ -48,9 +49,9 @@ var Client = require('mysql').Client,
   // The query should not throw,
   // the client's error handler should be called.
 
-  var gently = new Gently(),
-      client = new Client(TEST_CONFIG),
-      query;
+  var gently = new Gently();
+  var client = mysql.createClient(TEST_CONFIG);
+  var query;
 
   client.connect(gently.expect(function connectCb(error) {
     if (error) throw error;
@@ -70,12 +71,12 @@ var Client = require('mysql').Client,
   // The query's error handler should not be called and the query must not throw,
   // the client's error handler should be called.
 
-  var gently = new Gently(),
-      client = new Client(TEST_CONFIG),
-      query,
-      dummyHandler = function() {
-        throw new Error('The dummy handler should not be called');
-      };
+  var gently = new Gently();
+  var client = mysql.createClient(TEST_CONFIG);
+  var query;
+  var dummyHandler = function() {
+    throw new Error('The dummy handler should not be called');
+  };
 
   client.connect(gently.expect(function connectCb(error) {
     if (error) throw error;
@@ -98,8 +99,8 @@ var Client = require('mysql').Client,
   // Query errors should not leave the client in a broken state,
   // subsequent (correct) queries should work fine.
 
-  var gently = new Gently(),
-      client = new Client(TEST_CONFIG);
+  var gently = new Gently();
+  var client = mysql.createClient(TEST_CONFIG);
 
   client.connect(gently.expect(function connectCb(error) {
     if (error) throw error;

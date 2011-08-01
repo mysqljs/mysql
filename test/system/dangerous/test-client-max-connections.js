@@ -1,7 +1,7 @@
-require('../../common');
-var Client = require('mysql').Client,
-    mainClient = Client(TEST_CONFIG),
-    originalMaxConnections;
+var common = require('../../common');
+var mysql = require(common.dir.lib + '/mysql');
+var mainClient = mysql.createClient(TEST_CONFIG);
+var originalMaxConnections;
 
 
 function setMaxConnectionsToOne() {
@@ -28,7 +28,7 @@ function setMaxConnectionsToOne() {
 };
 
 function connectTwoClients() {
-  var client1 = Client(TEST_CONFIG);
+  var client1 = mysql.createClient(TEST_CONFIG);
   client1.connect(function(err) {
     if (err) {
       // There should be no error for the first connection, but if there is one
@@ -39,9 +39,9 @@ function connectTwoClients() {
       return;
     }
 
-    var client2 = Client(TEST_CONFIG);
+    var client2 = mysql.createClient(TEST_CONFIG);
     client2.connect(function(err) {
-      assert.strictEqual(err.number, Client.ERROR_CON_COUNT_ERROR);
+      assert.strictEqual(err.number, mysql.ERROR_CON_COUNT_ERROR);
 
       client1.end();
       restoreMaxConnections();
