@@ -1,6 +1,6 @@
 var path = require('path');
 
-var root = path.join(__dirname, '..');
+var root = path.join(__dirname, '../..');
 exports.dir = {
   root: root,
   lib: root + '/lib',
@@ -8,7 +8,7 @@ exports.dir = {
 var util = require('util');
 
 var parent = module.parent.filename;
-if (parent.match(/test\/system/) || parent.match(/benchmark/)) {
+if (parent.match(/system/) || parent.match(/benchmark/)) {
   try {
     global.TEST_CONFIG = require('./config');
   } catch (e) {

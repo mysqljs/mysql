@@ -16,7 +16,8 @@
     "hashish": "0.0.4"
   },
   "devDependencies": {
-    "gently": "0.8.0"
+    "gently": "0.8.0",
+    "far": "0.0.4"
   },
   "engines": {
     "node": "*"
