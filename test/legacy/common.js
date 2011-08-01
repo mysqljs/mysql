@@ -1,10 +1,7 @@
-var path = require('path');
+var newCommon = require('../common');
+exports.dir = newCommon.dir;
 
-var root = path.join(__dirname, '../..');
-exports.dir = {
-  root: root,
-  lib: root + '/lib',
-};
+var path = require('path');
 var util = require('util');
 
 var parent = module.parent.filename;
