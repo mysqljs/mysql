@@ -1,6 +1,14 @@
-{ "name" : "mysql"
-, "version": "0.9.1"
-, "devDependencies": {"gently": "0.8.0"}
-, "main" : "./lib/mysql"
-, "scripts" : { "test" : "make test" }
+{
+  "name": "mysql",
+  "version": "0.9.1",
+  "devDependencies": {
+    "gently": "0.8.0"
+  },
+  "main": "./lib/mysql",
+  "scripts": {
+    "test": "make test"
+  },
+  "dependencies": {
+    "hashish": "0.0.4"
+  }
 }
