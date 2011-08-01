@@ -3,7 +3,8 @@ var StreamStub = GENTLY.stub('net', 'Stream'),
     ParserStub = GENTLY.stub('./parser'),
     OutgoingPacketStub = GENTLY.stub('./outgoing_packet'),
     QueryStub = GENTLY.stub('./query'),
-    Parser = require(common.dir.lib + '/parser');
+    Parser = require(common.dir.lib + '/parser'),
+    constants = require(common.dir.lib + '/constants');
 
 for (var k in Parser) {
   ParserStub[k] = Parser[k];
@@ -35,7 +36,7 @@ test(function constructor() {
 
     assert.strictEqual(client.flags, Client.defaultFlags);
     assert.strictEqual(client.maxPacketSize, 0x01000000);
-    assert.strictEqual(client.charsetNumber, Client.UTF8_UNICODE_CI);
+    assert.strictEqual(client.charsetNumber, constants.UTF8_UNICODE_CI);
 
     assert.strictEqual(client._greeting, null);
     assert.deepEqual(client._queue, []);
