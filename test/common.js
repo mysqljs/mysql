@@ -1,5 +1,10 @@
 var path = require('path');
-require.paths.unshift(path.dirname(__dirname)+'/lib');
+
+var root = path.join(__dirname, '..');
+exports.dir = {
+  root: root,
+  lib: root + '/lib',
+};
 var util = require('util');
 
 var parent = module.parent.filename;

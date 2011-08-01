@@ -1,8 +1,8 @@
-require('../common');
+var common = require('../common');
 var ClientStub = GENTLY.stub('./client'),
-    Query = require('mysql/query'),
+    Query = require(common.dir.lib + '/query'),
     EventEmitter = require('events').EventEmitter,
-    Parser = require('mysql/parser'),
+    Parser = require(common.dir.lib + '/parser'),
     query,
     gently;
 

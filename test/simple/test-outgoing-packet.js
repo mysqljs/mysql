@@ -1,5 +1,5 @@
-require('../common');
-var OutgoingPacket = require('mysql/outgoing_packet'),
+var common = require('../common');
+var OutgoingPacket = require(common.dir.lib + '/outgoing_packet'),
     Buffer = require('buffer').Buffer;
 
 function test(test) {

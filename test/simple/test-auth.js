@@ -1,5 +1,5 @@
-require('../common');
-var auth = require('mysql/auth');
+var common = require('../common');
+var auth = require(common.dir.lib + '/auth');
 
 function test(test) {
   gently = new Gently();

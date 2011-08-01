@@ -1,15 +1,15 @@
-require('../common');
+var common = require('../common');
 var StreamStub = GENTLY.stub('net', 'Stream'),
     ParserStub = GENTLY.stub('./parser'),
     OutgoingPacketStub = GENTLY.stub('./outgoing_packet'),
     QueryStub = GENTLY.stub('./query'),
-    Parser = require('mysql/parser');
+    Parser = require(common.dir.lib + '/parser');
 
 for (var k in Parser) {
   ParserStub[k] = Parser[k];
 };
 
-var Client = require('mysql/client');
+var Client = require(common.dir.lib + '/client');
 
 function test(test) {
   client = new Client();

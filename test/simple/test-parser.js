@@ -1,6 +1,6 @@
-require('../common');
+var common = require('../common');
 var EventEmitter = require('events').EventEmitter,
-    Parser = require('mysql/parser'),
+    Parser = require(common.dir.lib + '/parser'),
     parser,
     gently;
 
