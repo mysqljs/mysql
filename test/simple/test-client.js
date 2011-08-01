@@ -20,27 +20,27 @@ function test(test) {
 
 test(function constructor() {
   (function testDefaultProperties() {
-      var client = new Client();
+    var client = new Client();
 
-      assert.strictEqual(client.host, 'localhost');
-      assert.strictEqual(client.port, 3306);
-      assert.strictEqual(client.user, null);
-      assert.strictEqual(client.password, null);
-      assert.strictEqual(client.database, '');
+    assert.strictEqual(client.host, 'localhost');
+    assert.strictEqual(client.port, 3306);
+    assert.strictEqual(client.user, null);
+    assert.strictEqual(client.password, null);
+    assert.strictEqual(client.database, '');
 
-      assert.strictEqual(client.typeCast, true);
-      assert.strictEqual(client.debug, false);
-      assert.strictEqual(client.ending, false);
-      assert.strictEqual(client.connected, false);
+    assert.strictEqual(client.typeCast, true);
+    assert.strictEqual(client.debug, false);
+    assert.strictEqual(client.ending, false);
+    assert.strictEqual(client.connected, false);
 
-      assert.strictEqual(client.flags, Client.defaultFlags);
-      assert.strictEqual(client.maxPacketSize, 0x01000000);
-      assert.strictEqual(client.charsetNumber, Client.UTF8_UNICODE_CI);
+    assert.strictEqual(client.flags, Client.defaultFlags);
+    assert.strictEqual(client.maxPacketSize, 0x01000000);
+    assert.strictEqual(client.charsetNumber, Client.UTF8_UNICODE_CI);
 
-      assert.strictEqual(client._greeting, null);
-      assert.deepEqual(client._queue, []);
-      assert.strictEqual(client._connection, null);
-      assert.strictEqual(client._parser, null);
+    assert.strictEqual(client._greeting, null);
+    assert.deepEqual(client._queue, []);
+    assert.strictEqual(client._connection, null);
+    assert.strictEqual(client._parser, null);
   })();
 
   (function testMixin() {
