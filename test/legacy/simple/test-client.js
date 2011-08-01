@@ -218,7 +218,7 @@ test(function query() {
 
         gently.expect(PACKET, 'writeNumber', function(bytes, number) {
           assert.strictEqual(bytes, 1);
-          assert.strictEqual(number, Client.COM_QUERY);
+          assert.strictEqual(number, constants.COM_QUERY);
         });
 
         gently.expect(PACKET, 'write', function(str, encoding) {
@@ -392,7 +392,7 @@ test(function ping() {
 
       gently.expect(this, 'writeNumber', function (length, val) {
         assert.equal(length, 1);
-        assert.equal(val, Client.COM_PING);
+        assert.equal(val, constants.COM_PING);
       });
 
       gently.expect(client, 'write', function (packet) {
@@ -418,7 +418,7 @@ test(function statistics() {
 
       gently.expect(this, 'writeNumber', function (length, val) {
         assert.equal(length, 1);
-        assert.equal(val, Client.COM_STATISTICS);
+        assert.equal(val, constants.COM_STATISTICS);
       });
 
       gently.expect(client, 'write', function (packet) {
@@ -445,7 +445,7 @@ test(function useDatabase() {
 
       gently.expect(this, 'writeNumber', function (length, val) {
         assert.equal(length, 1);
-        assert.equal(val, Client.COM_INIT_DB);
+        assert.equal(val, constants.COM_INIT_DB);
       });
 
       gently.expect(PACKET, 'write', function(str, encoding) {
@@ -487,7 +487,7 @@ test(function end() {
 
       gently.expect(this, 'writeNumber', function (length, val) {
         assert.equal(length, 1);
-        assert.equal(val, Client.COM_QUIT);
+        assert.equal(val, constants.COM_QUIT);
       });
 
       gently.expect(client, 'write', function (packet) {
