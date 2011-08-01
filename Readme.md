@@ -15,7 +15,7 @@ very heavy on database interaction your milage may vary.
 * Felix Geisendörfer ([felixge](http://github.com/felixge/node-mysql/commits/master?author=felixge)) - Author and maintainer
 * Bert Belder ([piscisaureus](http://github.com/felixge/node-mysql/commits/master?author=piscisaureus))
 * Alan Gutierrez ([bigeasy](http://github.com/felixge/node-mysql/commits/master?author=bigeasy))
-* Brian ([mscdex](http://github.com/felixge/node-mysql/commits/master?author=mscdex))
+* Brian White ([mscdex](http://github.com/felixge/node-mysql/commits/master?author=mscdex))
 * Cal Henderson ([iamcal](http://github.com/felixge/node-mysql/commits/master?author=iamcal))
 * Frank Grimm ([FrankGrimm](http://github.com/felixge/node-mysql/commits/master?author=FrankGrimm))
 * Nick Payne ([makeusabrew](http://github.com/felixge/node-mysql/commits/master?author=makeusabrew))
