@@ -17,7 +17,7 @@
   },
   "devDependencies": {
     "gently": "0.8.0",
-    "far": "0.0.4"
+    "far": "0.0.6"
   },
   "engines": {
     "node": "*"
