@@ -76,3 +76,19 @@ test('Reconnecting a closed client works', function(done) {
     done(err);
   });
 });
+
+test('Reconnect on timeout', {timeout: 2000}, function(done) {
+  // Not sure if we need all 3 of these, but they do the trick
+  this.client.query('SET interactive_timeout = 1');
+  this.client.query('SET wait_timeout = 1');
+  this.client.query('SET net_read_timeout = 1');
+
+  var self = this;
+  this.client._socket.on('end', function() {
+    assert.equal(self.client.connected, false);
+
+    self.client.query('SELECT 1', function(err) {
+      done(err);
+    });
+  });
+});
