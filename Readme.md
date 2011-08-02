@@ -209,14 +209,12 @@ at all.
 
 At this point the module is ready to be tried out, but a lot of things are yet to be done:
 
+* Implement retry
 * Pause / resume
 * Remaining mysql commands
 * Prepared Statements
 * Packet's > 16 MB
 * Compression
-* Performance profiling
-* Handle re-connect after bad credential error (should query queue be kept?)
-* Deal with stale connections / other potential network issues
 * Decide how to handle queries with multiple statements
 
 ## Contributors
