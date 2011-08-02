@@ -11,14 +11,12 @@ var timeout = setTimeout(function() {
   gently.verify();
 }, 5000);
 
-client.connect();
-
 // Not sure if we need all 3 of these, but they do the trick
 client.query('SET interactive_timeout = 1');
 client.query('SET wait_timeout = 1');
 client.query('SET net_read_timeout = 1');
 
-client._connection.on('end', function() {
+client._socket.on('end', function() {
   timeoutHappened = true;
   assert.equal(client.connected, false);
 
