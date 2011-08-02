@@ -13,3 +13,11 @@ test.after(function(done) {
 test('ping()', function(done) {
   this.client.ping(done);
 });
+
+test('statistics()', function(done) {
+  this.client.statistics(function statisticsCb(err, statistics) {
+    assert.ok(statistics.extra.match(/time/i));
+    done(err);
+  });
+});
+
