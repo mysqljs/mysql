@@ -1,15 +1,6 @@
 var common = require('../common');
-var StreamStub = GENTLY.stub('net', 'Stream'),
-    ParserStub = GENTLY.stub('./parser'),
-    OutgoingPacketStub = GENTLY.stub('./outgoing_packet'),
-    QueryStub = GENTLY.stub('./query'),
-    Parser = require(common.dir.lib + '/parser'),
-    constants = require(common.dir.lib + '/constants');
-
-for (var k in Parser) {
-  ParserStub[k] = Parser[k];
-};
-
+var Parser = require(common.dir.lib + '/parser');
+var constants = require(common.dir.lib + '/constants');
 var Client = require(common.dir.lib + '/client');
 
 function test(test) {
