@@ -7,6 +7,9 @@ exports.dir = {
   lib: root + '/lib',
 };
 
+exports.TEST_DB = 'node_mysql_test';
+exports.TEST_TABLE = 'posts';
+
 exports.createClient = function() {
   try {
     var config = require('./config');

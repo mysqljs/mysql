@@ -1,6 +1,7 @@
 var common = require('../common');
 var assert = require('assert');
 var test = common.fastOrSlow.slowTestCase();
+var mysql = require(common.dir.lib + '/mysql');
 
 test.before(function() {
   this.client = common.createClient();
@@ -70,4 +71,58 @@ test('Query a NULL value', function(done) {
     assert.strictEqual(results[0].field_b, null);
     done(err);
   });
+});
+
+test('Real world usage', function(done) {
+  this.client.query('CREATE DATABASE '+common.TEST_DB, function createDbCb(err) {
+    if (err && err.number != mysql.ERROR_DB_CREATE_EXISTS) {
+      done(err);
+    }
+  });
+
+  this.client.query('USE '+common.TEST_DB, function useDbCb(err) {
+    if (err) done(err);
+  });
+
+  this.client.query(
+    'CREATE TEMPORARY TABLE '+common.TEST_TABLE+
+    '(id INT(11) AUTO_INCREMENT, title VARCHAR(255), text TEXT, created DATETIME, PRIMARY KEY (id));',
+    function createTableCb(err) {
+      if (err) done (err);
+    }
+  );
+
+  this.client.query(
+    'INSERT INTO '+common.TEST_TABLE+' '+
+    'SET title = ?, text = ?, created = ?',
+    ['super cool', 'this is a nice long text', '2010-08-16 10:00:23'],
+    function insertCb(err) {
+      if (err) done(err);
+    }
+  );
+
+  var query = this.client.query(
+    'INSERT INTO '+common.TEST_TABLE+' '+
+    'SET title = ?, text = ?, created = ?',
+    ['another entry', 'because 2 entries make a better test', null]
+  );
+
+  var endCalled = false;
+  query.on('end', function insertOkCb(packet) {
+    endCalled = true;
+  });
+
+  var query = this.client.query(
+    'SELECT * FROM '+common.TEST_TABLE,
+    function selectCb(err, results, fields) {
+      assert.ok(endCalled);
+
+      assert.equal(results.length, 2);
+      assert.equal(results[1].title, 'another entry');
+      assert.ok(typeof results[1].id == 'number');
+      assert.ok(results[0].created instanceof Date);
+      assert.strictEqual(results[1].created, null);
+      done(err);
+    }
+  );
 });
