@@ -86,7 +86,7 @@ client.query(
 
 ## API
 
-### new mysql.Client([options])
+### mysql.createClient([options])
 
 Creates a new client instance. Any client property can be set using the
 `options` object.
@@ -118,10 +118,6 @@ Prints incoming and outgoing packets, useful for development / testing purposes.
 ### client.flags = Client.defaultFlags
 
 Connection flags send to the server.
-
-### client.connect([cb])
-
-Initiates a connection to the specified host server.
 
 ### client.query(sql, [params, cb])
 
