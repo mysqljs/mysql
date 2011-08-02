@@ -1,9 +1,9 @@
 var common = require('../common');
-var Query = require(common.dir.lib + '/query'),
-    EventEmitter = require('events').EventEmitter,
-    Parser = require(common.dir.lib + '/parser'),
-    query,
-    gently;
+var Query = require(common.dir.lib + '/query');
+var EventEmitter = require('events').EventEmitter;
+var Parser = require(common.dir.lib + '/parser');
+var query;
+var gently;
 
 function test(test) {
   query = new Query();
