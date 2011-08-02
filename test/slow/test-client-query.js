@@ -63,3 +63,11 @@ test('Long fields', function(done) {
   test();
   test(true);
 });
+
+test('Query a NULL value', function(done) {
+  this.client.query('SELECT NULL as field_a, NULL as field_b', function(err, results) {
+    assert.strictEqual(results[0].field_a, null);
+    assert.strictEqual(results[0].field_b, null);
+    done(err);
+  });
+});
