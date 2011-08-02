@@ -17,16 +17,7 @@ with it so far.
 npm install mysql
 ```
 
-## Design Goals
-
-* TDD: All code is written using test driven development, code coverage should approach 100%
-* Simplicity: The MySQL protocol is easy, a good parser should reflect that
-* Efficiency: Use fast algorithms, buffers and as little memory as possible.
-* Portability: Should run anywhere node runs
-* Completeness: The goal is to support the full MySQL API.
-* Compatibility: MySql >= 4.1
-
-## Tutorial
+## Usage
 
 ``` javascript
 var mysql = require('mysql');
