@@ -6,9 +6,9 @@ A pure node.js JavaScript Client implementing the [MySQL protocol](http://forge.
 
 ## Current status
 
-This module was developed for [Transloadit](http://transloadit.com/), a service focused on uploading
-and encoding images and videos. It is currently used in production there, but since the service is not
-very heavy on database interaction your milage may vary.
+This module was developed for [Transloadit](http://transloadit.com/), a service
+focused on uploading and encoding images and videos. So far we have performed
+close to one billion queries with it and are quite happy.
 
 ## Installation
 
