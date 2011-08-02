@@ -10,31 +10,6 @@ This module was developed for [Transloadit](http://transloadit.com/), a service 
 and encoding images and videos. It is currently used in production there, but since the service is not
 very heavy on database interaction your milage may vary.
 
-## Contributors
-
-[Click here][contributors] for a full list of contributors.
-
-[contributors]: https://github.com/felixge/node-mysql/contributors
-
-## Sponsors
-
-* [Joyent](http://www.joyent.com/) - Main sponsor, you should check out their [node.js hosting](https://no.de/).
-* [pinkbike.com](http://pinkbike.com/) - The most awesome biking site there is
-
-This is a rather large project requiring a significant amount of my limited resources.
-
-If your company could benefit from a well-engineered non-blocking mysql driver, and
-wants to support this project, I would greatly appriciate any sponsorship you may be
-able to provide. All sponsors will get lifetime display in this readme, priority
-support on problems, and votes on roadmap decisions. If you are interested, contact
-me at [felix@debuggable.com](mailto:felix@debuggable.com) for details.
-
-Of course I'm also happy about code contributions. If you're interested in
-working on features, just get in touch so we can talk about API design and
-testing.
-
-[transloadit]: http://transloadit.com/
-
 ## Installation
 
     npm install mysql
@@ -254,6 +229,31 @@ At this point the module is ready to be tried out, but a lot of things are yet t
 * Handle re-connect after bad credential error (should query queue be kept?)
 * Deal with stale connections / other potential network issues
 * Decide how to handle queries with multiple statements
+
+## Contributors
+
+[Click here][contributors] for a full list of contributors.
+
+[contributors]: https://github.com/felixge/node-mysql/contributors
+
+## Sponsors
+
+* [Joyent](http://www.joyent.com/) - Main sponsor, you should check out their [node.js hosting](https://no.de/).
+* [pinkbike.com](http://pinkbike.com/) - The most awesome biking site there is
+
+This is a rather large project requiring a significant amount of my limited resources.
+
+If your company could benefit from a well-engineered non-blocking mysql driver, and
+wants to support this project, I would greatly appriciate any sponsorship you may be
+able to provide. All sponsors will get lifetime display in this readme, priority
+support on problems, and votes on roadmap decisions. If you are interested, contact
+me at [felix@debuggable.com](mailto:felix@debuggable.com) for details.
+
+Of course I'm also happy about code contributions. If you're interested in
+working on features, just get in touch so we can talk about API design and
+testing.
+
+[transloadit]: http://transloadit.com/
 
 ## Changelog
 
