@@ -1,6 +1,5 @@
 var common = require('../common');
-var ClientStub = GENTLY.stub('./client'),
-    Query = require(common.dir.lib + '/query'),
+var Query = require(common.dir.lib + '/query'),
     EventEmitter = require('events').EventEmitter,
     Parser = require(common.dir.lib + '/parser'),
     query,
