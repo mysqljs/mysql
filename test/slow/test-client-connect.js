@@ -60,3 +60,19 @@ test('Bad credentials', function(done) {
     done();
   });
 });
+
+test('Reconnecting a closed client works', function(done) {
+  var cbs = [];
+  this.client.query('SELECT 1', function() {
+    cbs.push(1);
+  });
+
+  this.client.end(function() {
+    cbs.push(2);
+  });
+
+  this.client.query('SELECT 1', function(err) {
+    assert.deepEqual(cbs, [1, 2]);
+    done(err);
+  });
+});
