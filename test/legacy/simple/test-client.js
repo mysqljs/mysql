@@ -34,16 +34,6 @@ test(function constructor() {
     assert.strictEqual(client._socket, null);
     assert.strictEqual(client._parser, null);
   })();
-
-  (function testMixin() {
-    var client = new Client({foo: 'bar'});
-    assert.strictEqual(client.foo, 'bar');
-  })();
-
-  (function testWithoutNew() {
-    var client = Client({foo: 'bar'});
-    assert.strictEqual(client.foo, 'bar');
-  })();
 });
 
 test(function write() {
