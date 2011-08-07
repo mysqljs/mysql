@@ -240,12 +240,15 @@ testing.
 
 ## Changelog
 
+### v0.9.2
+
+* The underlaying socket connection is now managed implicitly rather than explicitly.
+* Check the [upgrading guide][] for a full list of changes.
+
 ### v0.9.1
 
 * Fix issue #49 / `client.escape()` throwing exceptions on objects. (Nick Payne)
 * Drop < v0.4.x compatibility. From now on you need node v0.4.x to use this module.
-
-[See Commits](https://github.com/felixge/node-mysql/compare/v0.9.0...v0.9.1)
 
 ### Older releases
 
