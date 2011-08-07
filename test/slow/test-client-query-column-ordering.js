@@ -12,7 +12,7 @@ test.after(function(done) {
   this.client.end(done);
 });
 
-test('Column ordering works properly', {timeout: 6000}, function(done) {
+test('Column ordering works properly', {timeout: 15 * 1000}, function(done) {
   var REPEATS = 500;
 
   this.client.query('CREATE DATABASE ' + common.TEST_DB, function(err) {
