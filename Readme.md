@@ -4,18 +4,24 @@
 
 A pure node.js JavaScript Client implementing the [MySQL protocol](http://forge.mysql.com/wiki/MySQL_Internals_ClientServer_Protocol).
 
-## Share the love
+## Made by transloadit.com
 
-If you like this module, please check out [transloadit.com](http://transloadit.com/),
-an infrastructure service for uploading and encoding images and videos. We built
-this module for our own needs and have performed close to one billion queries
-with it so far.
+We build this module for our own needs over at
+[transloadit.com](http://transloadit.com/) where we have performed close to
+one billion queries with it so far. So if you're looking for a service
+to provide media file uploading and encoding functionality to your application,
+check us out.
 
 ## Installation
 
 ```
 npm install mysql
 ```
+
+**Important**: If you are upgrading from 0.9.1 or below, there have been
+backwards incompatible changes in the API. Please read the [upgrading guide][].
+
+[upgrading guide]: https://github.com/felixge/node-mysql/wiki/Upgrading-to-0.9.2+
 
 ## Usage
 
