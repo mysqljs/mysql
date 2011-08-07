@@ -4,125 +4,85 @@
 
 A pure node.js JavaScript Client implementing the [MySQL protocol](http://forge.mysql.com/wiki/MySQL_Internals_ClientServer_Protocol).
 
-## Current status
+## Support this module
 
-This module was developed for [Transloadit](http://transloadit.com/), a service focused on uploading
-and encoding images and videos. It is currently used in production there, but since the service is not
-very heavy on database interaction your mileage may vary.
+If you like this module, check out and spread the word about our service
+[transloadit.com][]. We provide file uploading and encoding functionality to
+other applications, and have performed billions of queries with this module so
+far.
 
-## Contributors
-
-* Felix Geisendörfer ([felixge](http://github.com/felixge/node-mysql/commits/master?author=felixge)) - Author and maintainer
-* Bert Belder ([piscisaureus](http://github.com/felixge/node-mysql/commits/master?author=piscisaureus))
-* Alan Gutierrez ([bigeasy](http://github.com/felixge/node-mysql/commits/master?author=bigeasy))
-* Brian ([mscdex](http://github.com/felixge/node-mysql/commits/master?author=mscdex))
-* Cal Henderson ([iamcal](http://github.com/felixge/node-mysql/commits/master?author=iamcal))
-* Frank Grimm ([FrankGrimm](http://github.com/felixge/node-mysql/commits/master?author=FrankGrimm))
-* Nick Payne ([makeusabrew](http://github.com/felixge/node-mysql/commits/master?author=makeusabrew))
-
-## Sponsors
-
-* [Joyent](http://www.joyent.com/) - Main sponsor, you should check out their [node.js hosting](https://no.de/).
-* [pinkbike.com](http://pinkbike.com/) - The most awesome biking site there is
-
-This is a rather large project requiring a significant amount of my limited resources.
-
-If your company could benefit from a well-engineered non-blocking mysql driver, and
-wants to support this project, I would greatly appriciate any sponsorship you may be
-able to provide. All sponsors will get lifetime display in this readme, priority
-support on problems, and votes on roadmap decisions. If you are interested, contact
-me at [felix@debuggable.com](mailto:felix@debuggable.com) for details.
-
-Of course I'm also happy about code contributions. If you're interested in
-working on features, just get in touch so we can talk about API design and
-testing.
-
-[transloadit]: http://transloadit.com/
+[transloadit.com]: http://transloadit.com/
 
 ## Installation
 
-    npm install mysql
+```
+npm install mysql
+```
 
-Or if you don't want to use npm / run the latest source:
+**Important**: If you are upgrading from 0.9.1 or below, there have been
+backwards incompatible changes in the API. Please read the [upgrading guide][].
 
-    cd ~/.node_libraries
-    git clone git://github.com/felixge/node-mysql.git mysql
+[upgrading guide]: https://github.com/felixge/node-mysql/wiki/Upgrading-to-0.9.2+
 
-## Compatibility
+## Usage
 
-This module is compatible with node v0.4.x.
+``` javascript
+var mysql = require('mysql');
+var TEST_DATABASE = 'nodejs_mysql_test';
+var TEST_TABLE = 'test';
+var client = mysql.createClient({
+  user: 'root',
+  password: 'root',
+});
 
-If you need to work with an older node version, download v0.9.0. It supports
-node >= v0.1.102.
+client.query('CREATE DATABASE '+TEST_DATABASE, function(err) {
+  if (err && err.number != mysql.ERROR_DB_CREATE_EXISTS) {
+    throw err;
+  }
+});
 
-## Design Goals
+// If no callback is provided, any errors will be emitted as `'error'`
+// events by the client
+client.query('USE '+TEST_DATABASE);
 
-* TDD: All code is written using test driven development, code coverage should approach 100%
-* Simplicity: The MySQL protocol is easy, a good parser should reflect that
-* Efficiency: Use fast algorithms, buffers and as little memory as possible.
-* Portability: Should run anywhere node runs
-* Completeness: The goal is to support the full MySQL API.
-* Compatibility: MySql >= 4.1
+client.query(
+  'CREATE TEMPORARY TABLE '+TEST_TABLE+
+  '(id INT(11) AUTO_INCREMENT, '+
+  'title VARCHAR(255), '+
+  'text TEXT, '+
+  'created DATETIME, '+
+  'PRIMARY KEY (id))'
+);
 
-## Tutorial
+client.query(
+  'INSERT INTO '+TEST_TABLE+' '+
+  'SET title = ?, text = ?, created = ?',
+  ['super cool', 'this is a nice text', '2010-08-16 10:00:23']
+);
 
-    var Client = require('mysql').Client,
-        client = new Client(),
-        TEST_DATABASE = 'nodejs_mysql_test',
-        TEST_TABLE = 'test';
+var query = client.query(
+  'INSERT INTO '+TEST_TABLE+' '+
+  'SET title = ?, text = ?, created = ?',
+  ['another entry', 'because 2 entries make a better test', '2010-08-16 12:42:15']
+);
 
-    client.user = 'root';
-    client.password = 'root';
+client.query(
+  'SELECT * FROM '+TEST_TABLE,
+  function selectCb(err, results, fields) {
+    if (err) {
+      throw err;
+    }
 
-    client.connect();
-
-    client.query('CREATE DATABASE '+TEST_DATABASE, function(err) {
-      if (err && err.number != Client.ERROR_DB_CREATE_EXISTS) {
-        throw err;
-      }
-    });
-
-    // If no callback is provided, any errors will be emitted as `'error'`
-    // events by the client
-    client.query('USE '+TEST_DATABASE);
-
-    client.query(
-      'CREATE TEMPORARY TABLE '+TEST_TABLE+
-      '(id INT(11) AUTO_INCREMENT, '+
-      'title VARCHAR(255), '+
-      'text TEXT, '+
-      'created DATETIME, '+
-      'PRIMARY KEY (id))'
-    );
-
-    client.query(
-      'INSERT INTO '+TEST_TABLE+' '+
-      'SET title = ?, text = ?, created = ?',
-      ['super cool', 'this is a nice text', '2010-08-16 10:00:23']
-    );
-
-    var query = client.query(
-      'INSERT INTO '+TEST_TABLE+' '+
-      'SET title = ?, text = ?, created = ?',
-      ['another entry', 'because 2 entries make a better test', '2010-08-16 12:42:15']
-    );
-
-    client.query(
-      'SELECT * FROM '+TEST_TABLE,
-      function selectCb(err, results, fields) {
-        if (err) {
-          throw err;
-        }
-
-        console.log(results);
-        console.log(fields);
-        client.end();
-      }
-    );
+    console.log(results);
+    console.log(fields);
+    client.end();
+  }
+);
+```
 
 ## API
 
-### new mysql.Client([options])
+### mysql.createClient([options])
 
 Creates a new client instance. Any client property can be set using the
 `options` object.
@@ -154,10 +114,6 @@ Prints incoming and outgoing packets, useful for development / testing purposes.
 ### client.flags = Client.defaultFlags
 
 Connection flags send to the server.
-
-### client.connect([cb])
-
-Initiates a connection to the specified host server.
 
 ### client.query(sql, [params, cb])
 
@@ -249,15 +205,38 @@ at all.
 
 At this point the module is ready to be tried out, but a lot of things are yet to be done:
 
+* Implement retry
 * Pause / resume
 * Remaining mysql commands
 * Prepared Statements
 * Packet's > 16 MB
 * Compression
-* Performance profiling
-* Handle re-connect after bad credential error (should query queue be kept?)
-* Deal with stale connections / other potential network issues
 * Decide how to handle queries with multiple statements
+
+## Contributors
+
+[Click here][contributors] for a full list of contributors.
+
+[contributors]: https://github.com/felixge/node-mysql/contributors
+
+## Sponsors
+
+* [Joyent](http://www.joyent.com/) - Main sponsor, you should check out their [node.js hosting](https://no.de/).
+* [pinkbike.com](http://pinkbike.com/) - The most awesome biking site there is
+
+This is a rather large project requiring a significant amount of my limited resources.
+
+If your company could benefit from a well-engineered non-blocking mysql driver, and
+wants to support this project, I would greatly appriciate any sponsorship you may be
+able to provide. All sponsors will get lifetime display in this readme, priority
+support on problems, and votes on roadmap decisions. If you are interested, contact
+me at [felix@debuggable.com](mailto:felix@debuggable.com) for details.
+
+Of course I'm also happy about code contributions. If you're interested in
+working on features, just get in touch so we can talk about API design and
+testing.
+
+[transloadit]: http://transloadit.com/
 
 ## Changelog
 
