@@ -4,13 +4,13 @@
 
 A pure node.js JavaScript Client implementing the [MySQL protocol](http://forge.mysql.com/wiki/MySQL_Internals_ClientServer_Protocol).
 
-## Made by transloadit.com
+## Support this module
 
-We build this module for our own needs over at
-[transloadit.com](http://transloadit.com/) where we have performed close to
-one billion queries with it so far. So if you're looking for a service
-to provide media file uploading and encoding functionality to your application,
-check us out.
+If you like this module, check out and spread the word about our service
+[transloadit.com][]. We provide file uploading and encoding functionality to
+other applications, and have performed billions of queries with module so far.
+
+[transloadit.com]: http://transloadit.com/
 
 ## Installation
 
