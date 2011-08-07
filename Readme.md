@@ -8,7 +8,8 @@ A pure node.js JavaScript Client implementing the [MySQL protocol](http://forge.
 
 If you like this module, check out and spread the word about our service
 [transloadit.com][]. We provide file uploading and encoding functionality to
-other applications, and have performed billions of queries with module so far.
+other applications, and have performed billions of queries with this module so
+far.
 
 [transloadit.com]: http://transloadit.com/
 
