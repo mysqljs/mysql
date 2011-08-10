@@ -125,5 +125,20 @@ test('Real world usage', function(done) {
       done(err);
     }
   );
+
+  /* query placeholder parameters existence */
+  var params3 = ['another entry', 'number'];
+  var query3 = this.client.query(
+    'SELECT * FROM '+common.TEST_TABLE+' WHERE title = ? AND id = ?',
+    params3,
+    function selectCb(err, results, fields) {
+      assert.ok(endCalled);
+
+      assert.equal(params3.length, 2);
+      assert.equal(params3[0], 'another entry');
+      assert.equal(params3[1], 'number');
+      done(err);
+    }
+  );
 });
 
