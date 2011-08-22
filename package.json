@@ -10,14 +10,15 @@
   },
   "main": "./index",
   "scripts": {
-    "test": "make test-all"
+    "test": "make test"
   },
   "dependencies": {
     "hashish": "0.0.4"
   },
   "devDependencies": {
     "gently": "0.8.0",
-    "far": "0.0.6"
+    "far": "0.0.6",
+    "fast-or-slow": "0.0.5"
   },
   "engines": {
     "node": "*"

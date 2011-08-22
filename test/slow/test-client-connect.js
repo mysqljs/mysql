@@ -1,6 +1,6 @@
 var common = require('../common');
 var assert = require('assert');
-var test = common.fastOrSlow.slowTestCase();
+var test = common.fastOrSlow.slow();
 
 test.before(function() {
   this.client = common.createClient();
