@@ -1,6 +1,6 @@
 var common = require('../common');
 var assert = require('assert');
-var test = common.fastOrSlow.slowTestCase();
+var test = common.fastOrSlow.slow();
 var mysql = require(common.dir.lib + '/mysql');
 
 var INVALID_QUERY_1 = 'first invalid #*&% query';

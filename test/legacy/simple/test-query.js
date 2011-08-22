@@ -59,10 +59,10 @@ test(function _handlePacket() {
   assert.strictEqual(typeCast(Query.FIELD_TYPE_INT24, '08'), 8);
   assert.strictEqual(typeCast(Query.FIELD_TYPE_YEAR, '08'), 8);
 
-  assert.strictEqual(typeCast(Query.FIELD_TYPE_DECIMAL, '2.8'), 2.8);
+  assert.strictEqual(typeCast(Query.FIELD_TYPE_DECIMAL, '2.8'), '2.8');
   assert.strictEqual(typeCast(Query.FIELD_TYPE_FLOAT, '2.8'), 2.8);
   assert.strictEqual(typeCast(Query.FIELD_TYPE_DOUBLE, '2.8'), 2.8);
-  assert.strictEqual(typeCast(Query.FIELD_TYPE_NEWDECIMAL, '2.8'), 2.8);
+  assert.strictEqual(typeCast(Query.FIELD_TYPE_NEWDECIMAL, '2.8'), '2.8');
 
   assert.strictEqual(typeCast(Query.FIELD_TYPE_DATE, null), null);
 });
