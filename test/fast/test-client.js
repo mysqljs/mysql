@@ -16,6 +16,13 @@ test('#format() does not manipulate params parameter', function() {
   assert.equal(params.length, 1);
 });
 
+test('#format() does not quote floats', function() {
+  var params = [1.23];
+
+  var sql = client.format('?', params);
+  assert.strictEqual(sql, '1.23');
+});
+
 // https://github.com/felixge/node-mysql/issues/96
 test('Timeout reconnect works with empty queue', function() {
   // A non-error packet
