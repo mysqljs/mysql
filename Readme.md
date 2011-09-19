@@ -148,10 +148,9 @@ placeholder mechanism described above.
 
 Escapes a single `val` for use inside of a sql string.
 
-### client.destroy([cb])
+### client.destroy()
 
-Forces the client connection to be destroyed right away. This is not a
-nice way to terminate the connection, use with caution.
+Forces the client connection / socket to be destroyed right away.
 
 ### client.end([cb])
 
