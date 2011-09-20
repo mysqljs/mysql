@@ -31,3 +31,31 @@ test('Timeout reconnect works with empty queue', function() {
   // This must not throw an error
   client._handlePacket(packet);
 });
+
+test('#format() does not substitute ? in string literals', function() {
+  
+  // various positions
+  // ? '?' ? => 1 '?' 2
+  var sql = '? \'? \' ?';		// input
+  var exp = '1 \'? \' 2';		// expected output
+  var params = [1, 2];			// params
+  
+  assert.strictEqual(exp, client.format(sql, params));
+  
+  // trivial test: 
+  // '?' => '?' 
+  sql = '\'?\'';
+  exp = '\'?\'';
+  params = [];
+  
+  assert.strictEqual(exp, client.format(sql, params));
+  
+  // escaped quote:
+  // '? \' ?' ? => '? \' ?' 1
+  sql = '\'? \\\' ?\' ?';
+  exp = '\'? \\\' ?\' 1';
+  params = [1];
+  
+  assert.strictEqual(exp, client.format(sql, params));
+  
+});
