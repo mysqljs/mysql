@@ -23,7 +23,7 @@ test('#format() does not quote floats', function() {
   assert.strictEqual(sql, '1.23');
 });
 
-test('#format() does not quote arrays', function() {
+test('#format() quotes individual array values and combines them with commas', function() {
   var params = [ [ 6.23, 'something', true, null ] ];
 
   var sql = client.format('?', params);
