@@ -23,6 +23,13 @@ test('#format() does not quote floats', function() {
   assert.strictEqual(sql, '1.23');
 });
 
+test('#format() does not quote arrays', function() {
+  var params = [ [ 6.23, 'something', true, null ] ];
+
+  var sql = client.format('?', params);
+  assert.strictEqual(sql, "6.23,'something',true,NULL");
+});
+
 // https://github.com/felixge/node-mysql/issues/96
 test('Timeout reconnect works with empty queue', function() {
   // A non-error packet
