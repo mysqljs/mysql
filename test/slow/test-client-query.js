@@ -173,7 +173,20 @@ test('Non-UTC Dates', function(done) {
 });
 
 test('UTC Dates', function(done) {
-  // Set client date format to UTC
+  /*
+   * Set client date format to UTC.
+   * If utc is set to true, we assume that the dates returned from MySQL are in UTC and
+   * convert them to Javascript Date objects in UTC format instead of letting Javascript
+   * convert them to local times, which is the default behavior.
+   *
+   * new Date() assumes the date is in system's local timezone:
+   * >> new Date('2010-08-16 10:00:23').toUTCString()
+   * => Mon, 16 Aug 2010 17:00:23 GMT // assuming you're in the PDT timezone.
+   *
+   * To make Date parse it as UTC, we add a Z to the date string:
+   * >> new Date('2010-08-16 10:00:23Z').toUTCString()
+   * => Mon, 16 Aug 2010 10:00:23 GMT
+   */
   this.client.utc = true;
   this.client.query('CREATE DATABASE '+common.TEST_DB, function createDbCb(err) {
     if (err && err.number != mysql.ERROR_DB_CREATE_EXISTS) {
