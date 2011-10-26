@@ -127,3 +127,107 @@ test('Real world usage', function(done) {
   );
 });
 
+test('Non-UTC Dates', function(done) {
+  this.client.query('CREATE DATABASE '+common.TEST_DB, function createDbCb(err) {
+    if (err && err.number != mysql.ERROR_DB_CREATE_EXISTS) {
+      done(err);
+    }
+  });
+
+  this.client.query('USE '+common.TEST_DB, function useDbCb(err) {
+    if (err) done(err);
+  });
+
+  this.client.query(
+    'CREATE TEMPORARY TABLE '+common.TEST_TABLE+
+    '(id INT(11) AUTO_INCREMENT, created DATETIME, PRIMARY KEY (id));',
+    function createTableCb(err) {
+      if (err) done (err);
+    }
+  );
+
+  var query = this.client.query(
+    'INSERT INTO '+common.TEST_TABLE+' '+
+    'SET created = ?', ['2010-08-16 10:00:23'], function insertCb(err) {
+      if (err) done(err);
+    }
+  );
+
+  var endCalled = false;
+  query.on('end', function insertOkCb(packet) {
+    endCalled = true;
+  });
+
+  query = this.client.query(
+    'SELECT * FROM '+common.TEST_TABLE,
+    function selectCb(err, results, fields) {
+      assert.ok(endCalled);
+      var date = results[0].created;
+      assert.ok(date instanceof Date);
+      var actual   = Date.parse(results[0].created.toString());
+      var expected = Date.parse('2010-08-16 10:00:23');
+      assert.equal(actual, expected);
+      done(err);
+    }
+  );
+});
+
+test('UTC Dates', function(done) {
+  /*
+   * Set client date format to UTC.
+   * If utc is set to true, we assume that the dates returned from MySQL are in UTC and
+   * convert them to Javascript Date objects in UTC format instead of letting Javascript
+   * convert them to local times, which is the default behavior.
+   *
+   * new Date() assumes the date is in system's local timezone:
+   * >> new Date('2010-08-16 10:00:23').toUTCString()
+   * => Mon, 16 Aug 2010 17:00:23 GMT // assuming you're in the PDT timezone.
+   *
+   * To make Date parse it as UTC, we add a Z to the date string:
+   * >> new Date('2010-08-16 10:00:23Z').toUTCString()
+   * => Mon, 16 Aug 2010 10:00:23 GMT
+   */
+  this.client.utc = true;
+  this.client.query('CREATE DATABASE '+common.TEST_DB, function createDbCb(err) {
+    if (err && err.number != mysql.ERROR_DB_CREATE_EXISTS) {
+      done(err);
+    }
+  });
+
+  this.client.query('USE '+common.TEST_DB, function useDbCb(err) {
+    if (err) done(err);
+  });
+
+  this.client.query(
+    'CREATE TEMPORARY TABLE '+common.TEST_TABLE+
+    '(id INT(11) AUTO_INCREMENT, created DATETIME, PRIMARY KEY (id));',
+    function createTableCb(err) {
+      if (err) done (err);
+    }
+  );
+
+  var created = '2010-08-16 10:00:23';
+  var query = this.client.query(
+    'INSERT INTO '+common.TEST_TABLE+' '+
+    'SET created = ?', [created], function insertCb(err) {
+      if (err) done(err);
+    }
+  );
+
+  var endCalled = false;
+  query.on('end', function insertOkCb(packet) {
+    endCalled = true;
+  });
+
+  query = this.client.query(
+    'SELECT * FROM '+common.TEST_TABLE,
+    function selectCb(err, results, fields) {
+      assert.ok(endCalled);
+      var actual   = Date.parse(results[0].created.toString());
+      var expected = Date.parse('2010-08-16 10:00:23Z');
+      assert.equal(actual, expected);
+
+      done(err);
+    }
+  );
+});
