@@ -31,3 +31,150 @@ test('Timeout reconnect works with empty queue', function() {
   // This must not throw an error
   client._handlePacket(packet);
 });
+
+test('#format() does not substitute ? in string literals', function() {
+  
+  /**
+   * runs subtest
+   * @param input Input string
+   * @param {Array} params Array of subsitutions for placeholders
+   * @param expected Expected output string
+   */
+  function run(input, params, expected) {
+    assert.strictEqual(expected, client.format(input, params));
+  }
+
+  /*
+   * Single quotes
+   */
+  // various positions
+  // ? '?' ? => 1 '?' 2
+  run(
+    "? '? ' ?", [1, 2],
+    "1 '? ' 2"
+  );
+  
+  // trivial test: 
+  // '?' => '?' 
+  run(
+    "'?'", [],
+    "'?'"
+  );
+  
+  // escaped single quote
+  // '? \' ?' ? => '? \' ?' 1
+  run(
+    "'? \\' ?' ?", [1],
+    "'? \\' ?' 1"
+  );
+  
+  run(
+    "'? '' ?' ?", [1],
+    "'? '' ?' 1"
+  );
+
+  /*
+   * Double quotes
+   */
+  // various positions
+  // ? "?" ? => 1 "?" 2
+  run(
+    '? "? " ?', [1, 2],
+    '1 "? " 2'
+  );
+  
+  // trivial test: 
+  // "?" => "?" 
+  run(
+    '"?"', [],
+    '"?"'
+  );
+  
+  // escaped quote
+  // "? \" ?" ? => "? \" ?" 1
+  run(
+    '"? \\" ?" ?', [1],
+    '"? \\" ?" 1'
+  );
+  
+  run(
+    '"? "" ?" ?', [1],
+    '"? "" ?" 1'
+  );
+
+
+  /*
+   * Backticks 
+   */
+  // various positions
+  // ? `?` ? => 1 `?` 2
+  run(
+    '? `? ` ?', [1, 2],
+    '1 `? ` 2'
+  );
+  
+  // trivial test: 
+  // `?` => `?` 
+  run(
+    '`?`', [],
+    '`?`'
+  );
+  
+  // escaped backtick.
+  // according to mysql spec, double-backtick is the only way to escape
+  //                          (do not give double backticks to inmates :))
+  // `? `` ?` ? => `? `` ?` 1
+  run(
+    '`? `` ?` ?', [1],
+    '`? `` ?` 1'
+  );
+
+  // make sure the backslash doesnt work
+  // `? \` ? => `? \` 1
+  run(
+    '`? \\` ?', [1],
+    '`? \\` 1'
+  );
+
+  /*
+   * Various mixed quotations
+   */
+
+  // in single quote
+  // ? '? "? `?' ? => 1 '? "? `?' 2
+  run(
+    '? \'? "? `?\' ?', [1, 2],
+    '1 \'? "? `?\' 2'
+  );
+
+  // in doble quote
+  // ? "? '? `?" ? => 1 "? '? `?" 2
+  run(
+    '? "? \'? `?" ?', [1, 2],
+    '1 "? \'? `?" 2'
+  );
+
+  // in backticks
+  // ? `? '? "?` ? => 1 `? '? "?` 2
+  run(
+    '? `? \'? "?` ?', [1, 2],
+    '1 `? \'? "?` 2'
+  );
+
+
+  // and some cumulatie test
+  // ? single:' ? "? ''? ' ? ' \'\"? \\? \' ' double:"? "" " ? " '`\"? " ?
+  // 1 single:' ? "? ''? ' 2 ' \'\"? \\? \' ' double:"? "" " 3 " '`\"? " 4
+  run(
+    '? single:\' ? "? \'\'? \' ? \' \\\'\\"? \\\\? \\\' \' double:"? "" " ? " \'`\\"? " ?', [1, 2, 3, 4],
+    '1 single:\' ? "? \'\'? \' 2 \' \\\'\\"? \\\\? \\\' \' double:"? "" " 3 " \'`\\"? " 4'
+  );
+  
+  // some mad escaping test
+  // ? ' ''' ? ' \'? \\' ? ' \\\'? \\''? \\''' ?
+  // 1 ' ''' 2 ' \'? \\' 3 ' \\\'? \\''? \\''' 4
+  run(
+    "? ' ''' ? ' \\'? \\\\' ? ' \\\\\\'? \\\\''? \\\\''' ?", [1, 2, 3, 4],
+    "1 ' ''' 2 ' \\'? \\\\' 3 ' \\\\\\'? \\\\''? \\\\''' 4"
+  );
+});
