@@ -65,6 +65,33 @@ test('Long fields', function(done) {
   test(true);
 });
 
+test('BLOB fields returned as Buffers', function(done) {
+  this.client.query('USE '+common.TEST_DB, function useDbCb(err) {
+    if (err) done(err);
+  });
+  this.client.query(
+    'CREATE TEMPORARY TABLE '+common.TEST_TABLE+
+    '(mytext TEXT, myblob BLOB)',
+    function createTableCb(err) {
+      if (err) done (err);
+    }
+  );
+  this.client.query(
+    'INSERT INTO '+common.TEST_TABLE+' '+
+    'SET mytext = ?, myblob = ?',
+    ['asdf', 'asdf']
+  );
+  this.client.query(
+    'SELECT * FROM '+common.TEST_TABLE,
+    function selectCb(err, results, fields) {
+      if (err) done (err);
+      assert.strictEqual(results[0].mytext, 'asdf');
+      assert.strictEqual(typeof results[0].myblob, 'object');
+      assert.strictEqual(results[0].myblob.toString('utf-8'), 'asdf');
+    }
+  );
+});
+
 test('Query a NULL value', function(done) {
   this.client.query('SELECT NULL as field_a, NULL as field_b', function(err, results) {
     assert.strictEqual(results[0].field_a, null);
