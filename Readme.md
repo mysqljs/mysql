@@ -1,9 +1,5 @@
 # node-mysql
 
-<!--
-[![Build Status](https://secure.travis-ci.org/felixge/node-mysql.png)](http://travis-ci.org/felixge/node-mysql)
---!>
-
 ## Purpose
 
 A pure node.js JavaScript Client implementing the [MySQL protocol](http://forge.mysql.com/wiki/MySQL_Internals_ClientServer_Protocol).
