@@ -17,8 +17,8 @@
   },
   "devDependencies": {
     "gently": "0.8.0",
-    "far": "0.0.6",
-    "fast-or-slow": "0.0.5"
+    "fast-or-slow": "0.0.5",
+    "urun": "0.0.4"
   },
   "engines": {
     "node": "*"

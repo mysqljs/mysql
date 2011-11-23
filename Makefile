@@ -1,7 +1,8 @@
 SHELL := /bin/bash
+NODE   = node
 
 test:
-	@./test/run.js
+	@$(NODE) test/run.js
 benchmark-node-mysql:
 	@find benchmark/node-mysql/*.js | xargs -n 1 -t node
 benchmark-php:
