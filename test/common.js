@@ -21,5 +21,3 @@ exports.createClient = function() {
 
   return mysql.createClient(config);
 };
-
-exports.fastOrSlow = require('fast-or-slow');
