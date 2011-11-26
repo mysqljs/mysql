@@ -1,4 +1,4 @@
-var common = require('../../common');
+var common = require('../../../common');
 var assert = require('assert');
 
 var client = common.createClient();
