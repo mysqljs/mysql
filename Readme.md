@@ -241,6 +241,26 @@ testing.
 
 ## Changelog
 
+### v0.9.5
+
+* Fix #142 Driver stalls upon reconnect attempt that's immediately closed
+* Add travis build
+* Switch to urun as a test runner
+* Switch to utest for unit tests
+* Remove fast-or-slow dependency for tests
+* Split integration tests into individual files again
+
+### v0.9.4
+
+* Expose package.json as `mysql.PACKAGE` (#104)
+
+### v0.9.3
+
+* Set default `client.user` to root
+* Fix #91: Client#format should not mutate params array
+* Fix #94: TypeError in client.js
+* Parse decimals as string (vadimg)
+
 ### v0.9.2
 
 * The underlaying socket connection is now managed implicitly rather than explicitly.
