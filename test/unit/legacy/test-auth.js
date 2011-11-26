@@ -1,4 +1,4 @@
-var common = require('../common');
+var common = require('./common');
 var auth = require(common.dir.lib + '/auth');
 
 function test(test) {
