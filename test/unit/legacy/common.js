@@ -1,18 +1,8 @@
-var newCommon = require('../common');
+var newCommon = require('../../common');
 exports.dir = newCommon.dir;
 
 var path = require('path');
 var util = require('util');
-
-var parent = module.parent.filename;
-if (parent.match(/system/) || parent.match(/benchmark/)) {
-  try {
-    global.TEST_CONFIG = require('../config');
-  } catch (e) {
-    console.log('Skipping. See test/config.template.js for more information.');
-    process.exit(0);
-  }
-}
 
 global.TEST_DB = 'node_mysql_test';
 global.TEST_TABLE = 'posts';
