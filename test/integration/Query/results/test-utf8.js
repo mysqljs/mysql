@@ -38,7 +38,7 @@ for( var i=0; i<len; i++ ) {
 }
 
 // Insert many lines in the database
-var nlines = 1;
+var nlines = 1000;
 var count = nlines;
 var insert = function () {
   client.query(
