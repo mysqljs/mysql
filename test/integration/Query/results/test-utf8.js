@@ -23,7 +23,8 @@ client.query('USE '+common.TEST_DB);
 var table = common.TEST_TABLE;
 client.query(
   'CREATE TEMPORARY TABLE ' + table +
-  '(txt varchar(2048) CHARACTER SET utf8 COLLATE utf8_bin);'
+  '(txt varchar(2048) CHARACTER SET utf8 COLLATE utf8_bin, ' +
+  'txt2 varchar(2048) CHARACTER SET utf8 COLLATE utf8_bin);'
 );
 
 
@@ -37,11 +38,11 @@ for( var i=0; i<len; i++ ) {
 }
 
 // Insert many lines in the database
-var nlines = 1000;
+var nlines = 1;
 var count = nlines;
 var insert = function () {
   client.query(
-    'INSERT INTO ' + table + ' ' + 'SET txt = ?', [val], function (err, results, fields) {
+    'INSERT INTO ' + table + ' ' + 'SET txt = ?, txt2 = ? ', [val, val], function (err, results, fields) {
       count--;
       if( count > 0 ) {
         insert();
@@ -49,14 +50,16 @@ var insert = function () {
       else {
 
         // After all insertions are done, check results
-        var query = client.query('SELECT txt FROM '+ table, [], function selectCb(err, results, fields) {
+        var query = client.query('SELECT txt, txt2 FROM '+ table, [], function selectCb(err, results, fields) {
           assert.ok( err == null );
           assert.ok(results.length==nlines);
           for( var i=0; i<results.length; i++ ) {
             var row = results[i];
             var txt = row.txt;
+            var txt2 = row.txt2;
             // Check that we correctly read what was written
             assert.ok( txt.length===len );
+            assert.ok( txt === txt2 );
             for( var j=0; j<len; j++) {
               assert.ok( txt[j] === c );
             }
