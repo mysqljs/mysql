@@ -57,7 +57,7 @@ test('escape', {
     assert.equal(escape('Sup\\er'), "'Sup\\\\er'");
   },
 
-  '\u gets escaped': function() {
+  '\u001 (ascii 26) gets replaced with \\Z': function() {
     assert.equal(escape('Sup\u001aer'), "'Sup\\Zer'");
   },
 
