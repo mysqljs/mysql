@@ -34,28 +34,6 @@ test(function format() {
   });
 });
 
-test(function escape() {
-  assert.equal(client.escape(undefined), 'NULL');
-  assert.equal(client.escape(null), 'NULL');
-  assert.equal(client.escape(false), 'false');
-  assert.equal(client.escape(true), 'true');
-  assert.equal(client.escape(5), '5');
-  assert.equal(client.escape({foo:'bar'}), "'[object Object]'");
-  assert.equal(client.escape([1,2,3]), "'1,2,3'");
-  assert.equal(client.escape(new Date(Date.UTC(2011,6,6,6,6,6,6))), "'2011-07-06T06:06:06.006Z'");
-
-  assert.equal(client.escape('Super'), "'Super'");
-  assert.equal(client.escape('Sup\0er'), "'Sup\\0er'");
-  assert.equal(client.escape('Sup\ber'), "'Sup\\ber'");
-  assert.equal(client.escape('Sup\ner'), "'Sup\\ner'");
-  assert.equal(client.escape('Sup\rer'), "'Sup\\rer'");
-  assert.equal(client.escape('Sup\ter'), "'Sup\\ter'");
-  assert.equal(client.escape('Sup\\er'), "'Sup\\\\er'");
-  assert.equal(client.escape('Sup\u001aer'), "'Sup\\Zer'");
-  assert.equal(client.escape('Sup\'er'), "'Sup\\'er'");
-  assert.equal(client.escape('Sup"er'), "'Sup\\\"er'");
-});
-
 test(function _packetToUserObject() {
   (function testOkPacket() {
     var PACKET = {

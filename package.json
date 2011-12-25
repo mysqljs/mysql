@@ -18,7 +18,7 @@
   "devDependencies": {
     "gently": "0.8.0",
     "urun": "0.0.4",
-    "utest": "0.0.3"
+    "utest": "0.0.4"
   },
   "engines": {
     "node": "*"

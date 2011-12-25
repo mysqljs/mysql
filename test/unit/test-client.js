@@ -2,11 +2,16 @@ var common = require('../common');
 var assert = require('assert');
 var test   = require('utest');
 var Client = require(common.dir.lib + '/client');
+var escape = require(common.dir.lib + '/escape');
 
 var client;
 test('Client', {
   before: function() {
     client = new Client();
+  },
+
+  '#escape is aliased to escape module': function() {
+    assert.strictEqual(client.escape, escape);
   },
 
   '#format() does not manipulate params parameter': function() {
