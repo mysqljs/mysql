@@ -13,7 +13,7 @@
     "test": "make test"
   },
   "dependencies": {
-    "hashish": "0.0.4"
+    "underscore": "1.2.3"
   },
   "devDependencies": {
     "gently": "0.8.0",
