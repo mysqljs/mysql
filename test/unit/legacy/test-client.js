@@ -21,19 +21,6 @@ test(function write() {
   client.write(PACKET);
 });
 
-test(function format() {
-  var sql = client.format('? + ? = ?', [1, 2, 'great']);
-  assert.equal(sql, '1 + 2 = \'great\'');
-
-  assert.throws(function() {
-    var sql = client.format('? + ? = ?', [1, 2]);
-  });
-
-  assert.throws(function() {
-    var sql = client.format('? + ? = ?', [1, 2, 3, 4]);
-  });
-});
-
 test(function _packetToUserObject() {
   (function testOkPacket() {
     var PACKET = {

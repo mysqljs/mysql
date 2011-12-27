@@ -74,3 +74,38 @@ test('SqlString.escape', {
     assert.equal(SqlString.escape(date), "'" + date.toISOString() + "'");
   },
 });
+
+test('SqlString.format', {
+  'replaces "?" characters with escaped values': function() {
+    var sql = SqlString.format('? + ? = ?', [1, 2, 'great']);
+    assert.equal(sql, '1 + 2 = \'great\'');
+  },
+
+  'throws an error if too few parameters are given': function() {
+    assert.throws(function() {
+      var sql = SqlString.format('? + ? = ?', [1, 2]);
+    }, /SqlString.WrongParameterCount/);
+  },
+
+  'throws an error if too many parameters are given': function() {
+    assert.throws(function() {
+      var sql = SqlString.format('? + ? = ?', [1, 2, 3, 4]);
+    }, /SqlString.WrongParameterCount/);
+  },
+
+  'does not manipulate params parameter': function() {
+    var sql = '?';
+    var params = [1];
+
+    SqlString.format(sql, params);
+    assert.equal(params.length, 1);
+  },
+
+  'does not quote floats': function() {
+    var params = [1.23];
+
+    var sql = SqlString.format('?', params);
+    assert.strictEqual(sql, '1.23');
+  },
+});
+
