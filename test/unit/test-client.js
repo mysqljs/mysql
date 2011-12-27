@@ -2,7 +2,7 @@ var common = require('../common');
 var assert = require('assert');
 var test   = require('utest');
 var Client = require(common.dir.lib + '/Client');
-var escape = require(common.dir.lib + '/escape');
+var SqlString = require(common.dir.lib + '/SqlString');
 
 var client;
 test('Client', {
@@ -10,8 +10,8 @@ test('Client', {
     client = new Client();
   },
 
-  '#escape is aliased to escape module': function() {
-    assert.strictEqual(client.escape, escape);
+  '#escape is aliased to SqlString.escape': function() {
+    assert.strictEqual(client.escape, SqlString.escape);
   },
 
   '#format() does not manipulate params parameter': function() {
