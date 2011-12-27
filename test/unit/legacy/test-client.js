@@ -1,7 +1,7 @@
 var common = require('./common');
-var Parser = require(common.dir.lib + '/parser');
+var Parser = require(common.dir.lib + '/Parser');
 var constants = require(common.dir.lib + '/constants');
-var Client = require(common.dir.lib + '/client');
+var Client = require(common.dir.lib + '/Client');
 
 function test(test) {
   client = new Client();

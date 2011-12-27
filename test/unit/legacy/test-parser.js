@@ -1,6 +1,6 @@
 var common = require('./common');
 var EventEmitter = require('events').EventEmitter,
-    Parser = require(common.dir.lib + '/parser'),
+    Parser = require(common.dir.lib + '/Parser'),
     parser,
     gently;
 

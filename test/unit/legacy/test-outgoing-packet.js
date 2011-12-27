@@ -1,5 +1,5 @@
 var common = require('./common');
-var OutgoingPacket = require(common.dir.lib + '/outgoing_packet'),
+var OutgoingPacket = require(common.dir.lib + '/OutgoingPacket'),
     Buffer = require('buffer').Buffer;
 
 function test(test) {

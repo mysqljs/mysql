@@ -1,7 +1,7 @@
 var common = require('../common');
 var assert = require('assert');
 var test   = require('utest');
-var Client = require(common.dir.lib + '/client');
+var Client = require(common.dir.lib + '/Client');
 var escape = require(common.dir.lib + '/escape');
 
 var client;
