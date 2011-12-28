@@ -1,1 +1,1 @@
-module.exports = require('./lib/mysql');
+module.exports = require('./lib/Mysql');
