@@ -1,6 +1,6 @@
-var common          = require('../../../common');
-var assert          = require('assert');
-var test            = require('utest');
+var common         = require('../../../common');
+var assert         = require('assert');
+var test           = require('utest');
 var UnsignedNumber = require(common.dir.lib + '/protocol/elements/UnsignedNumber');
 
 test('UnsignedNumber', {
