@@ -1,11 +1,11 @@
 var common          = require('../../../common');
 var assert          = require('assert');
 var test            = require('utest');
-var UnsignedInteger = require(common.dir.lib + '/protocol/elements/UnsignedInteger');
+var UnsignedNumber = require(common.dir.lib + '/protocol/elements/UnsignedNumber');
 
-test('UnsignedInteger', {
+test('UnsignedNumber', {
   '1 byte': function() {
-    var uint   = new UnsignedInteger(223);
+    var uint   = new UnsignedNumber(223);
     var buffer = new Buffer(uint.length);
 
     uint.copy(buffer, 0);
@@ -14,7 +14,7 @@ test('UnsignedInteger', {
   },
 
   '4 bytes': function() {
-    var uint   = new UnsignedInteger(257, 4);
+    var uint   = new UnsignedNumber(257, 4);
     var buffer = new Buffer(uint.length);
 
     uint.copy(buffer, 0);
@@ -23,7 +23,7 @@ test('UnsignedInteger', {
   },
 
   'offset': function() {
-    var uint   = new UnsignedInteger(223);
+    var uint   = new UnsignedNumber(223);
     var buffer = new Buffer([0, 0]);
 
     uint.copy(buffer, 1);
