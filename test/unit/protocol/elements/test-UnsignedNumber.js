@@ -31,4 +31,3 @@ test('UnsignedNumber', {
     assert.deepEqual(buffer, new Buffer([0, 223]));
   },
 });
-
