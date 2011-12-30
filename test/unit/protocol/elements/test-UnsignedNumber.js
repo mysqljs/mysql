@@ -5,7 +5,7 @@ var UnsignedNumber = require(common.dir.lib + '/protocol/elements/UnsignedNumber
 
 test('UnsignedNumber', {
   '1 byte': function() {
-    var uint   = new UnsignedNumber(223);
+    var uint   = new UnsignedNumber(1, 223);
     var buffer = new Buffer(uint.length);
 
     uint.copy(buffer, 0);
@@ -14,7 +14,7 @@ test('UnsignedNumber', {
   },
 
   '4 bytes': function() {
-    var uint   = new UnsignedNumber(257, 4);
+    var uint   = new UnsignedNumber(4, 257);
     var buffer = new Buffer(uint.length);
 
     uint.copy(buffer, 0);
@@ -23,7 +23,7 @@ test('UnsignedNumber', {
   },
 
   'offset': function() {
-    var uint   = new UnsignedNumber(223);
+    var uint   = new UnsignedNumber(1, 223);
     var buffer = new Buffer([0, 0]);
 
     uint.copy(buffer, 1);
