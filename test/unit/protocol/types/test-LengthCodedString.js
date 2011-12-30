@@ -18,6 +18,15 @@ test('LengthCodedString', {
     assert.equal(lengthCodedInteger.length, 4);
   },
 
+  'Buffer "ab"': function() {
+    var lengthCodedInteger = new LengthCodedString(new Buffer('ab'));
+    var buffer             = new Buffer(lengthCodedInteger.length);
+
+    lengthCodedInteger.copy(buffer, 0);
+
+    assert.deepEqual(buffer, new Buffer([0x02, 0x61, 0x62]));
+  },
+
   'offset': function() {
     var lengthCodedInteger = new LengthCodedString('ab');
     var buffer             = new Buffer([0, 0, 0, 0]);
