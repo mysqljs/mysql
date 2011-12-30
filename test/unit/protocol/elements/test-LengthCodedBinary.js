@@ -1,7 +1,7 @@
-var common             = require('../../../common');
-var assert             = require('assert');
-var test               = require('utest');
-var LengthCodedBinary = require(common.dir.lib + '/protocol/types/LengthCodedBinary');
+var common            = require('../../../common');
+var assert            = require('assert');
+var test              = require('utest');
+var LengthCodedBinary = require(common.dir.lib + '/protocol/elements/LengthCodedBinary');
 
 test('LengthCodedBinary', {
   '1 byte for values between 0 - 255': function() {

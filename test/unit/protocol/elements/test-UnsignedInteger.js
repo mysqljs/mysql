@@ -1,7 +1,7 @@
-var common = require('../../../common');
-var assert = require('assert');
-var test   = require('utest');
-var UnsignedInteger = require(common.dir.lib + '/protocol/types/UnsignedInteger');
+var common          = require('../../../common');
+var assert          = require('assert');
+var test            = require('utest');
+var UnsignedInteger = require(common.dir.lib + '/protocol/elements/UnsignedInteger');
 
 test('UnsignedInteger', {
   '1 byte': function() {

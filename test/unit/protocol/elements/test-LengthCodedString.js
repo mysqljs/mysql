@@ -1,7 +1,7 @@
-var common             = require('../../../common');
-var assert             = require('assert');
-var test               = require('utest');
-var LengthCodedString = require(common.dir.lib + '/protocol/types/LengthCodedString');
+var common            = require('../../../common');
+var assert            = require('assert');
+var test              = require('utest');
+var LengthCodedString = require(common.dir.lib + '/protocol/elements/LengthCodedString');
 
 test('LengthCodedString', {
   'String "ab"': function() {

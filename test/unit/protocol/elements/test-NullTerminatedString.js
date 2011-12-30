@@ -1,7 +1,7 @@
-var common = require('../../../common');
-var assert = require('assert');
-var test   = require('utest');
-var NullTerminatedString = require(common.dir.lib + '/protocol/types/NullTerminatedString');
+var common               = require('../../../common');
+var assert               = require('assert');
+var test                 = require('utest');
+var NullTerminatedString = require(common.dir.lib + '/protocol/elements/NullTerminatedString');
 
 test('NullTerminatedString', {
   '1 byte': function() {

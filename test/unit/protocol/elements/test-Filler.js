@@ -1,7 +1,7 @@
 var common = require('../../../common');
 var assert = require('assert');
 var test   = require('utest');
-var Filler = require(common.dir.lib + '/protocol/types/Filler');
+var Filler = require(common.dir.lib + '/protocol/elements/Filler');
 
 test('Filler', {
   '1 byte': function() {
