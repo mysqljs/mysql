@@ -30,4 +30,39 @@ test('UnsignedNumber', {
 
     assert.deepEqual(buffer, new Buffer([0, 223]));
   },
+
+  'write single byte': function() {
+    var uint = new UnsignedNumber(1);
+    uint.write(new Buffer([123]), 0, 1);
+
+    assert.equal(uint.value, 123);
+  },
+
+  'write single byte with offset': function() {
+    var uint = new UnsignedNumber(1);
+    uint.write(new Buffer([123, 124]), 1);
+
+    assert.equal(uint.value, 124);
+  },
+
+  'write two bytes': function() {
+    var uint     = new UnsignedNumber(2);
+    var bytes    = [123, 124];
+    var expected = Math.pow(256, 0) * bytes[0] + Math.pow(256, 1) * bytes[1];
+
+    uint.write(new Buffer(bytes), 0, 2);
+
+    assert.equal(uint.value, expected);
+  },
+
+  'returns true when filled up': function() {
+    var uint = new UnsignedNumber(3);
+    var buffer = new Buffer([123, 124]);
+
+    var r = uint.write(buffer, 0, 1);
+    assert.strictEqual(r, false);
+
+    r = uint.write(buffer, 1, 2);
+    assert.strictEqual(r, true);
+  },
 });
