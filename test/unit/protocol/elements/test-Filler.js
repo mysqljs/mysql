@@ -30,5 +30,41 @@ test('Filler', {
 
     assert.deepEqual(buffer, new Buffer([1, 0, 3]));
   },
+
+  'write 1 bytes': function() {
+    var filler = new Filler(1);
+
+    var full = filler.write(new Buffer([0x00]), 0, 1);
+    assert.equal(full, true);
+    assert.equal(filler.bytesWritten, 1);
+  },
+
+  'write 2 bytes': function() {
+    var filler = new Filler(2);
+
+    var full = filler.write(new Buffer([0x00, 0x00]), 0, 2);
+    assert.equal(full, true);
+    assert.equal(filler.bytesWritten, 2);
+  },
+
+  'write 2 bytes from bigger buffer': function() {
+    var filler = new Filler(2);
+
+    var full = filler.write(new Buffer([0x00, 0x00, 0x00]), 0, 3);
+    assert.equal(full, true);
+    assert.equal(filler.bytesWritten, 2);
+  },
+
+  'write 2 bytes individually': function() {
+    var filler = new Filler(2);
+
+    var full = filler.write(new Buffer([0x00, 0x00]), 0, 1);
+    assert.equal(full, false);
+    assert.equal(filler.bytesWritten, 1);
+
+    var full = filler.write(new Buffer([0x00, 0x00]), 0, 1);
+    assert.equal(full, true);
+    assert.equal(filler.bytesWritten, 2);
+  },
 });
 
