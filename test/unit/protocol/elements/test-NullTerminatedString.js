@@ -31,10 +31,18 @@ test('NullTerminatedString', {
     assert.equal(string.length, Buffer.byteLength(value, 'utf-8') + 1);
   },
 
-  'create empty NullTerminatedString': function() {
+  'create empty NullTerminatedString (ascii)': function() {
     var string = new NullTerminatedString('ascii');
 
     assert.equal(string.encoding, 'ascii');
+    assert.strictEqual(string.value, undefined);
+    assert.equal(string.length, undefined);
+  },
+
+  'create empty NullTerminatedString (no encoding)': function() {
+    var string = new NullTerminatedString();
+
+    assert.equal(string.encoding, undefined);
     assert.strictEqual(string.value, undefined);
     assert.equal(string.length, undefined);
   },
