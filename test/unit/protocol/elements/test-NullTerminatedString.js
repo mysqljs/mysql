@@ -39,7 +39,7 @@ test('NullTerminatedString', {
     assert.equal(string.length, undefined);
   },
 
-  'create empty NullTerminatedString (no encoding)': function() {
+  'create empty NullTerminatedString (buffer)': function() {
     var string = new NullTerminatedString();
 
     assert.equal(string.encoding, undefined);
@@ -125,5 +125,41 @@ test('NullTerminatedString', {
     assert.equal(string.bytesWritten, 4);
     assert.equal(full, true);
   },
-});
 
+  'write 1 byte (buffer)': function() {
+    var string = new NullTerminatedString();
+
+    var full = string.write(new Buffer([0x00]), 0, 1);
+    assert.equal(full, true);
+    assert.deepEqual(string.value, new Buffer(0));
+    assert.equal(string.length, 1);
+    assert.equal(string.bytesWritten, 1);
+  },
+
+  'write 2 bytes (buffer)': function() {
+    var string = new NullTerminatedString();
+
+    var full = string.write(new Buffer([0x01, 0x00]), 0, 2);
+    assert.equal(full, true);
+    assert.deepEqual(string.value, new Buffer([0x01]));
+    assert.equal(string.length, 2);
+    assert.equal(string.bytesWritten, 2);
+  },
+
+  'write 2 bytes individually (buffer)': function() {
+    var string = new NullTerminatedString();
+    var buffer = new Buffer([0x01, 0x00]);
+
+    var full = string.write(new Buffer(buffer), 0, 1);
+    assert.equal(full, false);
+    assert.deepEqual(string.value, undefined);
+    assert.equal(string.length, undefined);
+    assert.equal(string.bytesWritten, 1);
+
+    var full = string.write(new Buffer(buffer), 1, 2);
+    assert.equal(full, true);
+    assert.deepEqual(string.value, new Buffer([0x01]));
+    assert.equal(string.length, 2);
+    assert.equal(string.bytesWritten, 2);
+  },
+});
