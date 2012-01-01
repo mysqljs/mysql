@@ -1,3 +1,4 @@
+// @TODO rename growingBuffer -> list
 var common     = require('../../../common');
 var assert     = require('assert');
 var test       = require('utest');
@@ -25,6 +26,13 @@ test('BufferList', {
 
     assert.equal(growingBuffer.length, buffer1.length + buffer2.length);
     assert.deepEqual(growingBuffer.toBuffer(), new Buffer([1, 2, 3, 4]));
+  },
+
+  '!initialize with buffers': function() {
+    var list = new BufferList([new Buffer([1, 2]), new Buffer([3])]);
+    assert.equal(list.length, 3);
+
+    assert.deepEqual(list.toBuffer(), new Buffer([1, 2, 3]));
   },
 });
 
