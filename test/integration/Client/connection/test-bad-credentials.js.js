@@ -6,13 +6,13 @@ client.password = 'thispassworddoesnotreallywork';
 
 var callbacks = [];
 client.query('SELECT 1', function(err) {
-  assert.ok(/access denied/i.test(err.message));
+  assert.ok(/access denied/i.test(err.message), err.message);
 
   callbacks.push(1);
 });
 
 client.query('SELECT 2', function(err) {
-  assert.ok(/access denied/i.test(err.message));
+  assert.ok(/access denied/i.test(err.message), err.message);
 
   callbacks.push(2);
 
