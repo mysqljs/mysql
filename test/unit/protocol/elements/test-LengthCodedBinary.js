@@ -5,28 +5,28 @@ var LengthCodedBinary = require(common.dir.lib + '/protocol/elements/LengthCoded
 
 test('LengthCodedBinary', {
   '1 byte for values between 0 - 255': function() {
-    var lengthCodedInteger = new LengthCodedBinary(250);
-    var buffer             = new Buffer(lengthCodedInteger.length);
+    var lengthCodedBinary = new LengthCodedBinary(250);
+    var buffer            = new Buffer(lengthCodedBinary.length);
 
-    lengthCodedInteger.copy(buffer, 0);
+    lengthCodedBinary.copy(buffer, 0);
 
     assert.deepEqual(buffer, new Buffer([250]));
   },
 
   'NULL = 251': function() {
-    var lengthCodedInteger = new LengthCodedBinary(null);
-    var buffer             = new Buffer(lengthCodedInteger.length);
+    var lengthCodedBinary = new LengthCodedBinary(null);
+    var buffer            = new Buffer(lengthCodedBinary.length);
 
-    lengthCodedInteger.copy(buffer, 0);
+    lengthCodedBinary.copy(buffer, 0);
 
     assert.deepEqual(buffer, new Buffer([251]));
   },
 
   '3 bytes for values > 250 < 2^16': function() {
-    var lengthCodedInteger = new LengthCodedBinary(251);
-    var buffer             = new Buffer(lengthCodedInteger.length);
+    var lengthCodedBinary = new LengthCodedBinary(251);
+    var buffer            = new Buffer(lengthCodedBinary.length);
 
-    lengthCodedInteger.copy(buffer, 0);
+    lengthCodedBinary.copy(buffer, 0);
 
     assert.deepEqual(buffer, new Buffer([252, 251, 0]));
   },
@@ -38,10 +38,10 @@ test('LengthCodedBinary', {
         Math.pow(256, 1) * expected[1] +
         Math.pow(256, 2) * expected[2]
 
-    var lengthCodedInteger = new LengthCodedBinary(value);
-    var buffer             = new Buffer(lengthCodedInteger.length);
+    var lengthCodedBinary = new LengthCodedBinary(value);
+    var buffer            = new Buffer(lengthCodedBinary.length);
 
-    lengthCodedInteger.copy(buffer, 0);
+    lengthCodedBinary.copy(buffer, 0);
 
     assert.deepEqual(buffer, new Buffer([253].concat(expected)));
   },
@@ -58,10 +58,10 @@ test('LengthCodedBinary', {
         Math.pow(256, 6) * expected[6];
         Math.pow(256, 7) * expected[7];
 
-    var lengthCodedInteger = new LengthCodedBinary(value);
-    var buffer             = new Buffer(lengthCodedInteger.length);
+    var lengthCodedBinary = new LengthCodedBinary(value);
+    var buffer            = new Buffer(lengthCodedBinary.length);
 
-    lengthCodedInteger.copy(buffer, 0);
+    lengthCodedBinary.copy(buffer, 0);
 
     assert.deepEqual(buffer, new Buffer([254].concat(expected)));
   },
@@ -70,7 +70,7 @@ test('LengthCodedBinary', {
     var value = Math.pow(2, 53);
 
     assert.throws(function() {
-      var lengthCodedInteger = new LengthCodedBinary(value);
+      var lengthCodedBinary = new LengthCodedBinary(value);
     }, /LengthCodedBinary.SizeExceeded/);
   },
 });
