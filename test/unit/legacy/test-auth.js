@@ -1,5 +1,5 @@
 var common = require('./common');
-var auth = require(common.dir.lib + '/Auth');
+var auth = require(common.dir.lib + '/protocol/Password');
 
 function test(test) {
   gently = new Gently();
