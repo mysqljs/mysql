@@ -66,5 +66,13 @@ test('Filler', {
     assert.equal(full, true);
     assert.equal(filler.bytesWritten, 2);
   },
+
+  'write invalid byte': function() {
+    var filler = new Filler(2);
+
+    assert.throws(function() {
+      var full = filler.write(new Buffer([0x01]), 0, 1);
+    }, /Filler.InvalidByte/);
+  },
 });
 
