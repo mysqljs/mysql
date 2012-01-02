@@ -202,6 +202,12 @@ at all.
       console.log(info.insertId);
     });
 
+### How can I find out the number of rows affected by the last query?
+
+    client.query('UPDATE my_table SET title = ?', function(err, info) {
+      console.log(info.affectedRows);
+    });
+
 ## Todo
 
 At this point the module is ready to be tried out, but a lot of things are yet to be done:
