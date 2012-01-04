@@ -4,7 +4,7 @@ var mysql  = require(common.dir.root);
 
 var client = common.createClient();
 client.query('CREATE DATABASE '+common.TEST_DB, function createDbCb(err) {
-  if (err && err.number != mysql.ERROR_DB_CREATE_EXISTS) done(err);
+  if (err && err.number != mysql.ERROR_DB_CREATE_EXISTS) throw err;
 });
 
 client.query('USE '+common.TEST_DB);
