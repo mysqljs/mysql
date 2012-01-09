@@ -219,6 +219,10 @@ At this point the module is ready to be tried out, but a lot of things are yet t
 * Packet's > 16 MB
 * Compression
 * Decide how to handle queries with multiple statements
+* Transactions
+
+A stop-gap solution to support multiple statements and transactions is
+available. Check it out here: http://github.com/bminer/node-mysql-queues
 
 ## Contributors
 
