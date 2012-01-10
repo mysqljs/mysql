@@ -3,6 +3,7 @@ var assert = require('assert');
 
 var client = common.createClient();
 var callbacks = [];
+
 client.query('SELECT 1', function(err, results) {
   if (err) throw err;
 
