@@ -80,44 +80,44 @@ test('LengthCodedBinary', {
     }, /LengthCodedBinary.SizeExceeded/);
   },
 
-  'write 1 byte (0 - 250)': function() {
+  'parse 1 byte (0 - 250)': function() {
     var lengthCodedBinary = new LengthCodedBinary();
 
-    var full = lengthCodedBinary.write(new Buffer([250]), 0, 1);
+    var full = lengthCodedBinary.parse(new Buffer([250]), 0, 1);
     assert.equal(lengthCodedBinary.value, 250);
     assert.equal(lengthCodedBinary.bytesWritten, 1);
     assert.equal(lengthCodedBinary.length, 1);
     assert.equal(full, true);
   },
 
-  'write 1 byte (0 - 250) with offset': function() {
+  'parse 1 byte (0 - 250) with offset': function() {
     var lengthCodedBinary = new LengthCodedBinary();
 
-    var full = lengthCodedBinary.write(new Buffer([0, 220]), 1, 2);
+    var full = lengthCodedBinary.parse(new Buffer([0, 220]), 1, 2);
     assert.equal(lengthCodedBinary.value, 220);
     assert.equal(lengthCodedBinary.bytesWritten, 1);
     assert.equal(lengthCodedBinary.length, 1);
     assert.equal(full, true);
   },
 
-  'write null (251)': function() {
+  'parse null (251)': function() {
     var lengthCodedBinary = new LengthCodedBinary();
 
-    var full = lengthCodedBinary.write(new Buffer([251]), 0, 1);
+    var full = lengthCodedBinary.parse(new Buffer([251]), 0, 1);
     assert.strictEqual(lengthCodedBinary.value, null);
     assert.equal(lengthCodedBinary.bytesWritten, 1);
     assert.equal(lengthCodedBinary.length, 1);
     assert.equal(full, true);
   },
 
-  'write 16 bit number': function() {
+  'parse 16 bit number': function() {
     var lengthCodedBinary = new LengthCodedBinary();
     var buffer = new Buffer([252, 1, 2]);
     var expected =
         Math.pow(256, 0) * buffer[1] +
         Math.pow(256, 1) * buffer[2];
 
-    var full = lengthCodedBinary.write(new Buffer(buffer), 0, buffer.length);
+    var full = lengthCodedBinary.parse(new Buffer(buffer), 0, buffer.length);
     assert.equal(lengthCodedBinary.value, expected);
     assert.equal(lengthCodedBinary.bytesWritten, 3);
     assert.equal(lengthCodedBinary.length, 3);
@@ -126,7 +126,7 @@ test('LengthCodedBinary', {
     return false;
   },
 
-  'write 24 bit number': function() {
+  'parse 24 bit number': function() {
     var lengthCodedBinary = new LengthCodedBinary();
     var buffer = new Buffer([253, 1, 2, 3]);
     var expected =
@@ -134,7 +134,7 @@ test('LengthCodedBinary', {
         Math.pow(256, 1) * buffer[2] +
         Math.pow(256, 2) * buffer[3];
 
-    var full = lengthCodedBinary.write(new Buffer(buffer), 0, buffer.length);
+    var full = lengthCodedBinary.parse(new Buffer(buffer), 0, buffer.length);
     assert.equal(lengthCodedBinary.value, expected);
     assert.equal(lengthCodedBinary.bytesWritten, 4);
     assert.equal(lengthCodedBinary.length, 4);
@@ -143,7 +143,7 @@ test('LengthCodedBinary', {
     return false;
   },
 
-  'write 64 bit number': function() {
+  'parse 64 bit number': function() {
     var lengthCodedBinary = new LengthCodedBinary();
     var buffer = new Buffer([254, 8, 7, 6, 5, 4, 3, 2, 0]);
     var expected =
@@ -156,7 +156,7 @@ test('LengthCodedBinary', {
         Math.pow(256, 6) * buffer[7] +
         Math.pow(256, 7) * buffer[8];
 
-    var full = lengthCodedBinary.write(new Buffer(buffer), 0, buffer.length);
+    var full = lengthCodedBinary.parse(new Buffer(buffer), 0, buffer.length);
     assert.equal(lengthCodedBinary.value, expected);
     assert.equal(lengthCodedBinary.bytesWritten, 9);
     assert.equal(lengthCodedBinary.length, 9);
@@ -165,7 +165,7 @@ test('LengthCodedBinary', {
     return false;
   },
 
-  'write 64 bit number exceeding JS precision': function() {
+  'parse 64 bit number exceeding JS precision': function() {
     var lengthCodedBinary = new LengthCodedBinary();
     var buffer = new Buffer([254, 8, 7, 6, 5, 4, 3, 0, 1]);
     var expected =
@@ -179,7 +179,7 @@ test('LengthCodedBinary', {
         Math.pow(256, 7) * buffer[8];
 
     assert.throws(function() {
-      lengthCodedBinary.write(new Buffer(buffer), 0, buffer.length);
+      lengthCodedBinary.parse(new Buffer(buffer), 0, buffer.length);
     }, /LengthCodedBinary.SizeExceeded/);
 
     return false;

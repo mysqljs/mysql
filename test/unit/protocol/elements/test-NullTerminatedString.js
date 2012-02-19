@@ -84,79 +84,79 @@ test('NullTerminatedString', {
     assert.deepEqual(buffer, new Buffer([0xc3, 0x96, 0x6c, 0x00]));
   },
 
-  'write 2 characters (utf-8) at once': function() {
+  'parse 2 characters (utf-8) at once': function() {
     var string = new NullTerminatedString('utf-8');
     var buffer = new Buffer([0x00, 0x00, 0x00, 0x00]);
     buffer.write('Öl', 'utf-8');
 
-    var full = string.write(buffer, 0, buffer.length);
+    var full = string.parse(buffer, 0, buffer.length);
     assert.equal(string.value, 'Öl');
     assert.equal(string.length, 4);
     assert.equal(string.bytesWritten, 4);
     assert.equal(full, true);
   },
 
-  'write 2 characters (utf-8) individually': function() {
+  'parse 2 characters (utf-8) individually': function() {
     var string = new NullTerminatedString('utf-8');
     var buffer = new Buffer([0x00, 0x00, 0x00, 0x00]);
     buffer.write('Öl', 'utf-8');
 
-    var full = string.write(buffer, 0, 1);
+    var full = string.parse(buffer, 0, 1);
     assert.equal(string.value, '');
     assert.equal(string.length, undefined);
     assert.equal(string.bytesWritten, 1);
     assert.equal(full, false);
 
-    var full = string.write(buffer, 1, 2);
+    var full = string.parse(buffer, 1, 2);
     assert.equal(string.value, 'Ö');
     assert.equal(string.length, undefined);
     assert.equal(string.bytesWritten, 2);
     assert.equal(full, false);
 
-    var full = string.write(buffer, 2, 3);
+    var full = string.parse(buffer, 2, 3);
     assert.equal(string.value, 'Öl');
     assert.equal(string.length, undefined);
     assert.equal(string.bytesWritten, 3);
     assert.equal(full, false);
 
-    var full = string.write(buffer, 3, 4);
+    var full = string.parse(buffer, 3, 4);
     assert.equal(string.value, 'Öl');
     assert.equal(string.length, 4);
     assert.equal(string.bytesWritten, 4);
     assert.equal(full, true);
   },
 
-  'write 1 byte (buffer)': function() {
+  'parse 1 byte (buffer)': function() {
     var string = new NullTerminatedString();
 
-    var full = string.write(new Buffer([0x00]), 0, 1);
+    var full = string.parse(new Buffer([0x00]), 0, 1);
     assert.equal(full, true);
     assert.deepEqual(string.value, new Buffer(0));
     assert.equal(string.length, 1);
     assert.equal(string.bytesWritten, 1);
   },
 
-  'write 2 bytes (buffer)': function() {
+  'parse 2 bytes (buffer)': function() {
     var string = new NullTerminatedString();
 
-    var full = string.write(new Buffer([0x01, 0x00]), 0, 2);
+    var full = string.parse(new Buffer([0x01, 0x00]), 0, 2);
     assert.equal(full, true);
     assert.deepEqual(string.value, new Buffer([0x01]));
     assert.equal(string.length, 2);
     assert.equal(string.bytesWritten, 2);
   },
 
-  'write 2 bytes individually (buffer)': function() {
+  'parse 2 bytes individually (buffer)': function() {
     var string = new NullTerminatedString();
     var buffer = new Buffer([0x01, 0x00]);
 
-    var full = string.write(new Buffer(buffer), 0, 1);
+    var full = string.parse(new Buffer(buffer), 0, 1);
     assert.equal(full, false);
     assert.deepEqual(string.value, undefined);
     assert.equal(string.length, undefined);
     assert.equal(string.bytesWritten, 1);
 
-    var full = string.write(new Buffer(buffer), 1, 2);
+    var full = string.parse(new Buffer(buffer), 1, 2);
     assert.equal(full, true);
     assert.deepEqual(string.value, new Buffer([0x01]));
     assert.equal(string.length, 2);
