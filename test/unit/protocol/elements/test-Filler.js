@@ -34,44 +34,49 @@ test('Filler', {
   'parse 1 bytes': function() {
     var filler = new Filler(1);
 
-    var full = filler.parse(new Buffer([0x00]), 0, 1);
-    assert.equal(full, true);
+    var start = filler.parse(new Buffer([0x00]), 0, 1);
+    assert.equal(start, 1);
     assert.equal(filler.bytesWritten, 1);
+    assert.equal(filler.isDone(), true);
   },
 
   'parse 2 bytes': function() {
     var filler = new Filler(2);
 
-    var full = filler.parse(new Buffer([0x00, 0x00]), 0, 2);
-    assert.equal(full, true);
+    var start = filler.parse(new Buffer([0x00, 0x00]), 0, 2);
+    assert.equal(start, 2);
     assert.equal(filler.bytesWritten, 2);
+    assert.equal(filler.isDone(), true);
   },
 
   'parse 2 bytes from bigger buffer': function() {
     var filler = new Filler(2);
 
-    var full = filler.parse(new Buffer([0x00, 0x00, 0x00]), 0, 3);
-    assert.equal(full, true);
+    var start = filler.parse(new Buffer([0x00, 0x00, 0x00]), 0, 3);
+    assert.equal(start, 2);
     assert.equal(filler.bytesWritten, 2);
+    assert.equal(filler.isDone(), true);
   },
 
   'parse 2 bytes individually': function() {
     var filler = new Filler(2);
 
-    var full = filler.parse(new Buffer([0x00, 0x00]), 0, 1);
-    assert.equal(full, false);
+    var start = filler.parse(new Buffer([0x00, 0x00]), 0, 1);
+    assert.equal(start, 1);
     assert.equal(filler.bytesWritten, 1);
+    assert.equal(filler.isDone(), false);
 
-    var full = filler.parse(new Buffer([0x00, 0x00]), 0, 1);
-    assert.equal(full, true);
+    start = filler.parse(new Buffer([0x00, 0x00]), 1, 2);
+    assert.equal(start, 2);
     assert.equal(filler.bytesWritten, 2);
+    assert.equal(filler.isDone(), true);
   },
 
   'parse invalid byte': function() {
     var filler = new Filler(2);
 
     assert.throws(function() {
-      var full = filler.parse(new Buffer([0x01]), 0, 1);
+      var start = filler.parse(new Buffer([0x01]), 0, 1);
     }, /Filler.InvalidByte/);
   },
 });
