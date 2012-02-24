@@ -83,31 +83,34 @@ test('LengthCodedBinary', {
   'parse 1 byte (0 - 250)': function() {
     var lengthCodedBinary = new LengthCodedBinary();
 
-    var full = lengthCodedBinary.parse(new Buffer([250]), 0, 1);
+    var start = lengthCodedBinary.parse(new Buffer([250]), 0, 1);
     assert.equal(lengthCodedBinary.value, 250);
     assert.equal(lengthCodedBinary.bytesWritten, 1);
     assert.equal(lengthCodedBinary.length, 1);
-    assert.equal(full, true);
+    assert.equal(lengthCodedBinary.isDone(), true);
+    assert.equal(start, 1);
   },
 
   'parse 1 byte (0 - 250) with offset': function() {
     var lengthCodedBinary = new LengthCodedBinary();
 
-    var full = lengthCodedBinary.parse(new Buffer([0, 220]), 1, 2);
+    var start = lengthCodedBinary.parse(new Buffer([0, 220]), 1, 2);
     assert.equal(lengthCodedBinary.value, 220);
     assert.equal(lengthCodedBinary.bytesWritten, 1);
     assert.equal(lengthCodedBinary.length, 1);
-    assert.equal(full, true);
+    assert.equal(lengthCodedBinary.isDone(), true);
+    assert.equal(start, 2);
   },
 
   'parse null (251)': function() {
     var lengthCodedBinary = new LengthCodedBinary();
 
-    var full = lengthCodedBinary.parse(new Buffer([251]), 0, 1);
+    var start = lengthCodedBinary.parse(new Buffer([251]), 0, 1);
     assert.strictEqual(lengthCodedBinary.value, null);
     assert.equal(lengthCodedBinary.bytesWritten, 1);
     assert.equal(lengthCodedBinary.length, 1);
-    assert.equal(full, true);
+    assert.equal(lengthCodedBinary.isDone(), true);
+    assert.equal(start, 1);
   },
 
   'parse 16 bit number': function() {
@@ -117,11 +120,12 @@ test('LengthCodedBinary', {
         Math.pow(256, 0) * buffer[1] +
         Math.pow(256, 1) * buffer[2];
 
-    var full = lengthCodedBinary.parse(new Buffer(buffer), 0, buffer.length);
+    var start = lengthCodedBinary.parse(new Buffer(buffer), 0, buffer.length);
     assert.equal(lengthCodedBinary.value, expected);
     assert.equal(lengthCodedBinary.bytesWritten, 3);
     assert.equal(lengthCodedBinary.length, 3);
-    assert.equal(full, true);
+    assert.equal(lengthCodedBinary.isDone(), true);
+    assert.equal(start, buffer.length);
 
     return false;
   },
@@ -134,11 +138,12 @@ test('LengthCodedBinary', {
         Math.pow(256, 1) * buffer[2] +
         Math.pow(256, 2) * buffer[3];
 
-    var full = lengthCodedBinary.parse(new Buffer(buffer), 0, buffer.length);
+    var start = lengthCodedBinary.parse(new Buffer(buffer), 0, buffer.length);
     assert.equal(lengthCodedBinary.value, expected);
     assert.equal(lengthCodedBinary.bytesWritten, 4);
     assert.equal(lengthCodedBinary.length, 4);
-    assert.equal(full, true);
+    assert.equal(lengthCodedBinary.isDone(), true);
+    assert.equal(start, buffer.length);
 
     return false;
   },
@@ -156,11 +161,12 @@ test('LengthCodedBinary', {
         Math.pow(256, 6) * buffer[7] +
         Math.pow(256, 7) * buffer[8];
 
-    var full = lengthCodedBinary.parse(new Buffer(buffer), 0, buffer.length);
+    var start = lengthCodedBinary.parse(new Buffer(buffer), 0, buffer.length);
     assert.equal(lengthCodedBinary.value, expected);
     assert.equal(lengthCodedBinary.bytesWritten, 9);
     assert.equal(lengthCodedBinary.length, 9);
-    assert.equal(full, true);
+    assert.equal(lengthCodedBinary.isDone(), true);
+    assert.equal(start, buffer.length);
 
     return false;
   },
