@@ -55,5 +55,14 @@ test('FixedSizeString', {
 
     assert.deepEqual(string.value, new Buffer([1, 2, 3]));
   },
+
+  'setLength after instaniation': function() {
+    var string = new FixedSizeString();
+    string.setLength(5);
+
+    assert.ok(Buffer.isBuffer(string.value));
+    assert.equal(string.value.length, 5);
+    assert.equal(string.length, 5);
+  },
 });
 
