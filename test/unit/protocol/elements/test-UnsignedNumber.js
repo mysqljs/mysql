@@ -33,16 +33,20 @@ test('UnsignedNumber', {
 
   'parse single byte': function() {
     var uint = new UnsignedNumber(1);
-    uint.parse(new Buffer([123]), 0, 1);
+    var offset = uint.parse(new Buffer([123]), 0, 1);
 
     assert.equal(uint.value, 123);
+    assert.equal(offset, 1);
+    assert.equal(uint.isDone(), true);
   },
 
   'parse single byte with offset': function() {
     var uint = new UnsignedNumber(1);
-    uint.parse(new Buffer([123, 124]), 1);
+    var offset = uint.parse(new Buffer([123, 124]), 1, 2);
 
     assert.equal(uint.value, 124);
+    assert.equal(offset, 2);
+    assert.equal(uint.isDone(), true);
   },
 
   'parse two bytes': function() {
@@ -50,19 +54,27 @@ test('UnsignedNumber', {
     var bytes    = [123, 124];
     var expected = Math.pow(256, 0) * bytes[0] + Math.pow(256, 1) * bytes[1];
 
-    uint.parse(new Buffer(bytes), 0, 2);
+    var offset = uint.parse(new Buffer(bytes), 0, 2);
 
     assert.equal(uint.value, expected);
+    assert.equal(offset, 2);
+    assert.equal(uint.isDone(), true);
   },
 
-  'returns true when filled up': function() {
+  'handles multiple parse events': function() {
     var uint = new UnsignedNumber(3);
-    var buffer = new Buffer([123, 124]);
+    var buffer = new Buffer([123, 124, 125]);
 
-    var r = uint.parse(buffer, 0, 1);
-    assert.strictEqual(r, false);
+    var offset = uint.parse(buffer, 0, 1);
+    assert.strictEqual(offset, 1);
+    assert.equal(uint.isDone(), false);
 
-    r = uint.parse(buffer, 1, 2);
-    assert.strictEqual(r, true);
+    offset = uint.parse(buffer, 1, 2);
+    assert.strictEqual(offset, 2);
+    assert.equal(uint.isDone(), false);
+
+    offset = uint.parse(buffer, 2, 3);
+    assert.strictEqual(offset, 3);
+    assert.equal(uint.isDone(), true);
   },
 });
