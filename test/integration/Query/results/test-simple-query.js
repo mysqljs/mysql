@@ -4,8 +4,10 @@ var mysql  = require(common.dir.root);
 
 var client = common.createClient();
 
+client._connect();
+
 var rows;
-client.query('SELECT 1', function(err, _rows) {
+client.newQuery('SELECT 1', function(err, _rows) {
   if (err) throw err;
 
   rows = _rows;
