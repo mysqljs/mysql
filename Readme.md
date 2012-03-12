@@ -251,6 +251,12 @@ testing.
 
 ## Changelog
 
+### v0.9.6
+
+* Escape array values so they produce sql arrays (Roger Castells, Colin Smith)
+* docs: mention mysql transaction stop gap solution (Blake Miner)
+* docs: Mention affectedRows in FAQ (Michael Baldwin)
+
 ### v0.9.5
 
 * Fix #142 Driver stalls upon reconnect attempt that's immediately closed
