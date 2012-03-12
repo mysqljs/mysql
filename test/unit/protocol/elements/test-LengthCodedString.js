@@ -4,35 +4,21 @@ var test              = require('utest');
 var LengthCodedString = require(common.dir.lib + '/protocol/elements/LengthCodedString');
 
 test('LengthCodedString', {
-  'String "ab"': function() {
-    var lengthCodedInteger = new LengthCodedString('ab');
-    var buffer             = new Buffer(lengthCodedInteger.length);
+  'copy: utf8 string with offset': function() {
+    var string = new LengthCodedString('utf8', 'Öl');
+    var buffer = new Buffer([255, 255, 255, 255, 255, 255]);
 
-    lengthCodedInteger.copy(buffer, 0);
+    string.copy(buffer, 1);
 
-    assert.deepEqual(buffer, new Buffer([0x02, 0x61, 0x62]));
+    assert.deepEqual(buffer, new Buffer([255, 0x03, 0xc3, 0x96, 0x6c, 255]));
   },
 
-  'Utf-8 String "Öl"': function() {
-    var lengthCodedInteger = new LengthCodedString('Öl');
-    assert.equal(lengthCodedInteger.length, 4);
-  },
+  'copy: buffer with offset': function() {
+    var string = new LengthCodedString(null, new Buffer('Öl', 'utf-8'));
+    var buffer = new Buffer([255, 255, 255, 255, 255, 255]);
 
-  'Buffer "ab"': function() {
-    var lengthCodedInteger = new LengthCodedString(new Buffer('ab'));
-    var buffer             = new Buffer(lengthCodedInteger.length);
+    string.copy(buffer, 1);
 
-    lengthCodedInteger.copy(buffer, 0);
-
-    assert.deepEqual(buffer, new Buffer([0x02, 0x61, 0x62]));
-  },
-
-  'offset': function() {
-    var lengthCodedInteger = new LengthCodedString('ab');
-    var buffer             = new Buffer([0, 0, 0, 0]);
-
-    lengthCodedInteger.copy(buffer, 1);
-
-    assert.deepEqual(buffer, new Buffer([0x00, 0x02, 0x61, 0x62]));
+    assert.deepEqual(buffer, new Buffer([255, 0x03, 0xc3, 0x96, 0x6c, 255]));
   },
 });
