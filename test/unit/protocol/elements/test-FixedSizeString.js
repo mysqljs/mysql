@@ -5,7 +5,7 @@ var FixedSizeString = require(common.dir.lib + '/protocol/elements/FixedSizeStri
 
 test('FixedSizeString', {
   'constructor: creates a buffer of the right size': function() {
-    var string = new FixedSizeString(null, 10);
+    var string = new FixedSizeString(10);
 
     assert.ok(Buffer.isBuffer(string.value));
     assert.equal(string.value.length, 10);
@@ -13,7 +13,7 @@ test('FixedSizeString', {
   },
 
   'constructor: creates empty string / sets encoding': function() {
-    var string = new FixedSizeString('utf-8', 10);
+    var string = new FixedSizeString(10, 'utf-8');
 
     assert.strictEqual(string.value, '');
     assert.equal(string.encoding, 'utf-8');
@@ -21,7 +21,7 @@ test('FixedSizeString', {
   },
 
   'constructor: sets utf-8 value and length properly': function() {
-    var string = new FixedSizeString('utf-8', null, 'Öl');
+    var string = new FixedSizeString(null, 'utf-8', 'Öl');
 
     assert.equal(string.value, 'Öl');
     assert.equal(string.encoding, 'utf-8');
@@ -56,7 +56,7 @@ test('FixedSizeString', {
   },
 
   'copy: utf-8 string': function() {
-    var string = new FixedSizeString('utf-8', null, 'Öl');
+    var string = new FixedSizeString(null, 'utf-8', 'Öl');
     var buffer = new Buffer([255, 255, 255, 255]);
 
     string.copy(buffer, 0);
@@ -65,7 +65,7 @@ test('FixedSizeString', {
   },
 
   'copy: utf-8 string with offset': function() {
-    var string = new FixedSizeString('utf-8', null, 'Öl');
+    var string = new FixedSizeString(null, 'utf-8', 'Öl');
     var buffer = new Buffer([255, 255, 255, 255, 255]);
 
     string.copy(buffer, 1);
@@ -74,7 +74,7 @@ test('FixedSizeString', {
   },
 
   'parse: buffer': function() {
-    var string = new FixedSizeString(null, 3);
+    var string = new FixedSizeString(3);
 
     var offset = string.parse(new Buffer([1, 2, 3, 4, 5]), 1, 5);
     assert.deepEqual(string.value, new Buffer([2, 3, 4]));
@@ -83,7 +83,7 @@ test('FixedSizeString', {
   },
 
   'parse: buffer (byte by byte)': function() {
-    var string = new FixedSizeString(null, 3);
+    var string = new FixedSizeString(3);
 
     var offset = string.parse(new Buffer([1]), 0, 1);
     assert.equal(offset, 1);
@@ -100,7 +100,7 @@ test('FixedSizeString', {
   },
 
   'parse: utf8 string': function() {
-    var string = new FixedSizeString('utf-8', 3);
+    var string = new FixedSizeString(3, 'utf-8');
 
     var offset = string.parse(new Buffer('aÖlb', 'utf-8'), 1, 5);
     assert.deepEqual(string.value, 'Öl');
@@ -109,7 +109,7 @@ test('FixedSizeString', {
   },
 
   'parse: utf8 string (byte by byte)': function() {
-    var string = new FixedSizeString('utf-8', 3);
+    var string = new FixedSizeString(3, 'utf-8');
 
     var offset = string.parse(new Buffer('Ö'), 0, 1);
     assert.equal(offset, 1);
