@@ -20,6 +20,14 @@ test('FixedSizeString', {
     assert.equal(string.length, 10);
   },
 
+  'constructor: empty utf-8 string': function() {
+    var string = new FixedSizeString(0, 'utf-8');
+
+    assert.strictEqual(string.value, '');
+    assert.equal(string.encoding, 'utf-8');
+    assert.equal(string.length, 0);
+  },
+
   'constructor: sets utf-8 value and length properly': function() {
     var string = new FixedSizeString(null, 'utf-8', 'Öl');
 
@@ -123,5 +131,14 @@ test('FixedSizeString', {
     assert.equal(offset, 1);
     assert.equal(string.isDone(), true);
     assert.equal(string.value, 'Öl');
+  },
+
+  'parse: empty utf8 string': function() {
+    var string = new FixedSizeString(0, 'utf-8');
+
+    var offset = string.parse(new Buffer([1, 2, 3]), 0, 3);
+    assert.deepEqual(string.value, '');
+    assert.equal(offset, 0);
+    assert.equal(string.isDone(), true);
   },
 });
