@@ -73,7 +73,7 @@ test('Filler', {
   },
 
   'parse invalid byte': function() {
-    var filler = new Filler(2);
+    var filler = new Filler(2, 0x00);
 
     assert.throws(function() {
       var start = filler.parse(new Buffer([0x01]), 0, 1);
