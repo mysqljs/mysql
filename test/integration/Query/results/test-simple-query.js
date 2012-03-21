@@ -10,6 +10,7 @@ var rows;
 client.newQuery('SELECT 1', function(err, _rows) {
   if (err) throw err;
 
+  console.error(arguments);
   rows = _rows;
 
   client.end();

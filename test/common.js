@@ -21,3 +21,7 @@ exports.createClient = function() {
 
   return mysql.createClient(config);
 };
+
+exports.createNewClient = function() {
+  return mysql.createClient(config);
+};
