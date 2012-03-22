@@ -1,18 +1,16 @@
-require('../../test/common');
-var Client = require('mysql/client'),
-    client = Client(TEST_CONFIG);
+var common = require('../../test/common');
+var client = common.createClient();
 
-client.connect();
-
-client.query('CREATE DATABASE '+TEST_DB, function(err) {
-  if (err && err.number != Client.ERROR_DB_CREATE_EXISTS) {
+client.query('CREATE DATABASE '+common.TEST_DB, function(err) {
+  // db exists
+  if (err && err.number != 1007) {
     throw err;
   }
 });
-client.query('USE '+TEST_DB);
-client.query('DROP TABLE IF EXISTS '+TEST_TABLE);
+client.query('USE '+common.TEST_DB);
+client.query('DROP TABLE IF EXISTS '+common.TEST_TABLE);
 client.query(
-  'CREATE TABLE '+TEST_TABLE+' ('+
+  'CREATE TABLE '+common.TEST_TABLE+' ('+
   'id INT(11) AUTO_INCREMENT, '+
   'title VARCHAR(255), '+
   'text TEXT, '+
@@ -23,7 +21,7 @@ client.query(
 
     var start = +new Date, inserts = 0, total = 10000;
     function insertOne() {
-      client.query('INSERT INTO '+TEST_TABLE+' SET title = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"', function() {
+      client.query('INSERT INTO '+common.TEST_TABLE+' SET title = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"', function() {
         inserts++;
         if (inserts < total) {
           insertOne();
