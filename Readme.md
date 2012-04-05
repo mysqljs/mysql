@@ -146,6 +146,10 @@ Returns some server statistics provided by MySql.
 Allows to safely insert a list of `params` into a `sql` string using the
 placeholder mechanism described above.
 
+### client.escape_str(val)
+
+Escapes a single `val` for use inside of a sql string without single quotations.
+
 ### client.escape(val)
 
 Escapes a single `val` for use inside of a sql string.
