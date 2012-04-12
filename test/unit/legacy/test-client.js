@@ -32,6 +32,8 @@ test(function format() {
   assert.throws(function() {
     var sql = client.format('? + ? = ?', [1, 2, 3, 4]);
   });
+
+  assert.equal(client.format('(?)', [['foo bar']]), "('foo bar')");
 });
 
 test(function escape() {
