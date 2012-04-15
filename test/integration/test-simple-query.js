@@ -6,12 +6,12 @@ var rows       = undefined;
 connection.connect(function(err) {
   if (err) throw err;
 
-  connection.query('SELECT 1 = 1', function(err, _rows) {
+  connection.query('SELECT 1', function(err, _rows) {
     if (err) throw err;
 
     rows = _rows;
 
-    client.end();
+    connection.end();
   });
 });
 
