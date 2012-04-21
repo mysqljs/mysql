@@ -17,6 +17,9 @@
     "underscore": "1.3.1",
     "require-all": "0.0.3"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "utest": "0.0.6",
+    "urun": "0.0.6"
+  },
   "optionalDependencies": {}
 }
