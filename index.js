@@ -1,10 +1,5 @@
-var MysqlClient     = require('./lib/MysqlClient');
-var MysqlConnection = require('./lib/MysqlConnection');
-
-exports.createClient = function(config) {
-  return new MysqlClient({config: config});
-};
+var Connection = require('./lib/Connection');
 
 exports.createConnection = function(config) {
-  return new MysqlConnection({config: config});
+  return new Connection({config: config});
 };
