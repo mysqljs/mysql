@@ -42,7 +42,7 @@ function report() {
     'max: %s | median: %s | sdev: %s | last: %s | min: %s | runs: %s | results: %s',
     max(),
     median(),
-    Math.round(sdev()),
+    sdev(),
     numbers[numbers.length - 1],
     min(),
     scriptRuns,
@@ -75,7 +75,9 @@ function median() {
 }
 
 function sdev() {
-  return Math.sqrt(variance());
+  if (!numbers.length) return undefined;
+
+  return Math.round(Math.sqrt(variance()));
 }
 
 function variance() {
