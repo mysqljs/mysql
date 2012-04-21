@@ -8,10 +8,10 @@ var options = {
   bufferSize : 64 * 1024,
 };
 
-console.log('Config:', options);
+console.error('Config:', options);
 
 function createBuffers() {
-  process.stdout.write('Creating row buffers ... ');
+  process.stderr.write('Creating row buffers ... ');
 
   var number = 0;
   var id     = 0;
@@ -38,7 +38,7 @@ function createBuffers() {
 
   var mb = (bytes / 1024 / 1024).toFixed(2)
 
-  console.log('%s buffers (%s mb) in %s ms', buffers.length, mb, (Date.now() - start));
+  console.error('%s buffers (%s mb) in %s ms', buffers.length, mb, (Date.now() - start));
 
   return buffers;
 }
@@ -87,7 +87,6 @@ function mergeBuffers(buffers) {
   return mergeBuffers;
 }
 
-var bestDuration = 0;
 function benchmark(buffers) {
   var protocol = new Protocol();
   protocol._receivedHandshakeInitializationPacket = true;
@@ -102,15 +101,8 @@ function benchmark(buffers) {
   }
 
   var duration = Date.now() - start;
-
-  if (bestDuration && duration > bestDuration) {
-    return;
-  }
-
-  bestDuration = duration;
-
   var hz = Math.round(options.rows / (duration / 1000));
-  console.log(hz + ' Hz');
+  console.log(hz);
 }
 
 var buffers = createBuffers();

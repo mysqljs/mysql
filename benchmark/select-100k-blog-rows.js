@@ -14,9 +14,8 @@ client.connect(function(err) {
 
 var firstSelect;
 var rows = 0;
-var bestHz = 0;
 
-console.log('Benchmarking rows per second in hz:');
+console.error('Benchmarking rows per second in hz:');
 
 function query() {
   firstSelect = firstSelect || Date.now();
@@ -33,10 +32,7 @@ function query() {
     var duration = (Date.now() - firstSelect) / 1000;
     var hz = Math.round(rows / duration);
 
-    if (hz > bestHz) {
-      bestHz = hz;
-      console.log(hz + ' Hz');
-    }
+    console.log(hz);
 
     rows        = 0;
     firstSelect = null;
