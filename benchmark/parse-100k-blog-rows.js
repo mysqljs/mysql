@@ -1,4 +1,4 @@
-var lib          = __dirname + '/../../lib';
+var lib          = __dirname + '/../lib';
 var Protocol     = require(lib + '/protocol/protocol');
 var Packets      = require(lib + '/protocol/packets');
 var PacketWriter = require(lib + '/protocol/PacketWriter');
@@ -101,8 +101,6 @@ function benchmark(buffers) {
     protocol.write(buffers[i]);
   }
 
-  //console.log(protocol);
-
   var duration = Date.now() - start;
 
   if (bestDuration && duration > bestDuration) {
@@ -111,17 +109,8 @@ function benchmark(buffers) {
 
   bestDuration = duration;
 
-  var frequency = (options.rows / (duration / 1000));
-
-  if (frequency > Math.pow(10, 6)) {
-    frequency = (frequency / Math.pow(10, 6)).toFixed(2) + ' Mhz';
-  } else if (frequency > Math.pow(10, 3)) {
-    frequency = (frequency / Math.pow(10, 3)).toFixed(2) + ' Khz';
-  } else {
-    frequency = (frequency) + ' Hz';
-  }
-
-  console.log(frequency);
+  var hz = Math.round(options.rows / (duration / 1000));
+  console.log(hz + ' Hz');
 }
 
 var buffers = createBuffers();

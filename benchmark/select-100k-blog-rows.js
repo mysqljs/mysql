@@ -13,8 +13,10 @@ client.connect(function(err) {
 });
 
 var firstSelect;
-var bestRowsPerSecond = 0;
 var rows = 0;
+var bestHz = 0;
+
+console.log('Benchmarking rows per second in hz:');
 
 function query() {
   firstSelect = firstSelect || Date.now();
@@ -22,25 +24,23 @@ function query() {
   client.query('SELECT * FROM posts', function(err, results) {
     if (err) throw err;
 
-    rows += results;
+    rows += results.length;
     if (rows < rowsPerRun) {
       query();
       return;
     }
 
     var duration = (Date.now() - firstSelect) / 1000;
-    var rowsPerSecond = rows / duration;;
+    var hz = Math.round(rows / duration);
 
-    if (rowsPerSecond > bestRowsPerSecond) {
-      bestRowsPerSecond = rowsPerSecond;
-      console.log('%d rows / second', rowsPerSecond.toFixed(2));
-    } else {
-      console.log('.');
+    if (hz > bestHz) {
+      bestHz = hz;
+      console.log(hz + ' Hz');
     }
 
     rows        = 0;
     firstSelect = null;
 
-    setTimeout(query, 1000);
+    query();
   });
 };
