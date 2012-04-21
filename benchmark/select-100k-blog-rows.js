@@ -8,7 +8,7 @@ client.connect(function(err) {
   client.query('USE node_mysql_test', function(err, results) {
     if (err) throw err;
 
-    query();
+    selectRows();
   });
 });
 
@@ -17,15 +17,15 @@ var rows = 0;
 
 console.error('Benchmarking rows per second in hz:');
 
-function query() {
+function selectRows() {
   firstSelect = firstSelect || Date.now();
 
-  client.query('SELECT * FROM posts', function(err, results) {
+  var query = client.query('SELECT * FROM posts', function(err, _rows) {
     if (err) throw err;
 
-    rows += results.length;
+    rows += _rows.length;
     if (rows < rowsPerRun) {
-      query();
+      selectRows();
       return;
     }
 
@@ -37,6 +37,6 @@ function query() {
     rows        = 0;
     firstSelect = null;
 
-    query();
+    selectRows();
   });
 };
