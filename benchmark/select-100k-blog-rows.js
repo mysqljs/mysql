@@ -20,7 +20,7 @@ console.error('Benchmarking rows per second in hz:');
 function selectRows() {
   firstSelect = firstSelect || Date.now();
 
-  var query = client.query('SELECT * FROM posts', function(err, _rows) {
+  client.query('SELECT * FROM posts', function(err, _rows) {
     if (err) throw err;
 
     rows += _rows.length;
