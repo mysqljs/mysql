@@ -2,9 +2,7 @@ var common     = require('../common');
 var connection = common.createConnection();
 var assert     = require('assert');
 
-connection.connect(function(err) {
-  if (err) throw err;
-});
+connection.connect();
 
 var rows = undefined;
 connection.query('SELECT 1', function(err, _rows) {
