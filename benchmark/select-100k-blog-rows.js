@@ -13,28 +13,28 @@ client.connect(function(err) {
 });
 
 var firstSelect;
-var rows = 0;
+var rowCount = 0;
 
 console.error('Benchmarking rows per second in hz:');
 
 function selectRows() {
   firstSelect = firstSelect || Date.now();
 
-  client.query('SELECT * FROM posts', function(err, _rows) {
+  client.query('SELECT * FROM posts', function(err, rows) {
     if (err) throw err;
 
-    rows += _rows.length;
-    if (rows < rowsPerRun) {
+    rowCount += rows.length;
+    if (rowCount < rowsPerRun) {
       selectRows();
       return;
     }
 
     var duration = (Date.now() - firstSelect) / 1000;
-    var hz = Math.round(rows / duration);
+    var hz = Math.round(rowCount / duration);
 
     console.log(hz);
 
-    rows        = 0;
+    rowCount    = 0;
     firstSelect = null;
 
     selectRows();
