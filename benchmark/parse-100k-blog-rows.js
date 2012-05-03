@@ -13,14 +13,14 @@ console.error('Config:', options);
 function createBuffers() {
   process.stderr.write('Creating row buffers ... ');
 
-  var number = 0;
+  var number = 1;
   var id     = 0;
   var start  = Date.now();
 
   var buffers = [
     createPacketBuffer(number++, new Packets.ResultSetHeaderPacket({fieldCount: 2})),
-    createPacketBuffer(number++, new Packets.FieldPacket({catalog: null, name: 'id'})),
-    createPacketBuffer(number++, new Packets.FieldPacket({catalog: null, name: 'text'})),
+    createPacketBuffer(number++, new Packets.FieldPacket({catalog: 'foo', name: 'id'})),
+    createPacketBuffer(number++, new Packets.FieldPacket({catalog: 'foo', name: 'text'})),
     createPacketBuffer(number++, new Packets.EofPacket()),
   ];
 
