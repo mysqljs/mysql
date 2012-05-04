@@ -67,15 +67,17 @@ connection.query('SELECT 1', function(err) {
 ```
 
 Normal errors however are only delegated to the callback they belong to.  So in
-the example below, only one the first callback receives an error:
+the example below, only one the first callback receives an error, the second
+query works as expected:
 
 ```js
-connection.query('USE NON_EXISTING_DB', function(err, rows) {
+connection.query('USE name_of_db_that_does_not_exist', function(err, rows) {
   console.log(err.code); // ER_BAD_DB_ERROR
 });
 
 connection.query('SELECT 1', function(err, rows) {
   console.log(err); // null
+  console.log(rows.length); // 1
 });
 ```
 
@@ -89,7 +91,7 @@ connection.on('error', function(err) {
   console.log(err.code); // ER_BAD_DB_ERROR
 });
 
-connection.query('USE NON_EXISTING_DB');
+connection.query('USE name_of_db_that_does_not_exist');
 ```
 
 Note: `error` events in node are special events. If they occur without an
