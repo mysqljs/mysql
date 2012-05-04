@@ -114,5 +114,5 @@ I have yet to write this, but it will include:
   license, docs)
 * How is the performance of this module compared to the alternatives? (great)
 * Is there commercial support for this driver? (nodefirm?)
-* What features are missing? (stored procedures, transactions, etc.)
+* What features are missing? (stored procedures, transactions, pause, etc.)
 * How can I contribute? (explain)
