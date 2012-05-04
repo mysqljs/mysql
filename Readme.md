@@ -58,11 +58,11 @@ var connection = require('mysql').createConnection({
 });
 
 connection.connect(function(err) {
-  console.log(err.code === 'ECONNREFUSED'); // true
+  console.log(err.code); // ECONNREFUSED
 });
 
 connection.query('SELECT 1', function(err) {
-  console.log(err.code === 'ECONNREFUSED'); // true
+  console.log(err.code); // ECONNREFUSED
 });
 ```
 
