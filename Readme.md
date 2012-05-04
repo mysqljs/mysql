@@ -48,9 +48,9 @@ object. Additionally they come with two properties:
 [Error]: https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Error
 [MySQL server error]: http://dev.mysql.com/doc/refman/5.5/en/error-messages-server.html
 
-Fatal errors are propagated to *all* callbacks. In the example below, a fatal
-error is triggered by trying to connect to an invalid port. Therefore the error
-object is propagated to both pending callbacks:
+Fatal errors are propagated to *all* pending callbacks. In the example below, a
+fatal error is triggered by trying to connect to an invalid port. Therefore the
+error object is propagated to both pending callbacks:
 
 ```js
 var connection = require('mysql').createConnection({
@@ -58,11 +58,11 @@ var connection = require('mysql').createConnection({
 });
 
 connection.connect(function(err) {
-  console.log(err.code);
+  console.log(err.code === 'ECONNREFUSED'); // true
 });
 
 connection.query('SELECT 1', function(err) {
-  console.log(err.code);
+  console.log(err.code === 'ECONNREFUSED'); // true
 });
 ```
 
