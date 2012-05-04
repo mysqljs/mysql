@@ -48,12 +48,23 @@ object. Additionally they come with two properties:
 [Error]: https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Error
 [MySQL server error]: http://dev.mysql.com/doc/refman/5.5/en/error-messages-server.html
 
-First you need to know that there are two kinds of errors which behave
-differently:
+Fatal errors are propagated to *all* callbacks. In the example below, a fatal
+error is triggered by trying to connect to an invalid port. Therefore the error
+object is propagated to both pending callbacks:
 
-* **Fatal Errors**: Any error that renders the connection unusable.
-* **Normal Errors**: All other errors, usually caused by individual queries.
+```
+var connection = require('mysql').createConnection({
+  port: 84943, // WRONG PORT
+});
 
+connection.connect(function(err) {
+  console.log(err.code);
+});
+
+connection.query('SELECT 1', function(err) {
+  console.log(err.code);
+});
+```
 
 
 
