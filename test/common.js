@@ -4,6 +4,9 @@ var _      = require('underscore');
 
 common.lib = path.join(__dirname, '../lib');
 
+// Useful for triggering ECONNREFUSED errors on connect()
+common.bogusPort = 47378;
+
 var Mysql = require('../');
 
 common.createConnection = function(config) {
