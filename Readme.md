@@ -78,3 +78,27 @@ connection.query('SELECT 1', function(err, rows) {
   console.log(err); // null
 });
 ```
+
+Last but not least: If a fatal errors occurs and there are no pending
+callbacks, or a normal error occurs which has no callback belonging to it, the
+error is emitted as an `error` event on the connection object. This is
+demonstrated in the example below:
+
+```js
+connection.on('error', function(err) {
+  console.log(err.code); // ER_BAD_DB_ERROR
+});
+
+connection.query('USE NON_EXISTING_DB');
+```
+
+Note: `error` events in node are special events. If they occur without an
+attached listener, a stack trace is printed and the process is killed.
+
+**tl;dr:** This module will not allow you to silently fail. If you really want
+this, you can do:
+
+```js
+// I am Chuck Noris mode:
+connection.on('error', function() {});
+```
