@@ -28,20 +28,33 @@ From this example, you can learn the following:
 
 * Every method you invoke on a connection is queued and executed in sequence.
 * You have to explicitly call the `connect()` method in the beginning.
-* Closing the connection is generally done using `end()` which makes sure all
-  remaining queries are executed before sending a quit packet to the mysql
-  server.
+* Closing the connection is done using `end()` which makes sure all remaining
+  queries are executed before sending a quit packet to the mysql server.
 
 ## Handling Errors
 
 This module comes with a consistent approach to error handling that you should
 review carefully in order to write solid applications.
 
+All errors created by this module are instances of the JavaScript [Error][]
+object. Additionally they come with two properties:
+
+* `err.code`: Either a [MySQL server error][] (e.g. `ER_ACCESS_DENIED_ERROR`),
+  a node.js error (e.g. `ECONNREFUSED`) or an internal error (e.g.
+  `PARSER_ERROR`).
+* `err.fatal`: Boolean, indicating if this error is terminal to the connection
+  object.
+
+[Error]: https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Error
+[MySQL server error]: http://dev.mysql.com/doc/refman/5.5/en/error-messages-server.html
+
 First you need to know that there are two kinds of errors which behave
 differently:
 
 * **Fatal Errors**: Any error that renders the connection unusable.
-* **Normal Errors**: Any other error.
+* **Normal Errors**: All other errors, usually caused by individual queries.
+
+
 
 
 ### MySQL error codes
