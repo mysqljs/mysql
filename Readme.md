@@ -37,8 +37,15 @@ From this example, you can learn the following:
 This module comes with a consistent approach to error handling that you should
 review carefully in order to write solid applications.
 
-By default, all errors are delegated to the callback of the method that caused
-it. For example:
+First you need to know that there are two kinds of errors which behave
+differently:
+
+* **Fatal Errors**: Any error that renders the connection unusable.
+* **Normal Errors**: Any other error.
+
+
+### MySQL error codes
+
 
 ```js
 var connection = require('mysql').createConnection({
@@ -51,4 +58,12 @@ connection.connect(function(err) {
   console.log(err.message); // Access denied for user 'USER'@'localhost' (using password: YES)
   console.log(err.code); // ER_ACCESS_DENIED_ERROR
 });
+
+connection.query(function(err) {
+
+});
 ```
+
+From the example above you can learn:
+
+* Errors are delegated to the callback 
