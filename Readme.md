@@ -52,7 +52,7 @@ Fatal errors are propagated to *all* callbacks. In the example below, a fatal
 error is triggered by trying to connect to an invalid port. Therefore the error
 object is propagated to both pending callbacks:
 
-```
+```js
 var connection = require('mysql').createConnection({
   port: 84943, // WRONG PORT
 });
