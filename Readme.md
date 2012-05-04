@@ -105,3 +105,14 @@ this advice and suppress unhandled errors, you can do this:
 // I am Chuck Noris:
 connection.on('error', function() {});
 ```
+
+## FAQ
+
+I have yet to write this, but it will include:
+
+* What benefits does this driver have over compiled alternatives? (portability,
+  license, docs)
+* How is the performance of this module compared to the alternatives? (great)
+* Is there commercial support for this driver? (nodefirm?)
+* What features are missing? (stored procedures, transactions, etc.)
+* How can I contribute? (explain)
