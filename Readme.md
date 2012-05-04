@@ -97,10 +97,11 @@ connection.query('USE name_of_db_that_does_not_exist');
 Note: `'error'` are special in node. If they occur without an attached
 listener, a stack trace is printed and your process is killed.
 
-**tl;dr:** This module will not allow you to silently fail. If you really want
-this, you can do:
+**tl;dr:** This module does not want you to to deal with silent failures. You
+should always provide callbacks for all your method calls. If you want to
+ignore this advice and suppress unhanded errors, you can do this:
 
 ```js
-// I am Chuck Noris mode:
+// I am Chuck Noris:
 connection.on('error', function() {});
 ```
