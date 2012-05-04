@@ -66,6 +66,18 @@ connection.query('SELECT 1', function(err) {
 });
 ```
 
+Normal errors however are only delegated to the callback they belong to.  So in
+the example below, only one the first callback receives an error:
+
+```js
+connection.query('USE NON_EXISTING_DB', function(err, rows) {
+  console.log(err.code); // ER_BAD_DB_ERROR
+});
+
+connection.query('SELECT 1', function(err, rows) {
+  console.log(err); // null
+});
+```
 
 
 ### MySQL error codes
