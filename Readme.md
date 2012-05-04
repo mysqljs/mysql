@@ -98,8 +98,8 @@ Note: `'error'` are special in node. If they occur without an attached
 listener, a stack trace is printed and your process is killed.
 
 **tl;dr:** This module does not want you to to deal with silent failures. You
-should always provide callbacks for all your method calls. If you want to
-ignore this advice and suppress unhanded errors, you can do this:
+should always provide callbacks to your method calls. If you want to ignore
+this advice and suppress unhandled errors, you can do this:
 
 ```js
 // I am Chuck Noris:
