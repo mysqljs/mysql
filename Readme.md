@@ -78,28 +78,3 @@ connection.query('SELECT 1', function(err, rows) {
   console.log(err); // null
 });
 ```
-
-
-### MySQL error codes
-
-
-```js
-var connection = require('mysql').createConnection({
-  host     : 'localhost',
-  user     : 'USER',
-  password : 'WRONG PASSWORD',
-});
-
-connection.connect(function(err) {
-  console.log(err.message); // Access denied for user 'USER'@'localhost' (using password: YES)
-  console.log(err.code); // ER_ACCESS_DENIED_ERROR
-});
-
-connection.query(function(err) {
-
-});
-```
-
-From the example above you can learn:
-
-* Errors are delegated to the callback 
