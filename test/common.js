@@ -5,7 +5,9 @@ var _      = require('underscore');
 common.lib = path.join(__dirname, '../lib');
 
 // Useful for triggering ECONNREFUSED errors on connect()
-common.bogusPort = 47378;
+common.bogusPort     = 47378;
+// Useful for triggering ER_ACCESS_DENIED_ERROR errors on connect()
+common.bogusPassword = 'INVALID PASSWORD';
 
 var Mysql = require('../');
 
