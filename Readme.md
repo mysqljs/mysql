@@ -59,10 +59,12 @@ var connection = require('mysql').createConnection({
 
 connection.connect(function(err) {
   console.log(err.code); // 'ECONNREFUSED'
+  console.log(err.fatal); // true
 });
 
 connection.query('SELECT 1', function(err) {
   console.log(err.code); // 'ECONNREFUSED'
+  console.log(err.fatal); // true
 });
 ```
 
