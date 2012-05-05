@@ -69,8 +69,8 @@ connection.query('SELECT 1', function(err) {
 ```
 
 Normal errors however are only delegated to the callback they belong to.  So in
-the example below, only one the first callback receives an error, the second
-query works as expected:
+the example below, only the first callback receives an error, the second query
+works as expected:
 
 ```js
 connection.query('USE name_of_db_that_does_not_exist', function(err, rows) {
