@@ -39,9 +39,9 @@ review carefully in order to write solid applications.
 All errors created by this module are instances of the JavaScript [Error][]
 object. Additionally they come with two properties:
 
-* `err.code`: Either a [MySQL server error][] (e.g. `ER_ACCESS_DENIED_ERROR`),
-  a node.js error (e.g. `ECONNREFUSED`) or an internal error (e.g.
-  `PARSER_ERROR`).
+* `err.code`: Either a [MySQL server error][] (e.g.
+  `'ER_ACCESS_DENIED_ERROR'`), a node.js error (e.g. `'ECONNREFUSED'`) or an
+  internal error (e.g.  `'PARSER_ERROR'`).
 * `err.fatal`: Boolean, indicating if this error is terminal to the connection
   object.
 
@@ -58,11 +58,11 @@ var connection = require('mysql').createConnection({
 });
 
 connection.connect(function(err) {
-  console.log(err.code); // ECONNREFUSED
+  console.log(err.code); // 'ECONNREFUSED'
 });
 
 connection.query('SELECT 1', function(err) {
-  console.log(err.code); // ECONNREFUSED
+  console.log(err.code); // 'ECONNREFUSED'
 });
 ```
 
@@ -72,7 +72,7 @@ query works as expected:
 
 ```js
 connection.query('USE name_of_db_that_does_not_exist', function(err, rows) {
-  console.log(err.code); // ER_BAD_DB_ERROR
+  console.log(err.code); // 'ER_BAD_DB_ERROR'
 });
 
 connection.query('SELECT 1', function(err, rows) {
@@ -88,7 +88,7 @@ demonstrated in the example below:
 
 ```js
 connection.on('error', function(err) {
-  console.log(err.code); // ER_BAD_DB_ERROR
+  console.log(err.code); // 'ER_BAD_DB_ERROR'
 });
 
 connection.query('USE name_of_db_that_does_not_exist');
