@@ -41,7 +41,7 @@ object. Additionally they come with two properties:
 
 * `err.code`: Either a [MySQL server error][] (e.g.
   `'ER_ACCESS_DENIED_ERROR'`), a node.js error (e.g. `'ECONNREFUSED'`) or an
-  internal error (e.g.  `'PROTOCOL_PARSE_ERROR'`).
+  internal error (e.g.  `'PROTOCOL_PARSER_EXCEPTION'`).
 * `err.fatal`: Boolean, indicating if this error is terminal to the connection
   object.
 
