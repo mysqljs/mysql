@@ -108,6 +108,36 @@ this advice and suppress unhandled errors, you can do this:
 connection.on('error', function() {});
 ```
 
+### Type Casting
+
+For your convenience, this driver will type cast certain field types into
+native JavaScript types by default. The following mappings exist:
+
+#### Number
+
+* TINY
+* SHORT
+* LONG
+* LONGLONG
+* INT24
+* YEAR
+* FLOAT
+* DOUBLE
+
+#### Date
+
+* TIMESTAMP
+* DATE
+* DATETIME
+* NEWDATE
+
+If you would like to disable the type casting, you can do so on the connection
+level:
+
+```js
+var connection = require('mysql').createConnection({typeCast: false});
+```
+
 ## FAQ
 
 I have yet to write this, but it will include:
