@@ -4,6 +4,7 @@ var assert     = require('assert');
 
 var err;
 connection.connect(function(_err) {
+  assert.equal(err, undefined);
   err = _err;
 });
 

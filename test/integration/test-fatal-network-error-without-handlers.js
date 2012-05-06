@@ -7,6 +7,7 @@ connection.query('SELECT 1');
 
 var err;
 connection.on('error', function(_err) {
+  assert.equal(err, undefined);
   err = _err;
 });
 
