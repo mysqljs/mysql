@@ -174,7 +174,7 @@ types by default. The following mappings exist:
 * DECIMAL (may exceed float precision)
 * BIGINT (may exceed float precision)
 * TIME (could be mapped to Date, but what date would be set?)
-* GEOMETRY (not sure how this works, comments appriciated)
+* GEOMETRY (never used those, get in touch if you do)
 
 If you would like to disable the type casting, you can do so on the connection
 level:
