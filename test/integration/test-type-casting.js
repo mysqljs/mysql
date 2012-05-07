@@ -29,7 +29,7 @@ var expected = {
   'MEDIUMBLOB' : new Buffer([0, 1, 254, 255]),
   'LONGBLOB'   : new Buffer([0, 1, 254, 255]),
   'BLOB'       : new Buffer([0, 1, 254, 255]),
-  'BIT'        : "b'1010010001000'",
+  'BIT'        : new Buffer([0, 1, 254, 255]),
   'CHAR'       : 'Hello',
   'VARCHAR'    : 'Hello',
   'TEXT'       : 'Hello World',
@@ -45,12 +45,10 @@ for (var key in expected) {
   } else if (/binary|char/i.test(type)) {
     type = type + '(' + value.length + ')';
   } else if (/bit/i.test(type)) {
-    type = type + '(13)';
+    type = type + '(' + (value.length * 8) + ')';
   }
 
-  var escaped = (/bit/i.test(type))
-    ? value
-    : connection.escape(value);
+  var escaped = connection.escape(value);
 
   schema.push('`' + key + '` ' + type + ',');
   inserts.push('`' + key + '` = ' + escaped);
@@ -86,8 +84,6 @@ process.on('exit', function() {
     } else if (Buffer.isBuffer(expectedValue)) {
       expectedValue = Array.prototype.slice.call(expectedValue)+'';
       actualValue   = Array.prototype.slice.call(actualValue)+'';
-    } else if (/bit/i.test(key)) {
-      actualValue = "b'" + actualValue + "'"
     }
 
     assert.strictEqual(actualValue, expectedValue, key + ': ' + actualValue + ' !== ' + expectedValue);
