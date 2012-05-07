@@ -110,8 +110,8 @@ connection.on('error', function() {});
 
 ### Type Casting
 
-For your convenience, this driver will type cast certain field types into
-native JavaScript types by default. The following mappings exist:
+For your convenience, this driver will cast mysql types into native JavaScript
+types by default. The following mappings exist:
 
 #### Number
 
