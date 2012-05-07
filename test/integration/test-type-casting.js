@@ -32,6 +32,9 @@ var expected = {
   'BIT'        : new Buffer([0, 1, 254, 255]),
   'CHAR'       : 'Hello',
   'VARCHAR'    : 'Hello',
+  'TINYTEXT'   : 'Hello World',
+  'MEDIUMTEXT' : 'Hello World',
+  'LONGTEXT'   : 'Hello World',
   'TEXT'       : 'Hello World',
 };
 

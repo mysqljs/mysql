@@ -131,39 +131,44 @@ types by default. The following mappings exist:
 
 #### Number
 
-* TINY (aka TINYINT)
-* SHORT (aka SMALLINT)
-* LONG (aka INT)
-* INT24 (aka MEDIUMINT)
-* YEAR (aka YEAR)
-* FLOAT (aka FLOAT)
-* DOUBLE (aka DOUBLE)
+* TINYINT
+* SMALLINT
+* INT
+* MEDIUMINT
+* YEAR
+* FLOAT
+* DOUBLE
 
 #### Date
 
-* TIMESTAMP (aka TIMESTAMP)
-* DATE (aka DATE)
-* DATETIME (aka DATETIME)
-* NEWDATE (aka ?)
+* TIMESTAMP
+* DATE
+* DATETIME
+
+#### Buffer
+
+* TINYBLOB
+* MEDIUMBLOB
+* LONGBLOB
+* BLOB
+* BINARY
+* VARBINARY
+* BIT
 
 #### String
 
-* DECIMAL (aka DECIMAL)
-* NEWDECIMAL (aka DECIMAL)
-* LONGLONG (aka BIGINT)
-* NULL (?)
-* TIME (aka TIME)
-* VARCHAR (aka VARCHAR)
-* BIT (aka BIT)
-* ENUM (aka ENUM)
-* SET (aka SET)
-* TINY\_BLOB (aka TINYBLOB, TINYTEXT)
-* MEDIUM\_BLOB (aka MEDIUMBLOB, MEDIUMTEXT)
-* LONG\_BLOB (aka LONGBLOG, LONGTEXT)
-* BLOB (aka BLOB, TEXT)
-* VAR\_STRING (aka VARCHAR, VARBINARY)
-* STRING (aka CHAR, BINARY)
-* GEOMETRY (aka GEOMETRY)
+* CHAR
+* VARCHAR
+* TINYTEXT
+* MEDIUMTEXT
+* LONGTEXT
+* TEXT
+* ENUM
+* SET
+* DECIMAL (may exceed float precision)
+* BIGINT (may exceed float precision)
+* TIME (could be mapped to Date, but what date would be set?)
+* GEOMETRY (not sure how this works, comments appriciated)
 
 If you would like to disable the type casting, you can do so on the connection
 level:
