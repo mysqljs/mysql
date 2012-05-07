@@ -10,19 +10,28 @@ connection.query('CREATE DATABASE ' + common.testDatabase, function(err) {
 connection.query('USE ' + common.testDatabase);
 
 var expected = {
-  'DECIMAL'   : '0.330',
-  'TINYINT'   : 1,
-  'SMALLINT'  : 2,
-  'INT'       : 3,
-  'FLOAT'     : 4.5,
-  'DOUBLE'    : 5.5,
-  'BIGINT'    : '6',
-  'MEDIUMINT' : 7,
-  'YEAR'      : 2012,
-  'TIMESTAMP' : new Date('2012-05-12 11:00:23'),
-  'DATETIME'  : new Date('2012-05-12 11:02:32'),
-  'DATE'      : new Date('2012-05-12'),
-  'TIME'      : '13:13:23',
+  'DECIMAL'    : '0.330',
+  'TINYINT'    : 1,
+  'SMALLINT'   : 2,
+  'INT'        : 3,
+  'FLOAT'      : 4.5,
+  'DOUBLE'     : 5.5,
+  'BIGINT'     : '6',
+  'MEDIUMINT'  : 7,
+  'YEAR'       : 2012,
+  'TIMESTAMP'  : new Date('2012-05-12 11:00:23'),
+  'DATETIME'   : new Date('2012-05-12 11:02:32'),
+  'DATE'       : new Date('2012-05-12'),
+  'TIME'       : '13:13:23',
+  'BINARY'     : new Buffer([0, 1, 254, 255]),
+  'VARBINARY'  : new Buffer([0, 1, 254, 255]),
+  'TINYBLOB'   : new Buffer([0, 1, 254, 255]),
+  'MEDIUMBLOB' : new Buffer([0, 1, 254, 255]),
+  'LONGBLOB'   : new Buffer([0, 1, 254, 255]),
+  'BLOB'       : new Buffer([0, 1, 254, 255]),
+  'CHAR'       : 'Hello',
+  'VARCHAR'    : 'Hello',
+  'TEXT'       : 'Hello World',
 };
 
 var schema  = [];
@@ -32,6 +41,8 @@ for (var key in expected) {
   var type = key;
   if (type === 'DECIMAL') {
     type = type + '(3,3)';
+  } else if (/binary|char/i.test(type)) {
+    type = type + '(' + value.length + ')';
   }
 
   schema.push('`' + key + '` ' + type + ',');
@@ -64,7 +75,10 @@ process.on('exit', function() {
 
     if (expectedValue instanceof Date) {
       expectedValue = Number(expectedValue);
-      actualValue = Number(actualValue);
+      actualValue   = Number(actualValue);
+    } else if (Buffer.isBuffer(expectedValue)) {
+      expectedValue = Array.prototype.slice.call(expectedValue)+'';
+      actualValue   = Array.prototype.slice.call(actualValue)+'';
     }
 
     assert.strictEqual(actualValue, expectedValue, key + ': ' + actualValue + ' !== ' + expectedValue);

@@ -76,4 +76,11 @@ test('SqlString.escape', {
 
     assert.strictEqual(string, "'" + expected + "'");
   },
+
+  'buffers are converted to hex': function() {
+    var buffer = new Buffer([0, 1, 254, 255]);
+    var string = SqlString.escape(buffer);
+
+    assert.strictEqual(string, "X'0001feff'");
+  },
 });
