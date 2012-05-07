@@ -33,7 +33,7 @@ From this example, you can learn the following:
 
 ## Contributors
 
-A lot of people have helped in creating this module, they are listed on the
+A lot of people have helped improving this module, see the
 [GitHub Contributors page][]. Thank you!
 
 [GitHub Contributors page]: https://github.com/felixge/node-mysql/graphs/contributors
