@@ -115,21 +115,39 @@ native JavaScript types by default. The following mappings exist:
 
 #### Number
 
-* TINY
-* SHORT
-* LONG
-* LONGLONG
-* INT24
-* YEAR
-* FLOAT
-* DOUBLE
+* TINY (aka TINYINT)
+* SHORT (aka SMALLINT)
+* LONG (aka INT)
+* INT24 (aka MEDIUMINT)
+* YEAR (aka YEAR)
+* FLOAT (aka FLOAT)
+* DOUBLE (aka DOUBLE)
 
 #### Date
 
-* TIMESTAMP
-* DATE
-* DATETIME
-* NEWDATE
+* TIMESTAMP (aka TIMESTAMP)
+* DATE (aka DATE)
+* DATETIME (aka DATETIME)
+* NEWDATE (aka ?)
+
+#### String
+
+* DECIMAL (aka DECIMAL)
+* NEWDECIMAL (aka DECIMAL)
+* LONGLONG (aka BIGINT)
+* NULL (?)
+* TIME (aka TIME)
+* VARCHAR (aka VARCHAR)
+* BIT (aka BIT)
+* ENUM (aka ENUM)
+* SET (aka SET)
+* TINY\_BLOB (aka TINYBLOB, TINYTEXT)
+* MEDIUM\_BLOB (aka MEDIUMBLOB, MEDIUMTEXT)
+* LONG\_BLOB (aka LONGBLOG, LONGTEXT)
+* BLOB (aka BLOB, TEXT)
+* VAR\_STRING (aka VARCHAR, VARBINARY)
+* STRING (aka CHAR, BINARY)
+* GEOMETRY (aka GEOMETRY)
 
 If you would like to disable the type casting, you can do so on the connection
 level:
