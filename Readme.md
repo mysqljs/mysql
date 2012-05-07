@@ -34,18 +34,24 @@ From this example, you can learn the following:
 ## Contributors
 
 A lot of people have helped in creating this module, they are listed on the
-[GitHub Contributors page][].
+[GitHub Contributors page][]. Thank you!
 
-Additionally the following companies have supported the project financially,
-allowing me to spend more time on it (ordered by time of contribution):
+[GitHub Contributors page]: https://github.com/felixge/node-mysql/graphs/contributors
+
+## Sponsors
+
+The following companies have supported the project financially, allowing me to
+spend more time on it (ordered by time of contribution):
 
 * [Joyent](http://www.joyent.com/)
 * [pinkbike.com](http://pinkbike.com/)
 * [Holiday Extras Ltd](http://pinkbike.com/)
 * [newscope](http://newscope.com/)
 
+If you are interested in sponsoring a day or more of my time, please
+[get in touch][].
 
-[GitHub Contributors page]: https://github.com/felixge/node-mysql/graphs/contributors
+[get in touch]: mailto:felix@debuggable.com
 
 ## Handling Errors
 
