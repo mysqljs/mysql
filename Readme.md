@@ -31,6 +31,22 @@ From this example, you can learn the following:
 * Closing the connection is done using `end()` which makes sure all remaining
   queries are executed before sending a quit packet to the mysql server.
 
+## Contributors
+
+A lot of people have helped in creating this module, they are listed on the
+[GitHub Contributors page][].
+
+Additionally the following companies have supported the project financially,
+allowing me to spend more time on it (ordered by time of contribution):
+
+* [Joyent](http://www.joyent.com/)
+* [pinkbike.com](http://pinkbike.com/)
+* [Holiday Extras Ltd](http://pinkbike.com/)
+* [newscope](http://newscope.com/)
+
+
+[GitHub Contributors page]: https://github.com/felixge/node-mysql/graphs/contributors
+
 ## Handling Errors
 
 This module comes with a consistent approach to error handling that you should
