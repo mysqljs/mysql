@@ -40,7 +40,7 @@ A lot of people have helped improving this module, see the
 
 ## Sponsors
 
-The following companies have supported the project financially, allowing me to
+The following companies have supported this project financially, allowing me to
 spend more time on it (ordered by time of contribution):
 
 * [Joyent](http://www.joyent.com/)
