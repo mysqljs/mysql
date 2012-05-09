@@ -80,10 +80,15 @@ However, a connection can also be implicitly established by invoking a query:
 var mysql      = require('mysql');
 var connection = mysql.createConnection(...);
 
-connection.query('SELECT 1', function(err) {
+connection.query('SELECT 1', function(err, rows) {
   // connected! (unless `err` is set)
 });
 ```
+
+Depending on how you like to handle your errors, either method may be
+appropriate. Any type of connection error (handshake or network) is considered
+a fatal error, see the [Error Handling](#error-handling) section for more
+information.
 
 ## Terminating connections
 
