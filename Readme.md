@@ -53,6 +53,28 @@ If you are interested in sponsoring a day or more of my time, please
 
 [get in touch]: mailto:felix@debuggable.com
 
+## Terminating connections
+
+There are two ways to end a connection. Terminating a connection gracefully is
+done by calling the `end()` method:
+
+```js
+connection.end(function(err) {
+  // The connection is terminated now
+});
+```
+
+This will make sure all previously enqueued queries are still executed before
+sending a `COM\_QUIT` packet to the MySQL server. If a fatal error occurs
+before the `COM\_QUIT` packet can be sent, an `err` argument will be provided
+to the callback, but the connection will be terminated regardless of that.
+
+An alternative way to end the connection is to call the `destroy()` method.
+This will cause an immediate termination of the underlaying socket.
+Additionally `destroy()` guarantees that no more events or callbacks will be
+triggered for the connection.
+
+
 ## Handling Errors
 
 This module comes with a consistent approach to error handling that you should
