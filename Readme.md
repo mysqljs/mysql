@@ -64,10 +64,10 @@ connection.end(function(err) {
 });
 ```
 
-This will make sure all previously enqueued queries are still executed before
-sending a `COM_QUIT` packet to the MySQL server. If a fatal error occurs
-before the `COM_QUIT` packet can be sent, an `err` argument will be provided
-to the callback, but the connection will be terminated regardless of that.
+This will make sure all previously enqueued queries are still before sending a
+`COM_QUIT` packet to the MySQL server. If a fatal error occurs before the
+`COM_QUIT` packet can be sent, an `err` argument will be provided to the
+callback, but the connection will be terminated regardless of that.
 
 An alternative way to end the connection is to call the `destroy()` method.
 This will cause an immediate termination of the underlaying socket.
@@ -80,7 +80,7 @@ connection.destroy();
 
 Unlike `end()` the `destroy()` method does not take a callback argument.
 
-## Handling Errors
+## Error Handling
 
 This module comes with a consistent approach to error handling that you should
 review carefully in order to write solid applications.
