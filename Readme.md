@@ -53,6 +53,38 @@ If you are interested in sponsoring a day or more of my time, please
 
 [get in touch]: mailto:felix@debuggable.com
 
+## Establishing connections
+
+The recommended way to establish a connection is this:
+
+```js
+var mysql      = require('mysql');
+var connection = mysql.createConnection({
+  host     : String, // defaults to 'localhost'
+  port     : Number, // defaults to 3306
+  user     : String, // no default
+  password : String, // no default
+  database : String, // no default
+  typeCast : Boolean, // defaults to true
+  debug    : Boolean, // defaults to false
+});
+
+connection.connect(function(err) {
+  // connected! (unless `err` is set)
+});
+```
+
+However, a connection can also be implicitly established by invoking a query:
+
+```js
+var mysql      = require('mysql');
+var connection = mysql.createConnection(...);
+
+connection.query('SELECT 1', function(err) {
+  // connected! (unless `err` is set)
+});
+```
+
 ## Terminating connections
 
 There are two ways to end a connection. Terminating a connection gracefully is
