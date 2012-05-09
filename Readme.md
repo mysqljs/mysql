@@ -62,9 +62,9 @@ var mysql      = require('mysql');
 var connection = mysql.createConnection({
   host     : String, // defaults to 'localhost'
   port     : Number, // defaults to 3306
-  user     : String, // no default
-  password : String, // no default
-  database : String, // no default
+  user     : String, // defaults to undefined
+  password : String, // defaults to undefined
+  database : String, // defaults to undefined
   typeCast : Boolean, // defaults to true
   debug    : Boolean, // defaults to false
 });
