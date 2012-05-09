@@ -5,11 +5,19 @@ var assert     = require('assert');
 var didEnd = false;
 connection.connect();
 connection.end(function(err) {
+  if (err) throw err;
+
   didEnd = true;
 });
 
-connection.query('SELECT 1', function(err) {
-  console.log(err);
+var err;
+connection.query('SELECT 1', function(_err) {
   assert.equal(didEnd, false);
-  assert.ok(/quit/.test(err.message));
+  err = _err;
+});
+
+process.on('exit', function() {
+  assert.equal(didEnd, true);
+  assert.equal(err.code, 'PROTOCOL_ENQUEUE_AFTER_QUIT');
+  assert.equal(err.fatal, false);
 });
