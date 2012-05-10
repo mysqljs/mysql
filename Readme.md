@@ -119,9 +119,9 @@ Unlike `end()` the `destroy()` method does not take a callback argument.
 
 ## Escaping Query Values
 
-In order to avoid SQL Injection attacks, you should always escape any user
-user provided values before using them inside a SQL query. You can do so
-using the `connection.escape()` method:
+In order to avoid SQL Injection attacks, you should always escape any user user
+provided data before using it inside a SQL query. You can do so using the
+`connection.escape()` method:
 
 ```js
 var userId = 'some user provided value';
@@ -130,6 +130,26 @@ connection.query(sql, function(err, results) {
   // ...
 });
 ```
+
+Alternatively, you can use `?` characters as placeholders for values you would
+like to have escaped like this:
+
+```js
+connection.query('SELECT * FROM users WHERE id = ?', [userId], function(err, results) {
+  // ...
+});
+```
+
+This looks similar to prepared statements in MySQL, however it really just uses
+the same `connection.escape` method.
+
+Different value types are escaped differently, here is a list:
+
+* Numbers are cast to strings
+* Booleans are converted to `true` / `false` strings
+* Date objects are converted to `'YYYY-mm-dd HH:ii:ss'` strings
+* Buffers are converted to hex strings, e.g. `X'0fa5'`
+* `undefined` / `null` are converted to `NULL`
 
 ## Error Handling
 
