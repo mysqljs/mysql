@@ -8,7 +8,7 @@
   },
   "main": "./index",
   "scripts": {
-    "test": "make test"
+    "test": "node test/integration/test-select-1.js"
   },
   "engines": {
     "node": "*"
