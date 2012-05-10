@@ -17,10 +17,9 @@ common.createConnection = function(config) {
   var isTravis = Boolean(process.env.CI);
   if (isTravis) {
     // see: http://about.travis-ci.org/docs/user/database-setup/
-    config = {
-      host: '127.0.0.1',
+    config = _.extend({
       user: 'root',
-    };
+    }, config);
   } else {
     config = _.extend({
       host     : process.env.MYSQL_HOST,
