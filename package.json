@@ -8,7 +8,7 @@
   },
   "main": "./index",
   "scripts": {
-    "test": "node test/integration/test-bad-credentials.js"
+    "test": "make test"
   },
   "engines": {
     "node": "*"

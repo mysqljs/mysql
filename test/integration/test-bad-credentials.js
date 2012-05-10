@@ -1,5 +1,5 @@
 var common     = require('../common');
-var connection = common.createConnection({debug: true, password: 'INVALID PASSWORD'});
+var connection = common.createConnection({password: 'INVALID PASSWORD'});
 var assert     = require('assert');
 
 var err;
