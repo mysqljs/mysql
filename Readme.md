@@ -126,6 +126,9 @@ using the `connection.escape()` method:
 ```js
 var userId = 'some user provided value';
 var sql    = 'SELECT * FROM users WHERE id = ' + connection.escape(userId);
+connection.query(sql, function(err, results) {
+  // ...
+});
 ```
 
 ## Error Handling
