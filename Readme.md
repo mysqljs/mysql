@@ -1,6 +1,6 @@
 # node-mysql
 
-[![Build Status](https://secure.travis-ci.org/felixge/node-mysql.png)](http://travis-ci.org/felixge/node-mysql)
+[![Build Status](https://secure.travis-ci.org/felixge/node-mysql.png?branch=master)](http://travis-ci.org/felixge/node-mysql)
 
 ## Purpose
 
