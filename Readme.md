@@ -119,7 +119,7 @@ Unlike `end()` the `destroy()` method does not take a callback argument.
 
 ## Escaping Query Values
 
-In order to avoid SQL Injection attacks, you should always escape any user user
+In order to avoid SQL Injection attacks, you should always escape any user
 provided data before using it inside a SQL query. You can do so using the
 `connection.escape()` method:
 
@@ -156,7 +156,7 @@ Different value types are escaped differently, here is how:
 * `undefined` / `null` are converted to `NULL`
 
 If you paid attention, you may have noticed that this escaping allows you
-to do need things like this:
+to do neat things like this:
 
 ```js
 var post = {id: 1, title: 'Hello MySQL'};
