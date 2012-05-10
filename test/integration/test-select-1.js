@@ -1,5 +1,5 @@
 var common     = require('../common');
-var connection = common.createConnection({debug: true});
+var connection = common.createConnection();
 var assert     = require('assert');
 
 connection.connect();
