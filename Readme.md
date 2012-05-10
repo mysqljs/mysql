@@ -292,8 +292,8 @@ types by default. The following mappings exist:
 * TIME (could be mapped to Date, but what date would be set?)
 * GEOMETRY (never used those, get in touch if you do)
 
-If you would like to disable the type casting, you can do so on the connection
-level:
+It is not recommended (and may go away / change in the future) to disable type
+casting, but you can currently do so on either the connection:
 
 ```js
 var connection = require('mysql').createConnection({typeCast: false});
@@ -305,9 +305,6 @@ Or on the query level:
 var query = connection.query('...'):
 query.typeCast = false;
 ```
-
-However, this is not recommended and may go away / change behavior in the
-future.
 
 ## FAQ
 
