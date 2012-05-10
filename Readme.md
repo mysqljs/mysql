@@ -117,6 +117,17 @@ connection.destroy();
 
 Unlike `end()` the `destroy()` method does not take a callback argument.
 
+## Escaping Query Values
+
+In order to avoid SQL Injection attacks, you should always escape any user
+user provided values before using them inside a SQL query. You can do so
+using the `connection.escape()` method:
+
+```js
+var userId = 'some user provided value';
+var sql    = 'SELECT * FROM users WHERE id = ' + connection.escape(userId);
+```
+
 ## Error Handling
 
 This module comes with a consistent approach to error handling that you should
