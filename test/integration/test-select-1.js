@@ -16,7 +16,7 @@ connection.query('SELECT 1', function(err, _rows) {
 connection.end();
 
 process.on('exit', function() {
-	console.log('EXIT');
+  console.log('EXIT', rows);
   assert.deepEqual(rows, [{1: 1}]);
 });
 
