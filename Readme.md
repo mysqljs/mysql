@@ -1,5 +1,7 @@
 # node-mysql
 
+[![Build Status](https://secure.travis-ci.org/felixge/node-mysql.png?branch=v2.0)](http://travis-ci.org/felixge/node-mysql)
+
 ## Introduction
 
 This is a node.js driver for mysql. Unlike other modules, it is written
