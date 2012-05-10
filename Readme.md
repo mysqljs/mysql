@@ -48,7 +48,7 @@ spend more time on it (ordered by time of contribution):
 
 * [Joyent](http://www.joyent.com/)
 * [pinkbike.com](http://pinkbike.com/)
-* [Holiday Extras Ltd](http://pinkbike.com/)
+* [Holiday Extras Ltd](http://www.holidayextras.co.uk/)
 * [newscope](http://newscope.com/)
 
 If you are interested in sponsoring a day or more of my time, please
