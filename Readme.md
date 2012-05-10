@@ -141,15 +141,29 @@ connection.query('SELECT * FROM users WHERE id = ?', [userId], function(err, res
 ```
 
 This looks similar to prepared statements in MySQL, however it really just uses
-the same `connection.escape` method.
+the same `connection.escape` method internally.
 
-Different value types are escaped differently, here is a list:
+Different value types are escaped differently, here is how:
 
-* Numbers are cast to strings
+* Numbers are left untouched
 * Booleans are converted to `true` / `false` strings
 * Date objects are converted to `'YYYY-mm-dd HH:ii:ss'` strings
 * Buffers are converted to hex strings, e.g. `X'0fa5'`
+* Strings are safely escaped
+* Arrays are turned into list, e.g. ['a', 'b'] turns into `'a', 'b'`
+* Objects are turned into `key = 'val'` pairs. Nested objects are cast to
+  strings.
 * `undefined` / `null` are converted to `NULL`
+
+If you paid attention, you may have noticed that this escaping allows you
+to do need things like this:
+
+```js
+var post = {id: 1, title: 'Hello MySQL'};
+connection.query('INSERT INTO posts SET ?', post, function(err, result) {
+  // Neat!
+});
+```
 
 ## Error Handling
 
