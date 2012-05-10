@@ -9,7 +9,7 @@ common.bogusPort     = 47378;
 // Useful for triggering ER_ACCESS_DENIED_ERROR errors on connect()
 common.bogusPassword = 'INVALID PASSWORD';
 
-common.testDatabase = process.env.MYSQL_TEST_DATABASE;
+common.testDatabase = process.env.MYSQL_DATABASE;
 
 var Mysql = require('../');
 
@@ -21,3 +21,11 @@ common.createConnection = function(config) {
     password : process.env.MYSQL_PASSWORD,
   }, config));
 };
+
+common.useTestDb = function(connection) {
+  var query = connection.query('CREATE DATABASE ' + common.testDatabase, function(err) {
+    if (err && err.code !== 'ER_DB_CREATE_EXISTS') throw err;
+  });
+
+  connection.query('USE ' + common.testDatabase);
+}

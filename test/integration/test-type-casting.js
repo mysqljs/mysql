@@ -2,12 +2,7 @@ var common     = require('../common');
 var connection = common.createConnection();
 var assert     = require('assert');
 
-connection.connect();
-connection.query('CREATE DATABASE ' + common.testDatabase, function(err) {
-  if (err && err.code !== 'ER_DB_CREATE_EXISTS') throw err;
-});
-
-connection.query('USE ' + common.testDatabase);
+common.useTestDb(connection);
 
 var expected = {
   'DECIMAL'    : '0.330',

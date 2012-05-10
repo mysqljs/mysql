@@ -21,12 +21,20 @@ test('SqlString.escape', {
     assert.equal(SqlString.escape(5), '5');
   },
 
-  'objects are stringified': function() {
-    assert.equal(SqlString.escape({foo:'bar'}), "'[object Object]'");
+  'objects are turned into key value pairs': function() {
+    assert.equal(SqlString.escape({a: 'b', c: 'd'}), "`a` = 'b', `c` = 'd'");
+  },
+
+  'nested objects are cast to strings': function() {
+    assert.equal(SqlString.escape({a: {nested: true}}), "`a` = '[object Object]'");
   },
 
   'arrays are turned into lists': function() {
-    assert.equal(SqlString.escape([1,2,3]), "'1,2,3'");
+    assert.equal(SqlString.escape([1, 2, 'c']), "1, 2, 'c'");
+  },
+
+  'nested objects inside arrays are cast to strings': function() {
+    assert.equal(SqlString.escape([1, {nested: true}, 2]), "1, '[object Object]', 2");
   },
 
   'strings are quoted': function() {
@@ -82,5 +90,22 @@ test('SqlString.escape', {
     var string = SqlString.escape(buffer);
 
     assert.strictEqual(string, "X'0001feff'");
+  },
+});
+
+test('SqlString.format', {
+  'question marks are replaced with escaped array values': function() {
+    var sql = SqlString.format('? and ?', ['a', 'b']);
+    assert.equal(sql, "'a' and 'b'");
+  },
+
+  'extra question marks are left untouched': function() {
+    var sql = SqlString.format('? and ?', ['a']);
+    assert.equal(sql, "'a' and ?");
+  },
+
+  'extra arguments are not used': function() {
+    var sql = SqlString.format('? and ?', ['a', 'b', 'c']);
+    assert.equal(sql, "'a' and 'b'");
   },
 });
