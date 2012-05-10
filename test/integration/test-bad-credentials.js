@@ -9,7 +9,7 @@ connection.connect(function(_err) {
 });
 
 process.on('exit', function() {
-  assert.ok(/access denied/i.test(err.message));
   assert.equal(err.code, 'ER_ACCESS_DENIED_ERROR');
+  assert.ok(/access denied/i.test(err.message));
 });
 
