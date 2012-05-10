@@ -161,10 +161,12 @@ If you paid attention, you may have noticed that this escaping allows you
 to do neat things like this:
 
 ```js
-var post = {id: 1, title: 'Hello MySQL'};
-connection.query('INSERT INTO posts SET ?', post, function(err, result) {
+var post  = {id: 1, title: 'Hello MySQL'};
+var query = connection.query('INSERT INTO posts SET ?', post, function(err, result) {
   // Neat!
 });
+console.log(query.sql); // INSERT INTO posts SET `id` = 1, `title` = 'Hello MySQL'
+
 ```
 
 ## Error Handling
@@ -296,6 +298,16 @@ level:
 ```js
 var connection = require('mysql').createConnection({typeCast: false});
 ```
+
+Or on the query level:
+
+```js
+var query = connection.query('...'):
+query.typeCast = false;
+```
+
+However, this is not recommended and may go away / change behavior in the
+future.
 
 ## FAQ
 
