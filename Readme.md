@@ -29,7 +29,6 @@ connection.end();
 From this example, you can learn the following:
 
 * Every method you invoke on a connection is queued and executed in sequence.
-* You have to explicitly call the `connect()` method in the beginning.
 * Closing the connection is done using `end()` which makes sure all remaining
   queries are executed before sending a quit packet to the mysql server.
 
@@ -168,6 +167,10 @@ var query = connection.query('INSERT INTO posts SET ?', post, function(err, resu
 console.log(query.sql); // INSERT INTO posts SET `id` = 1, `title` = 'Hello MySQL'
 
 ```
+
+## Escaping Queries in Parallel
+
+Yet to be written ...
 
 ## Error Handling
 
@@ -317,3 +320,15 @@ I have yet to write this, but it will include:
 * What features are missing? (stored procedures, transactions, pause, etc.)
 * How can I contribute? (explain)
 * What are the goals of this project?
+
+## Todo
+
+* Stored procedures (should work somewhat, but needs multi result queries and
+  tests)
+* Transactions (should work, needs testing)
+* Prepared statements
+* Packets > 16 MB
+* Multi result queries
+* pause() / resume()
+* setTimeout() for Connection / Query
+* connection pooling
