@@ -326,7 +326,7 @@ types by default. The following mappings exist:
 * BLOB
 * BINARY
 * VARBINARY
-* BIT
+* BIT (last byte will be filled with 0 bits as neccessary)
 
 ### String
 
