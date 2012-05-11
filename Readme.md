@@ -211,6 +211,9 @@ Please note a few things about the example above:
   amount and size of your rows.
 * `pause()` / `resume()` operate on the underlaying socket and parser. You are
   guaranteed that no more `'row'` events will fire after calling `pause()`.
+* You MUST NOT provide a callback to the `query()` method when streaming rows.
+  If you do so, all rows will be buffered for you, and you will not receive
+  `'row'` events on the query object.
 
 ## Error Handling
 
