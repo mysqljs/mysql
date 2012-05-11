@@ -297,12 +297,12 @@ this advice and suppress unhandled errors, you can do this:
 connection.on('error', function() {});
 ```
 
-### Type Casting
+## Type Casting
 
 For your convenience, this driver will cast mysql types into native JavaScript
 types by default. The following mappings exist:
 
-#### Number
+### Number
 
 * TINYINT
 * SMALLINT
@@ -312,13 +312,13 @@ types by default. The following mappings exist:
 * FLOAT
 * DOUBLE
 
-#### Date
+### Date
 
 * TIMESTAMP
 * DATE
 * DATETIME
 
-#### Buffer
+### Buffer
 
 * TINYBLOB
 * MEDIUMBLOB
@@ -328,7 +328,7 @@ types by default. The following mappings exist:
 * VARBINARY
 * BIT
 
-#### String
+### String
 
 * CHAR
 * VARCHAR
