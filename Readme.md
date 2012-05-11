@@ -217,8 +217,8 @@ Please note a few things about the example above:
 
 Additionally you may be interested to know that it is currently not possible to
 stream individual row columns, they will always be buffered up entirely. If you
-have a good use case for streaming fields to and from MySQL, I'd love to get
-your thoughts and conributions on this.
+have a good use case for streaming large fields to and from MySQL, I'd love to
+get your thoughts and conributions on this.
 
 ## Error Handling
 
