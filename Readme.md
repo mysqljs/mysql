@@ -4,8 +4,8 @@
 
 ## Introduction
 
-This is a node.js driver for mysql. Unlike other modules, it is written
-entirely in JavaScript, does not require compiling, and is 100% MIT licensed.
+This is a node.js driver for mysql. It is written in JavaScript, does not
+require compiling, and is 100% MIT licensed.
 
 Here is an example on how to use it:
 
