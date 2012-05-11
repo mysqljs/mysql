@@ -417,6 +417,5 @@ I have yet to write this, but it will include:
 * Prepared statements
 * Packets > 16 MB
 * Multi result queries
-* pause() / resume()
 * setTimeout() for Connection / Query
 * connection pooling
