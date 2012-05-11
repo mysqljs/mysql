@@ -129,6 +129,14 @@ connection.destroy();
 
 Unlike `end()` the `destroy()` method does not take a callback argument.
 
+## Server disconnects
+
+You may loose the connection to a MySQL server due to network problems, the
+server timing you out, or the server crashing. All of these events are
+considered fatal errors, and will have the `err.code =
+'PROTOCOL_CONNECTION_LOST'`.  See the [Error Handling](#error-handling) section
+for more information.
+
 ## Escaping query values
 
 In order to avoid SQL Injection attacks, you should always escape any user
