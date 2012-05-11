@@ -56,6 +56,15 @@ If you are interested in sponsoring a day or more of my time, please
 
 [get in touch]: http://felixge.de/consulting
 
+## Community
+
+So far all community activity has happened via the GitHub Issue system, however
+additionally I have just started a mailing list and IRC channel where people
+can ask questions and discuss things:
+
+* **Mailing list**: https://groups.google.com/forum/#!forum/node-mysql
+* **IRC Channel**: #node-mysql (on freenode.net)
+
 ## Establishing connections
 
 The recommended way to establish a connection is this:
