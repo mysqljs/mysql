@@ -357,6 +357,24 @@ var query = connection.query('...'):
 query.typeCast = false;
 ```
 
+## Debugging and Reporting Problems
+
+If you are running into problems, one thing that may help is enabling the
+`debug` mode for the connection:
+
+```js
+var connection = mysql.createConnection({debug: true});
+```
+
+This will print all incoming and outgoing packets on stdout.
+
+If that does not help, feel free to open a GitHub issue. A good GitHub issue
+will have:
+
+* The minimal amount of code required to reproduce the problem (if possible)
+* As much debugging output and information about your environment (mysql
+  version, node version, os, etc.) as you can gather.
+
 ## FAQ
 
 I have yet to write this, but it will include:
