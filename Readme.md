@@ -120,7 +120,7 @@ connection.destroy();
 
 Unlike `end()` the `destroy()` method does not take a callback argument.
 
-## Escaping Query Values
+## Escaping query values
 
 In order to avoid SQL Injection attacks, you should always escape any user
 provided data before using it inside a SQL query. You can do so using the
@@ -170,7 +170,20 @@ console.log(query.sql); // INSERT INTO posts SET `id` = 1, `title` = 'Hello MySQ
 
 ```
 
-## Executing Queries in Parallel
+## Getting the id of an inserted row
+
+If you are inserting a row into a table with an auto increment primary key, you
+can retrieve the insert id like this:
+
+```js
+connection.query('INSERT INTO posts SET ?', {title: 'test'}, function(err, result) {
+  if (err) throw err;
+
+  console.log(result.insertId);
+});
+```
+
+## Executing queries in parallel
 
 The MySQL protocol is sequential, this means that you need multiple connections
 to execute queries in parallel. Future version of this module may ship with a
@@ -180,7 +193,7 @@ parallel.
 
 One simple approach is to create one connection per incoming http request.
 
-## Streaming Query Rows
+## Streaming query rows
 
 Sometimes you may want to select large quantities of rows and process each of
 them as they are received. This can be done like this:
@@ -220,7 +233,7 @@ stream individual row columns, they will always be buffered up entirely. If you
 have a good use case for streaming large fields to and from MySQL, I'd love to
 get your thoughts and conributions on this.
 
-## Error Handling
+## Error handling
 
 This module comes with a consistent approach to error handling that you should
 review carefully in order to write solid applications.
@@ -297,7 +310,7 @@ this advice and suppress unhandled errors, you can do this:
 connection.on('error', function() {});
 ```
 
-## Type Casting
+## Type casting
 
 For your convenience, this driver will cast mysql types into native JavaScript
 types by default. The following mappings exist:
@@ -357,7 +370,7 @@ var query = connection.query('...'):
 query.typeCast = false;
 ```
 
-## Debugging and Reporting Problems
+## Debugging and reporting problems
 
 If you are running into problems, one thing that may help is enabling the
 `debug` mode for the connection:
