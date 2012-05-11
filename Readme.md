@@ -419,8 +419,7 @@ I have yet to write this, but it will include:
 
 ## Todo
 
-* Stored procedures (should work somewhat, but needs multi result queries and
-  tests)
+* Stored procedures (working, but only for single result sets)
 * Transactions (should work, needs testing)
 * Prepared statements
 * Packets > 16 MB
