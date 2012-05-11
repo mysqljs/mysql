@@ -204,6 +204,14 @@ query
   });
 ```
 
+Please note a few things about the example above:
+
+* Usually you will want to receive a certain amount of rows before starting to
+  throttle the connection using `pause()`. This number will depend on the
+  amount and size of your rows.
+* `pause()` / `resume()` operate on the underlaying socket and parser. You are
+  guaranteed that no more `'row'` events will fire after calling `pause()`.
+
 ## Error Handling
 
 This module comes with a consistent approach to error handling that you should
