@@ -54,7 +54,7 @@ spend more time on it (ordered by time of contribution):
 If you are interested in sponsoring a day or more of my time, please
 [get in touch][].
 
-[get in touch]: mailto:felix@debuggable.com
+[get in touch]: http://felixge.de/consulting
 
 ## Establishing connections
 
