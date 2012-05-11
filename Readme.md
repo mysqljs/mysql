@@ -170,9 +170,39 @@ console.log(query.sql); // INSERT INTO posts SET `id` = 1, `title` = 'Hello MySQ
 
 ```
 
-## Escaping Queries in Parallel
+## Executing Queries in Parallel
 
-Yet to be written ...
+The MySQL protocol is sequential, this means that you need multiple connections
+to execute queries in parallel. Future version of this module may ship with a
+connection pool implementation, but for now you have to figure out how to
+manage multiple connections yourself if you want to execute queries in
+parallel.
+
+One simple approach is to create one connection per incoming http request.
+
+## Streaming Query Rows
+
+Sometimes you may want to select large quantities of rows and process each of
+them as they are received. This can be done like this:
+
+```js
+var query = connection.query('SELECT * FROM posts');
+query
+  .on('error', function(err) {
+    // Handle error, an 'end' event will be emitted after this as well
+  })
+  .on('row', function(row) {
+    // Pausing the connnection is useful if your processing involves I/O
+    connection.pause();
+
+    processRow(row, function() {
+      connection.resume();
+    });
+  })
+  .on('end', function() {
+    // all rows have been received
+  });
+```
 
 ## Error Handling
 
