@@ -215,6 +215,11 @@ Please note a few things about the example above:
   If you do so, all rows will be buffered for you, and you will not receive
   `'row'` events on the query object.
 
+Additionally you may be interested to know that it is currently not possible to
+stream individual row columns, they will always be buffered up entirely. If you
+have a good use case for streaming fields to and from MySQL, I'd love to get
+your thoughts and conributions on this.
+
 ## Error Handling
 
 This module comes with a consistent approach to error handling that you should
