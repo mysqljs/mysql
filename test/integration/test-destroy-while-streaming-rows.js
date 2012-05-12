@@ -28,7 +28,7 @@ var hadEnd    = false;
 var query     = connection.query('SELECT * FROM ' + table);
 
 query
-  .on('row', function(row) {
+  .on('result', function(row) {
     assert.equal(destroyed, false);
 
     destroyed = true;
