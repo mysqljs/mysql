@@ -29,7 +29,7 @@ var query  = connection.query('SELECT * FROM ' + table);
 var hadEnd = 0;
 var rows   = [];
 query
-  .on('row', function(row) {
+  .on('result', function(row) {
     // Make sure we never receive a row while being paused
     assert.equal(paused, false);
 
