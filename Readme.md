@@ -221,7 +221,7 @@ query
   .on('error', function(err) {
     // Handle error, an 'end' event will be emitted after this as well
   })
-  .on('row', function(row) {
+  .on('result', function(row) {
     // Pausing the connnection is useful if your processing involves I/O
     connection.pause();
 
@@ -244,11 +244,59 @@ Please note a few things about the example above:
 * You MUST NOT provide a callback to the `query()` method when streaming rows.
   If you do so, all rows will be buffered for you, and you will not receive
   `'row'` events on the query object.
+* The `'result'` event will fire for both rows as well as OK packets
+  confirmining the success of a INSERT/UPDATE query.
 
 Additionally you may be interested to know that it is currently not possible to
 stream individual row columns, they will always be buffered up entirely. If you
 have a good use case for streaming large fields to and from MySQL, I'd love to
 get your thoughts and conributions on this.
+
+## Multiple statement queries
+
+Support for multiple statements is disabled for security reasons (it allows for
+SQL injection attacks if values are not properly escaped). To use this feature
+you have to enable it for your connection:
+
+```js
+var connection = mysql.createConnection({multipleStatements: true});
+```
+
+Once enabled, you can execute multiple statement queries like any other query:
+
+```js
+connection.query('SELECT 1; SELECT 2', function(err, results) {
+  if (err) throw err;
+
+  // `results` is an array with one element for every statement in the query:
+  console.log(results[0]); // [{1: 1}]
+  console.log(results[1]); // [{2: 2}]
+});
+```
+
+Additionally you can also stream the results of multiple statement queries:
+
+```js
+var query = connection.query('SELECT 1; SELECT 2');
+
+query
+  .on('result', function(row, index) {
+    // index refers to the statement this row belongs to (starts at 0)
+  });
+```
+
+If one of the statements in your query causes an error, the resulting Error
+object contains a `err.index` property which tells you which statement caused
+it.
+
+Please note that the interface for streaming multiple statement queries is
+experimental and I am looking forward to feedback on it.
+
+## Stored procedures
+
+You can call stored procedures from your queries as with any other mysql driver.
+If the stored procedure produces several result sets, they are exposed to you
+the same way as the results for multiple statement queries.
 
 ## Error handling
 
@@ -419,10 +467,7 @@ I have yet to write this, but it will include:
 
 ## Todo
 
-* Stored procedures (working, but only for single result sets)
-* Transactions (should work, needs testing)
 * Prepared statements
 * Packets > 16 MB
-* Multi result queries
 * setTimeout() for Connection / Query
 * connection pooling

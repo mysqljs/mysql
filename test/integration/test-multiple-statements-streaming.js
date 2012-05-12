@@ -1,5 +1,5 @@
 var common     = require('../common');
-var connection = common.createConnection();
+var connection = common.createConnection({multipleStatements: true});
 var assert     = require('assert');
 
 var sql = [
