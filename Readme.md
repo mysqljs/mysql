@@ -279,10 +279,9 @@ Additionally you can also stream the results of multiple statement queries:
 ```js
 var query = connection.query('SELECT 1; SELECT 2');
 
-query
-  .on('result', function(row, index) {
-    // index refers to the statement this row belongs to (starts at 0)
-  });
+query.on('result', function(row, index) {
+  // index refers to the statement this result belongs to (starts at 0)
+});
 ```
 
 If one of the statements in your query causes an error, the resulting Error
