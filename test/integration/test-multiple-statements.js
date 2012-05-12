@@ -2,8 +2,14 @@ var common     = require('../common');
 var connection = common.createConnection();
 var assert     = require('assert');
 
+var sql = [
+  'SELECT 1',
+  'USE ' + common.testDatabase,
+  'SELECT 2',
+].join('; ');
+
 var results;
-connection.query('SELECT 1; SELECT 2', function(err, _results) {
+connection.query(sql, function(err, _results) {
   if (err) throw err;
 
   results = _results;
@@ -12,9 +18,8 @@ connection.query('SELECT 1; SELECT 2', function(err, _results) {
 connection.end();
 
 process.on('exit', function() {
-  console.log(results);
-
-  assert.equal(results.length, 2);
+  assert.equal(results.length, 3);
   assert.deepEqual(results[0], [{1: 1}]);
-  assert.deepEqual(results[1], [{2: 2}]);
+  assert.strictEqual(results[1].constructor.name, 'OkPacket');
+  assert.deepEqual(results[2], [{2: 2}]);
 });
