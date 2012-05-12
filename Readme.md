@@ -287,7 +287,8 @@ query
 
 If one of the statements in your query causes an error, the resulting Error
 object contains a `err.index` property which tells you which statement caused
-it. MySQL will also stop executing any remaining statement when an error occurs.
+it. MySQL will also stop executing any remaining statements when an error
+occurs.
 
 Please note that the interface for streaming multiple statement queries is
 experimental and I am looking forward to feedback on it.
