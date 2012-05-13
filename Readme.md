@@ -240,12 +240,10 @@ Please note a few things about the example above:
   throttle the connection using `pause()`. This number will depend on the
   amount and size of your rows.
 * `pause()` / `resume()` operate on the underlaying socket and parser. You are
-  guaranteed that no more `'row'` events will fire after calling `pause()`.
+  guaranteed that no more `'result'` events will fire after calling `pause()`.
 * You MUST NOT provide a callback to the `query()` method when streaming rows.
-  If you do so, all rows will be buffered for you, and you will not receive
-  `'row'` events on the query object.
 * The `'result'` event will fire for both rows as well as OK packets
-  confirmining the success of a INSERT/UPDATE query.
+  confirming the success of a INSERT/UPDATE query.
 
 Additionally you may be interested to know that it is currently not possible to
 stream individual row columns, they will always be buffered up entirely. If you
