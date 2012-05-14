@@ -8,9 +8,11 @@ var errorErr;
 var closeErr;
 connection
   .on('close', function(err) {
+    assert.ok(!closeErr);
     closeErr = err;
   })
   .on('error', function(err) {
+    assert.ok(!errorErr);
     errorErr = err;
   });
 

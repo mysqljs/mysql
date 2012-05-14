@@ -4,6 +4,7 @@ var assert     = require('assert');
 
 var closeErr;
 connection.on('close', function(err) {
+  assert.ok(!closeErr);
   closeErr = err;
 });
 
@@ -14,6 +15,7 @@ server.listen(common.fakeServerPort, function(err) {
   if (err) throw err;
 
   connection.query('SELECT 1', function(err) {
+    assert.ok(!queryErr);
     queryErr = err;
   });
 });

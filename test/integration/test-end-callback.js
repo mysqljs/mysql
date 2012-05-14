@@ -4,6 +4,14 @@ var assert     = require('assert');
 
 connection.connect();
 
+var gotClose = false;
+connection.on('close', function(err) {
+  assert.equal(gotClose, false);
+  assert.ok(!err);
+
+  gotClose = true;
+});
+
 var gotCallback = false;
 connection.end(function(err) {
   if (err) throw err;
@@ -14,5 +22,6 @@ connection.end(function(err) {
 
 process.on('exit', function() {
   assert.equal(gotCallback, true);
+  assert.equal(gotClose, true);
 });
 
