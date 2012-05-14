@@ -1,6 +1,7 @@
-var common = exports;
-var path   = require('path');
-var _      = require('underscore');
+var common     = exports;
+var path       = require('path');
+var _          = require('underscore');
+var FakeServer = require('./FakeServer');
 
 common.lib = path.join(__dirname, '../lib');
 
@@ -8,6 +9,9 @@ common.lib = path.join(__dirname, '../lib');
 common.bogusPort     = 47378;
 // Useful for triggering ER_ACCESS_DENIED_ERROR errors on connect()
 common.bogusPassword = 'INVALID PASSWORD';
+
+// Used for simulating a fake mysql server
+common.fakeServerPort = 32893;
 
 common.testDatabase = process.env.MYSQL_DATABASE;
 
@@ -30,6 +34,10 @@ common.createConnection = function(config) {
   }
 
   return Mysql.createConnection(config);
+};
+
+common.createFakeServer = function(options) {
+  return new FakeServer(_.extend({}, options));
 };
 
 common.useTestDb = function(connection) {

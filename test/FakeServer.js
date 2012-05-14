@@ -1,0 +1,102 @@
+// An experimental fake MySQL server for tricky integration tests. Expanded
+// as needed.
+
+var Net          = require('net');
+var Packets      = require('../lib/protocol/packets');
+var PacketWriter = require('../lib/protocol/PacketWriter');
+var Parser       = require('../lib/protocol/Parser');
+var EventEmitter = require('events').EventEmitter;
+var Util         = require('util');
+
+module.exports = FakeServer;
+Util.inherits(FakeServer, EventEmitter);
+function FakeServer(options) {
+  EventEmitter.call(this);
+
+  this._server      = null;
+  this._connections = [];
+}
+
+FakeServer.prototype.listen = function(port, cb) {
+  this._server = Net.createServer(this._handleConnection.bind(this));
+  this._server.listen(port, cb);
+};
+
+FakeServer.prototype._handleConnection = function(socket) {
+  var connection = new FakeConnection(socket);
+  this.emit('connection', connection);
+  this._connections.push(connection);
+};
+
+FakeServer.prototype.destroy = function() {
+  this._server.close();
+  this._connections.forEach(function(connection) {
+    connection.destroy();
+  });
+};
+
+Util.inherits(FakeConnection, EventEmitter);
+function FakeConnection(socket) {
+  EventEmitter.call(this);
+
+  this._socket = socket;
+  this._parser = new Parser({packetParser: this._parsePacket.bind(this)});
+
+  this._clientAuthenticationPacket = false;
+
+  socket.on('data', this._handleData.bind(this));
+}
+
+FakeConnection.prototype.handshake = function() {
+  this._sendPacket(0, new Packets.HandshakeInitializationPacket({
+    scrambleBuff1: new Buffer(8),
+    scrambleBuff2: new Buffer(8),
+  }));
+};
+
+FakeConnection.prototype._sendPacket = function(number, packet) {
+  var writer = new PacketWriter(number);
+  packet.write(writer);
+  this._socket.write(writer.toBuffer());
+};
+
+FakeConnection.prototype._handleData = function(buffer) {
+  this._parser.write(buffer);
+};
+
+FakeConnection.prototype._parsePacket = function(header) {
+  var Packet   = this._determinePacket(header);
+  var packet   = new Packet();
+
+  packet.parse(this._parser);
+
+  switch (Packet) {
+    case Packets.ClientAuthenticationPacket:
+      this._clientAuthenticationPacket = packet;
+      this._sendPacket(header.number + 1, new Packets.OkPacket());
+      break;
+    case Packets.ComQueryPacket:
+      this.emit('query', packet);
+      break;
+    default:
+      throw new Error('Unexpected packet: ' + Packet.name)
+  }
+};
+
+FakeConnection.prototype._determinePacket = function() {
+  if (!this._clientAuthenticationPacket) {
+    return Packets.ClientAuthenticationPacket;
+  }
+
+  var firstByte = this._parser.peak();
+  switch (firstByte) {
+    case 0x03: return Packets.ComQueryPacket;
+    default:
+      throw new Error('Unknown packet, first byte: ' + firstByte);
+      break;
+  }
+};
+
+FakeConnection.prototype.destroy = function() {
+  this._socket.destroy();
+};
