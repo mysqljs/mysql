@@ -28,7 +28,14 @@ var query  = connection.query('SELECT * FROM ' + table);
 
 var hadEnd = 0;
 var rows   = [];
+var fields = undefined;
 query
+  .on('fields', function(_fields, index) {
+    assert.equal(index, 0);
+    assert.ok(!fields);
+
+    fields = _fields;
+  })
   .on('result', function(row) {
     // Make sure we never receive a row while being paused
     assert.equal(paused, false);
@@ -52,4 +59,7 @@ connection.end();
 process.on('exit', function() {
   assert.equal(rows.length, 10);
   assert.equal(hadEnd, true);
+
+  assert.equal(fields[0].name, 'id');
+  assert.equal(fields[1].name, 'title');
 });

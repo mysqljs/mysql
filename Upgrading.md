@@ -36,8 +36,6 @@ to check out so:
   currently using objects to fill query placeholders.
 * Connections can now be established explicitly again, so you may wish to do so
   if you want to handle connection errors specifically.
-* `query()` callbacks now longer provide `fields` as a 3rd argument. Please
-  let me know if you need this.
 
 That should be most of it, if you run into anything else, please send a patch
 or open an issue to improve this document.

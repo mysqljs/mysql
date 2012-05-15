@@ -19,7 +19,7 @@ var connection = mysql.createConnection({
 
 connection.connect();
 
-connection.query('SELECT 1', function(err, rows) {
+connection.query('SELECT 1', function(err, rows, fields) {
   if (err) throw err;
 
   console.log('Query result: ', rows);
@@ -248,6 +248,9 @@ query
   .on('error', function(err) {
     // Handle error, an 'end' event will be emitted after this as well
   })
+  .on('fields', function(fields) {
+    // the field packets for the rows to follow
+  })
   .on('result', function(row) {
     // Pausing the connnection is useful if your processing involves I/O
     connection.pause();
@@ -304,9 +307,13 @@ Additionally you can also stream the results of multiple statement queries:
 ```js
 var query = connection.query('SELECT 1; SELECT 2');
 
-query.on('result', function(row, index) {
-  // index refers to the statement this result belongs to (starts at 0)
-});
+query
+  .on('fields', function(fields, index) {
+    // the fields for the result rows that follow
+  })
+  .on('result', function(row, index) {
+    // index refers to the statement this result belongs to (starts at 0)
+  });
 ```
 
 If one of the statements in your query causes an error, the resulting Error

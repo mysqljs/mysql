@@ -11,6 +11,7 @@ var sql = [
 ].join('; ');
 
 var results = [];
+var fields = [];
 var hadErr   = false;
 
 var query = connection.query(sql);
@@ -21,6 +22,9 @@ query
 
     assert.equal(err.code, 'ER_PARSE_ERROR');
     assert.equal(err.index, 3);
+  })
+  .on('fields', function(_fields, index) {
+    fields.push({fields: _fields, index: index});
   })
   .on('result', function(result, index) {
     results.push({result: result, index: index});
@@ -41,4 +45,11 @@ process.on('exit', function() {
 
   assert.deepEqual(results[2].result, {2: 2});
   assert.equal(results[2].index, 2);
+
+  assert.equal(fields.length, 2);
+  assert.equal(fields[0].fields[0].name, '1');
+  assert.equal(fields[1].fields[0].name, '2');
+
+  assert.equal(fields[0].index, 0);
+  assert.equal(fields[1].index, 2);
 });

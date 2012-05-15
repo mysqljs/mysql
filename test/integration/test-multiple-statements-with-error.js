@@ -9,12 +9,15 @@ var sql = [
 ].join('; ');
 
 var finishedQueryOne = false;
-connection.query(sql, function(err, results) {
+connection.query(sql, function(err, results, fields) {
   assert.equal(finishedQueryOne, false);
   finishedQueryOne = true;
 
   assert.equal(err.code, 'ER_PARSE_ERROR');
   assert.deepEqual(results, [[{1: 1}]]);
+
+  assert.equal(fields.length, 1);
+  assert.equal(fields[0][0].name, '1');
 });
 
 var finishedQueryTwo = false;
