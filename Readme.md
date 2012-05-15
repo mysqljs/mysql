@@ -197,6 +197,9 @@ Different value types are escaped differently, here is how:
 * Objects are turned into `key = 'val'` pairs. Nested objects are cast to
   strings.
 * `undefined` / `null` are converted to `NULL`
+* `NaN` / `Infinity` are left as-is. MySQL does not support these, and trying
+  to insert them as values will trigger MySQL errors until they implement
+  support.
 
 If you paid attention, you may have noticed that this escaping allows you
 to do neat things like this:
