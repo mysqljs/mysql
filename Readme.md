@@ -48,8 +48,8 @@ spend more time on it (ordered by time of contribution):
 
 * [Joyent](http://www.joyent.com/)
 * [pinkbike.com](http://pinkbike.com/)
-* [Holiday Extras Ltd](http://www.holidayextras.co.uk/)
-* [newscope](http://newscope.com/)
+* [Holiday Extras](http://www.holidayextras.co.uk/) (they are [hiring](http://join.holidayextras.co.uk/vacancy/senior-web-technologist/))
+* [Newscope](http://newscope.com/) (they are [hiring](http://www.newscope.com/stellenangebote))
 
 If you are interested in sponsoring a day or more of my time, please
 [get in touch][].
