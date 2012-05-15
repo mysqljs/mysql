@@ -91,6 +91,14 @@ test('SqlString.escape', {
 
     assert.strictEqual(string, "X'0001feff'");
   },
+
+  'NaN -> NaN': function() {
+    assert.equal(SqlString.escape(NaN), 'NaN');
+  },
+
+  'Infinity -> Infinity': function() {
+    assert.equal(SqlString.escape(Infinity), 'Infinity');
+  },
 });
 
 test('SqlString.format', {
