@@ -492,3 +492,4 @@ I have yet to write this, but it will include:
 * Packets > 16 MB
 * setTimeout() for Connection / Query
 * connection pooling
+* Support for encodings other than UTF-8 / ASCII
