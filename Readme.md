@@ -36,10 +36,15 @@ From this example, you can learn the following:
 
 ## Contributors
 
-A lot of people have helped improving this module, see the
-[GitHub Contributors page][]. Thank you!
+Thanks goes to the people who have contributed code to this module, see the
+[GitHub Contributors page][].
 
 [GitHub Contributors page]: https://github.com/felixge/node-mysql/graphs/contributors
+
+Additionally I'd like to thank the following people:
+
+* Andrey Hristov (Oracle) - for helping me with protocol questions.
+* Ulf Wendel (Oracle) - for helping me with protocol questions.
 
 ## Sponsors
 
