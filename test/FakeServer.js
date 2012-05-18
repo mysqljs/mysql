@@ -50,7 +50,7 @@ function FakeConnection(socket) {
 FakeConnection.prototype.handshake = function() {
   this._sendPacket(0, new Packets.HandshakeInitializationPacket({
     scrambleBuff1: new Buffer(8),
-    scrambleBuff2: new Buffer(8),
+    scrambleBuff2: new Buffer(12),
   }));
 };
 
