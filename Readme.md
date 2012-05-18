@@ -43,9 +43,11 @@ Thanks goes to the people who have contributed code to this module, see the
 
 Additionally I'd like to thank the following people:
 
-* Andrey Hristov (Oracle) - for helping me with protocol questions.
-* Ulf Wendel (Oracle) - for helping me with protocol questions.
+* [Andrey Hristov][] (Oracle) - for helping me with protocol questions.
+* [Ulf Wendel][] (Oracle) - for helping me with protocol questions.
 
+[Ulf Wendel]: http://blog.ulf-wendel.de/
+[Andrey Hristov]: http://andrey.hristov.com/
 ## Sponsors
 
 The following companies have supported this project financially, allowing me to
