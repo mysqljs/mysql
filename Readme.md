@@ -152,7 +152,7 @@ The best way to be notified about a connection termination is to listen for the
 connection.on('close', function(err) {
   if (err) {
     // We did not expect this connection to terminate
-    connection = mysql.createConnnection(connection.config);
+    connection = mysql.createConnection(connection.config);
   } else {
     // We expected this to happen, end() was called.
   }
