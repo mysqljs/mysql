@@ -2,21 +2,29 @@ var common     = require('../common');
 var connection = common.createConnection();
 var assert     = require('assert');
 
-/**
-This test assumes there is a db named test on the MySQL server
-**/
-
-connection.query("select database() as current_db", function(err, info){
-  connection.changeUser({database:'test'}, function(err){
-    connection.query("select database() as current_db", function(err, info){
-      if (err) throw err;
-
-      assert.equal(info[0]['current_db'], 'test');
-      connection.end();
-    });
-  });
+connection.query('CREATE DATABASE ' + common.testDatabase, function(err) {
+  if (err && err.code !== 'ER_DB_CREATE_EXISTS') throw err;
 });
 
-connection.on('error', function(err){
-  console.log(err);
+var initialDb;
+connection.query('select database() as db', function(err, results) {
+  if (err) throw err;
+
+  initialDb = results[0].db;
+});
+
+connection.changeUser({database: common.testDatabase});
+
+var finalDb;
+connection.query('select database() as db', function(err, results){
+  if (err) throw err;
+
+  finalDb = results[0].db;
+});
+
+connection.end();
+
+process.on('exit', function() {
+  assert.equal(initialDb, null);
+  assert.equal(finalDb, common.testDatabase);
 });
