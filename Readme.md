@@ -337,6 +337,36 @@ You can call stored procedures from your queries as with any other mysql driver.
 If the stored procedure produces several result sets, they are exposed to you
 the same way as the results for multiple statement queries.
 
+## Joins with overlapping column names
+
+When executing joins, you are likely to get result sets with overlapping column
+names.
+
+By default, node-mysql will overwrite colliding column names in the
+order the columns are received from MySQL, causing some of the received values
+to be unavailable.
+
+However, you can also specify that you want your columns to be nested below
+the table name like this:
+
+```js
+var options = {sql: '...', nestTables: true};
+connection.query(options, function(err, results) {
+  /* results will be an array like this now:
+  [{
+    table1: {
+      fieldA: '...',
+      fieldB: '...',
+    },
+    table2: {
+      fieldA: '...',
+      fieldB: '...',
+    },
+  }, ...]
+  */
+});
+```
+
 ## Error handling
 
 This module comes with a consistent approach to error handling that you should
@@ -470,8 +500,10 @@ var connection = require('mysql').createConnection({typeCast: false});
 Or on the query level:
 
 ```js
-var query = connection.query('...'):
-query.typeCast = false;
+var options = {sql: '...', typeCast: false};
+var query = connection.query(options, function(err, results) {
+
+}):
 ```
 
 ## Debugging and reporting problems
