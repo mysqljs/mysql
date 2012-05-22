@@ -4,14 +4,17 @@ var assert     = require('assert');
 
 connection.connect();
 
+var options = {
+  sql      : "SELECT NOW() as date",
+  typeCast : false,
+};
+
 var rows = undefined;
-var query = connection.query("SELECT NOW() as date", function(err, _rows) {
+var query = connection.query(options, function(err, _rows) {
   if (err) throw err;
 
   rows = _rows;
 });
-
-query.typeCast = false;
 
 connection.end();
 
