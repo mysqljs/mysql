@@ -116,4 +116,9 @@ test('SqlString.format', {
     var sql = SqlString.format('? and ?', ['a', 'b', 'c']);
     assert.equal(sql, "'a' and 'b'");
   },
+
+  'question marks within values do not cause issues': function() {
+    var sql = SqlString.format('? and ?', ['hello?', 'b']);
+    assert.equal(sql, "'hello?' and 'b'");
+  },
 });
