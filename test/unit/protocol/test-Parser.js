@@ -90,4 +90,20 @@ test('Parser', {
       parser.parseLengthCodedNumber();
     }, /unexpected/i);
   },
+
+  'parsePacketTerminatedString: regular case': function() {
+    var parser = packet([0x48, 0x69]);
+    parser._packetEnd = 2;
+
+    var str = parser.parsePacketTerminatedString();
+    assert.equal(str, 'Hi');
+  },
+
+  'parsePacketTerminatedString: 0x00 terminated': function() {
+    var parser = packet([0x48, 0x69, 0x00]);
+    parser._packetEnd = 2;
+
+    var str = parser.parsePacketTerminatedString();
+    assert.equal(str, 'Hi');
+  },
 });
