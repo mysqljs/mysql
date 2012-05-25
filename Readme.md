@@ -85,6 +85,7 @@ var connection = mysql.createConnection({
   user       : String, // defaults to undefined
   password   : String, // defaults to undefined
   database   : String, // defaults to undefined
+  charset    : String, // defaults to 'UTF8_GENERAL_CI'
   typeCast   : Boolean, // defaults to true
   debug      : Boolean, // defaults to false
 });
