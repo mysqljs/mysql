@@ -55,9 +55,9 @@ FakeConnection.prototype.handshake = function() {
 };
 
 FakeConnection.prototype._sendPacket = function(packet) {
-  var writer = new PacketWriter(this._parser.incrementPacketNumber());
+  var writer = new PacketWriter();
   packet.write(writer);
-  this._socket.write(writer.toBuffer());
+  this._socket.write(writer.toBuffer(this._parser));
 };
 
 FakeConnection.prototype._handleData = function(buffer) {
