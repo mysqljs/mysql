@@ -48,16 +48,16 @@ function FakeConnection(socket) {
 }
 
 FakeConnection.prototype.handshake = function() {
-  this._sendPacket(0, new Packets.HandshakeInitializationPacket({
+  this._sendPacket(new Packets.HandshakeInitializationPacket({
     scrambleBuff1: new Buffer(8),
     scrambleBuff2: new Buffer(12),
   }));
 };
 
-FakeConnection.prototype._sendPacket = function(number, packet) {
-  var writer = new PacketWriter(number);
+FakeConnection.prototype._sendPacket = function(packet) {
+  var writer = new PacketWriter();
   packet.write(writer);
-  this._socket.write(writer.toBuffer());
+  this._socket.write(writer.toBuffer(this._parser));
 };
 
 FakeConnection.prototype._handleData = function(buffer) {
@@ -73,7 +73,8 @@ FakeConnection.prototype._parsePacket = function(header) {
   switch (Packet) {
     case Packets.ClientAuthenticationPacket:
       this._clientAuthenticationPacket = packet;
-      this._sendPacket(header.number + 1, new Packets.OkPacket());
+      this._sendPacket(new Packets.OkPacket());
+      this._parser.resetPacketNumber();
       break;
     case Packets.ComQueryPacket:
       this.emit('query', packet);
