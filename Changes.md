@@ -4,7 +4,7 @@ This file is a manually maintained list of changes for each release. Feel free
 to add your changes here when sending pull requests. Also send corrections if
 you spot any mistakes.
 
-## v2.0.0-alpha2
+## v2.0.0-alpha2 (unreleased)
 
 * Specify escaping before for NaN / Infinity (they are as unquoted constants).
 * Support for unix domain socket connections (use: {socketPath: '...'})
@@ -25,7 +25,7 @@ you spot any mistakes.
 * Fix BLOB type casting for TINY\_BLOG, MEDIUM\_BLOB and LONG\_BLOB
 * Add support for sending and receiving large (> 16 MB) packets.
 
-## v2.0.0-alpha
+## v2.0.0-alpha (2012-05-15)
 
 This release is a rewrite. You should carefully test your application after
 upgrading to avoid problems. This release features many improvements, most
@@ -85,13 +85,13 @@ to check out so:
 That should be most of it, if you run into anything else, please send a patch
 or open an issue to improve this document.
 
-## v0.9.6
+## v0.9.6 (2012-03-12)
 
 * Escape array values so they produce sql arrays (Roger Castells, Colin Smith)
 * docs: mention mysql transaction stop gap solution (Blake Miner)
 * docs: Mention affectedRows in FAQ (Michael Baldwin)
 
-## v0.9.5
+## v0.9.5 (2011-11-26)
 
 * Fix #142 Driver stalls upon reconnect attempt that's immediately closed
 * Add travis build
@@ -100,23 +100,23 @@ or open an issue to improve this document.
 * Remove fast-or-slow dependency for tests
 * Split integration tests into individual files again
 
-## v0.9.4
+## v0.9.4 (2011-08-31)
 
 * Expose package.json as `mysql.PACKAGE` (#104)
 
-## v0.9.3
+## v0.9.3 (2011-08-22)
 
 * Set default `client.user` to root
 * Fix #91: Client#format should not mutate params array
 * Fix #94: TypeError in client.js
 * Parse decimals as string (vadimg)
 
-## v0.9.2
+## v0.9.2 (2011-08-07)
 
 * The underlaying socket connection is now managed implicitly rather than explicitly.
 * Check the [upgrading guide][] for a full list of changes.
 
-## v0.9.1
+## v0.9.1 (2011-02-20)
 
 * Fix issue #49 / `client.escape()` throwing exceptions on objects. (Nick Payne)
 * Drop < v0.4.x compatibility. From now on you need node v0.4.x to use this module.
@@ -126,11 +126,20 @@ or open an issue to improve this document.
 These releases were done before maintaining this file:
 
 * [v0.9.0](https://github.com/felixge/node-mysql/compare/v0.8.0...v0.9.0)
+  (2011-01-04)
 * [v0.8.0](https://github.com/felixge/node-mysql/compare/v0.7.0...v0.8.0)
+  (2010-10-30)
 * [v0.7.0](https://github.com/felixge/node-mysql/compare/v0.6.0...v0.7.0)
+  (2010-10-14)
 * [v0.6.0](https://github.com/felixge/node-mysql/compare/v0.5.0...v0.6.0)
+  (2010-09-28)
 * [v0.5.0](https://github.com/felixge/node-mysql/compare/v0.4.0...v0.5.0)
+  (2010-09-17)
 * [v0.4.0](https://github.com/felixge/node-mysql/compare/v0.3.0...v0.4.0)
+  (2010-09-02)
 * [v0.3.0](https://github.com/felixge/node-mysql/compare/v0.2.0...v0.3.0)
+  (2010-08-25)
 * [v0.2.0](https://github.com/felixge/node-mysql/compare/v0.1.0...v0.2.0)
+  (2010-08-22)
 * [v0.1.0](https://github.com/felixge/node-mysql/commits/v0.1.0)
+  (2010-08-22)
