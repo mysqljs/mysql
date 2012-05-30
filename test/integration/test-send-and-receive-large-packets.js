@@ -7,13 +7,21 @@ var buffer = new Buffer(length);
 var sql    = 'SELECT ? as bigField';
 
 var rows = [];
-connection.query(sql, [buffer], function(err, _rows) {
+
+// Nesting the query inside the connect() method because our buffer to hex shim
+// for node v0.4.x takes ~12sec on TravisCI causing a handshake timeout unless
+// we do the handshake first before creating the SQL query.
+connection.connect(function(err) {
   if (err) throw err;
 
-  rows = _rows;
-});
+  connection.query(sql, [buffer], function(err, _rows) {
+    if (err) throw err;
 
-connection.end();
+    rows = _rows;
+  });
+
+  connection.end();
+});
 
 process.on('exit', function() {
   assert.equal(rows.length, 1);
