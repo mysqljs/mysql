@@ -29,12 +29,14 @@ function increaseMaxAllowedPacketIfNeeded() {
     ? minMaxAllowedPacket
     : oldMaxAllowedPacket;
 
-  console.log('increasing max_allowed_packet to %s', newMaxAllowedPacket);
-
   connection.query('SET GLOBAL max_allowed_packet = ?', [newMaxAllowedPacket], function(err, rows) {
     if (err) throw err;
 
-    console.log('increased max_allowed_packet', arguments);
+
+    // We need to re-connect for this change to take effect, bah
+    connection.end();
+    connection = common.createConnection();
+
     triggerLargeQueryAndResponsePackets();
   });
 }
