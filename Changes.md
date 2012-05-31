@@ -19,10 +19,10 @@ you spot any mistakes.
 * Fix ? placeholder mechanism for values containing '?' characters(#205)
 * Detect when `connect()` is called more than once on a connection and provide
   the user with a good error message for it (#204).
-* Switch to UTF8\_GENERAL\_CI (previously UTF8\_UNICODE\_CI) as the default
+* Switch to `UTF8_GENERAL_CI` (previously `UTF8_UNICODE_CI`) as the default
   charset for all connections to avoid strange MySQL performance issues (#200),
   and also make the charset user configurable.
-* Fix BLOB type casting for TINY\_BLOG, MEDIUM\_BLOB and LONG\_BLOB
+* Fix BLOB type casting for `TINY_BLOG`, `MEDIUM_BLOB` and `LONG_BLOB`
 * Add support for sending and receiving large (> 16 MB) packets.
 
 ## v2.0.0-alpha (2012-05-15)
