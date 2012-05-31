@@ -2,6 +2,7 @@ var lib          = __dirname + '/../lib';
 var Protocol     = require(lib + '/protocol/protocol');
 var Packets      = require(lib + '/protocol/packets');
 var PacketWriter = require(lib + '/protocol/PacketWriter');
+var Parser       = require(lib + '/protocol/Parser');
 
 var options = {
   rows       : 100000,
@@ -11,6 +12,8 @@ var options = {
 console.error('Config:', options);
 
 function createBuffers() {
+  var parser = new Parser();
+
   process.stderr.write('Creating row buffers ... ');
 
   var number = 1;
@@ -18,17 +21,17 @@ function createBuffers() {
   var start  = Date.now();
 
   var buffers = [
-    createPacketBuffer(number++, new Packets.ResultSetHeaderPacket({fieldCount: 2})),
-    createPacketBuffer(number++, new Packets.FieldPacket({catalog: 'foo', name: 'id'})),
-    createPacketBuffer(number++, new Packets.FieldPacket({catalog: 'foo', name: 'text'})),
-    createPacketBuffer(number++, new Packets.EofPacket()),
+    createPacketBuffer(parser, new Packets.ResultSetHeaderPacket({fieldCount: 2})),
+    createPacketBuffer(parser, new Packets.FieldPacket({catalog: 'foo', name: 'id'})),
+    createPacketBuffer(parser, new Packets.FieldPacket({catalog: 'foo', name: 'text'})),
+    createPacketBuffer(parser, new Packets.EofPacket()),
   ];
 
   for (var i = 0; i < options.rows; i++) {
-    buffers.push(createRowDataPacketBuffer(id++, number++));
+    buffers.push(createRowDataPacketBuffer(parser, number++));
   }
 
-  buffers.push(createPacketBuffer(number++, new Packets.EofPacket));
+  buffers.push(createPacketBuffer(parser, new Packets.EofPacket));
 
   buffers = mergeBuffers(buffers);
 
@@ -43,19 +46,19 @@ function createBuffers() {
   return buffers;
 }
 
-function createPacketBuffer(number, packet) {
-  var writer = new PacketWriter(number % 256);
+function createPacketBuffer(parser, packet) {
+  var writer = new PacketWriter();
   packet.write(writer);
-  return writer.toBuffer();
+  return writer.toBuffer(parser);
 }
 
-function createRowDataPacketBuffer(id, number) {
-  var writer = new PacketWriter(number++ % 256);
+function createRowDataPacketBuffer(parser, number) {
+  var writer = new PacketWriter();
 
-  writer.writeLengthCodedString(id);
+  writer.writeLengthCodedString(parser._nextPacketNumber);
   writer.writeLengthCodedString('Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has sur');
 
-  return writer.toBuffer();
+  return writer.toBuffer(parser);
 }
 
 function mergeBuffers(buffers) {
