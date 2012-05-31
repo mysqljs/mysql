@@ -5,6 +5,7 @@ var Net          = require('net');
 var Packets      = require('../lib/protocol/packets');
 var PacketWriter = require('../lib/protocol/PacketWriter');
 var Parser       = require('../lib/protocol/Parser');
+var Auth         = require('../lib/protocol/Auth');
 var EventEmitter = require('events').EventEmitter;
 var Util         = require('util');
 
@@ -42,16 +43,23 @@ function FakeConnection(socket) {
   this._socket = socket;
   this._parser = new Parser({packetParser: this._parsePacket.bind(this)});
 
-  this._clientAuthenticationPacket = false;
+  this._handshakeInitializationPacket = null;
+  this._clientAuthenticationPacket    = null;
+  this._oldPasswordPacket             = null;
+  this._handshakeOptions              = {};
 
   socket.on('data', this._handleData.bind(this));
 }
 
-FakeConnection.prototype.handshake = function() {
-  this._sendPacket(new Packets.HandshakeInitializationPacket({
+FakeConnection.prototype.handshake = function(options) {
+  this._handshakeOptions = options || {};
+
+  this._handshakeInitializationPacket = new Packets.HandshakeInitializationPacket({
     scrambleBuff1: new Buffer(8),
     scrambleBuff2: new Buffer(12),
-  }));
+  });
+
+  this._sendPacket(this._handshakeInitializationPacket);
 };
 
 FakeConnection.prototype._sendPacket = function(packet) {
@@ -73,7 +81,34 @@ FakeConnection.prototype._parsePacket = function(header) {
   switch (Packet) {
     case Packets.ClientAuthenticationPacket:
       this._clientAuthenticationPacket = packet;
-      this._sendPacket(new Packets.OkPacket());
+
+      if (this._handshakeOptions.oldPassword) {
+        this._sendPacket(new Packets.UseOldPasswordPacket());
+      } else {
+        if (this._handshakeOptions.user || this._handshakeOptions.password) {
+          throw new Error('not implemented');
+        }
+
+        this._sendPacket(new Packets.OkPacket());
+        this._parser.resetPacketNumber();
+      }
+      break;
+    case Packets.OldPasswordPacket:
+      this._oldPasswordPacket = packet;
+
+      var expected = Auth.scramble323(this._handshakeInitializationPacket.scrambleBuff(), this._handshakeOptions.password);
+      var got      = packet.scrambleBuff;
+
+      var toString = function(buffer) {
+        return Array.prototype.slice.call(buffer).join(',');
+      };
+
+      if (toString(expected) === toString(got)) {
+        this._sendPacket(new Packets.OkPacket());
+      } else {
+        this._sendPacket(new Packets.ErrorPacket());
+      }
+
       this._parser.resetPacketNumber();
       break;
     case Packets.ComQueryPacket:
@@ -87,6 +122,8 @@ FakeConnection.prototype._parsePacket = function(header) {
 FakeConnection.prototype._determinePacket = function() {
   if (!this._clientAuthenticationPacket) {
     return Packets.ClientAuthenticationPacket;
+  } else if (this._handshakeOptions.oldPassword && !this._oldPasswordPacket) {
+    return Packets.OldPasswordPacket;
   }
 
   var firstByte = this._parser.peak();
