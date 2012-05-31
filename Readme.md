@@ -2,6 +2,12 @@
 
 [![Build Status](https://secure.travis-ci.org/felixge/node-mysql.png?branch=v2.0)](http://travis-ci.org/felixge/node-mysql)
 
+## Install
+
+```bash
+npm install mysql@2.0.0-alpha2
+```
+
 ## Introduction
 
 This is a node.js driver for mysql. It is written in JavaScript, does not
