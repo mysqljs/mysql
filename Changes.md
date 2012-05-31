@@ -11,7 +11,7 @@ you spot any mistakes.
 ## v2.0.0-alpha2 (2012-05-31)
 
 * Specify escaping before for NaN / Infinity (they are as unquoted constants).
-* Support for unix domain socket connections (use: {socketPath: '...'})
+* Support for unix domain socket connections (use: {socketPath: '...'}).
 * Fix type casting for NULL values for Date/Number fields
 * Add `fields` argument to `query()` as well as `'fields'` event. This is
   similar to what was available in 0.9.x.
@@ -20,13 +20,13 @@ you spot any mistakes.
   core ever supports it natively.
 * Implement `nestTables` option for queries, allows fetching JOIN result sets
   with overlapping column names.
-* Fix ? placeholder mechanism for values containing '?' characters(#205)
+* Fix ? placeholder mechanism for values containing '?' characters (#205).
 * Detect when `connect()` is called more than once on a connection and provide
   the user with a good error message for it (#204).
 * Switch to `UTF8_GENERAL_CI` (previously `UTF8_UNICODE_CI`) as the default
   charset for all connections to avoid strange MySQL performance issues (#200),
   and also make the charset user configurable.
-* Fix BLOB type casting for `TINY_BLOG`, `MEDIUM_BLOB` and `LONG_BLOB`
+* Fix BLOB type casting for `TINY_BLOG`, `MEDIUM_BLOB` and `LONG_BLOB`.
 * Add support for sending and receiving large (> 16 MB) packets.
 
 ## v2.0.0-alpha (2012-05-15)
