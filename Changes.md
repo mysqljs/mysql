@@ -4,7 +4,9 @@ This file is a manually maintained list of changes for each release. Feel free
 to add your changes here when sending pull requests. Also send corrections if
 you spot any mistakes.
 
-## v2.0.0-alpha2 (unreleased)
+## ? (unreleased)
+
+## v2.0.0-alpha2 (2012-05-31)
 
 * Specify escaping before for NaN / Infinity (they are as unquoted constants).
 * Support for unix domain socket connections (use: {socketPath: '...'})
