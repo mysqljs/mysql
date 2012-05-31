@@ -7,6 +7,9 @@ you spot any mistakes.
 ## ? (unreleased)
 
 * Implement support for `LOAD DATA LOCAL INFILE` queries (#182).
+* Support OLD\_PASSWORD() accounts like 0.9.x did. You should still upgrade any
+  user accounts in your your MySQL user table that has short (16 byte) Password
+  values. Connecting to those accounts is not secure. (#204)
 
 ## v2.0.0-alpha2 (2012-05-31)
 
