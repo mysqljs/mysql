@@ -3,7 +3,8 @@ var path       = require('path');
 var _          = require('underscore');
 var FakeServer = require('./FakeServer');
 
-common.lib = path.join(__dirname, '../lib');
+common.lib      = path.join(__dirname, '../lib');
+common.fixtures = path.join(__dirname, 'fixtures');
 
 // Useful for triggering ECONNREFUSED errors on connect()
 common.bogusPort     = 47378;

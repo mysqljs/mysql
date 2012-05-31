@@ -6,6 +6,8 @@ you spot any mistakes.
 
 ## ? (unreleased)
 
+* Implement support for `LOAD DATA LOCAL INFILE` queries (#182).
+
 ## v2.0.0-alpha2 (2012-05-31)
 
 * Specify escaping before for NaN / Infinity (they are as unquoted constants).
