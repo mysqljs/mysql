@@ -64,6 +64,8 @@ Additionally I'd like to thank the following people:
 The following companies have supported this project financially, allowing me to
 spend more time on it (ordered by time of contribution):
 
+* [Transloadit](http://transloadit.com) (my startup, we do file uploading &
+  video encoding as a service, check it out)
 * [Joyent](http://www.joyent.com/)
 * [pinkbike.com](http://pinkbike.com/)
 * [Holiday Extras](http://www.holidayextras.co.uk/) (they are [hiring](http://join.holidayextras.co.uk/vacancy/senior-web-technologist/))
