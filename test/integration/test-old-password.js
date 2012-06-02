@@ -1,5 +1,9 @@
 var common     = require('../common');
-var connection = common.createConnection({port: common.fakeServerPort, password: 'oldpw'});
+var connection = common.createConnection({
+  port         : common.fakeServerPort,
+  password     : 'oldpw',
+  insecureAuth : true,
+});
 var assert     = require('assert');
 
 var server = common.createFakeServer();
