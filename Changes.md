@@ -10,6 +10,8 @@ you spot any mistakes.
 * Support OLD\_PASSWORD() accounts like 0.9.x did. You should still upgrade any
   user accounts in your your MySQL user table that has short (16 byte) Password
   values. Connecting to those accounts is not secure. (#204)
+* Ignore function values when escaping objects, allows to use RowDataPacket
+  objects as query arguments. (Alex Gorbatchev, #213)
 
 ## v2.0.0-alpha2 (2012-05-31)
 
