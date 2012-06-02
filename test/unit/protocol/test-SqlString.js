@@ -25,6 +25,10 @@ test('SqlString.escape', {
     assert.equal(SqlString.escape({a: 'b', c: 'd'}), "`a` = 'b', `c` = 'd'");
   },
 
+  'objects function properties are ignored': function() {
+    assert.equal(SqlString.escape({a: 'b', c: function() {}}), "`a` = 'b'");
+  },
+
   'nested objects are cast to strings': function() {
     assert.equal(SqlString.escape({a: {nested: true}}), "`a` = '[object Object]'");
   },
