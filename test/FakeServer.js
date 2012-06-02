@@ -62,6 +62,13 @@ FakeConnection.prototype.handshake = function(options) {
   this._sendPacket(this._handshakeInitializationPacket);
 };
 
+FakeConnection.prototype.deny = function(message, errno) {
+  this._sendPacket(new Packets.ErrorPacket({
+    message: message,
+    errno: errno,
+  }));
+};
+
 FakeConnection.prototype._sendPacket = function(packet) {
   var writer = new PacketWriter();
   packet.write(writer);
