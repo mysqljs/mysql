@@ -539,18 +539,6 @@ will have:
 * As much debugging output and information about your environment (mysql
   version, node version, os, etc.) as you can gather.
 
-## FAQ
-
-I have yet to write this, but it will include:
-
-* What benefits does this driver have over compiled alternatives? (portability,
-  license, docs)
-* How is the performance of this module compared to the alternatives? (great)
-* Is there commercial support for this driver? (nodefirm?)
-* What features are missing? (stored procedures, transactions, pause, etc.)
-* How can I contribute? (explain)
-* What are the goals of this project?
-
 ## Todo
 
 * Prepared statements
