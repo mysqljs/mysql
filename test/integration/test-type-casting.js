@@ -43,8 +43,10 @@ var inserts = [];
 tests.forEach(function(test, index) {
   var escaped = connection.escape(test.insert);
 
-  schema.push('`' + index + '` ' + test.type + ',');
-  inserts.push('`' + index + '` = ' + escaped);
+  test.columnName = test.type + '_' + index;
+
+  schema.push('`' + test.columnName + '` ' + test.type + ',');
+  inserts.push('`' + test.columnName + '` = ' + escaped);
 });
 
 var createTable = [
@@ -69,23 +71,24 @@ connection.query('SELECT * FROM type_casting', function(err, rows) {
 connection.end();
 
 process.on('exit', function() {
-  tests.forEach(function(test, index) {
+  tests.forEach(function(test) {
     var expected = test.expect || test.insert;
-    var got      = row[index];
+    var got      = row[test.columnName];
 
     if (expected instanceof Date) {
-      assert.equal(got instanceof Date, true);
+      assert.equal(got instanceof Date, true, test.type);
 
       expected = String(expected);
       got      = String(got);
     } else if (Buffer.isBuffer(expected)) {
-      assert.equal(Buffer.isBuffer(got), true);
+      assert.equal(Buffer.isBuffer(got), true, test.type);
 
       expected = String(Array.prototype.slice.call(expected));
       got      = String(Array.prototype.slice.call(got));
     }
 
-    var message = 'got: ' + got + ' expected: ' + expected + ' ' + test.type;
+    var message =
+      'got: "' + got + '" expected: "' + expected + '" test: ' + test.type + '';
     assert.strictEqual(expected, got, message);
   });
 });
