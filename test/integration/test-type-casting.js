@@ -29,6 +29,7 @@ var tests = [
   {type: 'bit(32)', insert: new Buffer([0, 1, 254, 255])},
   {type: 'char(5)', insert: 'Hello'},
   {type: 'varchar(5)', insert: 'Hello'},
+  {type: 'varchar(3) character set utf8 collate utf8_bin', insert: 'bin'},
   {type: 'tinytext', insert: 'Hello World'},
   {type: 'mediumtext', insert: 'Hello World'},
   {type: 'longtext', insert: 'Hello World'},
