@@ -15,14 +15,17 @@ connection.query([
 
 connection.query('INSERT INTO ' + table + ' SET ?', {title: 'test'});
 
+var options = {
+  nestTables: true,
+  sql: 'SELECT * FROM ' + table,
+};
+
 var rows;
-var query = connection.query('SELECT * FROM ' + table, function(err, _rows) {
+var query = connection.query(options, function(err, _rows) {
   if (err) throw err;
 
   rows = _rows;
 });
-
-query.nestTables = true;
 
 connection.end();
 
