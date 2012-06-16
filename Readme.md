@@ -92,16 +92,9 @@ The recommended way to establish a connection is this:
 ```js
 var mysql      = require('mysql');
 var connection = mysql.createConnection({
-  host         : String, // defaults to 'localhost'
-  port         : Number, // defaults to 3306
-  socketPath   : String, // defaults to undefined
-  user         : String, // defaults to undefined
-  password     : String, // defaults to undefined
-  database     : String, // defaults to undefined
-  charset      : String, // defaults to 'UTF8_GENERAL_CI'
-  insecureAuth : Boolean, // defaults to false
-  typeCast     : Boolean, // defaults to true
-  debug        : Boolean, // defaults to false
+  host     : 'example.org',
+  user     : 'bob',
+  password : 'secret',
 });
 
 connection.connect(function(err) {
@@ -124,6 +117,25 @@ Depending on how you like to handle your errors, either method may be
 appropriate. Any type of connection error (handshake or network) is considered
 a fatal error, see the [Error Handling](#error-handling) section for more
 information.
+
+## Connection options
+
+When establishing a connection, you can set the following options:
+
+* `host`: The hostname of the database you are connecting to. (Default:
+  `localhost`)
+* `port`: The port number to connect to. (Default: `3306`)
+* `socketPath`: The path to a unix domain socket to connect to. When used `host`
+  and `port` are ignored.
+* `user`: The MySQL user to authenticate as.
+* `password`: The passqword of that MySQL user.
+* `database`: Name of the database to use for this connection (Optional).
+* `charset`: The charset for the connection. (Default: `'UTF8_GENERAL_CI'`)
+* `insecureAuth`: Allow connecting to MySQL instances that ask for the old
+  (insecure) authentication method. (Default: `false`)
+* `typeCast`: Determines if column values should be converted to native
+   JavaScript types. (Default: `true`)
+* `debug`: Prints protocol details to stdout. (Default: `false`)
 
 ## Terminating connections
 
