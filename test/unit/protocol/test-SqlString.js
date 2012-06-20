@@ -36,6 +36,10 @@ test('SqlString.escape', {
   'arrays are turned into lists': function() {
     assert.equal(SqlString.escape([1, 2, 'c']), "1, 2, 'c'");
   },
+  
+  'nested arrays are turned into grouped lists': function() {
+    assert.equal(SqlString.escape([[1,2,3], [4,5,6], ['a','b','c']]), "(1, 2, 3), (4, 5, 6), ('a', 'b', 'c')");
+  },
 
   'nested objects inside arrays are cast to strings': function() {
     assert.equal(SqlString.escape([1, {nested: true}, 2]), "1, '[object Object]', 2");
