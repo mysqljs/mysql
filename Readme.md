@@ -143,6 +143,8 @@ When establishing a connection, you can set the following options:
 * `typeCast`: Determines if column values should be converted to native
    JavaScript types. (Default: `true`)
 * `debug`: Prints protocol details to stdout. (Default: `false`)
+* `multipleStatements`: Allow multiple mysql statements per query. Be careful
+  with this, it exposes you to SQL injection attacks. (Default: `false)
 
 ## Terminating connections
 
