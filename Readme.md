@@ -146,6 +146,16 @@ When establishing a connection, you can set the following options:
 * `multipleStatements`: Allow multiple mysql statements per query. Be careful
   with this, it exposes you to SQL injection attacks. (Default: `false)
 
+In addition to passing these options as an object, you can also use a url
+string. For example:
+
+```js
+var connection = mysql.createConnection('mysql://user:pass@host/db?debug=true&charset=BIG5_CHINESE_CI');
+```
+
+Note: The query values are first attempted to be parsed as JSON, and if that
+fails assumed to be plaintext strings.
+
 ## Terminating connections
 
 There are two ways to end a connection. Terminating a connection gracefully is
