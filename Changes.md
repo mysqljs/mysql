@@ -4,7 +4,7 @@ This file is a manually maintained list of changes for each release. Feel free
 to add your changes here when sending pull requests. Also send corrections if
 you spot any mistakes.
 
-## v2.0.0-alpha3 (unreleased)
+## v2.0.0-alpha3 (2012-06-12)
 
 * Implement support for `LOAD DATA LOCAL INFILE` queries (#182).
 * Support OLD\_PASSWORD() accounts like 0.9.x did. You should still upgrade any
