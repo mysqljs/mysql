@@ -5,7 +5,7 @@
 ## Install
 
 ```bash
-npm install mysql@2.0.0-alpha2
+npm install mysql@2.0.0-alpha3
 ```
 
 Despite the alpha tag, this is the recommended version for new applications.
