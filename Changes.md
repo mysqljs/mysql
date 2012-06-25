@@ -4,7 +4,7 @@ This file is a manually maintained list of changes for each release. Feel free
 to add your changes here when sending pull requests. Also send corrections if
 you spot any mistakes.
 
-## ? (unreleased)
+## v2.0.0-alpha3 (unreleased)
 
 * Implement support for `LOAD DATA LOCAL INFILE` queries (#182).
 * Support OLD\_PASSWORD() accounts like 0.9.x did. You should still upgrade any
@@ -12,6 +12,13 @@ you spot any mistakes.
   values. Connecting to those accounts is not secure. (#204)
 * Ignore function values when escaping objects, allows to use RowDataPacket
   objects as query arguments. (Alex Gorbatchev, #213)
+* Handle initial error packets from server such as `ER_HOST_NOT_PRIVILEGED`.
+* Treat `utf8\_bin` as a String, not Buffer. (#214)
+* Handle empty strings in first row column value. (#222)
+* Honor Connection#nestTables setting for queries. (#221)
+* Remove `CLIENT_INTERACTIVE` flag from config. Improves #225.
+* Improve docs for connections settings.
+* Implement url string support for Connection configs.
 
 ## v2.0.0-alpha2 (2012-05-31)
 
