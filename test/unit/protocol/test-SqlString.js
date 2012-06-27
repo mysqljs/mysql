@@ -69,7 +69,7 @@ test('SqlString.escape', {
     assert.equal(SqlString.escape('Sup\\er'), "'Sup\\\\er'");
   },
 
-  '\u001 (ascii 26) gets replaced with \\Z': function() {
+  '\u001a (ascii 26) gets replaced with \\Z': function() {
     assert.equal(SqlString.escape('Sup\u001aer'), "'Sup\\Zer'");
   },
 
