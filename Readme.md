@@ -5,7 +5,7 @@
 ## Install
 
 ```bash
-npm install mysql@2.0.0-alpha2
+npm install mysql@2.0.0-alpha3
 ```
 
 Despite the alpha tag, this is the recommended version for new applications.
@@ -143,6 +143,18 @@ When establishing a connection, you can set the following options:
 * `typeCast`: Determines if column values should be converted to native
    JavaScript types. (Default: `true`)
 * `debug`: Prints protocol details to stdout. (Default: `false`)
+* `multipleStatements`: Allow multiple mysql statements per query. Be careful
+  with this, it exposes you to SQL injection attacks. (Default: `false)
+
+In addition to passing these options as an object, you can also use a url
+string. For example:
+
+```js
+var connection = mysql.createConnection('mysql://user:pass@host/db?debug=true&charset=BIG5_CHINESE_CI');
+```
+
+Note: The query values are first attempted to be parsed as JSON, and if that
+fails assumed to be plaintext strings.
 
 ## Terminating connections
 
