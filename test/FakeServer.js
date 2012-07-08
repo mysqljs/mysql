@@ -41,7 +41,7 @@ function FakeConnection(socket) {
   EventEmitter.call(this);
 
   this._socket = socket;
-  this._parser = new Parser({packetParser: this._parsePacket.bind(this)});
+  this._parser = new Parser({onPacket: this._parsePacket.bind(this)});
 
   this._handshakeInitializationPacket = null;
   this._clientAuthenticationPacket    = null;
