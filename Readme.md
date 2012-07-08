@@ -90,7 +90,8 @@ additionally I have just started a mailing list and IRC channel where people
 can ask questions and discuss things:
 
 * **Mailing list**: https://groups.google.com/forum/#!forum/node-mysql
-* **IRC Channel**: #node-mysql (on freenode.net)
+* **IRC Channel**: #node.js (on freenode.net, I pay attention to any message
+  including `'mysql'`)
 
 ## Establishing connections
 
