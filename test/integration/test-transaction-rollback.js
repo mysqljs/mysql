@@ -13,7 +13,7 @@ connection.query([
   ') ENGINE=InnoDB DEFAULT CHARSET=utf8'
 ].join('\n'));
 
-connection.query('SET autocommit = 0');
+connection.query('START TRANSACTION');
 
 var rowCount = 10;
 for (var i = 1; i <= rowCount; i++) {
