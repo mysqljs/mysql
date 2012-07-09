@@ -85,13 +85,12 @@ If you are interested in sponsoring a day or more of my time, please
 
 ## Community
 
-So far all community activity has happened via the GitHub Issue system, however
-additionally I have just started a mailing list and IRC channel where people
-can ask questions and discuss things:
+If you'd like to discuss this module, or ask questions about it, please use one
+of the following:
 
 * **Mailing list**: https://groups.google.com/forum/#!forum/node-mysql
 * **IRC Channel**: #node.js (on freenode.net, I pay attention to any message
-  including `'mysql'`)
+  including the term `mysql`)
 
 ## Establishing connections
 
