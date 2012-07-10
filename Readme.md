@@ -519,7 +519,7 @@ should always provide callbacks to your method calls. If you want to ignore
 this advice and suppress unhandled errors, you can do this:
 
 ```js
-// I am Chuck Noris:
+// I am Chuck Norris:
 connection.on('error', function() {});
 ```
 
