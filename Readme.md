@@ -66,6 +66,7 @@ Additionally I'd like to thank the following people:
 
 [Ulf Wendel]: http://blog.ulf-wendel.de/
 [Andrey Hristov]: http://andrey.hristov.com/
+
 ## Sponsors
 
 The following companies have supported this project financially, allowing me to
