@@ -490,6 +490,12 @@ this advice and suppress unhandled errors, you can do this:
 connection.on('error', function() {});
 ```
 
+## Exception Safety
+
+This module is exception safe. That means you can continue to use it, even if
+one of your callbacks to it throws an error which you're catching using
+'uncaughtException' or a domain.
+
 ## Type casting
 
 For your convenience, this driver will cast mysql types into native JavaScript
