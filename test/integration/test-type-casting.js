@@ -18,7 +18,7 @@ var tests = [
   {type: 'year', insert: 2012},
   {type: 'timestamp', insert: new Date('2012-05-12 11:00:23')},
   {type: 'datetime', insert: new Date('2012-05-12 12:00:23')},
-  {type: 'date', insert: new Date('2012-05-12')},
+  {type: 'date', insert: new Date('2012-05-12 00:00:00')},
   {type: 'time', insert: '13:13:23'},
   {type: 'binary(4)', insert: new Buffer([0, 1, 254, 255])},
   {type: 'varbinary(4)', insert: new Buffer([0, 1, 254, 255])},
