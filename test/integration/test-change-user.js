@@ -11,6 +11,7 @@ connection.query('select database() as db', function(err, results) {
   if (err) throw err;
 
   initialDb = results[0].db;
+  assert.equal(connection.config.database, null);
 });
 
 connection.changeUser({database: common.testDatabase});
@@ -20,6 +21,7 @@ connection.query('select database() as db', function(err, results){
   if (err) throw err;
 
   finalDb = results[0].db;
+  assert.equal(connection.config.database, finalDb);
 });
 
 connection.end();
