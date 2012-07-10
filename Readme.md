@@ -423,7 +423,7 @@ object. Additionally they come with two properties:
 
 * `err.code`: Either a [MySQL server error][] (e.g.
   `'ER_ACCESS_DENIED_ERROR'`), a node.js error (e.g. `'ECONNREFUSED'`) or an
-  internal error (e.g.  `'PROTOCOL_PARSER_EXCEPTION'`).
+  internal error (e.g.  `'PROTOCOL_CONNECTION_LOST'`).
 * `err.fatal`: Boolean, indicating if this error is terminal to the connection
   object.
 
@@ -489,6 +489,12 @@ this advice and suppress unhandled errors, you can do this:
 // I am Chuck Noris:
 connection.on('error', function() {});
 ```
+
+## Exception Safety
+
+This module is exception safe. That means you can continue to use it, even if
+one of your callbacks to it throws an error which you're catching using
+'uncaughtException' or a domain.
 
 ## Type casting
 

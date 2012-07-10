@@ -11,10 +11,10 @@ connection.end(function(err) {
 });
 
 var err;
-connection.query('SELECT 1');
 connection.on('error', function(_err) {
   err = _err;
 });
+connection.query('SELECT 1');
 
 process.on('exit', function() {
   assert.equal(didEnd, true);
