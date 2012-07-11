@@ -2,7 +2,6 @@ var common     = require('../../common');
 var connection = common.createConnection({socketPath: common.fakeServerSocket});
 var assert     = require('assert');
 
-
 var server = common.createFakeServer();
 var didConnect = false;
 server.listen(common.fakeServerSocket, function(err) {
