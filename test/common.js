@@ -11,14 +11,14 @@ common.bogusPort     = 47378;
 // Useful for triggering ER_ACCESS_DENIED_ERROR errors on connect()
 common.bogusPassword = 'INVALID PASSWORD';
 
-// Used for simulating a fake mysql server
-common.fakeServerPort = 32893;
+// @TODO remove fakeServerPort alias, make this environment configurable
+common.fakeServerPort = common.serverPort = 32893;
 // Used for simulating a fake mysql server
 common.fakeServerSocket = __dirname + '/fake_server.sock';
 
 common.testDatabase = process.env.MYSQL_DATABASE;
 
-var Mysql = require('../');
+var mysql = common.mysql = require('..');
 
 common.isTravis = function() {
   return Boolean(process.env.CI);
@@ -39,7 +39,7 @@ common.createConnection = function(config) {
     }, config)
   }
 
-  return Mysql.createConnection(config);
+  return mysql.createConnection(config);
 };
 
 common.createFakeServer = function(options) {
