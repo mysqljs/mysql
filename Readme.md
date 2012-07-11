@@ -518,7 +518,7 @@ connection.on('error', function() {});
 ## Exception Safety
 
 This module is exception safe. That means you can continue to use it, even if
-one of your callbacks to it throws an error which you're catching using
+one of your callback functions throws an error which you're catching using
 'uncaughtException' or a domain.
 
 ## Type casting
