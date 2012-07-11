@@ -184,6 +184,30 @@ connection.destroy();
 
 Unlike `end()` the `destroy()` method does not take a callback argument.
 
+## Switching users / altering connection state
+
+MySQL offers a changeUser command that allows you to alter the current user and
+other aspects of the connection without shutting down the underlaying socket:
+
+```js
+connection.changeUser({user : 'john'}, function(err) {
+  if (err) throw err;
+});
+```
+
+The available options for this feature are:
+
+* `user`: The name of the new user (defaults to the previous one).
+* `password`: The password of the new user (defaults to the previous one).
+* `charset`: The new charset (defaults to the previous one).
+* `database`: The new database (defaults to the previous one).
+
+A sometimes useful side effect of this functionality is that this function also
+resets any connection state (variables, transactions, etc.).
+
+Errors encountered during this operation are treated as fatal connection errors
+by this module.
+
 ## Server disconnects
 
 You may loose the connection to a MySQL server due to network problems, the
