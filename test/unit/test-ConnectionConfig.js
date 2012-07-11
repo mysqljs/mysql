@@ -1,13 +1,13 @@
-var common   = require('../common');
-var test     = require('utest');
-var assert   = require('assert');
-var Charsets = require(common.lib + '/protocol/constants/charsets');
-var Config   = require(common.lib + '/Config');
+var common           = require('../common');
+var test             = require('utest');
+var assert           = require('assert');
+var Charsets         = require(common.lib + '/protocol/constants/charsets');
+var ConnectionConfig = require(common.lib + '/ConnectionConfig');
 
-test('Config#Constructor', {
+test('ConnectionConfig#Constructor', {
   'takes user,pw,host,port,db from url string': function() {
     var url    = 'mysql://myuser:mypass@myhost:3333/mydb';
-    var config = new Config(url);
+    var config = new ConnectionConfig(url);
 
     assert.equal(config.host, 'myhost');
     assert.equal(config.port, 3333);
@@ -18,7 +18,7 @@ test('Config#Constructor', {
 
   'allows additional options via url query': function() {
     var url    = 'mysql://myhost/mydb?debug=true&charset=BIG5_CHINESE_CI';
-    var config = new Config(url);
+    var config = new ConnectionConfig(url);
 
     assert.equal(config.host, 'myhost');
     assert.equal(config.port, 3306);
