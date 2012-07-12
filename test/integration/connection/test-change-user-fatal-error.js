@@ -7,6 +7,10 @@ var common     = require('../../common');
 var connection = common.createConnection();
 var assert     = require('assert');
 
+if (common.isTravis()) {
+  return console.log('skipping - travis mysql does not support this test');
+}
+
 var err;
 connection.changeUser({user: 'does-not-exist'}, function(_err) {
   err = _err;
