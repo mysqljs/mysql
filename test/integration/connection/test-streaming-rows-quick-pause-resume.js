@@ -41,6 +41,6 @@ query.on('result', function(row) {
 connection.end();
 
 process.on('exit', function() {
-  assert.equal(rows.length, 10);
+  assert.equal(rows.length, rowCount);
   assert.equal(hadEnd, true);
 });
