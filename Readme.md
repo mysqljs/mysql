@@ -216,28 +216,36 @@ considered fatal errors, and will have the `err.code =
 'PROTOCOL_CONNECTION_LOST'`.  See the [Error Handling](#error-handling) section
 for more information.
 
-The best way to be notified about a connection termination is to listen for the
-`'close'` event:
+The best way to handle such unexpected disconnects is shown below:
 
 ```js
-connection.on('close', function(err) {
-  if (err) {
-    // We did not expect this connection to terminate
+function handleDisconnect(connection) {
+  connection.on('error', function(err) {
+    if (!err.fatal) {
+      return;
+    }
+
+    if (err.code !== 'PROTOCOL_CONNECTION_LOST') {
+      throw err;
+    }
+
+    console.log('Re-connecting lost connection: ' + err.stack);
+
     connection = mysql.createConnection(connection.config);
-  } else {
-    // We expected this to happen, end() was called.
-  }
-});
+    handleDisconnect(connection);
+    connection.connect();
+  });
+}
+
+handleDisconnect(connection);
 ```
 
 As you can see in the example above, re-connecting a connection is done by
 establishing a new connection. Once terminated, an existing connection object
 cannot be re-connected by design.
 
-Please note that you will also receive a `'close'` event with an `err` argument
-when a connection attempt fails because of bad credentials. If you find this
-cumbersome to work with, please post to the node-mysql mailing list to discuss
-improvements.
+This logic will also be part of connection pool support once I add that to this
+library.
 
 ## Escaping query values
 
