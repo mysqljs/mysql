@@ -1,5 +1,6 @@
 var common = require('../../../common');
 var assert = require('assert');
+var mysql  = require(common.dir.root);
 
 var client = common.createClient();
 client.useDatabase(common.TEST_DB, function(err, result) {
