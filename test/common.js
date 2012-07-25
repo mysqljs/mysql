@@ -20,9 +20,12 @@ common.testDatabase = process.env.MYSQL_DATABASE;
 
 var Mysql = require('../');
 
+common.isTravis = function() {
+  return Boolean(process.env.CI);
+};
+
 common.createConnection = function(config) {
-  var isTravis = Boolean(process.env.CI);
-  if (isTravis) {
+  if (common.isTravis()) {
     // see: http://about.travis-ci.org/docs/user/database-setup/
     config = _.extend({
       user: 'root',

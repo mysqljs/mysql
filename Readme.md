@@ -1,6 +1,6 @@
 # node-mysql
 
-[![Build Status](https://secure.travis-ci.org/felixge/node-mysql.png?branch=v2.0)](http://travis-ci.org/felixge/node-mysql)
+[![Build Status](https://secure.travis-ci.org/felixge/node-mysql.png)](http://travis-ci.org/felixge/node-mysql)
 
 ## Install
 
@@ -66,6 +66,7 @@ Additionally I'd like to thank the following people:
 
 [Ulf Wendel]: http://blog.ulf-wendel.de/
 [Andrey Hristov]: http://andrey.hristov.com/
+
 ## Sponsors
 
 The following companies have supported this project financially, allowing me to
@@ -183,6 +184,30 @@ connection.destroy();
 
 Unlike `end()` the `destroy()` method does not take a callback argument.
 
+## Switching users / altering connection state
+
+MySQL offers a changeUser command that allows you to alter the current user and
+other aspects of the connection without shutting down the underlaying socket:
+
+```js
+connection.changeUser({user : 'john'}, function(err) {
+  if (err) throw err;
+});
+```
+
+The available options for this feature are:
+
+* `user`: The name of the new user (defaults to the previous one).
+* `password`: The password of the new user (defaults to the previous one).
+* `charset`: The new charset (defaults to the previous one).
+* `database`: The new database (defaults to the previous one).
+
+A sometimes useful side effect of this functionality is that this function also
+resets any connection state (variables, transactions, etc.).
+
+Errors encountered during this operation are treated as fatal connection errors
+by this module.
+
 ## Server disconnects
 
 You may loose the connection to a MySQL server due to network problems, the
@@ -191,28 +216,36 @@ considered fatal errors, and will have the `err.code =
 'PROTOCOL_CONNECTION_LOST'`.  See the [Error Handling](#error-handling) section
 for more information.
 
-The best way to be notified about a connection termination is to listen for the
-`'close'` event:
+The best way to handle such unexpected disconnects is shown below:
 
 ```js
-connection.on('close', function(err) {
-  if (err) {
-    // We did not expect this connection to terminate
+function handleDisconnect(connection) {
+  connection.on('error', function(err) {
+    if (!err.fatal) {
+      return;
+    }
+
+    if (err.code !== 'PROTOCOL_CONNECTION_LOST') {
+      throw err;
+    }
+
+    console.log('Re-connecting lost connection: ' + err.stack);
+
     connection = mysql.createConnection(connection.config);
-  } else {
-    // We expected this to happen, end() was called.
-  }
-});
+    handleDisconnect(connection);
+    connection.connect();
+  });
+}
+
+handleDisconnect(connection);
 ```
 
 As you can see in the example above, re-connecting a connection is done by
 establishing a new connection. Once terminated, an existing connection object
 cannot be re-connected by design.
 
-Please note that you will also receive a `'close'` event with an `err` argument
-when a connection attempt fails because of bad credentials. If you find this
-cumbersome to work with, please post to the node-mysql mailing list to discuss
-improvements.
+This logic will also be part of connection pool support once I add that to this
+library.
 
 ## Escaping query values
 
@@ -423,7 +456,7 @@ object. Additionally they come with two properties:
 
 * `err.code`: Either a [MySQL server error][] (e.g.
   `'ER_ACCESS_DENIED_ERROR'`), a node.js error (e.g. `'ECONNREFUSED'`) or an
-  internal error (e.g.  `'PROTOCOL_PARSER_EXCEPTION'`).
+  internal error (e.g.  `'PROTOCOL_CONNECTION_LOST'`).
 * `err.fatal`: Boolean, indicating if this error is terminal to the connection
   object.
 
@@ -486,9 +519,15 @@ should always provide callbacks to your method calls. If you want to ignore
 this advice and suppress unhandled errors, you can do this:
 
 ```js
-// I am Chuck Noris:
+// I am Chuck Norris:
 connection.on('error', function() {});
 ```
+
+## Exception Safety
+
+This module is exception safe. That means you can continue to use it, even if
+one of your callback functions throws an error which you're catching using
+'uncaughtException' or a domain.
 
 ## Type casting
 
