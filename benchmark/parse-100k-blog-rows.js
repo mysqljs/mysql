@@ -93,7 +93,7 @@ function mergeBuffers(buffers) {
 function benchmark(buffers) {
   var protocol = new Protocol();
   protocol._handshakeInitializationPacket = true;
-  protocol.query({typeCast: false, sql: 'SELECT ...'});
+  protocol.query({castMap: false, sql: 'SELECT ...'});
 
   var start = +new Date;
 

@@ -141,11 +141,9 @@ When establishing a connection, you can set the following options:
 * `charset`: The charset for the connection. (Default: `'UTF8_GENERAL_CI'`)
 * `insecureAuth`: Allow connecting to MySQL instances that ask for the old
   (insecure) authentication method. (Default: `false`)
-* `typeCast`: Determines if column values should be converted to native
-   JavaScript types. (Default: `true`)
-* `debug`: Prints protocol details to stdout. (Default: `false`)
+* `castMap`: Hash of the mapping of MySQL data types to JS language types. * `debug`: Prints protocol details to stdout. (Default: `false`)
 * `multipleStatements`: Allow multiple mysql statements per query. Be careful
-  with this, it exposes you to SQL injection attacks. (Default: `false)
+  with this, it exposes you to SQL injection attacks. (Default: `false`)
 
 In addition to passing these options as an object, you can also use a url
 string. For example:
@@ -531,8 +529,7 @@ one of your callback functions throws an error which you're catching using
 
 ## Type casting
 
-For your convenience, this driver will cast mysql types into native JavaScript
-types by default. The following mappings exist:
+For your convenience, this driver will cast mysql types into native JavaScript types by default. The following mappings exist:
 
 ### Number
 
@@ -575,21 +572,78 @@ types by default. The following mappings exist:
 * TIME (could be mapped to Date, but what date would be set?)
 * GEOMETRY (never used those, get in touch if you do)
 
-It is not recommended (and may go away / change in the future) to disable type
-casting, but you can currently do so on either the connection:
+### Customize type casting
+
+It is not recommended to disable type casting, but you can currently do so on either the connection:
 
 ```js
-var connection = require('mysql').createConnection({typeCast: false});
+var connection = require('mysql').createConnection({castMap: false});
 ```
 
 Or on the query level:
 
 ```js
-var options = {sql: '...', typeCast: false};
+var options = {sql: '...', castMap: false};
 var query = connection.query(options, function(err, results) {
-
 }):
 ```
+
+You can customize type casting by providing a custom `castMap` either on the connection level: 
+
+```js
+var Types = require('mysql').Types;
+var myCastMap = {};
+myCastMap[Types.MYSQL_DATE] = Types.JS_STRING;
+var connection = require('mysql').createConnection({castMap: myCastMap});
+```
+
+Or on the query level:
+
+```js
+… 
+var options = {sql: '...', castMap: myCastMap};
+var query = connection.query(options, function(err, results) {
+}):
+```
+
+The following MySQL type constants are exported: 
+
+* Types.MYSQL_DECIMAL
+* Types.MYSQL_TINY
+* Types.MYSQL_SHORT
+* Types.MYSQL_LONG
+* Types.MYSQL_FLOAT
+* Types.MYSQL_DOUBLE
+* Types.MYSQL_NULL
+* Types.MYSQL_TIMESTAMP
+* Types.MYSQL_LONGLONG
+* Types.MYSQL_INT24
+* Types.MYSQL_DATE
+* Types.MYSQL_TIME
+* Types.MYSQL_DATETIME
+* Types.MYSQL_YEAR
+* Types.MYSQL_NEWDATE
+* Types.MYSQL_VARCHAR
+* Types.MYSQL_BIT
+* Types.MYSQL_NEWDECIMAL
+* Types.MYSQL_ENUM
+* Types.MYSQL_SET
+* Types.MYSQL_TINY_BLOB
+* Types.MYSQL_MEDIUM_BLOB
+* Types.MYSQL_LONG_BLOB
+* Types.MYSQL_BLOB
+* Types.MYSQL_VAR_STRING
+* Types.MYSQL_STRING
+* Types.MYSQL_GEOMETRY
+
+The following JS type constants are exported: 
+
+* JS_STRING
+* JS_DATE
+* JS_NUMBER
+* JS_BUFFER
+* JS_BUFFER_OR_STRING
+
 
 ## Debugging and reporting problems
 
