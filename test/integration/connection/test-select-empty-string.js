@@ -1,16 +1,19 @@
 var common     = require('../../common');
+var ResultSet     = require('../../../lib/protocol/ResultSet');
 var connection = common.createConnection();
 var assert     = require('assert');
 
 var rows;
-connection.query('SELECT ""', function(err, _rows) {
+connection.query('SELECT ""', function(err, _result) {
   if (err) throw err;
 
-  rows = _rows;
+  result = _result;
 });
 
 connection.end();
 
 process.on('exit', function() {
-  assert.deepEqual(rows, [{'': ''}]);
+  var rs0 = new ResultSet();
+  rs0.push({'': ''});
+  assert.deepEqual(result, rs0);
 });

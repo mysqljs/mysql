@@ -1,4 +1,5 @@
 var common     = require('../../common');
+var ResultSet     = require('../../../lib/protocol/ResultSet');
 var connection = common.createConnection();
 var assert     = require('assert');
 
@@ -19,11 +20,11 @@ connection.query([
   'END'
 ].join('\n'));
 
-connection.query('CALL '+procedureName+'(?,?)', [input0,input1], function(err, _result) {
+connection.query('CALL '+procedureName+'(?,?)', [input0,input1], function(err, _result1, _result2) {
   if (err) throw err;
 
-  _result.pop(); // drop metadata
-  result = _result;
+  result1 = _result1;
+  result2 = _result2;
 });
 
 connection.query('DROP PROCEDURE '+procedureName);
@@ -36,5 +37,17 @@ process.on('exit', function() {
   var result1Expected = {};
   result1Expected[fieldName1] = input1;
 
-  assert.deepEqual(result, [[result0Expected], [result1Expected]]);
+  var rs0 = new ResultSet();
+  var rs1 = new ResultSet();
+
+  rs0.push(result0Expected);
+  rs1.push(result1Expected);
+
+  assert.deepEqual(result1, rs0);
+  assert.deepEqual(result2, rs1);
+  assert(result1.serverInfo);
+  assert(result2.serverInfo);
+  assert.strictEqual(result1.serverInfo.constructor.name, 'OkPacket');
+  assert.strictEqual(result2.serverInfo.constructor.name, 'OkPacket');
+  assert.deepEqual(result1.serverInfo, result2.serverInfo);
 });

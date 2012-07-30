@@ -1,4 +1,5 @@
 var common     = require('../../common');
+var ResultSet     = require('../../../lib/protocol/ResultSet');
 var connection = common.createConnection();
 var assert     = require('assert');
 
@@ -18,7 +19,6 @@ connection.query([
 
 connection.query('CALL '+procedureName+'(?)', [input], function(err, _result) {
   if (err) throw err;
-  _result.pop(); // drop metadata
   result = _result;
 });
 
@@ -29,5 +29,10 @@ connection.end();
 process.on('exit', function() {
   var expected = {};
   expected[fieldName] = input;
-  assert.deepEqual(result, [[expected]]);
+
+  var rs0 = new ResultSet();
+  rs0.push(expected);
+
+  assert.deepEqual(result, rs0);
+  assert.equal(result.columns[0].name, fieldName);
 });

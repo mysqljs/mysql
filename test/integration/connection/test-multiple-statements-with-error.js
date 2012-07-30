@@ -1,4 +1,5 @@
 var common     = require('../../common');
+var ResultSet     = require('../../../lib/protocol/ResultSet');
 var connection = common.createConnection({multipleStatements: true});
 var assert     = require('assert');
 
@@ -9,15 +10,17 @@ var sql = [
 ].join('; ');
 
 var finishedQueryOne = false;
-connection.query(sql, function(err, results, fields) {
+connection.query(sql, function(err, results) {
   assert.equal(finishedQueryOne, false);
   finishedQueryOne = true;
 
-  assert.equal(err.code, 'ER_PARSE_ERROR');
-  assert.deepEqual(results, [[{1: 1}]]);
+  var rs0 = new ResultSet();
+  rs0.push({1: 1});
 
-  assert.equal(fields.length, 1);
-  assert.equal(fields[0][0].name, '1');
+  assert.equal(err.code, 'ER_PARSE_ERROR');
+  assert.deepEqual(results, rs0);
+  assert.equal(results.columns.length, 1);
+  assert.equal(results.columns[0].name, '1');
 });
 
 var finishedQueryTwo = false;
@@ -25,7 +28,11 @@ connection.query('SELECT 3', function(err, results) {
   assert.equal(finishedQueryTwo, false);
   finishedQueryTwo = true;
 
-  assert.deepEqual(results, [{3: 3}]);
+  var rs0 = new ResultSet();
+  rs0.push({3: 3});
+
+  assert.deepEqual(results, rs0);
+
 });
 
 connection.end();
