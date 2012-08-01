@@ -136,7 +136,7 @@ When establishing a connection, you can set the following options:
 * `socketPath`: The path to a unix domain socket to connect to. When used `host`
   and `port` are ignored.
 * `user`: The MySQL user to authenticate as.
-* `password`: The passqword of that MySQL user.
+* `password`: The password of that MySQL user.
 * `database`: Name of the database to use for this connection (Optional).
 * `charset`: The charset for the connection. (Default: `'UTF8_GENERAL_CI'`)
 * `insecureAuth`: Allow connecting to MySQL instances that ask for the old
@@ -174,7 +174,7 @@ This will make sure all previously enqueued queries are still before sending a
 callback, but the connection will be terminated regardless of that.
 
 An alternative way to end the connection is to call the `destroy()` method.
-This will cause an immediate termination of the underlaying socket.
+This will cause an immediate termination of the underlying socket.
 Additionally `destroy()` guarantees that no more events or callbacks will be
 triggered for the connection.
 
@@ -187,7 +187,7 @@ Unlike `end()` the `destroy()` method does not take a callback argument.
 ## Switching users / altering connection state
 
 MySQL offers a changeUser command that allows you to alter the current user and
-other aspects of the connection without shutting down the underlaying socket:
+other aspects of the connection without shutting down the underlying socket:
 
 ```js
 connection.changeUser({user : 'john'}, function(err) {
@@ -210,7 +210,7 @@ by this module.
 
 ## Server disconnects
 
-You may loose the connection to a MySQL server due to network problems, the
+You may lose the connection to a MySQL server due to network problems, the
 server timing you out, or the server crashing. All of these events are
 considered fatal errors, and will have the `err.code =
 'PROTOCOL_CONNECTION_LOST'`.  See the [Error Handling](#error-handling) section
@@ -355,7 +355,7 @@ Please note a few things about the example above:
 * Usually you will want to receive a certain amount of rows before starting to
   throttle the connection using `pause()`. This number will depend on the
   amount and size of your rows.
-* `pause()` / `resume()` operate on the underlaying socket and parser. You are
+* `pause()` / `resume()` operate on the underlying socket and parser. You are
   guaranteed that no more `'result'` events will fire after calling `pause()`.
 * You MUST NOT provide a callback to the `query()` method when streaming rows.
 * The `'result'` event will fire for both rows as well as OK packets
@@ -364,7 +364,7 @@ Please note a few things about the example above:
 Additionally you may be interested to know that it is currently not possible to
 stream individual row columns, they will always be buffered up entirely. If you
 have a good use case for streaming large fields to and from MySQL, I'd love to
-get your thoughts and conributions on this.
+get your thoughts and contributions on this.
 
 ## Multiple statement queries
 
@@ -514,7 +514,7 @@ connection.query('USE name_of_db_that_does_not_exist');
 Note: `'error'` are special in node. If they occur without an attached
 listener, a stack trace is printed and your process is killed.
 
-**tl;dr:** This module does not want you to to deal with silent failures. You
+**tl;dr:** This module does not want you to deal with silent failures. You
 should always provide callbacks to your method calls. If you want to ignore
 this advice and suppress unhandled errors, you can do this:
 
@@ -558,7 +558,7 @@ types by default. The following mappings exist:
 * BLOB
 * BINARY
 * VARBINARY
-* BIT (last byte will be filled with 0 bits as neccessary)
+* BIT (last byte will be filled with 0 bits as necessary)
 
 ### String
 
