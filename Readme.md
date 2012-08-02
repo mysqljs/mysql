@@ -280,7 +280,7 @@ Different value types are escaped differently, here is how:
 * Date objects are converted to `'YYYY-mm-dd HH:ii:ss'` strings
 * Buffers are converted to hex strings, e.g. `X'0fa5'`
 * Strings are safely escaped
-* Arrays are turned into list, e.g. ['a', 'b'] turns into `'a', 'b'`
+* Arrays are turned into list, e.g. `['a', 'b']` turns into `'a', 'b'`
 * Nested arrays are turned into grouped lists (for bulk inserts), e.g. `[['a',
   'b'], ['c', 'd']]` turns into `('a', 'b'), ('c', 'd')`
 * Objects are turned into `key = 'val'` pairs. Nested objects are cast to
