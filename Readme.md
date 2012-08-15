@@ -247,6 +247,40 @@ cannot be re-connected by design.
 This logic will also be part of connection pool support once I add that to this
 library.
 
+## Idle connections
+
+Connections emit `'drain'` events after they have finished all queued queries
+(including query callbacks). This event could be used to detect idle
+connections:
+
+```javascript
+function detectIdle(connection) {
+	connection._idleTimeout = null;
+
+	function clearIdleTimeout() {
+		if (connection.idleTimeout) {
+			clearTimeout(connection.idleTimeout);
+		}
+	}
+
+	connection.on('drain', function() {
+		clearIdleTimeout();
+		connection._idleTimeout = setTimeout(60000, function() {
+			console.error("Connection was idle for 60 seconds");
+			// or return to a pool, etc.
+		})
+	})
+
+	var query = connection.query;
+	connection.query = function() {
+		clearIdleTimeout();
+		query.apply(connection, arguments);
+	};
+})
+
+handleDisconnect(connection);
+```
+
 ## Escaping query values
 
 In order to avoid SQL Injection attacks, you should always escape any user
