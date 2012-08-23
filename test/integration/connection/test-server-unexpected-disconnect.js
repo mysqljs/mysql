@@ -2,10 +2,10 @@ var common     = require('../../common');
 var connection = common.createConnection({port: common.fakeServerPort});
 var assert     = require('assert');
 
-var closeErr;
-connection.on('close', function(err) {
-  assert.ok(!closeErr);
-  closeErr = err;
+var endErr;
+connection.on('end', function(err) {
+  assert.ok(!endErr);
+  endErr = err;
 });
 
 var queryErr;
@@ -32,5 +32,5 @@ process.on('exit', function() {
   assert.strictEqual(queryErr.code, 'PROTOCOL_CONNECTION_LOST');
   assert.strictEqual(queryErr.fatal, true);
 
-  assert.strictEqual(closeErr, queryErr);
+  assert.strictEqual(endErr, queryErr);
 });

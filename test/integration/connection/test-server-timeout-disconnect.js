@@ -5,11 +5,11 @@ var assert     = require('assert');
 connection.query('SET wait_timeout = 1');
 
 var errorErr;
-var closeErr;
+var endErr;
 connection
-  .on('close', function(err) {
-    assert.ok(!closeErr);
-    closeErr = err;
+  .on('end', function(err) {
+    assert.ok(!endErr);
+    endErr = err;
   })
   .on('error', function(err) {
     assert.ok(!errorErr);
@@ -20,5 +20,5 @@ process.on('exit', function() {
   assert.strictEqual(errorErr.code, 'PROTOCOL_CONNECTION_LOST');
   assert.strictEqual(errorErr.fatal, true);
 
-  assert.strictEqual(closeErr, errorErr);
+  assert.strictEqual(endErr, errorErr);
 });

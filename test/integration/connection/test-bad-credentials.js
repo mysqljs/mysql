@@ -2,10 +2,10 @@ var common     = require('../../common');
 var connection = common.createConnection({password: 'INVALID PASSWORD'});
 var assert     = require('assert');
 
-var closeErr;
-connection.on('close', function(err) {
-  assert.equal(closeErr, undefined);
-  closeErr = err;
+var endErr;
+connection.on('end', function(err) {
+  assert.equal(endErr, undefined);
+  endErr = err;
 });
 
 var connectErr;
@@ -15,9 +15,9 @@ connection.connect(function(err) {
 });
 
 process.on('exit', function() {
-  assert.equal(closeErr.code, 'ER_ACCESS_DENIED_ERROR');
-  assert.ok(/access denied/i.test(closeErr.message));
+  assert.equal(endErr.code, 'ER_ACCESS_DENIED_ERROR');
+  assert.ok(/access denied/i.test(endErr.message));
 
-  assert.strictEqual(closeErr, connectErr);
+  assert.strictEqual(endErr, connectErr);
 });
 
