@@ -17,7 +17,8 @@ connection.query([
 
 var result;
 var now = new Date();
-var nowString = now.toISOString();
+// Removing the decimal portion of the date string for Travis CI.
+var nowString = now.toISOString().replace(/\.\d\d\d/, '');
 
 connection.query('INSERT INTO ' + table + ' SET ?', {created_at: nowString}, function(err, _result) {
   if (err) throw err;
