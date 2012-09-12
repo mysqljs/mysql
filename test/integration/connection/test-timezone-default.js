@@ -1,9 +1,6 @@
-//process.env.TZ = 'UTC';
 var common = require('../../common');
 var assert = require('assert');
-
-var config = {utc: true};
-var connection = common.createConnection(config);
+var connection = common.createConnection();
 
 common.useTestDb(connection);
 
@@ -34,7 +31,8 @@ connection.query('INSERT INTO ' + table + ' SET ?', {created_at: nowString}, fun
 
 
 process.on('exit', function() {
-  var expectedHours = now.getHours();
+  var tzOffsetHours = new Date().getTimezoneOffset() / 60;
+  var expectedHours = now.getHours() + tzOffsetHours;
   var actualHours = result.getHours();
   assert.strictEqual(actualHours, expectedHours);
 });
