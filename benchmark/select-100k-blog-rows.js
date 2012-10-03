@@ -1,5 +1,5 @@
 var common     = require('../test/common');
-var client     = common.createConnection({typeCast: false});
+var client     = common.createConnection({castMap: false});
 var rowsPerRun = 100000;
 
 client.connect(function(err) {
