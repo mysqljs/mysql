@@ -593,6 +593,20 @@ var query = connection.query(options, function(err, results) {
 }):
 ```
 
+Type casting can also be disabled per type (keys can be `number`, `date`,
+or `buffer`):
+
+```js
+var connection = require('mysql').createConnection({typeCast: {date: false}});
+```
+
+Or per query (unspecified types will fall back to connection's options):
+
+```js
+var options = {sql: '...', typeCast: {number: false}};
+var query = connection.query(options, function(err, results) {
+```
+
 ## Debugging and reporting problems
 
 If you are running into problems, one thing that may help is enabling the
