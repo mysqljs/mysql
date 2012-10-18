@@ -4,3 +4,5 @@ var ConnectionConfig = require('./lib/ConnectionConfig');
 exports.createConnection = function(config) {
   return new Connection({config: new ConnectionConfig(config)});
 };
+
+exports.escape = require('./lib/protocol/SqlString').escape;
