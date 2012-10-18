@@ -302,6 +302,15 @@ console.log(query.sql); // INSERT INTO posts SET `id` = 1, `title` = 'Hello MySQ
 
 ```
 
+If you feel the need to escape queries by yourself, you can also use the escaping
+function directly:
+
+```js
+var query = "SELECT * FROM posts WHERE title=" + mysql.escape("Hello MySQL");
+
+console.log(query); // SELECT * FROM posts WHERE title='Hello MySQL'
+```
+
 ## Getting the id of an inserted row
 
 If you are inserting a row into a table with an auto increment primary key, you
