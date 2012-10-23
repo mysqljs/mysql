@@ -15,22 +15,34 @@ connection.query([
 
 connection.query('INSERT INTO ' + table + ' SET ?', {title: 'test'});
 
-var options = {
+var options1 = {
   nestTables: true,
-  sql: 'SELECT * FROM ' + table,
+  sql: 'SELECT * FROM ' + table
 };
+var options2 = {
+  nestTables: '_',
+  sql: 'SELECT * FROM ' + table
+};
+var rows1, rows2;
 
-var rows;
-var query = connection.query(options, function(err, _rows) {
+connection.query(options1, function(err, _rows) {
   if (err) throw err;
 
-  rows = _rows;
+  rows1 = _rows;
+});
+connection.query(options2, function(err, _rows) {
+  if (err) throw err;
+
+  rows2 = _rows;
 });
 
 connection.end();
 
 process.on('exit', function() {
-  assert.equal(rows.length, 1);
-  assert.equal(rows[0].nested_test.id, 1);
-  assert.equal(rows[0].nested_test.title, 'test');
+  assert.equal(rows1.length, 1);
+  assert.equal(rows1[0].nested_test.id, 1);
+  assert.equal(rows1[0].nested_test.title, 'test');
+  assert.equal(rows2.length, 1);
+  assert.equal(rows2[0].nested_test_id, 1);
+  assert.equal(rows2[0].nested_test_title, 'test');
 });
