@@ -4,7 +4,7 @@ var assert     = require('assert');
 
 common.useTestDb(connection);
 
-var table = 'insert_test';
+var table = 'zerofill_results_test';
 connection.query([
   'CREATE TEMPORARY TABLE `' + table + '` (',
   '`id` int(11) unsigned NOT NULL AUTO_INCREMENT,',
