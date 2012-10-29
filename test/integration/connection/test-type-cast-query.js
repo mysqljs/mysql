@@ -20,10 +20,18 @@ var query = connection.query(options, function(err, _rows) {
 connection.end();
 
 process.on('exit', function() {
-  assert.strictEqual(typeof rows[0].date, 'object');
-  assert.equal(util.isDate(rows[0].date), true);
+  var point = rows[0].point;
+  var byteOrder = point.readUInt8(4);
+  var wkbType = byteOrder? point.readUInt32LE(5) : point.readUInt32BE(5);
+  var x = byteOrder? point.readDoubleLE(9) : point.readDoubleBE(9);
+  var y = byteOrder? point.readDoubleLE(17) : point.readDoubleBE(17);
 
-  assert.strictEqual(typeof rows[0].point, 'object');
-  assert.strictEqual(rows[0].point.x, 1.2);
-  assert.strictEqual(rows[0].point.y, -3.4);
+  assert.strictEqual(typeof rows[0].date, 'object');
+  assert.equal(Buffer.isBuffer(rows[0].date), true);
+  assert.strictEqual(typeof point, 'object');
+  assert.equal(Buffer.isBuffer(point), true);
+  assert.equal(point.readUInt32LE(0), 0); // unknown
+  assert.equal(wkbType, 1); // WKBPoint
+  assert.equal(x, 1.2);
+  assert.equal(y, -3.4);
 });
