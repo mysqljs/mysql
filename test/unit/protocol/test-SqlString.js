@@ -36,7 +36,7 @@ test('SqlString.escape', {
   'arrays are turned into lists': function() {
     assert.equal(SqlString.escape([1, 2, 'c']), "1, 2, 'c'");
   },
-  
+
   'nested arrays are turned into grouped lists': function() {
     assert.equal(SqlString.escape([[1,2,3], [4,5,6], ['a', 'b', {nested: true}]]), "(1, 2, 3), (4, 5, 6), ('a', 'b', '[object Object]')");
   },
@@ -87,7 +87,7 @@ test('SqlString.escape', {
 
   'dates are converted to YYYY-MM-DD HH:II:SS': function() {
     var expected = '2012-05-07 11:42:03';
-    var date     = new Date(expected);
+    var date     = new Date(Date.UTC(2012, 4, 7, 11, 42, 3));
     var string   = SqlString.escape(date);
 
     assert.strictEqual(string, "'" + expected + "'");
@@ -106,7 +106,7 @@ test('SqlString.escape', {
 
   'Infinity -> Infinity': function() {
     assert.equal(SqlString.escape(Infinity), 'Infinity');
-  },
+  }
 });
 
 test('SqlString.format', {

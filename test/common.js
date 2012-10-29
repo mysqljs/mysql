@@ -28,7 +28,7 @@ common.createConnection = function(config) {
   if (common.isTravis()) {
     // see: http://about.travis-ci.org/docs/user/database-setup/
     config = _.extend({
-      user: 'root',
+      user: 'root'
     }, config);
   } else {
     config = _.extend({
@@ -36,7 +36,8 @@ common.createConnection = function(config) {
       port     : process.env.MYSQL_PORT,
       user     : process.env.MYSQL_USER,
       password : process.env.MYSQL_PASSWORD,
-    }, config)
+      timezone : "+05:00"
+    }, config);
   }
 
   return Mysql.createConnection(config);
