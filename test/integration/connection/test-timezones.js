@@ -7,12 +7,14 @@ common.useTestDb(connection);
 var table = 'timezone_test';
 connection.query([
   'CREATE TEMPORARY TABLE `' + table + '`(',
-  '`offset` float,',
+  '`offset` varchar(10),',
   '`dt` datetime',
   ') ENGINE=InnoDB DEFAULT CHARSET=utf8'
 ].join('\n'));
 
-var tests = [ 0, 1, 5, 12, 26, -1, -5, -20, 'Z', 'local', undefined ];
+var tests = [ 0, 1, 5, 12, 26, -1, -5, -20, 'Z', 'local' ];
+
+connection.query('DELETE FROM ' + table);
 
 testNextDate();
 
@@ -31,7 +33,7 @@ function testNextDate() {
 function testDate(offset, cb) {
 	var dt = new Date();
 
-	if (offset == 'Z' || offset == 'local' || !offset) {
+	if (offset == 'Z' || offset == 'local') {
 		connection._timezone = offset;
 	} else {
 		connection._timezone = (offset < 0 ? "-" : "+") + pad2(Math.abs(offset)) + ":00";
@@ -39,14 +41,13 @@ function testDate(offset, cb) {
 	connection.query('INSERT INTO ' + table + ' SET ?', { offset: offset, dt: dt });
 
 	if (offset == 'Z') {
-		dt.setTime(dt.getTime() - (dt.getTimezoneOffset() * 60000));
-	} else if (offset != 'local' && offset) {
-		dt.setTime(dt.getTime() - (dt.getTimezoneOffset() * 60000) + (offset * 3600000));
+		dt.setTime(dt.getTime() + (dt.getTimezoneOffset() * 60000));
+	} else if (offset != 'local') {
+		dt.setTime(dt.getTime() + (dt.getTimezoneOffset() * 60000) + (offset * 3600000));
 	}
 
 	connection.query({
-		sql: 'SELECT * FROM ' + table + ' WHERE offset ' + (offset === undefined ? 'IS NULL' : '= ?'),
-		values: [ offset ],
+		sql: 'SELECT * FROM ' + table + ' WHERE offset = \'' + offset + '\'',
 		typeCast: function (field, parser, timeZone, next) {
 			if (field.type != 12) return next();
 
