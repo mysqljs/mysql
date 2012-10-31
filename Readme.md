@@ -139,6 +139,7 @@ When establishing a connection, you can set the following options:
 * `password`: The password of that MySQL user.
 * `database`: Name of the database to use for this connection (Optional).
 * `charset`: The charset for the connection. (Default: `'UTF8_GENERAL_CI'`)
+* `timezone`: The timezone used to store local dates. (Default: `'local'`)
 * `insecureAuth`: Allow connecting to MySQL instances that ask for the old
   (insecure) authentication method. (Default: `false`)
 * `typeCast`: Determines if column values should be converted to native
@@ -151,7 +152,7 @@ In addition to passing these options as an object, you can also use a url
 string. For example:
 
 ```js
-var connection = mysql.createConnection('mysql://user:pass@host/db?debug=true&charset=BIG5_CHINESE_CI');
+var connection = mysql.createConnection('mysql://user:pass@host/db?debug=true&charset=BIG5_CHINESE_CI&timezone=-0700');
 ```
 
 Note: The query values are first attempted to be parsed as JSON, and if that
