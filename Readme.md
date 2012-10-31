@@ -147,6 +147,8 @@ When establishing a connection, you can set the following options:
 * `debug`: Prints protocol details to stdout. (Default: `false`)
 * `multipleStatements`: Allow multiple mysql statements per query. Be careful
   with this, it exposes you to SQL injection attacks. (Default: `false)
+* `flags`: List of connection flags to use other than the default ones. It is
+  also possible to blacklist default ones. For more information, check [Connection Flags](#connection-flags).
 
 In addition to passing these options as an object, you can also use a url
 string. For example:
@@ -602,6 +604,49 @@ var query = connection.query(options, function(err, results) {
 
 }):
 ```
+
+## Connection Flags
+
+If, for any reason, you would like to change the default connection flags, you
+can use the connection option `flags`. Pass a string with a comma separated list
+of items to add to the default flags. If you don't want a default flag to be used
+prepend the flag with a minus sign. To add a flag that is not in the default list, don't prepend it with a plus sign, just write the flag name (case insensitive).
+
+### Example
+
+The next example blacklists FOUND_ROWS flag from default connection flags.
+
+```js
+var connection = mysql.createConnection("mysql://localhost/test?flags=-found_rows")
+```
+
+### Default Flags
+
+- LONG_PASSWORD
+- FOUND_ROWS
+- LONG_FLAG
+- CONNECT_WITH_DB
+- ODBC
+- LOCAL_FILES
+- IGNORE_SPACE
+- PROTOCOL_41
+- IGNORE_SIGPIPE
+- TRANSACTIONS
+- RESERVED
+- SECURE_CONNECTION
+- MULTI_RESULTS
+- MULTI_STATEMENTS (used if `multipleStatements` option is activated)
+
+### Other Available Flags
+
+- NO_SCHEMA
+- COMPRESS
+- INTERACTIVE
+- SSL
+- PS_MULTI_RESULTS
+- PLUGIN_AUTH
+- SSL_VERIFY_SERVER_CERT
+- REMEMBER_OPTIONS
 
 ## Debugging and reporting problems
 
