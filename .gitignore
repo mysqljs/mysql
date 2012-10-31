@@ -1,3 +1,5 @@
 *.un~
 
 /node_modules
+
+*.sublime-*
