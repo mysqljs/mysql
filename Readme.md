@@ -1,3 +1,9 @@
+
+NOTE ON THIS FORK
+
+this fork adds an event emission "endOfQueue" whenever the end of the queue is reached.
+
+
 # node-mysql
 
 [![Build Status](https://secure.travis-ci.org/felixge/node-mysql.png)](http://travis-ci.org/felixge/node-mysql)
