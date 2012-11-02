@@ -14,11 +14,11 @@ if (common.isTravis()) {
 var err;
 connection.changeUser({user: 'does-not-exist'}, function(_err) {
   err = _err;
+  connection.end();
 });
-connection.end();
 
 process.on('exit', function() {
-  if (err === null) return;
+  if (process.env.NO_GRANT == '1' && err === null) return;
   assert.equal(err.code, 'ER_ACCESS_DENIED_ERROR');
   assert.equal(err.fatal, true);
 });

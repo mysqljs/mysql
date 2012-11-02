@@ -12,9 +12,13 @@ var connectErr;
 connection.connect(function(err) {
   assert.equal(connectErr, undefined);
   connectErr = err;
+
+  connection.end();
 });
 
 process.on('exit', function() {
+  if (process.env.NO_GRANT == '1' && typeof endErr == 'undefined') return;
+
   assert.equal(endErr.code, 'ER_ACCESS_DENIED_ERROR');
   assert.ok(/access denied/i.test(endErr.message));
 
