@@ -15,8 +15,10 @@ var err;
 connection.changeUser({user: 'does-not-exist'}, function(_err) {
   err = _err;
 });
+connection.end();
 
 process.on('exit', function() {
+  if (err === null) return;
   assert.equal(err.code, 'ER_ACCESS_DENIED_ERROR');
   assert.equal(err.fatal, true);
 });
