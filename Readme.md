@@ -460,6 +460,22 @@ connection.query(options, function(err, results) {
 });
 ```
 
+Or use a string separator to have your results merged.
+
+```js
+var options = {sql: '...', nestTables: '_'};
+connection.query(options, function(err, results) {
+  /* results will be an array like this now:
+  [{
+    table1_fieldA: '...',
+    table1_fieldB: '...',
+    table2_fieldA: '...',
+    table2_fieldB: '...'
+  }, ...]
+  */
+});
+```
+
 ## Error handling
 
 This module comes with a consistent approach to error handling that you should
