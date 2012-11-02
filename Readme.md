@@ -620,7 +620,7 @@ prepend the flag with a minus sign. To add a flag that is not in the default lis
 The next example blacklists FOUND_ROWS flag from default connection flags.
 
 ```js
-var connection = mysql.createConnection("mysql://localhost/test?flags=-found_rows")
+var connection = mysql.createConnection("mysql://localhost/test?flags=-FOUND_ROWS")
 ```
 
 ### Default Flags
