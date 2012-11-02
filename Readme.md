@@ -612,6 +612,9 @@ can use the connection option `flags`. Pass a string with a comma separated list
 of items to add to the default flags. If you don't want a default flag to be used
 prepend the flag with a minus sign. To add a flag that is not in the default list, don't prepend it with a plus sign, just write the flag name (case insensitive).
 
+**Please note that some available flags that are not default are still not supported
+(e.g.: SSL, Compression). Use at your own risk.**
+
 ### Example
 
 The next example blacklists FOUND_ROWS flag from default connection flags.
