@@ -5,9 +5,6 @@ module.exports = function (Connection) {
     values = values || {};
 
     return sql.replace(/\:(\w+)/, function (m, k) {
-      if (!values.hasOwnProperty(k)) {
-        return 'NULL';
-      }
       return SqlString.escape(values[k], false, Connection._timezone);
     });
   };
