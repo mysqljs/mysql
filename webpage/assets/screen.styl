@@ -1,0 +1,133 @@
+section-margin = 100px
+
+body-font(size, weight = 100)
+	font weight size "Helvetica Neue", Helvetica, Arial, sans-serif
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td
+	margin 0
+	padding 0
+	border 0
+	outline 0
+	font-weight inherit
+	font-style inherit
+	font-family inherit
+	font-size 100%
+	vertical-align baseline
+body
+	line-height 1
+ol, ul
+	list-style none
+table
+	border-collapse separate
+	border-spacing 0
+	vertical-align middle
+caption, th, td
+	text-align left
+	font-weight normal
+	vertical-align middle
+a img
+	border none
+
+body
+	background #fff
+	color #444
+	font 400 14px/1.6 "Open Sans", sans-serif
+
+nav
+	position fixed
+	top 0
+	left 0
+	width 100%
+	font-size 12px
+	background rgba(255, 255, 255, .97)
+
+	ul
+		padding 1em
+		text-align right
+
+	li
+		display inline-block
+
+	a
+		padding .5em 1em
+		color #777
+		text-decoration none
+
+		&:hover
+			text-decoration underline
+
+		&.selected
+			font-weight bold
+			color #222
+
+header
+	margin 2em
+	padding section-margin
+	padding-right 300px
+	background url(mysql_logo.png) right center no-repeat
+	border-left 1px solid #eee
+
+nav + header
+	margin-top 15%
+
+section
+	padding section-margin
+
+h1
+	body-font(60px, 400)
+	color #353535
+
+h2
+	body-font(60px)
+
+h3
+	margin 2em 0 .5em
+	body-font(30px)
+	letter-spacing .1em
+
+h4
+	margin 2em 0 .5em
+	body-font(18px, 400)
+	letter-spacing .1em
+
+a
+	color #4183C4
+
+p
+	padding .5em 0
+
+pre
+	color #353535
+	font-size 14px
+	line-height 1.4
+	margin 20px 0
+	padding 20px
+	background #fff
+	border 1px solid #e7e7e7;
+	border-bottom 1px solid #ddd
+	box-shadow 0 1px 3px 0 #eee
+	border-radius 3px
+
+	code
+		font-family monaco, monospace
+		font-size .8em
+
+code
+	.keyword
+		color #8a6343
+
+	.string
+		color #5890ad
+
+	.number
+		color #2f6fad
+
+	.comment
+		color #888

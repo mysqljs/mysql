@@ -1,0 +1,185 @@
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  font-weight: inherit;
+  font-style: inherit;
+  font-family: inherit;
+  font-size: 100%;
+  vertical-align: baseline;
+}
+body {
+  line-height: 1;
+}
+ol,
+ul {
+  list-style: none;
+}
+table {
+  border-collapse: separate;
+  border-spacing: 0;
+  vertical-align: middle;
+}
+caption,
+th,
+td {
+  text-align: left;
+  font-weight: normal;
+  vertical-align: middle;
+}
+a img {
+  border: none;
+}
+body {
+  background: #fff;
+  color: #444;
+  font: 400 14px/1.6 "Open Sans", sans-serif;
+}
+nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  font-size: 12px;
+  background: rgba(255,255,255,0.97);
+}
+nav ul {
+  padding: 1em;
+  text-align: right;
+}
+nav li {
+  display: inline-block;
+}
+nav a {
+  padding: 0.5em 1em;
+  color: #777;
+  text-decoration: none;
+}
+nav a:hover {
+  text-decoration: underline;
+}
+nav a.selected {
+  font-weight: bold;
+  color: #222;
+}
+header {
+  margin: 2em;
+  padding: 100px;
+  padding-right: 300px;
+  background: url("mysql_logo.png") right center no-repeat;
+  border-left: 1px solid #eee;
+}
+nav + header {
+  margin-top: 15%;
+}
+section {
+  padding: 100px;
+}
+h1 {
+  font: 400 60px "Helvetica Neue", Helvetica, Arial, sans-serif;
+  color: #353535;
+}
+h2 {
+  font: 100 60px "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+h3 {
+  margin: 2em 0 0.5em;
+  font: 100 30px "Helvetica Neue", Helvetica, Arial, sans-serif;
+  letter-spacing: 0.1em;
+}
+h4 {
+  margin: 2em 0 0.5em;
+  font: 400 18px "Helvetica Neue", Helvetica, Arial, sans-serif;
+  letter-spacing: 0.1em;
+}
+a {
+  color: #4183c4;
+}
+p {
+  padding: 0.5em 0;
+}
+pre {
+  color: #353535;
+  font-size: 14px;
+  line-height: 1.4;
+  margin: 20px 0;
+  padding: 20px;
+  background: #fff;
+  border: 1px solid #e7e7e7;
+  border-bottom: 1px solid #ddd;
+  box-shadow: 0 1px 3px 0 #eee;
+  border-radius: 3px;
+}
+pre code {
+  font-family: monaco, monospace;
+  font-size: 0.8em;
+}
+code .keyword {
+  color: #8a6343;
+}
+code .string {
+  color: #5890ad;
+}
+code .number {
+  color: #2f6fad;
+}
+code .comment {
+  color: #888;
+}
