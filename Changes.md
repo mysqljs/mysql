@@ -4,6 +4,25 @@ This file is a manually maintained list of changes for each release. Feel free
 to add your changes here when sending pull requests. Also send corrections if
 you spot any mistakes.
 
+## v2.0.0-alpha4 (2012-10-03)
+
+* Fix some OOB errors on resume()
+* Fix quick pause() / resume() usage
+* Properly parse host denied / similar errors
+* Add Connection.ChangeUser functionality
+* Make sure changeUser errors are fatal
+* Enable formatting nested arrays for bulk inserts
+* Add Connection.escape functionality
+* Renamed 'close' to 'end' event
+* Return parsed object instead of Buffer for GEOMETRY types
+* Allow nestTables inline (using a string instead of a boolean)
+* Check for ZEROFILL_FLAG and format number accordingly
+* Add timezone support (default: local)
+* Add custom typeCast functionality
+* Export mysql column types
+* Add connection flags functionality (#237)
+* Exports drain event when queue finishes processing (#272, #271, #306)
+
 ## v2.0.0-alpha3 (2012-06-12)
 
 * Implement support for `LOAD DATA LOCAL INFILE` queries (#182).
