@@ -621,6 +621,26 @@ var query = connection.query(options, function(err, results) {
 }):
 ```
 
+You can also pass a function and handle type casting yourself. You're given some
+column information like database, table and name and also type and length. If you
+just want to apply a custom type casting to a specific type you can call the default.
+Here's an example of converting `TINYINT(1)` to boolean:
+
+```js
+connection.query({
+  sql: '...',
+  typeCast: function (field, next) {
+    if (field.type == 'TINY' && field.length == 1) {
+      return (field.string() == '1'); // 1 = true, 0 = false
+    }
+    return next();
+  }
+})
+```
+
+If you need a buffer there's also a `.buffer()` function and also a `.geometry()` one
+both used by the default type cast that you can use.
+
 ## Connection Flags
 
 If, for any reason, you would like to change the default connection flags, you
