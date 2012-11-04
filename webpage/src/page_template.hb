@@ -4,7 +4,7 @@
 		<meta name="author" value="Diogo Resende, dresende@thinkdigital.pt" />
 		<link rel="stylesheet" type="text/css" href="assets/screen.css" />
 	</head>
-	<body id="index">
+	<body>
 		<nav>
 			<ul>
 				{{#each pages}}
@@ -13,8 +13,8 @@
 				<li><a href="http://github.com/felixge/node-mysql" target="_blank">Community</a></li>
 			</ul>
 		</nav>
-		<header>
+		<section>
 			{{{page.content}}}
-		</header>
+		</section>
 	</body>
 </html>

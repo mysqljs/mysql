@@ -3,37 +3,7 @@ section-margin = 100px
 body-font(size, weight = 100)
 	font weight size "Helvetica Neue", Helvetica, Arial, sans-serif
 
-html, body, div, span, applet, object, iframe,
-h1, h2, h3, h4, h5, h6, p, blockquote, pre,
-a, abbr, acronym, address, big, cite, code,
-del, dfn, em, img, ins, kbd, q, s, samp,
-small, strike, strong, sub, sup, tt, var,
-dl, dt, dd, ol, ul, li,
-fieldset, form, label, legend,
-table, caption, tbody, tfoot, thead, tr, th, td
-	margin 0
-	padding 0
-	border 0
-	outline 0
-	font-weight inherit
-	font-style inherit
-	font-family inherit
-	font-size 100%
-	vertical-align baseline
-body
-	line-height 1
-ol, ul
-	list-style none
-table
-	border-collapse separate
-	border-spacing 0
-	vertical-align middle
-caption, th, td
-	text-align left
-	font-weight normal
-	vertical-align middle
-a img
-	border none
+global-reset()
 
 body
 	background #fff
@@ -47,6 +17,8 @@ nav
 	width 100%
 	font-size 12px
 	background rgba(255, 255, 255, .97)
+	border-bottom 1px solid #ccc
+	box-shadow 0 1px 3px #eee
 
 	ul
 		padding 1em
@@ -67,6 +39,10 @@ nav
 			font-weight bold
 			color #222
 
+#index nav
+	border 0
+	box-shadow none
+
 header
 	margin 2em
 	padding section-margin
@@ -75,7 +51,7 @@ header
 	border-left 1px solid #eee
 
 nav + header
-	margin-top 15%
+	margin-top 5%
 
 section
 	padding section-margin
@@ -131,3 +107,11 @@ code
 
 	.comment
 		color #888
+
+p code, ul code
+	padding 2px 8px
+	font-family monaco, monospace
+	font-size .75em
+	background #efefef
+	border 1px solid #eaeaea
+	border-radius 3px
