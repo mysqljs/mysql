@@ -18,7 +18,7 @@ var results;
 connection.query("INSERT INTO " + table + " VALUES (1, 0), (2, 1), (3, NULL)");
 connection.query({
   sql: "SELECT * FROM " + table,
-  typeCast: function (field, parser, tz, next) {
+  typeCast: function (field, parser, next) {
     if (field.type != Mysql.Types.TINY) {
       return next();
     }

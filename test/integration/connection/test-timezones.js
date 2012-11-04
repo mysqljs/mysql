@@ -34,9 +34,9 @@ function testDate(offset, cb) {
 	var dt = new Date();
 
 	if (offset == 'Z' || offset == 'local') {
-		connection._timezone = offset;
+		connection.config.timezone = offset;
 	} else {
-		connection._timezone = (offset < 0 ? "-" : "+") + pad2(Math.abs(offset)) + ":00";
+		connection.config.timezone = (offset < 0 ? "-" : "+") + pad2(Math.abs(offset)) + ":00";
 	}
 	connection.query('INSERT INTO ' + table + ' SET ?', { offset: offset, dt: dt });
 
@@ -48,7 +48,7 @@ function testDate(offset, cb) {
 
 	connection.query({
 		sql: 'SELECT * FROM ' + table + ' WHERE offset = \'' + offset + '\'',
-		typeCast: function (field, parser, timeZone, next) {
+		typeCast: function (field, parser, next) {
 			if (field.type != 12) return next();
 
 			return new Date(parser.parseLengthCodedString());
