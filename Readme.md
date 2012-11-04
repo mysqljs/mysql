@@ -623,8 +623,8 @@ var query = connection.query(options, function(err, results) {
 
 You can also pass a function and handle type casting yourself. You're given some
 column information like database, table and name and also type and length. If you
-just want to apply a custom type casting to a specific type you can call the default.
-Here's an example of converting `TINYINT(1)` to boolean:
+just want to apply a custom type casting to a specific type you can do it and then
+fallback to the default. Here's an example of converting `TINYINT(1)` to boolean:
 
 ```js
 connection.query({
