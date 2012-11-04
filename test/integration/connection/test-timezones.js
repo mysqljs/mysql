@@ -48,10 +48,10 @@ function testDate(offset, cb) {
 
 	connection.query({
 		sql: 'SELECT * FROM ' + table + ' WHERE offset = \'' + offset + '\'',
-		typeCast: function (field, parser, next) {
-			if (field.type != 12) return next();
+		typeCast: function (field, next) {
+			if (field.type != 'DATETIME') return next();
 
-			return new Date(parser.parseLengthCodedString());
+			return new Date(field.string());
 		}
 	}, function (err, result) {
 		if (err) throw err;
