@@ -18,12 +18,12 @@ var results;
 connection.query("INSERT INTO " + table + " VALUES (1, 0), (2, 1), (3, NULL)");
 connection.query({
   sql: "SELECT * FROM " + table,
-  typeCast: function (field, parser, tz, next) {
-    if (field.type != Mysql.Types.TINY) {
+  typeCast: function (field, next) {
+    if (field.type != 'TINY') {
       return next();
     }
 
-    var val = parser.parseLengthCodedString();
+    var val = field.string();
 
     if (val === null) {
       return null;
