@@ -110,8 +110,8 @@ process.on('exit', function() {
                 '" test: ' + test.type + '';
       assert.deepEqual(expected, got, message);
     } else {
-      message = 'got: "' + got + '" expected: "' + expected +
-                '" test: ' + test.type + '';
+      message = 'got: "' + got + '" (' + (typeof got) + ') expected: "' + expected +
+                '" (' + (typeof expected) + ') test: ' + test.type + '';
       assert.strictEqual(expected, got, message);
     }
   });
