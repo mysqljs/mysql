@@ -13,6 +13,22 @@ function packet(bytes) {
 }
 
 test('Parser', {
+  "parseBuffer: buffer won\'t change after appending another one": function() {
+    var startBuffer = new Buffer(5);
+    startBuffer.fill('a');
+
+    var parser = new Parser();
+    parser.append(startBuffer);
+
+    var value = parser.parseBuffer(4);
+
+    assert.equal(value.toString(), 'aaaa');
+
+    parser.append(new Buffer('b'));
+
+    assert.equal(value.toString(), 'aaaa');
+  },
+
   'parseUnsignedNumber: 1 byte': function() {
     var value = packet([5]).parseUnsignedNumber(1);
     assert.equal(value, 5);
