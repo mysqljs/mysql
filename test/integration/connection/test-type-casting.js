@@ -5,15 +5,15 @@ var assert     = require('assert');
 common.useTestDb(connection);
 
 var tests = [
-  {type: 'decimal(3,3)', insert: '0.330'},
-  {type: 'decimal(3,3)', insert: 0.33, expect: '0.330'},
+  {type: 'decimal(3,3)', insert: '0.330', expect: 0.33 },
+  {type: 'decimal(3,3)', insert: 0.33},
   {type: 'tinyint', insert: 1},
   {type: 'smallint', insert: 2},
   {type: 'int', insert: 3},
   {type: 'float', insert: 4.5},
   {type: 'double', insert: 5.5},
-  {type: 'bigint', insert: '6'},
-  {type: 'bigint', insert: 6, expect: '6'},
+  {type: 'bigint', insert: '6', expect: 6},
+  {type: 'bigint', insert: 6},
   {type: 'mediumint', insert: 7},
   {type: 'year', insert: 2012},
   {type: 'timestamp', insert: new Date('2012-05-12 11:00:23')},
