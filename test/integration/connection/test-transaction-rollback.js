@@ -29,13 +29,13 @@ connection.query('ROLLBACK');
 
 var rows;
 var query = connection.query('SELECT * FROM ' + table, function(err, _rows) {
-	if (err) throw err;
+  if (err) throw err;
 
-	rows = _rows;
+  rows = _rows;
 });
 
 connection.end();
 
 process.on('exit', function() {
-	assert.equal(rows.length, 0);
+  assert.equal(rows.length, 0);
 });
