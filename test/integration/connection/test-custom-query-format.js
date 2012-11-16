@@ -4,6 +4,7 @@ var connection = common.createConnection();
 var assert     = require('assert');
 
 connection.config.queryFormat = function (query, values, tz) {
+  if (!values) return query;
   return query.replace(/\:(\w+)/g, function (txt, key) {
     if (values.hasOwnProperty(key)) {
       return connection.escape(values[key]);
@@ -13,3 +14,5 @@ connection.config.queryFormat = function (query, values, tz) {
 };
 
 assert.equal(connection.format("SELECT :a1, :a2", { a1: 1, a2: 'two' }), "SELECT 1, 'two'");
+assert.equal(connection.format("SELECT :a1", []), "SELECT :a1");
+assert.equal(connection.format("SELECT :a1"), "SELECT :a1");
