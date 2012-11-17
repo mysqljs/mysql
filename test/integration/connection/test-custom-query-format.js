@@ -7,10 +7,10 @@ connection.config.queryFormat = function (query, values, tz) {
   if (!values) return query;
   return query.replace(/\:(\w+)/g, function (txt, key) {
     if (values.hasOwnProperty(key)) {
-      return connection.escape(values[key]);
+      return this.escape(values[key]);
     }
     return txt;
-  });
+  }.bind(this));
 };
 
 assert.equal(connection.format("SELECT :a1, :a2", { a1: 1, a2: 'two' }), "SELECT 1, 'two'");
