@@ -144,6 +144,7 @@ When establishing a connection, you can set the following options:
   (insecure) authentication method. (Default: `false`)
 * `typeCast`: Determines if column values should be converted to native
    JavaScript types. (Default: `true`)
+* `queryFormat`: A custom query format function. See [Custom format](#custom-format).
 * `debug`: Prints protocol details to stdout. (Default: `false`)
 * `multipleStatements`: Allow multiple mysql statements per query. Be careful
   with this, it exposes you to SQL injection attacks. (Default: `false)
@@ -312,6 +313,26 @@ function directly:
 var query = "SELECT * FROM posts WHERE title=" + mysql.escape("Hello MySQL");
 
 console.log(query); // SELECT * FROM posts WHERE title='Hello MySQL'
+```
+
+### Custom format
+
+If you prefer to have another type of query escape format, there's a connection configuration option you can use to define a custom format function. You can access the connection object if you want to use the built-in `.escape()` or any other connection function.
+
+Here's an example of how to implement another format:
+
+```js
+connection.config.queryFormat = function (query, values) {
+  if (!values) return query;
+  return query.replace(/\:(\w+)/g, function (txt, key) {
+    if (values.hasOwnProperty(key)) {
+      return this.escape(values[key]);
+    }
+    return txt;
+  }.bind(this));
+};
+
+connection.query("UPDATE posts SET title = :title", { title: "Hello MySQL" });
 ```
 
 ## Getting the id of an inserted row
