@@ -14,8 +14,7 @@
     "node": "*"
   },
   "dependencies": {
-    "require-all": "0.0.3",
-    "semver": "1.1.0"
+    "require-all": "0.0.3"
   },
   "devDependencies": {
     "utest": "0.0.6",
