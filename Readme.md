@@ -315,6 +315,30 @@ var query = "SELECT * FROM posts WHERE title=" + mysql.escape("Hello MySQL");
 console.log(query); // SELECT * FROM posts WHERE title='Hello MySQL'
 ```
 
+## Escaping query identifiers
+
+If you can't trust an SQL identifier (database / table / column name) because it is
+provided by a user, you should escape it with `mysql.escapeId(identifier)` like this:
+
+```js
+var sorter = 'date';
+var query = 'SELECT * FROM posts ORDER BY ' + mysql.escapeId(sorter);
+
+console.log(query); // SELECT * FROM posts ORDER BY `date`
+```
+
+It also supports adding qualified identifiers. It will escape both parts.
+
+```js
+var sorter = 'date';
+var query = 'SELECT * FROM posts ORDER BY ' + mysql.escapeId('posts.date');
+
+console.log(query); // SELECT * FROM posts ORDER BY `posts`.`date`
+```
+
+When you pass an Object to `.escape()` or `.query()`, `.escapeId()` is used to avoid SQL
+injection in object keys.
+
 ### Custom format
 
 If you prefer to have another type of query escape format, there's a connection configuration option you can use to define a custom format function. You can access the connection object if you want to use the built-in `.escape()` or any other connection function.
