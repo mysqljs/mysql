@@ -331,7 +331,7 @@ It also supports adding qualified identifiers. It will escape both parts.
 
 ```js
 var sorter = 'date';
-var query = 'SELECT * FROM posts ORDER BY ' + mysql.escapeId('posts.date');
+var query = 'SELECT * FROM posts ORDER BY ' + mysql.escapeId('posts.' + sorter);
 
 console.log(query); // SELECT * FROM posts ORDER BY `posts`.`date`
 ```
