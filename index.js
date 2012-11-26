@@ -1,10 +1,12 @@
 var Connection       = require('./lib/Connection');
 var ConnectionConfig = require('./lib/ConnectionConfig');
 var Types            = require('./lib/protocol/constants/types');
+var SqlString        = require('./lib/protocol/SqlString');
 
 exports.createConnection = function(config) {
   return new Connection({config: new ConnectionConfig(config)});
 };
 
-exports.escape = require('./lib/protocol/SqlString').escape;
-exports.Types = Types;
+exports.Types    = Types;
+exports.escape   = SqlString.escape;
+exports.escapeId = SqlString.escapeId;
