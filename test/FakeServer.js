@@ -57,8 +57,7 @@ FakeConnection.prototype.handshake = function(options) {
   this._handshakeInitializationPacket = new Packets.HandshakeInitializationPacket({
     scrambleBuff1       : new Buffer(8),
     scrambleBuff2       : new Buffer(12),
-    serverVersion       : '4.1', // force protocol for >4.1
-    serverCapabilities1 : 512,
+    serverCapabilities1 : 512, // only 1 flag, PROTOCOL_41
     protocol41          : true
   });
 
