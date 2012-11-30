@@ -42,6 +42,12 @@ common.createConnection = function(config) {
   return Mysql.createConnection(config);
 };
 
+common.createPool = function(config) {
+  config = config || {};
+  config.createConnection = common.createConnection;
+  return Mysql.createPool(config);
+};
+
 common.createFakeServer = function(options) {
   return new FakeServer(_.extend({}, options));
 };
