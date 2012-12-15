@@ -7,6 +7,8 @@ exports.createConnection = function(config) {
   return new Connection({config: new ConnectionConfig(config)});
 };
 
+exports.createQuery = Connection.createQuery;
+
 exports.Types    = Types;
 exports.escape   = SqlString.escape;
 exports.escapeId = SqlString.escapeId;
