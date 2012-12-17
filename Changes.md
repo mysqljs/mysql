@@ -4,6 +4,19 @@ This file is a manually maintained list of changes for each release. Feel free
 to add your changes here when sending pull requests. Also send corrections if
 you spot any mistakes.
 
+## v2.0.0-alpha5 (2012-12-03)
+
+* Add mysql.escapeId to escape identifiers (closes #342)
+* Allow custom escaping mode (config.queryFormat)
+* Convert DATE columns to configured timezone instead of UTC (#332)
+* Convert LONGLONG and NEWDECIMAL to numbers (#333)
+* Fix Connection.escape() (fixes #330)
+* Changed Readme ambiguity about custom type cast fallback
+* Change typeCast to receive Connection instead of Connection.config.timezone
+* Fix drain event having useless err parameter
+* Add Connection.statistics() back from v0.9
+* Add Connection.ping() back from v0.9
+
 ## v2.0.0-alpha4 (2012-10-03)
 
 * Fix some OOB errors on resume()
