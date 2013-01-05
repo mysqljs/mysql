@@ -188,6 +188,66 @@ connection.destroy();
 
 Unlike `end()` the `destroy()` method does not take a callback argument.
 
+## Pooling connections
+
+Connections can be pooled to ease sharing a single connection, or managing
+multiple connections.
+
+```js
+var mysql = require('mysql');
+var pool  = mysql.createPool({
+  host     : 'example.org',
+  user     : 'bob',
+  password : 'secret'
+});
+
+pool.getConnection(function(err, connection) {
+  // connected! (unless `err` is set)
+});
+```
+
+When you are done with a connections, just call `end` and the connection will
+return to the pool, ready to be used again by someone else.
+
+```js
+var mysql = require('mysql');
+var pool  = mysql.createPool(...);
+
+pool.getConnection(function(err, connection) {
+  // Use the connection
+  connection.query( 'SELECT something FROM sometable', function(err, rows) {
+    // And done with the connection.
+    connection.end();
+
+    // Don't use the connection here, it has been returned to the pool.
+  });
+});
+```
+
+If you would like to close the connection and remove it from the pool, use
+`connection.destroy()` instead. The pool will create a new connection the next
+time one is needed.
+
+Connections are lazily created by the pool. If you configure the pool to allow
+up to 100 connections, but only ever use 5 simultaneously, only 5 connections
+will be made. Connections are also cycled round-robin style, with connections
+being taken from the top of the pool and returning to the bottom.
+
+## Pool options
+
+Pools accept all the same options as a connection. When creating a new
+connection, the options are simply passed to the connection constructor. In
+addition to those options pools accept a few extras:
+
+* `createConnection`: The function to use to create the connection. (Default:
+  `mysql.createConnection`)
+* `waitForConnections`: Determines the pool's action when no connections are
+  available and the limit has been reached. If `true`, the pool will queue the
+  connection request and call it when one becomes available. If `false`, the
+  pool will immediately call back with an error. (Default: `true`)
+* `connectionLimit`: The maximum number of connections to create at once.
+  (Default: `10`)
+
 ## Switching users / altering connection state
 
 MySQL offers a changeUser command that allows you to alter the current user and
