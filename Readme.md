@@ -814,6 +814,5 @@ will have:
 
 * Prepared statements
 * setTimeout() for Connection / Query
-* connection pooling
 * Support for encodings other than UTF-8 / ASCII
 * API support for transactions, similar to [php](http://www.php.net/manual/en/mysqli.quickstart.transactions.php)
