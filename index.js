@@ -13,6 +13,8 @@ exports.createPool = function(config) {
   return new Pool({config: new PoolConfig(config)});
 };
 
+exports.createQuery = Connection.createQuery;
+
 exports.Types    = Types;
 exports.escape   = SqlString.escape;
 exports.escapeId = SqlString.escapeId;
