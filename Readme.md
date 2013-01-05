@@ -206,8 +206,8 @@ pool.getConnection(function(err, connection) {
 });
 ```
 
-When you are done with a connections, just call `end` and the connection will
-return to the pool, ready to be used again by someone else.
+When you are done with a connection, just call `connection.end()` and the
+connection will return to the pool, ready to be used again by someone else.
 
 ```js
 var mysql = require('mysql');
