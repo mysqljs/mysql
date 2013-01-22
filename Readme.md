@@ -147,7 +147,7 @@ When establishing a connection, you can set the following options:
 * `queryFormat`: A custom query format function. See [Custom format](#custom-format).
 * `debug`: Prints protocol details to stdout. (Default: `false`)
 * `multipleStatements`: Allow multiple mysql statements per query. Be careful
-  with this, it exposes you to SQL injection attacks. (Default: `false)
+  with this, it exposes you to SQL injection attacks. (Default: `false`)
 * `flags`: List of connection flags to use other than the default ones. It is
   also possible to blacklist default ones. For more information, check [Connection Flags](#connection-flags).
 
