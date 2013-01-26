@@ -4,8 +4,8 @@ var pool      = common.createPool();
 var poolEnded = false;
 
 pool.end(function(err) {
-  if (err) throw err;
   poolEnded = true;
+  if (err) throw err;
 });
 
 process.on('exit', function() {

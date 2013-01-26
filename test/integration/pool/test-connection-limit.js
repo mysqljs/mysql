@@ -17,9 +17,7 @@ pool.getConnection(function(err, connection) {
       assert.ok(shouldGetConnection);
       assert.strictEqual(connection, connection2);
 
-      pool.end(function(err) {
-        if (err) throw err;
-      });
+      pool.end();
     });
 
     shouldGetConnection = true;
