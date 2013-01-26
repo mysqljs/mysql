@@ -308,8 +308,8 @@ As you can see in the example above, re-connecting a connection is done by
 establishing a new connection. Once terminated, an existing connection object
 cannot be re-connected by design.
 
-This logic will also be part of connection pool support once I add that to this
-library.
+With Pool, disconnected connections will be removed from the pool freeing up
+space for a new connection to be created on the next getConnection call.
 
 ## Escaping query values
 
@@ -435,12 +435,8 @@ connection.query('INSERT INTO posts SET ?', {title: 'test'}, function(err, resul
 ## Executing queries in parallel
 
 The MySQL protocol is sequential, this means that you need multiple connections
-to execute queries in parallel. Future version of this module may ship with a
-connection pool implementation, but for now you have to figure out how to
-manage multiple connections yourself if you want to execute queries in
-parallel.
-
-One simple approach is to create one connection per incoming http request.
+to execute queries in parallel. You can use a Pool to manage connections, one
+simple approach is to create one connection per incoming http request.
 
 ## Streaming query rows
 
