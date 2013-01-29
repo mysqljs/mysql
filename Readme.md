@@ -372,6 +372,9 @@ connection.query('INSERT INTO posts SET ?', {title: 'test'}, function(err, resul
 });
 ```
 
+For huge insert ids (above JavaScript Number precision limit), the value is returned
+as String instead of a Number.
+
 ## Executing queries in parallel
 
 The MySQL protocol is sequential, this means that you need multiple connections
