@@ -93,11 +93,9 @@ test('Parser', {
     assert.strictEqual(parser.parseLengthCodedNumber(), Math.pow(2, 53) - 1);
   },
 
-  'parseLengthCodedNumber:  53 bit = Error': function() {
+  'parseLengthCodedNumber:  53 bit = String number': function() {
     var parser = packet([254, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x20, 0x00]);
-    assert.throws(function() {
-      parser.parseLengthCodedNumber();
-    }, /precision/i);
+    assert.strictEqual(parser.parseLengthCodedNumber(), '9007199254740992');
   },
 
   'parseLengthCodedNumber: 255 = Error': function() {
