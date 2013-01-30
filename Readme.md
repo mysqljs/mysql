@@ -377,6 +377,9 @@ When dealing with big numbers (above JavaScript Number precision limit), you sho
 consider enabling `supportBigNumbers` option to be able to read the insert id as a
 string, otherwise it will throw.
 
+This option is also required when fetching big numbers from the database, otherwise
+you will get values rounded to hundreds or thousands due to the precision limit.
+
 ## Executing queries in parallel
 
 The MySQL protocol is sequential, this means that you need multiple connections
