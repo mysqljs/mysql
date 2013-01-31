@@ -4,6 +4,12 @@ This file is a manually maintained list of changes for each release. Feel free
 to add your changes here when sending pull requests. Also send corrections if
 you spot any mistakes.
 
+## v2.0.0-alpha6 (2013-01-31)
+
+* Add supportBigNumbers option (#381, #382)
+* Accept prebuilt Query object in connection.query
+* Bug fixes
+
 ## v2.0.0-alpha5 (2012-12-03)
 
 * Add mysql.escapeId to escape identifiers (closes #342)
