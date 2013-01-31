@@ -14,7 +14,8 @@
     "node": "*"
   },
   "dependencies": {
-    "require-all": "0.0.3"
+    "require-all": "0.0.3",
+    "bignumber.js": "1.0.1"
   },
   "devDependencies": {
     "utest": "0.0.6",
