@@ -189,6 +189,66 @@ connection.destroy();
 
 Unlike `end()` the `destroy()` method does not take a callback argument.
 
+## Pooling connections
+
+Connections can be pooled to ease sharing a single connection, or managing
+multiple connections.
+
+```js
+var mysql = require('mysql');
+var pool  = mysql.createPool({
+  host     : 'example.org',
+  user     : 'bob',
+  password : 'secret'
+});
+
+pool.getConnection(function(err, connection) {
+  // connected! (unless `err` is set)
+});
+```
+
+When you are done with a connection, just call `connection.end()` and the
+connection will return to the pool, ready to be used again by someone else.
+
+```js
+var mysql = require('mysql');
+var pool  = mysql.createPool(...);
+
+pool.getConnection(function(err, connection) {
+  // Use the connection
+  connection.query( 'SELECT something FROM sometable', function(err, rows) {
+    // And done with the connection.
+    connection.end();
+
+    // Don't use the connection here, it has been returned to the pool.
+  });
+});
+```
+
+If you would like to close the connection and remove it from the pool, use
+`connection.destroy()` instead. The pool will create a new connection the next
+time one is needed.
+
+Connections are lazily created by the pool. If you configure the pool to allow
+up to 100 connections, but only ever use 5 simultaneously, only 5 connections
+will be made. Connections are also cycled round-robin style, with connections
+being taken from the top of the pool and returning to the bottom.
+
+## Pool options
+
+Pools accept all the same options as a connection. When creating a new
+connection, the options are simply passed to the connection constructor. In
+addition to those options pools accept a few extras:
+
+* `createConnection`: The function to use to create the connection. (Default:
+  `mysql.createConnection`)
+* `waitForConnections`: Determines the pool's action when no connections are
+  available and the limit has been reached. If `true`, the pool will queue the
+  connection request and call it when one becomes available. If `false`, the
+  pool will immediately call back with an error. (Default: `true`)
+* `connectionLimit`: The maximum number of connections to create at once.
+  (Default: `10`)
+
 ## Switching users / altering connection state
 
 MySQL offers a changeUser command that allows you to alter the current user and
@@ -249,8 +309,8 @@ As you can see in the example above, re-connecting a connection is done by
 establishing a new connection. Once terminated, an existing connection object
 cannot be re-connected by design.
 
-This logic will also be part of connection pool support once I add that to this
-library.
+With Pool, disconnected connections will be removed from the pool freeing up
+space for a new connection to be created on the next getConnection call.
 
 ## Escaping query values
 
@@ -383,12 +443,8 @@ you will get values rounded to hundreds or thousands due to the precision limit.
 ## Executing queries in parallel
 
 The MySQL protocol is sequential, this means that you need multiple connections
-to execute queries in parallel. Future version of this module may ship with a
-connection pool implementation, but for now you have to figure out how to
-manage multiple connections yourself if you want to execute queries in
-parallel.
-
-One simple approach is to create one connection per incoming http request.
+to execute queries in parallel. You can use a Pool to manage connections, one
+simple approach is to create one connection per incoming http request.
 
 ## Streaming query rows
 
@@ -762,6 +818,5 @@ will have:
 
 * Prepared statements
 * setTimeout() for Connection / Query
-* connection pooling
 * Support for encodings other than UTF-8 / ASCII
 * API support for transactions, similar to [php](http://www.php.net/manual/en/mysqli.quickstart.transactions.php)

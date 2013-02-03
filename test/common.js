@@ -25,6 +25,29 @@ common.isTravis = function() {
 };
 
 common.createConnection = function(config) {
+  config = mergeTestConfig(config);
+  return Mysql.createConnection(config);
+};
+
+common.createPool = function(config) {
+  config = mergeTestConfig(config);
+  config.createConnection = common.createConnection;
+  return Mysql.createPool(config);
+};
+
+common.createFakeServer = function(options) {
+  return new FakeServer(_.extend({}, options));
+};
+
+common.useTestDb = function(connection) {
+  var query = connection.query('CREATE DATABASE ' + common.testDatabase, function(err) {
+    if (err && err.code !== 'ER_DB_CREATE_EXISTS') throw err;
+  });
+
+  connection.query('USE ' + common.testDatabase);
+}
+
+function mergeTestConfig(config) {
   if (common.isTravis()) {
     // see: http://about.travis-ci.org/docs/user/database-setup/
     config = _.extend({
@@ -38,18 +61,5 @@ common.createConnection = function(config) {
       password : process.env.MYSQL_PASSWORD
     }, config);
   }
-
-  return Mysql.createConnection(config);
-};
-
-common.createFakeServer = function(options) {
-  return new FakeServer(_.extend({}, options));
-};
-
-common.useTestDb = function(connection) {
-  var query = connection.query('CREATE DATABASE ' + common.testDatabase, function(err) {
-    if (err && err.code !== 'ER_DB_CREATE_EXISTS') throw err;
-  });
-
-  connection.query('USE ' + common.testDatabase);
+  return config;
 }
