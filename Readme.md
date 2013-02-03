@@ -5,7 +5,7 @@
 ## Install
 
 ```bash
-npm install mysql@2.0.0-alpha5
+npm install mysql@2.0.0-alpha6
 ```
 
 Despite the alpha tag, this is the recommended version for new applications.
@@ -145,9 +145,10 @@ When establishing a connection, you can set the following options:
 * `typeCast`: Determines if column values should be converted to native
    JavaScript types. (Default: `true`)
 * `queryFormat`: A custom query format function. See [Custom format](#custom-format).
+* `supportBigNumbers`: When dealing with big numbers in the database, you should enable this option.
 * `debug`: Prints protocol details to stdout. (Default: `false`)
 * `multipleStatements`: Allow multiple mysql statements per query. Be careful
-  with this, it exposes you to SQL injection attacks. (Default: `false)
+  with this, it exposes you to SQL injection attacks. (Default: `false`)
 * `flags`: List of connection flags to use other than the default ones. It is
   also possible to blacklist default ones. For more information, check [Connection Flags](#connection-flags).
 
@@ -431,6 +432,13 @@ connection.query('INSERT INTO posts SET ?', {title: 'test'}, function(err, resul
   console.log(result.insertId);
 });
 ```
+
+When dealing with big numbers (above JavaScript Number precision limit), you should
+consider enabling `supportBigNumbers` option to be able to read the insert id as a
+string, otherwise it will throw.
+
+This option is also required when fetching big numbers from the database, otherwise
+you will get values rounded to hundreds or thousands due to the precision limit.
 
 ## Executing queries in parallel
 
