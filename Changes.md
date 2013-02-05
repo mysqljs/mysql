@@ -4,6 +4,9 @@ This file is a manually maintained list of changes for each release. Feel free
 to add your changes here when sending pull requests. Also send corrections if
 you spot any mistakes.
 
+## v2.0.0-alpha7 (2013-02-03)
+* Add connection pooling (#351)
+
 ## v2.0.0-alpha6 (2013-01-31)
 
 * Add supportBigNumbers option (#381, #382)
