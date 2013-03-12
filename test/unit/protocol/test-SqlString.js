@@ -23,6 +23,7 @@ test('SqlString.escape', {
 
   'objects are turned into key value pairs': function() {
     assert.equal(SqlString.escape({a: 'b', c: 'd'}), "`a` = 'b', `c` = 'd'");
+    assert.equal(SqlString.escape({a: 'b', c: 'd'}, null, null, true), "`a` = 'b',`c` = 'd'");
   },
 
   'objects function properties are ignored': function() {
@@ -35,14 +36,17 @@ test('SqlString.escape', {
 
   'arrays are turned into lists': function() {
     assert.equal(SqlString.escape([1, 2, 'c']), "1, 2, 'c'");
+    assert.equal(SqlString.escape([1, 2, 'c'], null, null, true), "1,2,'c'");
   },
 
   'nested arrays are turned into grouped lists': function() {
     assert.equal(SqlString.escape([[1,2,3], [4,5,6], ['a', 'b', {nested: true}]]), "(1, 2, 3), (4, 5, 6), ('a', 'b', '[object Object]')");
+    assert.equal(SqlString.escape([[1,2,3], [4,5,6], ['a', 'b', {nested: true}]], null, null, true), "(1,2,3),(4,5,6),('a','b','[object Object]')");
   },
 
   'nested objects inside arrays are cast to strings': function() {
     assert.equal(SqlString.escape([1, {nested: true}, 2]), "1, '[object Object]', 2");
+    assert.equal(SqlString.escape([1, {nested: true}, 2], null, null, true), "1,'[object Object]',2");
   },
 
   'strings are quoted': function() {
