@@ -805,7 +805,14 @@ If you are running into problems, one thing that may help is enabling the
 var connection = mysql.createConnection({debug: true});
 ```
 
-This will print all incoming and outgoing packets on stdout.
+This will print all incoming and outgoing packets on stdout. You can also restrict debugging to
+packet types by passing an array of types to debug:
+
+```js
+var connection = mysql.createConnection({debug: ['ComQueryPacket', 'RowDataPacket']});
+```
+
+to restrict debugging to the query and data packets.
 
 If that does not help, feel free to open a GitHub issue. A good GitHub issue
 will have:
