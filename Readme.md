@@ -405,6 +405,7 @@ connection.query('SELECT * FROM ?? WHERE id = ?', ['users', userId], function(er
   // ...
 });
 ```
+**Please note that this last character sequence is experimental and syntax might change**
 
 When you pass an Object to `.escape()` or `.query()`, `.escapeId()` is used to avoid SQL injection in object keys.
 
