@@ -397,8 +397,16 @@ var query = 'SELECT * FROM posts ORDER BY ' + mysql.escapeId('posts.' + sorter);
 console.log(query); // SELECT * FROM posts ORDER BY `posts`.`date`
 ```
 
-When you pass an Object to `.escape()` or `.query()`, `.escapeId()` is used to avoid SQL
-injection in object keys.
+Alternatively, you can use `??` characters as placeholders for identifiers you would
+like to have escaped like this:
+
+```js
+connection.query('SELECT * FROM ?? WHERE id = ?', ['users', userId], function(err, results) {
+  // ...
+});
+```
+
+When you pass an Object to `.escape()` or `.query()`, `.escapeId()` is used to avoid SQL injection in object keys.
 
 ### Custom format
 
