@@ -498,6 +498,24 @@ stream individual row columns, they will always be buffered up entirely. If you
 have a good use case for streaming large fields to and from MySQL, I'd love to
 get your thoughts and contributions on this.
 
+### Piping results with [Streams2](http://blog.nodejs.org/2012/12/20/streams2/) (Node v0.10+)
+
+The query object provides a convenience method `.stream([options])` that wraps
+query events into a [Readable](http://nodejs.org/api/stream.html#stream_class_stream_readable) 
+Streams2 object.  This stream can easily be piped downstream and provides
+automatic pause/resume, based on downstream congestion and the optional 
+`highWaterMark`. The `objectMode` parameter of the stream is set to `true` by
+default. 
+
+For example, piping query results into another stream (with a max buffer of 5 
+objects) is simply:
+
+```js
+connection.query('SELECT * FROM posts')
+  .stream({highWaterMark: 5})
+  .pipe(...);
+```
+
 ## Multiple statement queries
 
 Support for multiple statements is disabled for security reasons (it allows for
