@@ -4,7 +4,26 @@ This file is a manually maintained list of changes for each release. Feel free
 to add your changes here when sending pull requests. Also send corrections if
 you spot any mistakes.
 
+## v2.0.0-alpha8 (2013-04-30)
+
+* Switch to old mode for Streams 2 (Node.js v 0.10.x)
+* Add stream method to Query Wraps events from the query object into a node v0.10.x Readable stream
+* DECIMAL should also be treated as big number
+* Removed slow unnecessary stack access
+* Added charsets
+* Added bigNumberStrings option for forcing BIGINT columns as strings
+* Changes date parsing to return String if not a valid JS Date
+* Adds support for ?? escape sequence to escape identifiers
+* Changes Auth.token() to force password to be in binary, not utf8 (#378)
+* Restrict debugging by packet types
+* Add 'multipleStatements' option tracking to ConnectionConfig. Fixes GH-408
+* Changes Pool to handle 'error' events and dispose connection
+* Allows db.query({ sql: "..." }, [ val1, ... ], cb); (#390)
+* Improved documentation
+* Bug fixes
+
 ## v2.0.0-alpha7 (2013-02-03)
+
 * Add connection pooling (#351)
 
 ## v2.0.0-alpha6 (2013-01-31)
