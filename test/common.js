@@ -31,7 +31,9 @@ common.createConnection = function(config) {
 
 common.createPool = function(config) {
   config = mergeTestConfig(config);
-  config.createConnection = common.createConnection;
+  if (!config.createConnection) {
+    config.createConnection = common.createConnection;
+  }
   return Mysql.createPool(config);
 };
 
