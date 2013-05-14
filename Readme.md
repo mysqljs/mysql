@@ -255,6 +255,9 @@ addition to those options pools accept a few extras:
   pool will immediately call back with an error. (Default: `true`)
 * `connectionLimit`: The maximum number of connections to create at once.
   (Default: `10`)
+* `queueLimit`: The maximum number of connection requests the pool will queue
+  before returning an error from `getConnection`. If set to `0`, there is no
+  limit to the number of queued connection requests. (Default: `0`)
 
 ## Switching users / altering connection state
 
