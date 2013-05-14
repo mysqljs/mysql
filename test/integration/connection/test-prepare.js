@@ -24,6 +24,6 @@ for (var i = 1; i <= rowCount; i++) {
 }
 
 var statement = connection.prepare('SELECT * FROM '+table+' WHERE id = ?');
-statement.execute([1], function() {
+statement.execute([1], function(err, results, fields) {
   console.log(arguments);
 });
