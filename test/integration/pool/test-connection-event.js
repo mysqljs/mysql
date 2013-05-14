@@ -4,7 +4,7 @@ var Connection = require(common.lib + '/Connection');
 var pool       = common.createPool();
 
 var connectionEventHappened = false;
-pool.on('connection', function(err, connection) {
+pool.on('connection', function(connection) {
   connectionEventHappened = true;
 })
 
