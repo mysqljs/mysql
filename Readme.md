@@ -214,6 +214,15 @@ pool.getConnection(function(err, connection) {
 });
 ```
 
+If you need to set session variables on the connection before it gets used,
+you can listen to the `connection` event.
+
+```js
+pool.on('connection', function(err, connection) {
+  connection.query('SET SESSION auto_increment_increment=1')
+})
+```
+
 When you are done with a connection, just call `connection.end()` and the
 connection will return to the pool, ready to be used again by someone else.
 
