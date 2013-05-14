@@ -869,12 +869,15 @@ will have:
 
 ## Running unit tests
 
-Set the environment variables `MYSQL_DATABASE`, `MYSQL_HOST`, `MYSQL_PORT`, `MYSQL_USER` and `MYSQL_PASSWORD`. Then run `make test`. E.g.
+Set the environment variables `MYSQL_DATABASE`, `MYSQL_HOST`, `MYSQL_PORT`, `MYSQL_USER` and `MYSQL_PASSWORD`. (You may want to put these in a `config.sh` file and source it when you run the tests). Then run `make test`. E.g.
 
+```
   mysql -u root -e "CREATE DATABASE IF NOT EXISTS node_mysql_test_db"
   mysql -u root -e "CREATE USER 'node_mysql_test'@'localhost' IDENTIFIED BY ''"
   mysql -u root -e "GRANT ALL ON node_mysql_test_db.* TO 'node_mysql_test'@'%'"
-  export MYSQL_DATABASE=node_mysql_test_db && export MYSQL_USER=node_mysql_test && make test
+  export MYSQL_DATABASE=node_mysql_test_db && export MYSQL_USER=node_mysql_test
+  make test
+```
 
 ## Todo
 
