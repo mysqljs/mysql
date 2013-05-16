@@ -879,6 +879,14 @@ Set the environment variables `MYSQL_DATABASE`, `MYSQL_HOST`, `MYSQL_PORT`, `MYS
   make test
 ```
 
+## Running unit tests on windows
+
+* Edit the variables in the file ```make.bat```  according to your system and mysql-settings.
+* Make sure the database (e.g. 'test') you want to use exists and the user you entered has the proper rights to use the test database. (E.g. do not forget to execute the SQL-command ```FLUSH PRIVILEGES``` after you have created the user.)
+* In a DOS-box (or CMD-shell) in the folder of your application run ```npm install mysql --dev``` or in the mysql folder (```node_modules\mysql```), run ```npm install --dev```. (This will install additional developer-dependencies for node-mysql.)
+* Run ```npm test mysql``` in your applications folder or ```npm test``` in the mysql subfolder.
+* If you want to log the output into a file use ```npm test mysql > test.log``` or ```npm test > test.log```.
+
 ## Todo
 
 * Prepared statements
