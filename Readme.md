@@ -224,7 +224,7 @@ pool.on('connection', function(err, connection) {
 ```
 
 If you need to create connections when the pool is started,
-you can set `initialSize` option. getConnection() function will execute after all connections is created.
+you can set `initialSize` option. getConnection() function will execute after all connections are created.
 
 ```js
 var pool  = mysql.createPool({
@@ -234,7 +234,7 @@ var pool  = mysql.createPool({
   initialSize : 10
 });
 
-// you can listen to the `initialized` event (emit after all connections is created)
+// you can listen to the `initialized` event (emit after all connections are created)
 pool.on('initialized', function(poolSize) {
 });
 
