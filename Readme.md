@@ -223,6 +223,26 @@ pool.on('connection', function(err, connection) {
 })
 ```
 
+If you need to create connections when the pool is started,
+you can set `initialSize` option. getConnection() function will execute after all connections is created.
+
+```js
+var pool  = mysql.createPool({
+  host     : 'example.org',
+  user     : 'bob',
+  password : 'secret',
+  initialSize : 10
+});
+
+// you can listen to the `initialized` event (emit after all connections is created)
+pool.on('initialized', function(poolSize) {
+});
+
+pool.getConnection(function(err, connection) {
+  // connected! (unless `err` is set)
+});
+```
+
 When you are done with a connection, just call `connection.end()` and the
 connection will return to the pool, ready to be used again by someone else.
 
@@ -267,6 +287,8 @@ addition to those options pools accept a few extras:
 * `queueLimit`: The maximum number of connection requests the pool will queue
   before returning an error from `getConnection`. If set to `0`, there is no
   limit to the number of queued connection requests. (Default: `0`)
+* `initialSize`: The initial number of connections that are created when the pool is started.
+  (Default: `0`)
 
 ## Switching users / altering connection state
 
