@@ -140,6 +140,8 @@ When establishing a connection, you can set the following options:
 * `database`: Name of the database to use for this connection (Optional).
 * `charset`: The charset for the connection. (Default: `'UTF8_GENERAL_CI'`)
 * `timezone`: The timezone used to store local dates. (Default: `'local'`)
+* `stringifyObjects`: Stringify objects instead of converting to values. See
+issue [#501](https://github.com/felixge/node-mysql/issues/501). (Default: `'false'`)
 * `insecureAuth`: Allow connecting to MySQL instances that ask for the old
   (insecure) authentication method. (Default: `false`)
 * `typeCast`: Determines if column values should be converted to native
