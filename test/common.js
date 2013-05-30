@@ -47,6 +47,10 @@ common.useTestDb = function(connection) {
   connection.query('USE ' + common.testDatabase);
 }
 
+common.getTestConfig = function(config) {
+  return mergeTestConfig(config);
+}
+
 function mergeTestConfig(config) {
   if (common.isTravis()) {
     // see: http://about.travis-ci.org/docs/user/database-setup/
