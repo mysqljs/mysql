@@ -252,6 +252,42 @@ up to 100 connections, but only ever use 5 simultaneously, only 5 connections
 will be made. Connections are also cycled round-robin style, with connections
 being taken from the top of the pool and returning to the bottom.
 
+If you need to create connections when the pool is started, you can set `initialSize` option.
+
+```js
+var pool  = mysql.createPool({
+  host     : 'example.org',
+  user     : 'bob',
+  password : 'secret',
+  initialSize : 10
+});
+
+// You can listen to the `initialized` event (emit after all connections are created)
+pool.on('initialized', function(poolSize) {
+});
+
+// Return connection while pool is initializing. (after connection is created)
+pool.getConnection(function(err, connection) {
+});
+```
+
+If you need to manage idle connections, you can set `minIdle`, `maxIdle` option.
+The pool will create or remove connections per `checkIdleInterval` (`minIdle` < free connections < `maxIdle`).
+If you set `maxWait` option, getConnection() function has a timeout.
+
+```js
+var pool  = mysql.createPool({
+  host     : 'example.org',
+  user     : 'bob',
+  password : 'secret',
+  minIdle: 10,
+  maxIdle: 30,
+  maxWait: 3000, // throw error if a connection is not returned within 3 seconds.
+  checkIdleInterval: 600000, // check per 10 minutes (default value)
+  checkIdleNumPerRun: 3  // 3 connections are created or removed per 10 minutes (default value)
+});
+```
+
 ## Pool options
 
 Pools accept all the same options as a connection. When creating a new
@@ -269,6 +305,18 @@ addition to those options pools accept a few extras:
 * `queueLimit`: The maximum number of connection requests the pool will queue
   before returning an error from `getConnection`. If set to `0`, there is no
   limit to the number of queued connection requests. (Default: `0`)
+* `maxWait`: The maximum number of milliseconds that the pool will wait for a
+  connection to be returned. (Default: `0`)
+* `initialSize`: The initial number of connections that are created when the
+  pool is started. (Default: `0`)
+* `minIdle`: The minimum number of connections that can remain idle in the pool.
+  (Default: `0`)
+* `maxIdle`: The maximum number of connections that can remain idle in the pool.
+  (Default: `0`)
+* `checkIdleInterval`: The number of milliseconds to check idle in the pool.
+  (Default: `600000`)
+* `checkIdleNumPerRun`: The number of objects to examine(create/remove)
+  during each run of the idle object check. (Default: `3`)
 
 ## Switching users / altering connection state
 
