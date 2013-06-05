@@ -138,7 +138,7 @@ When establishing a connection, you can set the following options:
 * `user`: The MySQL user to authenticate as.
 * `password`: The password of that MySQL user.
 * `database`: Name of the database to use for this connection (Optional).
-* `charset`: The charset for the connection. (Default: `'UTF8_GENERAL_CI'`)
+* `charset`: The charset for the connection. (Default: `'UTF8_GENERAL_CI'`. Value needs to be all in upper case letters!)
 * `timezone`: The timezone used to store local dates. (Default: `'local'`)
 * `stringifyObjects`: Stringify objects instead of converting to values. See
 issue [#501](https://github.com/felixge/node-mysql/issues/501). (Default: `'false'`)
@@ -252,6 +252,42 @@ up to 100 connections, but only ever use 5 simultaneously, only 5 connections
 will be made. Connections are also cycled round-robin style, with connections
 being taken from the top of the pool and returning to the bottom.
 
+If you need to create connections when the pool is started, you can set `initialSize` option.
+
+```js
+var pool  = mysql.createPool({
+  host     : 'example.org',
+  user     : 'bob',
+  password : 'secret',
+  initialSize : 10
+});
+
+// You can listen to the `initialized` event (emit after all connections are created)
+pool.on('initialized', function(poolSize) {
+});
+
+// Return connection while pool is initializing. (after connection is created)
+pool.getConnection(function(err, connection) {
+});
+```
+
+If you need to manage idle connections, you can set `minIdle`, `maxIdle` option.
+The pool will create or remove connections per `checkIdleInterval` (`minIdle` < free connections < `maxIdle`).
+If you set `maxWait` option, getConnection() function has a timeout.
+
+```js
+var pool  = mysql.createPool({
+  host     : 'example.org',
+  user     : 'bob',
+  password : 'secret',
+  minIdle: 10,
+  maxIdle: 30,
+  maxWait: 3000, // throw error if a connection is not returned within 3 seconds.
+  checkIdleInterval: 600000, // check per 10 minutes (default value)
+  checkIdleNumPerRun: 3  // 3 connections are created or removed per 10 minutes (default value)
+});
+```
+
 ## Pool options
 
 Pools accept all the same options as a connection. When creating a new
@@ -269,6 +305,74 @@ addition to those options pools accept a few extras:
 * `queueLimit`: The maximum number of connection requests the pool will queue
   before returning an error from `getConnection`. If set to `0`, there is no
   limit to the number of queued connection requests. (Default: `0`)
+* `maxWait`: The maximum number of milliseconds that the pool will wait for a
+  connection to be returned. (Default: `0`)
+* `initialSize`: The initial number of connections that are created when the
+  pool is started. (Default: `0`)
+* `minIdle`: The minimum number of connections that can remain idle in the pool.
+  (Default: `0`)
+* `maxIdle`: The maximum number of connections that can remain idle in the pool.
+  (Default: `0`)
+* `checkIdleInterval`: The number of milliseconds to check idle in the pool.
+  (Default: `600000`)
+* `checkIdleNumPerRun`: The number of objects to examine(create/remove)
+  during each run of the idle object check. (Default: `3`)
+
+## PoolCluster
+
+PoolCluster provides multiple hosts connection. (group & retry & selector)
+
+```js
+// create
+var poolCluster = mysql.createPoolCluster();
+
+poolCluster.add(config); // anonymous group
+poolCluster.add('MASTER', masterConfig);
+poolCluster.add('SLAVE1', slave1Config);
+poolCluster.add('SLAVE2', slave2Config);
+
+// Target Group : ALL(anonymous, MASTER, SLAVE1-2), Selector : round-robin(default)
+poolCluster.getConnection(function (err, connection) {});
+
+// Target Group : MASTER, Selector : round-robin
+poolCluster.getConnection('MASTER', function (err, connection) {});
+
+// Target Group : SLAVE1-2, Selector : order
+// If can't connect to SLAVE1, return SLAVE2. (remove SLAVE1 in the cluster)
+poolCluster.on('remove', function (nodeId) {
+  console.log('REMOVED NODE : ' + nodeId); // nodeId = SLAVE1
+});
+
+poolCluster.getConnection('SLAVE*', 'ORDER', function (err, connection) {});
+
+// of namespace : of(pattern, selector)
+poolCluster.of('*').getConnection(function (err, connection) {});
+
+var pool = poolCluster.of('SLAVE*', 'RANDOM')
+pool.getConnection(function (err, connection) {});
+pool.getConnection(function (err, connection) {});
+
+// destroy
+poolCluster.end();
+```
+
+## PoolCluster Option
+* `canRetry`: If `true`, `PoolCluster` will attempt to reconnect when connection fails. (Default: `true`)
+* `removeNodeErrorCount`: If connection fails, node's `errorCount` increases.
+  When `errorCount` is greater than `removeNodeErrorCount`, remove a node in the `PoolCluster`. (Default: `5`)
+* `defaultSelector`: The default selector. (Default: `RR`)
+  * `RR`: Select one alternately. (Round-Robin)
+  * `RANDOM`: Select the node by random function.
+  * `ORDER`: Select the first node available unconditionally.
+
+```js
+var clusterConfig = {
+  removeNodeErrorCount: 1, // Remove the node immediately when connection fails.
+  defaultSelector: 'ORDER'
+};
+
+var poolCluster = mysql.createPoolCluster(clusterConfig);
+```
 
 ## Switching users / altering connection state
 
@@ -879,6 +983,14 @@ For example, if you have an installation of mysql running on localhost:3306 and 
   mysql -u root -e "CREATE DATABASE IF NOT EXISTS node_mysql_test"
   MYSQL_HOST=localhost MYSQL_PORT=3306 MYSQL_DATABASE=node_mysql_test MYSQL_USER=root MYSQL_PASSWORD= make test
 ```
+
+## Running unit tests on windows
+
+* Edit the variables in the file ```make.bat```  according to your system and mysql-settings.
+* Make sure the database (e.g. 'test') you want to use exists and the user you entered has the proper rights to use the test database. (E.g. do not forget to execute the SQL-command ```FLUSH PRIVILEGES``` after you have created the user.)
+* In a DOS-box (or CMD-shell) in the folder of your application run ```npm install mysql --dev``` or in the mysql folder (```node_modules\mysql```), run ```npm install --dev```. (This will install additional developer-dependencies for node-mysql.)
+* Run ```npm test mysql``` in your applications folder or ```npm test``` in the mysql subfolder.
+* If you want to log the output into a file use ```npm test mysql > test.log``` or ```npm test > test.log```.
 
 ## Todo
 
