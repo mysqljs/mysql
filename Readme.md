@@ -140,6 +140,8 @@ When establishing a connection, you can set the following options:
 * `database`: Name of the database to use for this connection (Optional).
 * `charset`: The charset for the connection. (Default: `'UTF8_GENERAL_CI'`)
 * `timezone`: The timezone used to store local dates. (Default: `'local'`)
+* `stringifyObjects`: Stringify objects instead of converting to values. See
+issue [#501](https://github.com/felixge/node-mysql/issues/501). (Default: `'false'`)
 * `insecureAuth`: Allow connecting to MySQL instances that ask for the old
   (insecure) authentication method. (Default: `false`)
 * `typeCast`: Determines if column values should be converted to native
@@ -869,14 +871,13 @@ will have:
 
 ## Running unit tests
 
-Set the environment variables `MYSQL_DATABASE`, `MYSQL_HOST`, `MYSQL_PORT`, `MYSQL_USER` and `MYSQL_PASSWORD`. (You may want to put these in a `config.sh` file and source it when you run the tests). Then run `make test`. E.g.
+Set the environment variables `MYSQL_DATABASE`, `MYSQL_HOST`, `MYSQL_PORT`, `MYSQL_USER` and `MYSQL_PASSWORD`. (You may want to put these in a `config.sh` file and source it when you run the tests). Then run `make test`.
+
+For example, if you have an installation of mysql running on localhost:3306 and no password set for the `root` user, run:
 
 ```
-  mysql -u root -e "CREATE DATABASE IF NOT EXISTS node_mysql_test_db"
-  mysql -u root -e "CREATE USER 'node_mysql_test'@'localhost' IDENTIFIED BY ''"
-  mysql -u root -e "GRANT ALL ON node_mysql_test_db.* TO 'node_mysql_test'@'%'"
-  export MYSQL_DATABASE=node_mysql_test_db && export MYSQL_USER=node_mysql_test
-  make test
+  mysql -u root -e "CREATE DATABASE IF NOT EXISTS node_mysql_test"
+  MYSQL_HOST=localhost MYSQL_PORT=3306 MYSQL_DATABASE=node_mysql_test MYSQL_USER=root MYSQL_PASSWORD= make test
 ```
 
 ## Running unit tests on windows
@@ -885,7 +886,7 @@ Set the environment variables `MYSQL_DATABASE`, `MYSQL_HOST`, `MYSQL_PORT`, `MYS
 * Make sure the database (e.g. 'test') you want to use exists and the user you entered has the proper rights to use the test database. (E.g. do not forget to execute the SQL-command ```FLUSH PRIVILEGES``` after you have created the user.)
 * In a DOS-box (or CMD-shell) in the folder of your application run ```npm install mysql --dev``` or in the mysql folder (```node_modules\mysql```), run ```npm install --dev```. (This will install additional developer-dependencies for node-mysql.)
 * Run ```npm test mysql``` in your applications folder or ```npm test``` in the mysql subfolder.
-* If you want to log the output into a file use ```npm test mysql > test.log``` or ```npm test > test.log```.
+* If you want to log the output into a file use ```npm test mysql > test.log``` or ```npm test > test.log```. 
 
 ## Todo
 
