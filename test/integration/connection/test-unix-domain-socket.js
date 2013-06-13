@@ -1,9 +1,19 @@
+/**
+ * This test is skipped, if the environment variable "windir" is set.
+ * It assumes that it runs on a windows system then.
+ */
+if (process.env.windir) {
+  return console.log('Skipping "test-unix-domain-socket.js" - Environment' 
+    + ' variable "windir" is set. Skipping this, because we seem to be on' 
+    + ' a windows system');  
+}
 var common     = require('../../common');
 var connection = common.createConnection({socketPath: common.fakeServerSocket});
 var assert     = require('assert');
 
 var server = common.createFakeServer();
 var didConnect = false;
+
 server.listen(common.fakeServerSocket, function(err) {
   if (err) throw err;
 
@@ -27,6 +37,6 @@ server.on('connection', function(connection) {
 });
 
 process.on('exit', function() {
-  assert.equal(didConnect, true);
-  assert.equal(hadConnection, true);
+    assert.equal(didConnect, true);
+    assert.equal(hadConnection, true);
 });

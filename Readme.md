@@ -138,7 +138,7 @@ When establishing a connection, you can set the following options:
 * `user`: The MySQL user to authenticate as.
 * `password`: The password of that MySQL user.
 * `database`: Name of the database to use for this connection (Optional).
-* `charset`: The charset for the connection. (Default: `'UTF8_GENERAL_CI'`)
+* `charset`: The charset for the connection. (Default: `'UTF8_GENERAL_CI'`. Value needs to be all in upper case letters!)
 * `timezone`: The timezone used to store local dates. (Default: `'local'`)
 * `stringifyObjects`: Stringify objects instead of converting to values. See
 issue [#501](https://github.com/felixge/node-mysql/issues/501). (Default: `'false'`)
@@ -879,6 +879,14 @@ For example, if you have an installation of mysql running on localhost:3306 and 
   mysql -u root -e "CREATE DATABASE IF NOT EXISTS node_mysql_test"
   MYSQL_HOST=localhost MYSQL_PORT=3306 MYSQL_DATABASE=node_mysql_test MYSQL_USER=root MYSQL_PASSWORD= make test
 ```
+
+## Running unit tests on windows
+
+* Edit the variables in the file ```make.bat```  according to your system and mysql-settings.
+* Make sure the database (e.g. 'test') you want to use exists and the user you entered has the proper rights to use the test database. (E.g. do not forget to execute the SQL-command ```FLUSH PRIVILEGES``` after you have created the user.)
+* In a DOS-box (or CMD-shell) in the folder of your application run ```npm install mysql --dev``` or in the mysql folder (```node_modules\mysql```), run ```npm install --dev```. (This will install additional developer-dependencies for node-mysql.)
+* Run ```npm test mysql``` in your applications folder or ```npm test``` in the mysql subfolder.
+* If you want to log the output into a file use ```npm test mysql > test.log``` or ```npm test > test.log```. 
 
 ## Todo
 
