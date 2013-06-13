@@ -138,7 +138,7 @@ When establishing a connection, you can set the following options:
 * `user`: The MySQL user to authenticate as.
 * `password`: The password of that MySQL user.
 * `database`: Name of the database to use for this connection (Optional).
-* `charset`: The charset for the connection. (Default: `'UTF8_GENERAL_CI'`)
+* `charset`: The charset for the connection. (Default: `'UTF8_GENERAL_CI'`. Value needs to be all in upper case letters!)
 * `timezone`: The timezone used to store local dates. (Default: `'local'`)
 * `stringifyObjects`: Stringify objects instead of converting to values. See
 issue [#501](https://github.com/felixge/node-mysql/issues/501). (Default: `'false'`)
