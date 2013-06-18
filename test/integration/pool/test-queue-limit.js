@@ -8,12 +8,12 @@ var pool   = common.createPool({
 
 // First connection we get right away
 pool.getConnection(function(err, connection) {
-  connection.end()
+  connection.release()
 })
 
 // Second connection request goes into the queue
 pool.getConnection(function(err, connection) {
-  connection.end()
+  connection.release()
   pool.end()
 })
 

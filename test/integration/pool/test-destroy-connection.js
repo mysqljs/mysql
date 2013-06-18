@@ -13,5 +13,5 @@ pool.getConnection(function(err, connection) {
   assert.strictEqual(connection.end,     Connection.prototype.end);
   assert.strictEqual(connection.destroy, Connection.prototype.destroy);
 
-  pool.end();
+  pool.release();
 });

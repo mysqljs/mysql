@@ -8,7 +8,7 @@ pool.query('SELECT 1', function (err, _rows, _fields) {
   rows = _rows;
   fields = _fields;
 
-  pool.end();
+  pool.release();
 });
 
 process.on('exit', function () {

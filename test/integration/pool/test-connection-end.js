@@ -6,5 +6,5 @@ var pool       = common.createPool();
 pool.getConnection(function(err, connection) {
   if (err) throw err;
   assert.ok(connection instanceof Connection);
-  pool.release();
+  pool.end();
 });
