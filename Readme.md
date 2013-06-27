@@ -270,6 +270,62 @@ addition to those options pools accept a few extras:
   before returning an error from `getConnection`. If set to `0`, there is no
   limit to the number of queued connection requests. (Default: `0`)
 
+## PoolCluster
+
+PoolCluster provides multiple hosts connection. (group & retry & selector)
+
+```js
+// create
+var poolCluster = mysql.createPoolCluster();
+
+poolCluster.add(config); // anonymous group
+poolCluster.add('MASTER', masterConfig);
+poolCluster.add('SLAVE1', slave1Config);
+poolCluster.add('SLAVE2', slave2Config);
+
+// Target Group : ALL(anonymous, MASTER, SLAVE1-2), Selector : round-robin(default)
+poolCluster.getConnection(function (err, connection) {});
+
+// Target Group : MASTER, Selector : round-robin
+poolCluster.getConnection('MASTER', function (err, connection) {});
+
+// Target Group : SLAVE1-2, Selector : order
+// If can't connect to SLAVE1, return SLAVE2. (remove SLAVE1 in the cluster)
+poolCluster.on('remove', function (nodeId) {
+  console.log('REMOVED NODE : ' + nodeId); // nodeId = SLAVE1 
+});
+
+poolCluster.getConnection('SLAVE*', 'ORDER', function (err, connection) {});
+
+// of namespace : of(pattern, selector)
+poolCluster.of('*').getConnection(function (err, connection) {});
+
+var pool = poolCluster.of('SLAVE*', 'RANDOM')
+pool.getConnection(function (err, connection) {});
+pool.getConnection(function (err, connection) {});
+
+// destroy
+poolCluster.end();
+```
+
+## PoolCluster Option
+* `canRetry`: If `true`, `PoolCluster` will attempt to reconnect when connection fails. (Default: `true`)
+* `removeNodeErrorCount`: If connection fails, node's `errorCount` increases. 
+  When `errorCount` is greater than `removeNodeErrorCount`, remove a node in the `PoolCluster`. (Default: `5`)
+* `defaultSelector`: The default selector. (Default: `RR`)
+  * `RR`: Select one alternately. (Round-Robin)
+  * `RANDOM`: Select the node by random function.
+  * `ORDER`: Select the first node available unconditionally.
+
+```js
+var clusterConfig = {
+  removeNodeErrorCount: 1, // Remove the node immediately when connection fails.
+  defaultSelector: 'ORDER'
+};
+
+var poolCluster = mysql.createPoolCluster(clusterConfig);
+```
+
 ## Switching users / altering connection state
 
 MySQL offers a changeUser command that allows you to alter the current user and
@@ -886,7 +942,7 @@ For example, if you have an installation of mysql running on localhost:3306 and 
 * Make sure the database (e.g. 'test') you want to use exists and the user you entered has the proper rights to use the test database. (E.g. do not forget to execute the SQL-command ```FLUSH PRIVILEGES``` after you have created the user.)
 * In a DOS-box (or CMD-shell) in the folder of your application run ```npm install mysql --dev``` or in the mysql folder (```node_modules\mysql```), run ```npm install --dev```. (This will install additional developer-dependencies for node-mysql.)
 * Run ```npm test mysql``` in your applications folder or ```npm test``` in the mysql subfolder.
-* If you want to log the output into a file use ```npm test mysql > test.log``` or ```npm test > test.log```. 
+* If you want to log the output into a file use ```npm test mysql > test.log``` or ```npm test > test.log```.
 
 ## Todo
 
