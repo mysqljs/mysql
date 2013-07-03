@@ -32,7 +32,7 @@ var mysql      = require('mysql');
 var connection = mysql.createConnection({
   host     : 'localhost',
   user     : 'me',
-  password : 'secret'
+  password : 'secret',
 });
 
 connection.connect();
@@ -102,7 +102,7 @@ var mysql      = require('mysql');
 var connection = mysql.createConnection({
   host     : 'example.org',
   user     : 'bob',
-  password : 'secret'
+  password : 'secret',
 });
 
 connection.connect(function(err) {
@@ -208,7 +208,7 @@ var mysql = require('mysql');
 var pool  = mysql.createPool({
   host     : 'example.org',
   user     : 'bob',
-  password : 'secret'
+  password : 'secret',
 });
 
 pool.getConnection(function(err, connection) {
@@ -320,7 +320,7 @@ poolCluster.end();
 ```js
 var clusterConfig = {
   removeNodeErrorCount: 1, // Remove the node immediately when connection fails.
-  defaultSelector: 'ORDER'
+  defaultSelector: 'ORDER',
 };
 
 var poolCluster = mysql.createPoolCluster(clusterConfig);
@@ -683,7 +683,7 @@ connection.query(options, function(err, results) {
     table1_fieldA: '...',
     table1_fieldB: '...',
     table2_fieldA: '...',
-    table2_fieldB: '...'
+    table2_fieldB: '...',
   }, ...]
   */
 });
@@ -712,7 +712,7 @@ error object is propagated to both pending callbacks:
 
 ```js
 var connection = require('mysql').createConnection({
-  port: 84943 // WRONG PORT
+  port: 84943, // WRONG PORT
 });
 
 connection.connect(function(err) {
