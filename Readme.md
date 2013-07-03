@@ -208,7 +208,7 @@ var mysql = require('mysql');
 var pool  = mysql.createPool({
   host     : 'example.org',
   user     : 'bob',
-  password : 'secret'
+  password : 'secret',
 });
 
 pool.getConnection(function(err, connection) {
@@ -222,7 +222,7 @@ you can listen to the `connection` event.
 ```js
 pool.on('connection', function(err, connection) {
   connection.query('SET SESSION auto_increment_increment=1')
-})
+});
 ```
 
 When you are done with a connection, just call `connection.end()` and the
@@ -300,7 +300,7 @@ poolCluster.getConnection('SLAVE*', 'ORDER', function (err, connection) {});
 // of namespace : of(pattern, selector)
 poolCluster.of('*').getConnection(function (err, connection) {});
 
-var pool = poolCluster.of('SLAVE*', 'RANDOM')
+var pool = poolCluster.of('SLAVE*', 'RANDOM');
 pool.getConnection(function (err, connection) {});
 pool.getConnection(function (err, connection) {});
 
@@ -320,7 +320,7 @@ poolCluster.end();
 ```js
 var clusterConfig = {
   removeNodeErrorCount: 1, // Remove the node immediately when connection fails.
-  defaultSelector: 'ORDER'
+  defaultSelector: 'ORDER',
 };
 
 var poolCluster = mysql.createPoolCluster(clusterConfig);
@@ -683,7 +683,7 @@ connection.query(options, function(err, results) {
     table1_fieldA: '...',
     table1_fieldB: '...',
     table2_fieldA: '...',
-    table2_fieldB: '...'
+    table2_fieldB: '...',
   }, ...]
   */
 });
@@ -831,7 +831,7 @@ Or on the query level:
 var options = {sql: '...', typeCast: false};
 var query = connection.query(options, function(err, results) {
 
-}):
+});
 ```
 
 You can also pass a function and handle type casting yourself. You're given some
@@ -848,7 +848,7 @@ connection.query({
     }
     return next();
   }
-})
+});
 ```
 
 If you need a buffer there's also a `.buffer()` function and also a `.geometry()` one
@@ -869,7 +869,7 @@ prepend the flag with a minus sign. To add a flag that is not in the default lis
 The next example blacklists FOUND_ROWS flag from default connection flags.
 
 ```js
-var connection = mysql.createConnection("mysql://localhost/test?flags=-FOUND_ROWS")
+var connection = mysql.createConnection("mysql://localhost/test?flags=-FOUND_ROWS");
 ```
 
 ### Default Flags
