@@ -850,7 +850,8 @@ connection.query({
   }
 });
 ```
-WARNING: YOU MUST INVOKE the parser before returning from a custom typeCast function.
+__WARNING: YOU MUST INVOKE the parser using one of these three field functions in your custom typeCast callback. They can only be called once.( see #539 for discussion)__
+
 ```
 field.string()
 field.buffer()
@@ -862,11 +863,8 @@ parser.parseLengthCodedString()
 parser.parseLengthCodedBuffer()
 parser.parseGeometryValue()
 ```
-You can find which field function you need to use by looking at: [RowDataPacket.prototype._typeCast](https://github.com/felixge/node-mysql/blob/master/lib/protocol/packets/RowDataPacket.js#L41)
+__You can find which field function you need to use by looking at: [RowDataPacket.prototype._typeCast](https://github.com/felixge/node-mysql/blob/master/lib/protocol/packets/RowDataPacket.js#L41)__
 
-
-If you need a buffer there's also a `.buffer()` function and also a `.geometry()` one
-both used by the default type cast that you can use.
 
 ## Connection Flags
 
