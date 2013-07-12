@@ -11,7 +11,8 @@ pool.getConnection(function(err, connection) {
   assert.ok(pool._allConnections.length == 0);
   assert.ok(connection._poolRemoved);
   assert.strictEqual(connection.end,     Connection.prototype.end);
-  assert.strictEqual(connection.destroy, Connection.prototype.destroy);
+  assert.strictEqual(connection.end,     Connection.prototype.end);
+  assert.ok(!('release' in connection))
 
   pool.end();
 });
