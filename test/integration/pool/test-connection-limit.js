@@ -21,6 +21,6 @@ pool.getConnection(function(err, connection) {
     });
 
     shouldGetConnection = true;
-    connection.end();
+    connection.release();
   });
 });
