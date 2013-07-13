@@ -20,6 +20,9 @@ exports.createPoolCluster = function(config) {
 
 exports.createQuery = Connection.createQuery;
 
-exports.Types    = Types;
-exports.escape   = SqlString.escape;
-exports.escapeId = SqlString.escapeId;
+exports.Types       = Types;
+
+//Expose SQL String Functionality
+exports.escape      = SqlString.escape;
+exports.escapeId    = SqlString.escapeId;
+exports.format      = SqlString.format;
