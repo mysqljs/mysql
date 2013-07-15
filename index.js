@@ -5,6 +5,7 @@ var SqlString        = require('./lib/protocol/SqlString');
 var Pool             = require('./lib/Pool');
 var PoolConfig       = require('./lib/PoolConfig');
 var PoolCluster      = require('./lib/PoolCluster');
+var Introspection    = require('./lib/Introspection');
 
 exports.createConnection = function(config) {
   return new Connection({config: new ConnectionConfig(config)});
@@ -23,3 +24,4 @@ exports.createQuery = Connection.createQuery;
 exports.Types    = Types;
 exports.escape   = SqlString.escape;
 exports.escapeId = SqlString.escapeId;
+exports.initIntrospection = Introspection.init;
