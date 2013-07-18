@@ -404,7 +404,7 @@ space for a new connection to be created on the next getConnection call.
 
 In order to avoid SQL Injection attacks, you should always escape any user
 provided data before using it inside a SQL query. You can do so using the
-`connection.escape()` method:
+`connection.escape()` or `pool.escape()` methods:
 
 ```js
 var userId = 'some user provided value';
