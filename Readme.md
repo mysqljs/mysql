@@ -388,6 +388,7 @@ function handleDisconnect() {
     } else {                                      // connnection idle timeout (the wait_timeout
       throw err;                                  // server variable configures this)
     }
+  });
 }
 
 handleDisconnect();
