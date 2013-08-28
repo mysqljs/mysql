@@ -4,6 +4,16 @@ This file is a manually maintained list of changes for each release. Feel free
 to add your changes here when sending pull requests. Also send corrections if
 you spot any mistakes.
 
+## v2.0.0-alpha9 (2013-08-27)
+
+* Add query to pool to execute queries directly using the pool
+* Pool option to set queue limit
+* Pool sends 'connection' event when it opens a new connection
+* Added stringifyObjects option to treat input as strings rather than objects (#501)
+* Support for poolClusters
+* Datetime improvements
+* Bug fixes
+
 ## v2.0.0-alpha8 (2013-04-30)
 
 * Switch to old mode for Streams 2 (Node.js v 0.10.x)
