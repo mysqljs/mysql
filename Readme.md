@@ -225,7 +225,7 @@ pool.on('connection', function(err, connection) {
 });
 ```
 
-When you are done with a connection, just call `connection.end()` and the
+When you are done with a connection, just call `connection.release()` and the
 connection will return to the pool, ready to be used again by someone else.
 
 ```js
@@ -236,7 +236,7 @@ pool.getConnection(function(err, connection) {
   // Use the connection
   connection.query( 'SELECT something FROM sometable', function(err, rows) {
     // And done with the connection.
-    connection.end();
+    connection.release();
 
     // Don't use the connection here, it has been returned to the pool.
   });
