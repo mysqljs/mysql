@@ -5,7 +5,7 @@
 ## Install
 
 ```bash
-npm install mysql@2.0.0-alpha8
+npm install mysql@2.0.0-alpha9
 ```
 
 Despite the alpha tag, this is the recommended version for new applications.
@@ -225,7 +225,7 @@ pool.on('connection', function(err, connection) {
 });
 ```
 
-When you are done with a connection, just call `connection.end()` and the
+When you are done with a connection, just call `connection.release()` and the
 connection will return to the pool, ready to be used again by someone else.
 
 ```js
@@ -236,7 +236,7 @@ pool.getConnection(function(err, connection) {
   // Use the connection
   connection.query( 'SELECT something FROM sometable', function(err, rows) {
     // And done with the connection.
-    connection.end();
+    connection.release();
 
     // Don't use the connection here, it has been returned to the pool.
   });
@@ -353,33 +353,45 @@ by this module.
 ## Server disconnects
 
 You may lose the connection to a MySQL server due to network problems, the
-server timing you out, or the server crashing. All of these events are
-considered fatal errors, and will have the `err.code =
+server timing you out, the server being restarted, or crashing. All of these
+events are considered fatal errors, and will have the `err.code =
 'PROTOCOL_CONNECTION_LOST'`.  See the [Error Handling](#error-handling) section
 for more information.
 
-The best way to handle such unexpected disconnects is shown below:
+A good way to handle such unexpected disconnects is shown below:
 
 ```js
-function handleDisconnect(connection) {
+var db_config = {
+  host: 'localhost',
+	user: 'root',
+	password: '',
+	database: 'example'
+};
+
+var connection;
+
+function handleDisconnect() {
+  connection = mysql.createConnection(db_config); // Recreate the connection, since
+                                                  // the old one cannot be reused.
+
+  connection.connect(function(err) {              // The server is either down
+    if(err) {                                     // or restarting (takes a while sometimes).
+      console.log('error when connecting to db:', err);
+      setTimeout(handleDisconnect, 2000); // We introduce a delay before attempting to reconnect,
+    }                                     // to avoid a hot loop, and to allow our node script to
+  });                                     // process asynchronous requests in the meantime.
+                                          // If you're also serving http, display a 503 error.
   connection.on('error', function(err) {
-    if (!err.fatal) {
-      return;
+    console.log('db error', err);
+    if(err.code === 'PROTOCOL_CONNECTION_LOST') { // Connection to the MySQL server is usually
+      handleDisconnect();                         // lost due to either server restart, or a
+    } else {                                      // connnection idle timeout (the wait_timeout
+      throw err;                                  // server variable configures this)
     }
-
-    if (err.code !== 'PROTOCOL_CONNECTION_LOST') {
-      throw err;
-    }
-
-    console.log('Re-connecting lost connection: ' + err.stack);
-
-    connection = mysql.createConnection(connection.config);
-    handleDisconnect(connection);
-    connection.connect();
   });
 }
 
-handleDisconnect(connection);
+handleDisconnect();
 ```
 
 As you can see in the example above, re-connecting a connection is done by
@@ -393,7 +405,7 @@ space for a new connection to be created on the next getConnection call.
 
 In order to avoid SQL Injection attacks, you should always escape any user
 provided data before using it inside a SQL query. You can do so using the
-`connection.escape()` method:
+`connection.escape()` or `pool.escape()` methods:
 
 ```js
 var userId = 'some user provided value';

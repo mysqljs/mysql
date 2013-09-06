@@ -87,7 +87,7 @@ test('SqlString.escape', {
 
   'dates are converted to YYYY-MM-DD HH:II:SS.sss': function() {
     var expected = '2012-05-07 11:42:03.002';
-    var date     = new Date(Date.UTC(2012, 4, 7, 11, 42, 3, 2));
+    var date     = new Date(2012, 4, 7, 11, 42, 3, 2);
     var string   = SqlString.escape(date);
 
     assert.strictEqual(string, "'" + expected + "'");
