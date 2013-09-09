@@ -712,25 +712,25 @@ var title = 'Hello MySQL';
 pool.getConnection(function(err, connection) {
   connection.beginTransaction(function(err) {
     if (err) {
-      pool.releaseConnection(connection);
+      connection.release();
       throw err;
     }
     connection.query('INSERT INTO posts SET title=?', title, function(err, result) {
       if (err) {
-        pool.releaseConnection(connection);
+        connection.release();
 	      throw err;
 	  }
 
-	  var log = 'Post ' + result.insertId + ' added';
+	  var logData = 'Post ' + result.insertId + ' added';
 
-	  connection.query('INSERT INTO log SET description=?', log, function(err, result) {
+	  connection.query('INSERT INTO log SET data=?', log, function(err, result) {
 	    if (err) {
-	      pool.releaseConnection(connection);
+	      connection.release();
 	      throw err;
 	    }
 	    connection.commit(function(err) {
 	      if (err) {
-	         pool.releaseConnection(connection);
+	         connection.release();
 	         throw err;
 	      }
 	      console.log('success!');
