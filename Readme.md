@@ -701,6 +701,52 @@ connection.query(options, function(err, results) {
 });
 ```
 
+## Transactions
+
+Transactions are useful when combined with pooling in cases where
+multiple dependent nested queries occur:
+
+```js
+var title = 'Hello MySQL';
+
+pool.getConnection(function(err, connection) {
+  connection.beginTransaction(function(err) {
+    if (err) {
+      pool.releaseConnection(connection);
+      throw err;
+    }
+    connection.query('INSERT INTO posts SET title=?', title, function(err, result) {
+      if (err) {
+        pool.releaseConnection(connection);
+	      throw err;
+	  }
+
+	  var log = 'Post ' + result.insertId + ' added';
+
+	  connection.query('INSERT INTO log SET description=?', log, function(err, result) {
+	    if (err) {
+	      pool.releaseConnection(connection);
+	      throw err;
+	    }
+	    connection.commit(function(err) {
+	      if (err) {
+	         pool.releaseConnection(connection);
+	         throw err;
+	      }
+	      console.log('success!');
+	    });
+	  });
+	});
+  });
+});
+```
+
+Note that all transactions must be explicitly committed.
+```pool.releaseConnection(connection)``` will roll back any open
+transactions on the connection before releasing it.
+
+```connection.rollback(function(err))``` can also be used to manually roll back queries.
+
 ## Error handling
 
 This module comes with a consistent approach to error handling that you should
