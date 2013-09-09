@@ -13,7 +13,7 @@ connection.query([
   ') ENGINE=InnoDB DEFAULT CHARSET=utf8'
 ].join('\n'));
 
-connection.query('START TRANSACTION');
+connection.beginTransaction();
 
 var rowCount = 10;
 for (var i = 1; i <= rowCount; i++) {
@@ -25,7 +25,7 @@ for (var i = 1; i <= rowCount; i++) {
   connection.query('INSERT INTO ' + table + ' SET ?', row);
 }
 
-connection.query('ROLLBACK');
+connection.rollback();
 
 var rows;
 var query = connection.query('SELECT * FROM ' + table, function(err, _rows) {
