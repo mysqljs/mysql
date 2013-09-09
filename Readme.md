@@ -742,7 +742,7 @@ pool.getConnection(function(err, connection) {
 ```
 
 Note that all transactions must be explicitly committed.
-```pool.releaseConnection(connection)``` will roll back any open
+```connection.release()``` will roll back any open
 transactions on the connection before releasing it.
 
 ```connection.rollback(function(err))``` can also be used to manually roll back queries.
