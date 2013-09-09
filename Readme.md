@@ -721,7 +721,7 @@ pool.getConnection(function(err, connection) {
 	      throw err;
 	  }
 
-	  var logData = 'Post ' + result.insertId + ' added';
+	  var log = 'Post ' + result.insertId + ' added';
 
 	  connection.query('INSERT INTO log SET data=?', log, function(err, result) {
 	    if (err) {
