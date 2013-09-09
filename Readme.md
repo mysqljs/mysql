@@ -718,7 +718,7 @@ pool.getConnection(function(err, connection) {
     connection.query('INSERT INTO posts SET title=?', title, function(err, result) {
       if (err) {
         connection.release();
-	      throw err;
+	    throw err;
 	  }
 
 	  var log = 'Post ' + result.insertId + ' added';
@@ -730,8 +730,8 @@ pool.getConnection(function(err, connection) {
 	    }
 	    connection.commit(function(err) {
 	      if (err) {
-	         connection.release();
-	         throw err;
+	        connection.release();
+	        throw err;
 	      }
 	      console.log('success!');
 	    });
@@ -1019,4 +1019,3 @@ For example, if you have an installation of mysql running on localhost:3306 and 
 * Prepared statements
 * setTimeout() for Connection / Query
 * Support for encodings other than UTF-8 / ASCII
-* API support for transactions, similar to [php](http://www.php.net/manual/en/mysqli.quickstart.transactions.php)
