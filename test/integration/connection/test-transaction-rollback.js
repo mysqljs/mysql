@@ -6,36 +6,34 @@ common.useTestDb(connection);
 
 var table = 'transaction_test';
 connection.query([
-  'CREATE TEMPORARY TABLE `' + table + '` (',
-  '`id` int(11) unsigned NOT NULL AUTO_INCREMENT,',
-  '`title` varchar(255),',
-  'PRIMARY KEY (`id`)',
-  ') ENGINE=InnoDB DEFAULT CHARSET=utf8'
-].join('\n'));
+                   'CREATE TEMPORARY TABLE `' + table + '` (',
+                   '`id` int(11) unsigned NOT NULL AUTO_INCREMENT,',
+                   '`title` varchar(255),',
+                   'PRIMARY KEY (`id`)',
+                   ') ENGINE=InnoDB DEFAULT CHARSET=utf8'
+                 ].join('\n'));
 
-connection.beginTransaction();
+connection.beginTransaction(function (err) {
+  assert.ifError(err);
+  assert.strictEqual(connection.inTransaction, true);
 
-var rowCount = 10;
-for (var i = 1; i <= rowCount; i++) {
   var row = {
-    id: i,
-    title: 'Row #' + i,
+    id: 1,
+    title: 'Test row'
   };
 
-  connection.query('INSERT INTO ' + table + ' SET ?', row);
-}
+  connection.query('INSERT INTO ' + table + ' SET ?', row, function(err) {
+    assert.ifError(err);
 
-connection.rollback();
+    connection.rollback(function(err) {
+      assert.ifError(err);
 
-var rows;
-var query = connection.query('SELECT * FROM ' + table, function(err, _rows) {
-  if (err) throw err;
-
-  rows = _rows;
-});
-
-connection.end();
-
-process.on('exit', function() {
-  assert.equal(rows.length, 0);
+      connection.query('SELECT * FROM ' + table, function(err, rows) {
+        assert.ifError(err);
+        assert.strictEqual(connection.inTransaction, false);
+        connection.end();
+        assert.equal(rows.length, 0);
+      });
+    });
+  });
 });
