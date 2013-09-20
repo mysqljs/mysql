@@ -15,8 +15,7 @@ connection.query([
 
 connection.beginTransaction(function (err) {
   assert.ifError(err);
-  assert.strictEqual(connection.inTransaction, true);
-
+  
   var row = {
     id: 1,
     title: 'Test row'
@@ -30,7 +29,6 @@ connection.beginTransaction(function (err) {
 
       connection.query('SELECT * FROM ' + table, function(err, rows) {
         assert.ifError(err);
-        assert.strictEqual(connection.inTransaction, false);
         connection.end();
         assert.equal(rows.length, 1);
       });

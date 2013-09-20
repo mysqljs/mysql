@@ -703,49 +703,42 @@ connection.query(options, function(err, results) {
 
 ## Transactions
 
-Transactions are useful when combined with pooling in cases where
-multiple dependent nested queries occur:
+Simple transaction support is available at the connection level:
 
 ```js
-var title = 'Hello MySQL';
-
-pool.getConnection(function(err, connection) {
-  connection.beginTransaction(function(err) {
-    if (err) {
-      connection.release();
-      throw err;
+connection.beginTransaction(function(err) {
+  if (err) { throw err; }
+  connection.query('INSERT INTO posts SET title=?', title, function(err, result) {
+    if (err) { 
+      connection.rollback(function() {
+        throw err;
+      });
     }
-    connection.query('INSERT INTO posts SET title=?', title, function(err, result) {
-      if (err) {
-        connection.release();
-	    throw err;
-	  }
 
-	  var log = 'Post ' + result.insertId + ' added';
+	var log = 'Post ' + result.insertId + ' added';
 
-	  connection.query('INSERT INTO log SET data=?', log, function(err, result) {
-	    if (err) {
-	      connection.release();
-	      throw err;
-	    }
-	    connection.commit(function(err) {
-	      if (err) {
-	        connection.release();
-	        throw err;
-	      }
-	      console.log('success!');
-	    });
+	connection.query('INSERT INTO log SET data=?', log, function(err, result) {
+	  if (err) { 
+        connection.rollback(function() {
+          throw err;
+        });
+      }  
+	  connection.commit(function(err) {
+	    if (err) { 
+          connection.rollback(function() {
+            throw err;
+          });
+        }
+	    console.log('success!');
 	  });
-	});
+    });
   });
 });
 ```
-
-Note that all transactions must be explicitly committed.
-```connection.release()``` will roll back any open
-transactions on the connection before releasing it.
-
-```connection.rollback(function(err))``` can also be used to manually roll back queries.
+Please note that beginTransaction(), commit() and rollback() are simply convenience
+functions that execute the START TRANSACTION, COMMIT, and ROLLBACK commands respectively.
+It is important to understand that many commands in MySQL can cause an implicit commit,
+as described [in the MySQL documentation]: http://dev.mysql.com/doc/refman/5.5/en/implicit-commit.html
 
 ## Error handling
 
