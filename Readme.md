@@ -738,7 +738,7 @@ connection.beginTransaction(function(err) {
 Please note that beginTransaction(), commit() and rollback() are simply convenience
 functions that execute the START TRANSACTION, COMMIT, and ROLLBACK commands respectively.
 It is important to understand that many commands in MySQL can cause an implicit commit,
-as described [in the MySQL documentation]: http://dev.mysql.com/doc/refman/5.5/en/implicit-commit.html
+as described [in the MySQL documentation](http://dev.mysql.com/doc/refman/5.5/en/implicit-commit.html)
 
 ## Error handling
 
