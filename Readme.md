@@ -220,7 +220,7 @@ If you need to set session variables on the connection before it gets used,
 you can listen to the `connection` event.
 
 ```js
-pool.on('connection', function(err, connection) {
+pool.on('connection', function(connection) {
   connection.query('SET SESSION auto_increment_increment=1')
 });
 ```
