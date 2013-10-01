@@ -33,6 +33,12 @@ function testNextDate() {
 function testDate(offset, cb) {
   var dt = new Date();
 
+  // datetime will round fractional seconds up, which causes this test to fail
+  // depending on when it is executed. MySQL 5.6.4 and up supports datetime(6)
+  // which would not require this change.
+  // http://dev.mysql.com/doc/refman/5.6/en/fractional-seconds.html
+  dt.setMilliseconds(0);
+
   if (offset == 'Z' || offset == 'local') {
     connection.config.timezone = offset;
   } else {
