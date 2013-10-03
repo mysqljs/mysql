@@ -11,5 +11,7 @@ pool.getConnection(function(err, connection) {
   assert.ok(pool._allConnections.length == 0);
   assert.ok(!connection._pool);
 
+  assert.doesNotThrow(function () { connection.release(); });
+
   pool.end();
 });
