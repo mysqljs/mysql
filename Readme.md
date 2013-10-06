@@ -490,9 +490,13 @@ Alternatively, you can use `??` characters as placeholders for identifiers you w
 like to have escaped like this:
 
 ```js
-connection.query('SELECT * FROM ?? WHERE id = ?', ['users', userId], function(err, results) {
+var userId = 1;
+var columns = ['username', 'email'];
+var query = connection.query('SELECT ?? FROM ?? WHERE id = ?', [columns, 'users', userId], function(err, results) {
   // ...
 });
+
+console.log(query.sql); // SELECT `username`, `email` FROM `users` WHERE id = 1
 ```
 **Please note that this last character sequence is experimental and syntax might change**
 
