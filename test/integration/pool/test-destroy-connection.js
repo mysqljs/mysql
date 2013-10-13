@@ -9,9 +9,9 @@ pool.getConnection(function(err, connection) {
   connection.destroy();
 
   assert.ok(pool._allConnections.length == 0);
-  assert.ok(connection._poolRemoved);
-  assert.strictEqual(connection.end,     Connection.prototype.end);
-  assert.strictEqual(connection.destroy, Connection.prototype.destroy);
+  assert.ok(!connection._pool);
+
+  assert.doesNotThrow(function () { connection.release(); });
 
   pool.end();
 });

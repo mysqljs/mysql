@@ -31,8 +31,14 @@ common.createConnection = function(config) {
 
 common.createPool = function(config) {
   config = mergeTestConfig(config);
-  config.createConnection = common.createConnection;
+  config.connectionConfig = mergeTestConfig(config.connectionConfig);
   return Mysql.createPool(config);
+};
+
+common.createPoolCluster = function(config) {
+  config = mergeTestConfig(config);
+  config.createConnection = common.createConnection;
+  return Mysql.createPoolCluster(config);
 };
 
 common.createFakeServer = function(options) {
@@ -45,7 +51,11 @@ common.useTestDb = function(connection) {
   });
 
   connection.query('USE ' + common.testDatabase);
-}
+};
+
+common.getTestConfig = function(config) {
+  return mergeTestConfig(config);
+};
 
 function mergeTestConfig(config) {
   if (common.isTravis()) {
