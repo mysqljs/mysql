@@ -363,11 +363,7 @@ A good way to handle such unexpected disconnects is shown below:
 ```js
 var db_config = {
   host: 'localhost',
-<<<<<<< HEAD
 	user: 'root',
-=======
-    user: 'root',
->>>>>>> f924d913fc53cbc7d19d9b7199517acbb0827b95
 	password: '',
 	database: 'example'
 };
@@ -1027,8 +1023,4 @@ For example, if you have an installation of mysql running on localhost:3306 and 
 
 * Prepared statements
 * setTimeout() for Connection / Query
-<<<<<<< HEAD
 * Support for encodings other than UTF-8 / ASCII
-=======
-* Support for encodings other than UTF-8 / ASCII
->>>>>>> f924d913fc53cbc7d19d9b7199517acbb0827b95
