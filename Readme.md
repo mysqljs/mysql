@@ -363,7 +363,11 @@ A good way to handle such unexpected disconnects is shown below:
 ```js
 var db_config = {
   host: 'localhost',
+<<<<<<< HEAD
 	user: 'root',
+=======
+    user: 'root',
+>>>>>>> f924d913fc53cbc7d19d9b7199517acbb0827b95
 	password: '',
 	database: 'example'
 };
@@ -497,6 +501,18 @@ connection.query('SELECT * FROM ?? WHERE id = ?', ['users', userId], function(er
 **Please note that this last character sequence is experimental and syntax might change**
 
 When you pass an Object to `.escape()` or `.query()`, `.escapeId()` is used to avoid SQL injection in object keys.
+
+### Preparing Queries
+
+You can use mysql.format to prepare a query with multiple insertion points, utilizing the proper escaping for ids and values. A simple example of this follows:
+
+```js
+var sql = "SELECT * FROM ?? WHERE ?? = ?";
+var inserts = ['users', 'id', userId];
+sql = mysql.format(sql, inserts);
+```
+
+Following this you then have a valid, escaped query that you can then send to the database safely. This is useful if you are looking to prepare the query before actually sending it to the database. As mysql.format is exposed from SqlString.format you also have the option (but are not required) to pass in stringifyObject and timezone, allowing you provide a custom means of turning objects into strings, as well as a location-specific/timezone-aware Date.
 
 ### Custom format
 
@@ -1011,4 +1027,8 @@ For example, if you have an installation of mysql running on localhost:3306 and 
 
 * Prepared statements
 * setTimeout() for Connection / Query
+<<<<<<< HEAD
 * Support for encodings other than UTF-8 / ASCII
+=======
+* Support for encodings other than UTF-8 / ASCII
+>>>>>>> f924d913fc53cbc7d19d9b7199517acbb0827b95
