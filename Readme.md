@@ -5,7 +5,7 @@
 ## Install
 
 ```bash
-npm install mysql@2.0.0-alpha8
+npm install mysql@2.0.0-alpha9
 ```
 
 Despite the alpha tag, this is the recommended version for new applications.
@@ -208,7 +208,7 @@ var mysql = require('mysql');
 var pool  = mysql.createPool({
   host     : 'example.org',
   user     : 'bob',
-  password : 'secret'
+  password : 'secret',
 });
 
 pool.getConnection(function(err, connection) {
@@ -220,12 +220,12 @@ If you need to set session variables on the connection before it gets used,
 you can listen to the `connection` event.
 
 ```js
-pool.on('connection', function(err, connection) {
+pool.on('connection', function(connection) {
   connection.query('SET SESSION auto_increment_increment=1')
-})
+});
 ```
 
-When you are done with a connection, just call `connection.end()` and the
+When you are done with a connection, just call `connection.release()` and the
 connection will return to the pool, ready to be used again by someone else.
 
 ```js
@@ -236,7 +236,7 @@ pool.getConnection(function(err, connection) {
   // Use the connection
   connection.query( 'SELECT something FROM sometable', function(err, rows) {
     // And done with the connection.
-    connection.end();
+    connection.release();
 
     // Don't use the connection here, it has been returned to the pool.
   });
@@ -270,6 +270,62 @@ addition to those options pools accept a few extras:
   before returning an error from `getConnection`. If set to `0`, there is no
   limit to the number of queued connection requests. (Default: `0`)
 
+## PoolCluster
+
+PoolCluster provides multiple hosts connection. (group & retry & selector)
+
+```js
+// create
+var poolCluster = mysql.createPoolCluster();
+
+poolCluster.add(config); // anonymous group
+poolCluster.add('MASTER', masterConfig);
+poolCluster.add('SLAVE1', slave1Config);
+poolCluster.add('SLAVE2', slave2Config);
+
+// Target Group : ALL(anonymous, MASTER, SLAVE1-2), Selector : round-robin(default)
+poolCluster.getConnection(function (err, connection) {});
+
+// Target Group : MASTER, Selector : round-robin
+poolCluster.getConnection('MASTER', function (err, connection) {});
+
+// Target Group : SLAVE1-2, Selector : order
+// If can't connect to SLAVE1, return SLAVE2. (remove SLAVE1 in the cluster)
+poolCluster.on('remove', function (nodeId) {
+  console.log('REMOVED NODE : ' + nodeId); // nodeId = SLAVE1 
+});
+
+poolCluster.getConnection('SLAVE*', 'ORDER', function (err, connection) {});
+
+// of namespace : of(pattern, selector)
+poolCluster.of('*').getConnection(function (err, connection) {});
+
+var pool = poolCluster.of('SLAVE*', 'RANDOM');
+pool.getConnection(function (err, connection) {});
+pool.getConnection(function (err, connection) {});
+
+// destroy
+poolCluster.end();
+```
+
+## PoolCluster Option
+* `canRetry`: If `true`, `PoolCluster` will attempt to reconnect when connection fails. (Default: `true`)
+* `removeNodeErrorCount`: If connection fails, node's `errorCount` increases. 
+  When `errorCount` is greater than `removeNodeErrorCount`, remove a node in the `PoolCluster`. (Default: `5`)
+* `defaultSelector`: The default selector. (Default: `RR`)
+  * `RR`: Select one alternately. (Round-Robin)
+  * `RANDOM`: Select the node by random function.
+  * `ORDER`: Select the first node available unconditionally.
+
+```js
+var clusterConfig = {
+  removeNodeErrorCount: 1, // Remove the node immediately when connection fails.
+  defaultSelector: 'ORDER',
+};
+
+var poolCluster = mysql.createPoolCluster(clusterConfig);
+```
+
 ## Switching users / altering connection state
 
 MySQL offers a changeUser command that allows you to alter the current user and
@@ -297,33 +353,45 @@ by this module.
 ## Server disconnects
 
 You may lose the connection to a MySQL server due to network problems, the
-server timing you out, or the server crashing. All of these events are
-considered fatal errors, and will have the `err.code =
+server timing you out, the server being restarted, or crashing. All of these
+events are considered fatal errors, and will have the `err.code =
 'PROTOCOL_CONNECTION_LOST'`.  See the [Error Handling](#error-handling) section
 for more information.
 
-The best way to handle such unexpected disconnects is shown below:
+A good way to handle such unexpected disconnects is shown below:
 
 ```js
-function handleDisconnect(connection) {
+var db_config = {
+  host: 'localhost',
+    user: 'root',
+	password: '',
+	database: 'example'
+};
+
+var connection;
+
+function handleDisconnect() {
+  connection = mysql.createConnection(db_config); // Recreate the connection, since
+                                                  // the old one cannot be reused.
+
+  connection.connect(function(err) {              // The server is either down
+    if(err) {                                     // or restarting (takes a while sometimes).
+      console.log('error when connecting to db:', err);
+      setTimeout(handleDisconnect, 2000); // We introduce a delay before attempting to reconnect,
+    }                                     // to avoid a hot loop, and to allow our node script to
+  });                                     // process asynchronous requests in the meantime.
+                                          // If you're also serving http, display a 503 error.
   connection.on('error', function(err) {
-    if (!err.fatal) {
-      return;
+    console.log('db error', err);
+    if(err.code === 'PROTOCOL_CONNECTION_LOST') { // Connection to the MySQL server is usually
+      handleDisconnect();                         // lost due to either server restart, or a
+    } else {                                      // connnection idle timeout (the wait_timeout
+      throw err;                                  // server variable configures this)
     }
-
-    if (err.code !== 'PROTOCOL_CONNECTION_LOST') {
-      throw err;
-    }
-
-    console.log('Re-connecting lost connection: ' + err.stack);
-
-    connection = mysql.createConnection(connection.config);
-    handleDisconnect(connection);
-    connection.connect();
   });
 }
 
-handleDisconnect(connection);
+handleDisconnect();
 ```
 
 As you can see in the example above, re-connecting a connection is done by
@@ -337,7 +405,7 @@ space for a new connection to be created on the next getConnection call.
 
 In order to avoid SQL Injection attacks, you should always escape any user
 provided data before using it inside a SQL query. You can do so using the
-`connection.escape()` method:
+`connection.escape()` or `pool.escape()` methods:
 
 ```js
 var userId = 'some user provided value';
@@ -429,6 +497,18 @@ connection.query('SELECT * FROM ?? WHERE id = ?', ['users', userId], function(er
 **Please note that this last character sequence is experimental and syntax might change**
 
 When you pass an Object to `.escape()` or `.query()`, `.escapeId()` is used to avoid SQL injection in object keys.
+
+### Preparing Queries
+
+You can use mysql.format to prepare a query with multiple insertion points, utilizing the proper escaping for ids and values. A simple example of this follows:
+
+```js
+var sql = "SELECT * FROM ?? WHERE ?? = ?";
+var inserts = ['users', 'id', userId];
+sql = mysql.format(sql, inserts);
+```
+
+Following this you then have a valid, escaped query that you can then send to the database safely. This is useful if you are looking to prepare the query before actually sending it to the database. As mysql.format is exposed from SqlString.format you also have the option (but are not required) to pass in stringifyObject and timezone, allowing you provide a custom means of turning objects into strings, as well as a location-specific/timezone-aware Date.
 
 ### Custom format
 
@@ -627,11 +707,50 @@ connection.query(options, function(err, results) {
     table1_fieldA: '...',
     table1_fieldB: '...',
     table2_fieldA: '...',
-    table2_fieldB: '...'
+    table2_fieldB: '...',
   }, ...]
   */
 });
 ```
+
+## Transactions
+
+Simple transaction support is available at the connection level:
+
+```js
+connection.beginTransaction(function(err) {
+  if (err) { throw err; }
+  connection.query('INSERT INTO posts SET title=?', title, function(err, result) {
+    if (err) { 
+      connection.rollback(function() {
+        throw err;
+      });
+    }
+
+	var log = 'Post ' + result.insertId + ' added';
+
+	connection.query('INSERT INTO log SET data=?', log, function(err, result) {
+	  if (err) { 
+        connection.rollback(function() {
+          throw err;
+        });
+      }  
+	  connection.commit(function(err) {
+	    if (err) { 
+          connection.rollback(function() {
+            throw err;
+          });
+        }
+	    console.log('success!');
+	  });
+    });
+  });
+});
+```
+Please note that beginTransaction(), commit() and rollback() are simply convenience
+functions that execute the START TRANSACTION, COMMIT, and ROLLBACK commands respectively.
+It is important to understand that many commands in MySQL can cause an implicit commit,
+as described [in the MySQL documentation](http://dev.mysql.com/doc/refman/5.5/en/implicit-commit.html)
 
 ## Error handling
 
@@ -775,7 +894,7 @@ Or on the query level:
 var options = {sql: '...', typeCast: false};
 var query = connection.query(options, function(err, results) {
 
-}):
+});
 ```
 
 You can also pass a function and handle type casting yourself. You're given some
@@ -792,11 +911,23 @@ connection.query({
     }
     return next();
   }
-})
+});
 ```
+__WARNING: YOU MUST INVOKE the parser using one of these three field functions in your custom typeCast callback. They can only be called once.( see #539 for discussion)__
 
-If you need a buffer there's also a `.buffer()` function and also a `.geometry()` one
-both used by the default type cast that you can use.
+```
+field.string()
+field.buffer()
+field.geometry()
+```
+are aliases for
+```
+parser.parseLengthCodedString()
+parser.parseLengthCodedBuffer()
+parser.parseGeometryValue()
+```
+__You can find which field function you need to use by looking at: [RowDataPacket.prototype._typeCast](https://github.com/felixge/node-mysql/blob/master/lib/protocol/packets/RowDataPacket.js#L41)__
+
 
 ## Connection Flags
 
@@ -813,7 +944,7 @@ prepend the flag with a minus sign. To add a flag that is not in the default lis
 The next example blacklists FOUND_ROWS flag from default connection flags.
 
 ```js
-var connection = mysql.createConnection("mysql://localhost/test?flags=-FOUND_ROWS")
+var connection = mysql.createConnection("mysql://localhost/test?flags=-FOUND_ROWS");
 ```
 
 ### Default Flags
@@ -886,11 +1017,10 @@ For example, if you have an installation of mysql running on localhost:3306 and 
 * Make sure the database (e.g. 'test') you want to use exists and the user you entered has the proper rights to use the test database. (E.g. do not forget to execute the SQL-command ```FLUSH PRIVILEGES``` after you have created the user.)
 * In a DOS-box (or CMD-shell) in the folder of your application run ```npm install mysql --dev``` or in the mysql folder (```node_modules\mysql```), run ```npm install --dev```. (This will install additional developer-dependencies for node-mysql.)
 * Run ```npm test mysql``` in your applications folder or ```npm test``` in the mysql subfolder.
-* If you want to log the output into a file use ```npm test mysql > test.log``` or ```npm test > test.log```. 
+* If you want to log the output into a file use ```npm test mysql > test.log``` or ```npm test > test.log```.
 
 ## Todo
 
 * Prepared statements
 * setTimeout() for Connection / Query
 * Support for encodings other than UTF-8 / ASCII
-* API support for transactions, similar to [php](http://www.php.net/manual/en/mysqli.quickstart.transactions.php)
