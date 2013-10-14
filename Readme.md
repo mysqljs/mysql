@@ -220,7 +220,7 @@ If you need to set session variables on the connection before it gets used,
 you can listen to the `connection` event.
 
 ```js
-pool.on('connection', function(err, connection) {
+pool.on('connection', function(connection) {
   connection.query('SET SESSION auto_increment_increment=1')
 });
 ```
@@ -701,6 +701,45 @@ connection.query(options, function(err, results) {
 });
 ```
 
+## Transactions
+
+Simple transaction support is available at the connection level:
+
+```js
+connection.beginTransaction(function(err) {
+  if (err) { throw err; }
+  connection.query('INSERT INTO posts SET title=?', title, function(err, result) {
+    if (err) { 
+      connection.rollback(function() {
+        throw err;
+      });
+    }
+
+	var log = 'Post ' + result.insertId + ' added';
+
+	connection.query('INSERT INTO log SET data=?', log, function(err, result) {
+	  if (err) { 
+        connection.rollback(function() {
+          throw err;
+        });
+      }  
+	  connection.commit(function(err) {
+	    if (err) { 
+          connection.rollback(function() {
+            throw err;
+          });
+        }
+	    console.log('success!');
+	  });
+    });
+  });
+});
+```
+Please note that beginTransaction(), commit() and rollback() are simply convenience
+functions that execute the START TRANSACTION, COMMIT, and ROLLBACK commands respectively.
+It is important to understand that many commands in MySQL can cause an implicit commit,
+as described [in the MySQL documentation](http://dev.mysql.com/doc/refman/5.5/en/implicit-commit.html)
+
 ## Error handling
 
 This module comes with a consistent approach to error handling that you should
@@ -973,4 +1012,3 @@ For example, if you have an installation of mysql running on localhost:3306 and 
 * Prepared statements
 * setTimeout() for Connection / Query
 * Support for encodings other than UTF-8 / ASCII
-* API support for transactions, similar to [php](http://www.php.net/manual/en/mysqli.quickstart.transactions.php)
