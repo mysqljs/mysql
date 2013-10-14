@@ -498,6 +498,18 @@ connection.query('SELECT * FROM ?? WHERE id = ?', ['users', userId], function(er
 
 When you pass an Object to `.escape()` or `.query()`, `.escapeId()` is used to avoid SQL injection in object keys.
 
+### Preparing Queries
+
+You can use mysql.format to prepare a query with multiple insertion points, utilizing the proper escaping for ids and values. A simple example of this follows:
+
+```js
+var sql = "SELECT * FROM ?? WHERE ?? = ?";
+var inserts = ['users', 'id', userId];
+sql = mysql.format(sql, inserts);
+```
+
+Following this you then have a valid, escaped query that you can then send to the database safely. This is useful if you are looking to prepare the query before actually sending it to the database. As mysql.format is exposed from SqlString.format you also have the option (but are not required) to pass in stringifyObject and timezone, allowing you provide a custom means of turning objects into strings, as well as a location-specific/timezone-aware Date.
+
 ### Custom format
 
 If you prefer to have another type of query escape format, there's a connection configuration option you can use to define a custom format function. You can access the connection object if you want to use the built-in `.escape()` or any other connection function.
