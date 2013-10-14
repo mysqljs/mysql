@@ -3,6 +3,16 @@ var test      = require('utest');
 var assert    = require('assert');
 var SqlString = require(common.lib + '/protocol/SqlString');
 
+test('SqlString.escapeId', {
+  'arrays are turned into lists': function() {
+    assert.equal(SqlString.escapeId(['a', 'b', 't.c']), "`a`, `b`, `t`.`c`");
+  },
+
+  'nested arrays are flattened': function() {
+    assert.equal(SqlString.escapeId(['a', ['b', ['t.c']]]), "`a`, `b`, `t`.`c`");
+  },
+});
+
 test('SqlString.escape', {
   'undefined -> NULL': function() {
     assert.equal(SqlString.escape(undefined), 'NULL');
