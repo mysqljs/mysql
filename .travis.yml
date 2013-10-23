@@ -3,3 +3,15 @@ node_js:
   - '0.6'
   - '0.8'
   - '0.10'
+
+before_script:
+- "mysql -e 'create database node_mysql;'"
+
+env:
+  - MYSQL_DATABASE=node_mysql
+
+mysql:
+  adapter: mysql2
+  username: root
+  encoding: utf8
+  database: node_mysql
