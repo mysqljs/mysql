@@ -7,18 +7,15 @@ var common     = require('../../common');
 var connection = common.createConnection();
 var assert     = require('assert');
 
-if (common.isTravis()) {
-  return console.log('skipping - travis mysql does not support this test');
-}
-
 var err;
-connection.changeUser({user: 'does-not-exist'}, function(_err) {
+connection.changeUser({database: 'does-not-exist'}, function(_err) {
   err = _err;
   connection.end();
 });
 
 process.on('exit', function() {
   if (process.env.NO_GRANT == '1' && err === null) return;
-  assert.equal(err.code, 'ER_ACCESS_DENIED_ERROR');
+  // Might yield various error codes (ER_BAD_DB_ERROR, ER_ACCESS_DENIED_ERROR),
+  //  so we only check that the error is fatal.
   assert.equal(err.fatal, true);
 });
