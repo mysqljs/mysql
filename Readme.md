@@ -133,6 +133,7 @@ When establishing a connection, you can set the following options:
 * `host`: The hostname of the database you are connecting to. (Default:
   `localhost`)
 * `port`: The port number to connect to. (Default: `3306`)
+* `localAddress`: The source IP address to use for TCP connection. (Optional)
 * `socketPath`: The path to a unix domain socket to connect to. When used `host`
   and `port` are ignored.
 * `user`: The MySQL user to authenticate as.
