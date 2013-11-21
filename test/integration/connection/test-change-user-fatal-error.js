@@ -12,7 +12,7 @@ if (common.isTravis()) {
 }
 
 var err;
-connection.changeUser({user: 'does-not-exist'}, function(_err) {
+connection.changeUser({user: 'does-not-exist', password: 'wrong-password'}, function(_err) {
   err = _err;
   connection.end();
 });
