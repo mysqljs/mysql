@@ -133,6 +133,7 @@ When establishing a connection, you can set the following options:
 * `host`: The hostname of the database you are connecting to. (Default:
   `localhost`)
 * `port`: The port number to connect to. (Default: `3306`)
+* `localAddress`: The source IP address to use for TCP connection. (Optional)
 * `socketPath`: The path to a unix domain socket to connect to. When used `host`
   and `port` are ignored.
 * `user`: The MySQL user to authenticate as.
@@ -155,6 +156,8 @@ issue [#501](https://github.com/felixge/node-mysql/issues/501). (Default: `'fals
   objects only when they cannot be accurately represented with [JavaScript Number objects] (http://ecma262-5.com/ELS5_HTML.htm#Section_8.5)
   (which happens when they exceed the [-2^53, +2^53] range), otherwise they will be returned as
   Number objects. This option is ignored if `supportBigNumbers` is disabled.
+* `dateStrings`: Force date types (TIMESTAMP, DATETIME, DATE) to be returned as strings rather then
+   inflated into JavaScript Date objects. (Default: `false`)
 * `debug`: Prints protocol details to stdout. (Default: `false`)
 * `multipleStatements`: Allow multiple mysql statements per query. Be careful
   with this, it exposes you to SQL injection attacks. (Default: `false`)
