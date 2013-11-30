@@ -4,6 +4,14 @@ This file is a manually maintained list of changes for each release. Feel free
 to add your changes here when sending pull requests. Also send corrections if
 you spot any mistakes.
 
+## v2.0.0-rc1 (2013-11-30)
+
+* Transaction support
+* Expose SqlString.format as mysql.format()
+* Many bug fixes
+* Better support for dates in local time zone
+* Doc improvements
+
 ## v2.0.0-alpha9 (2013-08-27)
 
 * Add query to pool to execute queries directly using the pool
