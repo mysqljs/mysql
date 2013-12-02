@@ -7,7 +7,10 @@ before_script:
 - "mysql -e 'create database node_mysql;'"
 
 env:
+  - MYSQL_HOST=localhost
   - MYSQL_DATABASE=node_mysql
+  - MYSQL_USER=root
+  - MYSQL_PASSWORD=
 
 mysql:
   adapter: mysql2
