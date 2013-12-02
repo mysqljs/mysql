@@ -8,7 +8,7 @@
 npm install mysql@2.0.0-rc1
 ```
 
-Despite the alpha tag, this is the recommended version for new applications.
+Despite the `rc` tag, this is the recommended version for new applications.
 For information about the previous 0.9.x releases, visit the [v0.9 branch][].
 
 Sometimes I may also ask you to install the latest version from Github to check
