@@ -2,7 +2,6 @@ var common     = require('../../common');
 var connection = common.createConnection();
 var assert     = require('assert');
 var fs         = require('fs');
-var events     = require('events');
 
 common.useTestDb(connection);
 
@@ -18,24 +17,20 @@ connection.query([
 var path = common.fixtures + '/data.csv';
 var _createReadStream = fs.createReadStream;
 fs.createReadStream = function () {
-  var realStream = _createReadStream.apply(null, arguments);
-  if (arguments[0] === path) {
-    var mockStream = new events.EventEmitter();
-    realStream.on('data', function (buf) {
-      // emit one byte one time to emulate slow read to ensure that
-      // CJK character will not be mistakenly converted.
-      for (var i = 0, l = buf.length; i < l; i++) {
-        mockStream.emit('data', buf.slice(i, i + 1));
-      }
-    });
-    realStream.on('end', function () {
-      mockStream.emit('end');
-    });
-    return mockStream;
-  }
-  else {
-    return realStream;
-  }
+  var stream = _createReadStream.apply(null, arguments);
+  stream.on = function (evt, cb) {
+    if (evt === 'data') {
+      cb = (function (_cb) {
+        return function (buf) {
+          for (var i = 0, l = buf.length; i < l; i++) {
+            _cb(buf.slice(i, i + 1));
+          }
+        };
+      })(cb);
+    }
+    Object.getPrototypeOf(stream).on.call(stream, evt, cb);
+  };
+  return stream;
 };
 
 // we must specify character set here to correspond with the encoding of data.csv
