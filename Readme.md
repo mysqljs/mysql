@@ -102,7 +102,7 @@ var mysql      = require('mysql');
 var connection = mysql.createConnection({
   host     : 'example.org',
   user     : 'bob',
-  password : 'secret',
+  password : 'secret'
 });
 
 connection.connect(function(err) {
