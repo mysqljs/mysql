@@ -211,7 +211,7 @@ var mysql = require('mysql');
 var pool  = mysql.createPool({
   host     : 'example.org',
   user     : 'bob',
-  password : 'secret',
+  password : 'secret'
 });
 
 pool.getConnection(function(err, connection) {
@@ -323,7 +323,7 @@ poolCluster.end();
 ```js
 var clusterConfig = {
   removeNodeErrorCount: 1, // Remove the node immediately when connection fails.
-  defaultSelector: 'ORDER',
+  defaultSelector: 'ORDER'
 };
 
 var poolCluster = mysql.createPoolCluster(clusterConfig);
