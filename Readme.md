@@ -606,7 +606,7 @@ stream individual row columns, they will always be buffered up entirely. If you
 have a good use case for streaming large fields to and from MySQL, I'd love to
 get your thoughts and contributions on this.
 
-### Piping results with [Streams2](http://blog.nodejs.org/2012/12/20/streams2/) (Node v0.10+)
+### Piping results with [Streams2](http://blog.nodejs.org/2012/12/20/streams2/)
 
 The query object provides a convenience method `.stream([options])` that wraps
 query events into a [Readable](http://nodejs.org/api/stream.html#stream_class_stream_readable)
