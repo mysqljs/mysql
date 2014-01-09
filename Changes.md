@@ -4,8 +4,18 @@ This file is a manually maintained list of changes for each release. Feel free
 to add your changes here when sending pull requests. Also send corrections if
 you spot any mistakes.
 
+
+## v2.0.0 (2014-01-09)
+
+* stream improvements:
+  - node 0.8 support #692
+  - Emit 'close' events from query streams #688
+* encoding fix in streaming LOAD DATA LOCAL INFILE #670
+* Doc improvements
+
 ## v2.0.0-rc2 (2013-12-07)
-* Streaming LOAD DATA LOCAL INFILE
+
+* Streaming LOAD DATA LOCAL INFILE #668
 * Doc improvements
 
 ## v2.0.0-rc1 (2013-11-30)
