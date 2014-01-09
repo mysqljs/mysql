@@ -39,6 +39,16 @@ test('Parser', {
     assert.equal(value, 256 + 1);
   },
 
+  'parseUnsignedNumber: 3 bytes': function() {
+    var value = packet([1, 1, 1]).parseUnsignedNumber(3);
+    assert.equal(value, 65536 + 256 + 1);
+  },
+
+  'parseUnsignedNumber: 4 bytes': function() {
+    var value = packet([255, 255, 255, 255]).parseUnsignedNumber(4);
+    assert.equal(value, Math.pow(2, 32) - 1);
+  },
+
   'parseUnsignedNumber: honors offsets': function() {
     var parser = packet([1, 2]);
     assert.equal(parser.parseUnsignedNumber(1), 1);
@@ -105,6 +115,18 @@ test('Parser', {
     assert.throws(function() {
       parser.parseLengthCodedNumber();
     }, /unexpected/i);
+  },
+
+  'parseLengthCodedNumber:  53 bit BigNumber': function() {
+    var parser = packet([254, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x20, 0x00]);
+    parser._supportBigNumbers = true;
+    assert.strictEqual(parser.parseLengthCodedNumber(), '9007199254740992');
+  },
+
+  'parseLengthCodedNumber:  64 bit BigNumber': function() {
+    var parser = packet([254, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF]);
+    parser._supportBigNumbers = true;
+    assert.strictEqual(parser.parseLengthCodedNumber(), '18446744073709551615');
   },
 
   'parsePacketTerminatedString: regular case': function() {
