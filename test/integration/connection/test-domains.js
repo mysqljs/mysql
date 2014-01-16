@@ -5,11 +5,13 @@ var d2 = domain.create();
 var d3 = domain.create();
 var d4 = domain.create();
 var d5 = domain.create();
-var err1, err2, err3, err4, err5;
+var d6 = domain.create();
+var err1, err2, err3, err4, err5, err6;
 
 d1.run(function() {
   var common     = require('../../common');
   var connection = common.createConnection();
+  var pool       = common.createPool();
   var assert     = require('assert');
  
   d2.run(function() {
@@ -20,26 +22,34 @@ d1.run(function() {
   });
 
   d3.run(function() {
-    connection.query('SELECT 2', function(err, _rows, _fields) {
+    pool.query('SELECT 2', function(err, _rows, _fields) {
       if (err) throw err;
       throw new Error('inside domain 3');
     });
   });
 
   d4.run(function() {
-   connection.ping(function() {
-     throw new Error('inside domain 4');
-   });
+    connection.ping(function() {
+      throw new Error('inside domain 4');
+    });
   });
 
   d5.run(function() {
-   connection.statistics(function(err, stat) {
-     throw new Error('inside domain 5');
-   });
+    connection.statistics(function(err, stat) {
+      throw new Error('inside domain 5');
+    });
+  });
+  
+  d6.run(function() {
+    pool.getConnection(function(err, conn) {
+      conn.release();
+      throw new Error('inside domain 6');
+    });
   });
   
   connection.end();
   setTimeout(function() {
+    pool.end();
     throw new Error('inside domain 1');
   }, 100);
 
@@ -55,6 +65,9 @@ d1.run(function() {
   d5.on('error', function(err) {
     err5 = err;
   });
+  d6.on('error', function(err) {
+    err6 = err;
+  });
 });
 
 d1.on('error', function(err) {
@@ -67,4 +80,5 @@ process.on('exit', function() {
   assert.equal(''+err3, 'Error: inside domain 3') 
   assert.equal(''+err4, 'Error: inside domain 4') 
   assert.equal(''+err5, 'Error: inside domain 5') 
+  assert.equal(''+err6, 'Error: inside domain 6') 
 });
