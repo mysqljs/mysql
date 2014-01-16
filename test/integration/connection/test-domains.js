@@ -4,12 +4,8 @@ var d1 = domain.create();
 var d2 = domain.create();
 var d3 = domain.create();
 var d4 = domain.create();
-var err1, err2, err3, err4;
-
-d1.namename = '_1';
-d2.namename = '_2';
-d3.namename = '_3';
-d4.namename = '_4';
+var d5 = domain.create();
+var err1, err2, err3, err4, err5;
 
 d1.run(function() {
   var common     = require('../../common');
@@ -36,6 +32,12 @@ d1.run(function() {
    });
   });
 
+  d5.run(function() {
+   connection.statistics(function(err, stat) {
+     throw new Error('inside domain 5');
+   });
+  });
+  
   connection.end();
   setTimeout(function() {
     throw new Error('inside domain 1');
@@ -50,7 +52,9 @@ d1.run(function() {
   d4.on('error', function(err) {
     err4 = err;
   });
-
+  d5.on('error', function(err) {
+    err5 = err;
+  });
 });
 
 d1.on('error', function(err) {
@@ -61,5 +65,6 @@ process.on('exit', function() {
   assert.equal(''+err1, 'Error: inside domain 1')
   assert.equal(''+err2, 'Error: inside domain 2')
   assert.equal(''+err3, 'Error: inside domain 3') 
-  //assert.equal(''+err4, 'Error: inside domain 4') 
+  assert.equal(''+err4, 'Error: inside domain 4') 
+  assert.equal(''+err5, 'Error: inside domain 5') 
 });
