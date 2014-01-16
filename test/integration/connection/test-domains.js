@@ -17,7 +17,6 @@ d1.run(function() {
   var assert     = require('assert');
  
   d2.run(function() {
-    debugger;
     connection.query('SELECT 1', function(err, _rows, _fields) {
       if (err) throw err;
       throw new Error('inside domain 2');
@@ -25,7 +24,6 @@ d1.run(function() {
   });
 
   d3.run(function() {
-    debugger
     connection.query('SELECT 2', function(err, _rows, _fields) {
       if (err) throw err;
       throw new Error('inside domain 3');
