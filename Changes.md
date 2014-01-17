@@ -7,6 +7,7 @@ you spot any mistakes.
 ## HEAD
 
 * internal parser speed improvement #702
+* domains support
 
 ## v2.0.0 (2014-01-09)
 
