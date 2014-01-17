@@ -158,6 +158,9 @@ issue [#501](https://github.com/felixge/node-mysql/issues/501). (Default: `'fals
 * `dateStrings`: Force date types (TIMESTAMP, DATETIME, DATE) to be returned as strings rather then
    inflated into JavaScript Date objects. (Default: `false`)
 * `debug`: Prints protocol details to stdout. (Default: `false`)
+* `trace`: Generates stack traces on `Error` to include call site of library
+   entrance ("long stack traces"). Slight performance penalty for most calls.
+   (Default: `true`)
 * `multipleStatements`: Allow multiple mysql statements per query. Be careful
   with this, it exposes you to SQL injection attacks. (Default: `false`)
 * `flags`: List of connection flags to use other than the default ones. It is
