@@ -6,8 +6,11 @@ you spot any mistakes.
 
 ## HEAD
 
+## v2.0.1
+
 * internal parser speed improvement #702
 * domains support
+* 'trace' connection option to control if long stack traces are generated #713 #710 #439
 
 ## v2.0.0 (2014-01-09)
 
