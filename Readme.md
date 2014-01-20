@@ -257,6 +257,24 @@ up to 100 connections, but only ever use 5 simultaneously, only 5 connections
 will be made. Connections are also cycled round-robin style, with connections
 being taken from the top of the pool and returning to the bottom.
 
+Once the number of active connections reaches `connectionLimit` (see blelow)
+the connection will be queued and the pool will emit a `queue` event with
+the number of queued connections as the first argument to the callback.
+
+```js
+var mysql = require('mysql');
+var pool  = mysql.createPool(...);
+
+pool.on('queue',function(queuedConnections) {
+	// Do something i.e. log to console
+	console.error('connectionLimit reached, '+queuedConnections+' connections in the queue');
+});
+
+// Create and use more than connectionLimit connections
+
+```
+
+
 ## Pool options
 
 Pools accept all the same options as a connection. When creating a new
