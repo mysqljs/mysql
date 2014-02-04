@@ -6,6 +6,8 @@ you spot any mistakes.
 
 ## HEAD
 
+* Add `connectTimeout` option to specify a timeout for establishing a connection #726
+
 ## v2.0.1
 
 * internal parser speed improvement #702
