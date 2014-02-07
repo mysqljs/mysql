@@ -167,6 +167,9 @@ issue [#501](https://github.com/felixge/node-mysql/issues/501). (Default: `'fals
   with this, it exposes you to SQL injection attacks. (Default: `false`)
 * `flags`: List of connection flags to use other than the default ones. It is
   also possible to blacklist default ones. For more information, check [Connection Flags](#connection-flags).
+* `ssl`: object with ssl parameters ( same format as [crypto.createCredentials](http://nodejs.org/api/crypto.html#crypto_crypto_createcredentials_details) argument ) 
+  or a string containing name of ssl profile. Currently only 'Amazon RDS' profile is bundled, containing CA from https://rds.amazonaws.com/doc/rds-ssl-ca-cert.pem
+
 
 In addition to passing these options as an object, you can also use a url
 string. For example:
