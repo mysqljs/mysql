@@ -24,6 +24,7 @@ d1.run(function() {
     
   d3.run(function() {
     pool.getConnection(function(err, conn) {
+      if (err) throw err;
       d7.run(function() {
         pool.query('SELECT 2', function(err, _rows, _fields) {
           if (err) throw err;
@@ -36,19 +37,22 @@ d1.run(function() {
   });
 
   d4.run(function() {
-    connection.ping(function() {
+    connection.ping(function(err) {
+      if (err) throw err;
       throw new Error('inside domain 4');
     });
   });
 
   d5.run(function() {
     connection.statistics(function(err, stat) {
+      if (err) throw err;
       throw new Error('inside domain 5');
     });
   });
   
   d6.run(function() {
     pool.getConnection(function(err, conn) {
+      if (err) throw err;
       conn.release();
       throw new Error('inside domain 6');
     });
