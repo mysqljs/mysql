@@ -268,8 +268,6 @@ Pools accept all the same options as a connection. When creating a new
 connection, the options are simply passed to the connection constructor. In
 addition to those options pools accept a few extras:
 
-* `createConnection`: The function to use to create the connection. (Default:
-  `mysql.createConnection`)
 * `waitForConnections`: Determines the pool's action when no connections are
   available and the limit has been reached. If `true`, the pool will queue the
   connection request and call it when one becomes available. If `false`, the
