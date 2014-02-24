@@ -210,6 +210,22 @@ Unlike `end()` the `destroy()` method does not take a callback argument.
 
 ## Pooling connections
 
+Use pool directly.
+```js
+var mysql = require('mysql');
+var pool  = mysql.createPool({
+  host     : 'example.org',
+  user     : 'bob',
+  password : 'secret'
+});
+
+pool.query('SELECT 1 + 1 AS solution', function(err, rows, fields) {
+  if (err) throw err;
+
+  console.log('The solution is: ', rows[0].solution);
+});
+```
+
 Connections can be pooled to ease sharing a single connection, or managing
 multiple connections.
 
