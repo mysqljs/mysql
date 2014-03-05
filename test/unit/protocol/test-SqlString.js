@@ -144,6 +144,14 @@ test('SqlString.format', {
     var sql = SqlString.format('?', { 'hello': 'world' }, false)
     assert.equal(sql, "`hello` = 'world'")
   },
+  'objects is converted to values seperated by AND to the right of the WHERE': function(){
+    var sql = SqlString.format('select * from table where ?', {'hello': 'world', 'foo': 'bar'});
+    assert.equal(sql, "select * from table where `hello` = 'world' and `foo` = 'bar'");
+  },
+  'objects is converted to values seperated by , to the left of the WHERE': function(){
+      var sql = SqlString.format('insert into table set ?', {'hello': 'world', 'foo': 'bar'});
+      assert.equal(sql, "insert into table set `hello` = 'world', `foo` = 'bar'");  
+  },
 
   'objects is not converted to values': function () {
     var sql = SqlString.format('?', { 'hello': 'world' }, true)
