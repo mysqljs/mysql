@@ -210,6 +210,22 @@ Unlike `end()` the `destroy()` method does not take a callback argument.
 
 ## Pooling connections
 
+Use pool directly.
+```js
+var mysql = require('mysql');
+var pool  = mysql.createPool({
+  host     : 'example.org',
+  user     : 'bob',
+  password : 'secret'
+});
+
+pool.query('SELECT 1 + 1 AS solution', function(err, rows, fields) {
+  if (err) throw err;
+
+  console.log('The solution is: ', rows[0].solution);
+});
+```
+
 Connections can be pooled to ease sharing a single connection, or managing
 multiple connections.
 
@@ -286,8 +302,6 @@ Pools accept all the same options as a connection. When creating a new
 connection, the options are simply passed to the connection constructor. In
 addition to those options pools accept a few extras:
 
-* `createConnection`: The function to use to create the connection. (Default:
-  `mysql.createConnection`)
 * `waitForConnections`: Determines the pool's action when no connections are
   available and the limit has been reached. If `true`, the pool will queue the
   connection request and call it when one becomes available. If `false`, the

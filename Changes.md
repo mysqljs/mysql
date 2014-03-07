@@ -6,6 +6,10 @@ you spot any mistakes.
 
 ## HEAD
 
+
+## v2.1.0 (2014-02-20)
+
+* crypto.createHash fix for node.js < 11 #735
 * Add `connectTimeout` option to specify a timeout for establishing a connection #726
 * SSL support #481
 
