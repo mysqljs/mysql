@@ -18,7 +18,8 @@
   "dependencies": {
     "require-all": "0.0.3",
     "bignumber.js": "1.0.1",
-    "readable-stream": "~1.1.9"
+    "readable-stream": "~1.1.9",
+    "semver": "2.2.1"
   },
   "devDependencies": {
     "utest": "0.0.6",

@@ -6,6 +6,8 @@ you spot any mistakes.
 
 ## HEAD
 
+* fix authentication w/password failure for node.js 0.10.5
+* fix authentication w/password TypeError exception for node.js 0.10.0-0.10.4
 
 ## v2.1.0 (2014-02-20)
 
