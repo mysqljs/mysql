@@ -55,8 +55,8 @@ FakeConnection.prototype.handshake = function(options) {
   this._handshakeOptions = options || {};
 
   this._handshakeInitializationPacket = new Packets.HandshakeInitializationPacket({
-    scrambleBuff1       : new Buffer(8),
-    scrambleBuff2       : new Buffer(12),
+    scrambleBuff1       : new Buffer('1020304050607080', 'hex'),
+    scrambleBuff2       : new Buffer('0102030405060708090A0B0C', 'hex'),
     serverCapabilities1 : 512, // only 1 flag, PROTOCOL_41
     protocol41          : true
   });
@@ -71,6 +71,21 @@ FakeConnection.prototype.deny = function(message, errno) {
   }));
 };
 
+FakeConnection.prototype._sendAuthResponse = function(packet, expected) {
+  var got = packet.scrambleBuff;
+
+  if (expected.toString('hex') === got.toString('hex')) {
+    this._sendPacket(new Packets.OkPacket());
+  } else {
+    this._sendPacket(new Packets.ErrorPacket({
+      message: 'expected ' + expected.toString('hex') + ' got ' + got.toString('hex'),
+      errno: 1045 // ER_ACCESS_DENIED_ERROR
+    }));
+  }
+
+  this._parser.resetPacketNumber();
+};
+
 FakeConnection.prototype._sendPacket = function(packet) {
   var writer = new PacketWriter();
   packet.write(writer);
@@ -83,7 +98,7 @@ FakeConnection.prototype._handleData = function(buffer) {
 
 FakeConnection.prototype._parsePacket = function(header) {
   var Packet   = this._determinePacket(header);
-  var packet   = new Packet();
+  var packet   = new Packet({protocol41: true});
 
   packet.parse(this._parser);
 
@@ -93,11 +108,12 @@ FakeConnection.prototype._parsePacket = function(header) {
 
       if (this._handshakeOptions.oldPassword) {
         this._sendPacket(new Packets.UseOldPasswordPacket());
+      } else if (this._handshakeOptions.password === 'passwd') {
+        var expected = new Buffer('3DA0ADA7C9E1BB3A110575DF53306F9D2DE7FD09', 'hex');
+        this._sendAuthResponse(packet, expected);
+      } else if (this._handshakeOptions.user || this._handshakeOptions.password) {
+        throw new Error('not implemented');
       } else {
-        if (this._handshakeOptions.user || this._handshakeOptions.password) {
-          throw new Error('not implemented');
-        }
-
         this._sendPacket(new Packets.OkPacket());
         this._parser.resetPacketNumber();
       }
@@ -106,19 +122,8 @@ FakeConnection.prototype._parsePacket = function(header) {
       this._oldPasswordPacket = packet;
 
       var expected = Auth.scramble323(this._handshakeInitializationPacket.scrambleBuff(), this._handshakeOptions.password);
-      var got      = packet.scrambleBuff;
 
-      var toString = function(buffer) {
-        return Array.prototype.slice.call(buffer).join(',');
-      };
-
-      if (toString(expected) === toString(got)) {
-        this._sendPacket(new Packets.OkPacket());
-      } else {
-        this._sendPacket(new Packets.ErrorPacket());
-      }
-
-      this._parser.resetPacketNumber();
+      this._sendAuthResponse(packet, expected);
       break;
     case Packets.ComQueryPacket:
       this.emit('query', packet);
