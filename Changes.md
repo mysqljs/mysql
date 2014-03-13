@@ -7,7 +7,7 @@ you spot any mistakes.
 ## HEAD
 
 * fix authentication w/password failure for node.js 0.10.5 #746 #752
-* fix authentication w/password TypeError exception for node.js 0.10.0-0.10.4
+* fix authentication w/password TypeError exception for node.js 0.10.0-0.10.4 #747
 * fix specifying `values` in `conn.query({...}).on(...)` pattern #755
 * fix long stack trace to include the `pool.query(...)` call #715
 
