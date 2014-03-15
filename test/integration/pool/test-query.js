@@ -8,7 +8,12 @@ pool.query('SELECT 1', function (err, _rows, _fields) {
   rows = _rows;
   fields = _fields;
 
-  pool.end();
+  // Should work without error
+  pool.query('SELECT SQL_ERROR');
+
+  process.nextTick(function () {
+    pool.end();
+  });
 });
 
 process.on('exit', function () {

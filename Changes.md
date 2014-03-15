@@ -7,6 +7,7 @@ you spot any mistakes.
 ## HEAD
 
 * Use indexOf instead of for loops removing conn from pool #611
+* Make callback to `pool.query` optional like `conn.query` #585
 
 ## v2.1.1 (2014-03-13)
 
