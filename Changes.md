@@ -6,6 +6,8 @@ you spot any mistakes.
 
 ## HEAD
 
+* Use indexOf instead of for loops removing conn from pool #611
+
 ## v2.1.1 (2014-03-13)
 
 * fix authentication w/password failure for node.js 0.10.5 #746 #752
