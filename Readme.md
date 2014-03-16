@@ -382,45 +382,8 @@ events are considered fatal errors, and will have the `err.code =
 'PROTOCOL_CONNECTION_LOST'`.  See the [Error Handling](#error-handling) section
 for more information.
 
-A good way to handle such unexpected disconnects is shown below:
-
-```js
-var db_config = {
-  host: 'localhost',
-	user: 'root',
-	password: '',
-	database: 'example'
-};
-
-var connection;
-
-function handleDisconnect() {
-  connection = mysql.createConnection(db_config); // Recreate the connection, since
-                                                  // the old one cannot be reused.
-
-  connection.connect(function(err) {              // The server is either down
-    if(err) {                                     // or restarting (takes a while sometimes).
-      console.log('error when connecting to db:', err);
-      setTimeout(handleDisconnect, 2000); // We introduce a delay before attempting to reconnect,
-    }                                     // to avoid a hot loop, and to allow our node script to
-  });                                     // process asynchronous requests in the meantime.
-                                          // If you're also serving http, display a 503 error.
-  connection.on('error', function(err) {
-    console.log('db error', err);
-    if(err.code === 'PROTOCOL_CONNECTION_LOST') { // Connection to the MySQL server is usually
-      handleDisconnect();                         // lost due to either server restart, or a
-    } else {                                      // connnection idle timeout (the wait_timeout
-      throw err;                                  // server variable configures this)
-    }
-  });
-}
-
-handleDisconnect();
-```
-
-As you can see in the example above, re-connecting a connection is done by
-establishing a new connection. Once terminated, an existing connection object
-cannot be re-connected by design.
+Re-connecting a connection is done by establishing a new connection. Once
+terminated, an existing connection object cannot be re-connected by design.
 
 With Pool, disconnected connections will be removed from the pool freeing up
 space for a new connection to be created on the next getConnection call.
