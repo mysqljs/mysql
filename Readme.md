@@ -1013,5 +1013,5 @@ For example, if you have an installation of mysql running on localhost:3306 and 
 ## Todo
 
 * Prepared statements
-* setTimeout() for Connection / Query
+* setTimeout() for Query
 * Support for encodings other than UTF-8 / ASCII
