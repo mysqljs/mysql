@@ -1,6 +1,6 @@
 # node-mysql
 
-[![Build Status](https://secure.travis-ci.org/felixge/node-mysql.png)](http://travis-ci.org/felixge/node-mysql)
+[![Build Status](https://travis-ci.org/felixge/node-mysql.svg?branch=master)](https://travis-ci.org/felixge/node-mysql)
 
 ## Install
 
