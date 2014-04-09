@@ -8,6 +8,8 @@ you spot any mistakes.
 
 * Use indexOf instead of for loops removing conn from pool #611
 * Make callback to `pool.query` optional like `conn.query` #585
+* Prevent enqueuing sequences after fatal error #400
+* Fix geometry parser for empty fields #742
 
 ## v2.1.1 (2014-03-13)
 
