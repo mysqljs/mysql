@@ -14,8 +14,8 @@
   },
   "dependencies": {
     "bignumber.js": "1.3.0",
-    "require-all": "0.0.8",
-    "readable-stream": "~1.1.9"
+    "readable-stream": "~1.1.13",
+    "require-all": "0.0.8"
   },
   "devDependencies": {
     "underscore": "1.6.0",
