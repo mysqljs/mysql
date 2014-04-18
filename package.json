@@ -13,7 +13,7 @@
     "test": "make test"
   },
   "dependencies": {
-    "require-all": "0.0.3",
+    "require-all": "0.0.8",
     "bignumber.js": "1.0.1",
     "readable-stream": "~1.1.9"
   },
