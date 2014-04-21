@@ -34,4 +34,20 @@ test('ConnectionConfig#Constructor', {
 
     assert.equal(config.charsetNumber, Charsets.BIG5_CHINESE_CI);
   },
+
+  'throws on unknown charset': function() {
+    var error;
+
+    try {
+      var config = new ConnectionConfig({
+        charset: 'INVALID_CHARSET',
+      });
+    } catch (err) {
+      error = err;
+    }
+
+    assert.ok(error);
+    assert.equal(error.name, 'TypeError');
+    assert.equal(error.message, 'Unknown charset \'INVALID_CHARSET\'');
+  },
 });

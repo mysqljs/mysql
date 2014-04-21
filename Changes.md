@@ -11,6 +11,7 @@ you spot any mistakes.
 * Prevent enqueuing sequences after fatal error #400
 * Fix geometry parser for empty fields #742
 * Accept lower-case charset option
+* Throw on unknown charset option #789
 
 ## v2.1.1 (2014-03-13)
 
