@@ -12,6 +12,7 @@ you spot any mistakes.
 * Fix geometry parser for empty fields #742
 * Accept lower-case charset option
 * Throw on unknown charset option #789
+* Update known charsets
 
 ## v2.1.1 (2014-03-13)
 
