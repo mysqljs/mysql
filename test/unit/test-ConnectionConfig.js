@@ -26,4 +26,12 @@ test('ConnectionConfig#Constructor', {
     assert.equal(config.debug, true);
     assert.equal(config.charsetNumber, Charsets.BIG5_CHINESE_CI);
   },
+
+  'allows case-insensitive charset name': function() {
+    var config = new ConnectionConfig({
+      charset: 'big5_chinese_ci',
+    });
+
+    assert.equal(config.charsetNumber, Charsets.BIG5_CHINESE_CI);
+  },
 });

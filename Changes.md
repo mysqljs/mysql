@@ -10,6 +10,7 @@ you spot any mistakes.
 * Make callback to `pool.query` optional like `conn.query` #585
 * Prevent enqueuing sequences after fatal error #400
 * Fix geometry parser for empty fields #742
+* Accept lower-case charset option
 
 ## v2.1.1 (2014-03-13)
 

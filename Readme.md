@@ -138,7 +138,7 @@ When establishing a connection, you can set the following options:
 * `user`: The MySQL user to authenticate as.
 * `password`: The password of that MySQL user.
 * `database`: Name of the database to use for this connection (Optional).
-* `charset`: The charset for the connection. (Default: `'UTF8_GENERAL_CI'`. Value needs to be all in upper case letters!)
+* `charset`: The charset for the connection. (Default: `'UTF8_GENERAL_CI'`)
 * `timezone`: The timezone used to store local dates. (Default: `'local'`)
 * `connectTimeout`: The milliseconds before a timeout occurs during the initial connection
   to the MySQL server. (Default: no timeout)
