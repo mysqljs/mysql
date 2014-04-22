@@ -167,7 +167,7 @@ issue [#501](https://github.com/felixge/node-mysql/issues/501). (Default: `'fals
   with this, it exposes you to SQL injection attacks. (Default: `false`)
 * `flags`: List of connection flags to use other than the default ones. It is
   also possible to blacklist default ones. For more information, check [Connection Flags](#connection-flags).
-* `ssl`: object with ssl parameters ( same format as [crypto.createCredentials](http://nodejs.org/api/crypto.html#crypto_crypto_createcredentials_details) argument ) 
+* `ssl`: object with ssl parameters ( same format as [crypto.createCredentials](http://nodejs.org/api/crypto.html#crypto_crypto_createcredentials_details) argument )
   or a string containing name of ssl profile. Currently only 'Amazon RDS' profile is bundled, containing CA from https://rds.amazonaws.com/doc/rds-ssl-ca-cert.pem
 
 
@@ -316,7 +316,7 @@ poolCluster.getConnection('MASTER', function (err, connection) {});
 // Target Group : SLAVE1-2, Selector : order
 // If can't connect to SLAVE1, return SLAVE2. (remove SLAVE1 in the cluster)
 poolCluster.on('remove', function (nodeId) {
-  console.log('REMOVED NODE : ' + nodeId); // nodeId = SLAVE1 
+  console.log('REMOVED NODE : ' + nodeId); // nodeId = SLAVE1
 });
 
 poolCluster.getConnection('SLAVE*', 'ORDER', function (err, connection) {});
@@ -334,7 +334,7 @@ poolCluster.end();
 
 ## PoolCluster Option
 * `canRetry`: If `true`, `PoolCluster` will attempt to reconnect when connection fails. (Default: `true`)
-* `removeNodeErrorCount`: If connection fails, node's `errorCount` increases. 
+* `removeNodeErrorCount`: If connection fails, node's `errorCount` increases.
   When `errorCount` is greater than `removeNodeErrorCount`, remove a node in the `PoolCluster`. (Default: `5`)
 * `defaultSelector`: The default selector. (Default: `RR`)
   * `RR`: Select one alternately. (Round-Robin)
@@ -739,7 +739,7 @@ Simple transaction support is available at the connection level:
 connection.beginTransaction(function(err) {
   if (err) { throw err; }
   connection.query('INSERT INTO posts SET title=?', title, function(err, result) {
-    if (err) { 
+    if (err) {
       connection.rollback(function() {
         throw err;
       });
@@ -748,13 +748,13 @@ connection.beginTransaction(function(err) {
 	var log = 'Post ' + result.insertId + ' added';
 
 	connection.query('INSERT INTO log SET data=?', log, function(err, result) {
-	  if (err) { 
+	  if (err) {
         connection.rollback(function() {
           throw err;
         });
-      }  
+      }
 	  connection.commit(function(err) {
-	    if (err) { 
+	    if (err) {
           connection.rollback(function() {
             throw err;
           });
