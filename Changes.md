@@ -13,6 +13,7 @@ you spot any mistakes.
 * Accept lower-case charset option
 * Throw on unknown charset option #789
 * Update known charsets
+* Remove console.warn from PoolCluster #744
 
 ## v2.1.1 (2014-03-13)
 
