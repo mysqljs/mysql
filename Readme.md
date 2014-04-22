@@ -414,6 +414,9 @@ connection.query('SELECT * FROM users WHERE id = ?', [userId], function(err, res
 This looks similar to prepared statements in MySQL, however it really just uses
 the same `connection.escape()` method internally.
 
+**Caution** This also differs from prepared statements in that all `?` are
+replaced, even those contained in comments and strings.
+
 Different value types are escaped differently, here is how:
 
 * Numbers are left untouched
