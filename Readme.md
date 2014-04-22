@@ -541,6 +541,33 @@ string, otherwise it will throw.
 This option is also required when fetching big numbers from the database, otherwise
 you will get values rounded to hundreds or thousands due to the precision limit.
 
+##Getting the number of affected rows.
+
+You can get the number of affected rows from an insert, update or delete statement.
+
+```js
+connection.query('DELETE FROM posts WHERE title = "wrong"', function (err, result) {
+  if (err) throw err;
+
+  console.log(result.affectedRows);
+})
+```
+
+##Geting the number of changed rows.
+
+You can get the number of changed rows from an update statement.
+
+"changedRows" differs from "affectedRows" in that it does not count updated rows
+whose values were not changed.
+
+```js
+connection.query('UPDATE posts SET ...', function (err, response) {
+  if (err) throw err;
+
+  console.log(result.changedRows);
+})
+```
+
 ## Executing queries in parallel
 
 The MySQL protocol is sequential, this means that you need multiple connections
