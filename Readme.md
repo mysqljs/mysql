@@ -546,7 +546,7 @@ you will get values rounded to hundreds or thousands due to the precision limit.
 You can get the number of affected rows from an insert, update or delete statement.
 
 ```js
-connection.query('DELETE FROM posts WHERE title = ?', ['missprint'], function (err, result) {
+connection.query('DELETE FROM posts WHERE title = "wrong"', function (err, result) {
   if (err) throw err;
 
   console.log(result.affectedRows);
