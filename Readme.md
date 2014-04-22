@@ -541,7 +541,7 @@ string, otherwise it will throw.
 This option is also required when fetching big numbers from the database, otherwise
 you will get values rounded to hundreds or thousands due to the precision limit.
 
-##Getting the number of affected rows.
+## Getting the number of affected rows.
 
 You can get the number of affected rows from an insert, update or delete statement.
 
@@ -549,11 +549,11 @@ You can get the number of affected rows from an insert, update or delete stateme
 connection.query('DELETE FROM posts WHERE title = "wrong"', function (err, result) {
   if (err) throw err;
 
-  console.log(result.affectedRows);
+  console.log('deleted ' + result.affectedRows + ' rows');
 })
 ```
 
-##Geting the number of changed rows.
+## Getting the number of changed rows.
 
 You can get the number of changed rows from an update statement.
 
@@ -564,7 +564,7 @@ whose values were not changed.
 connection.query('UPDATE posts SET ...', function (err, response) {
   if (err) throw err;
 
-  console.log(result.changedRows);
+  console.log('changed ' + result.changedRows + ' rows');
 })
 ```
 
@@ -1020,22 +1020,14 @@ will have:
 
 ## Running unit tests
 
-Set the environment variables `MYSQL_DATABASE`, `MYSQL_HOST`, `MYSQL_PORT`, `MYSQL_USER` and `MYSQL_PASSWORD`. (You may want to put these in a `config.sh` file and source it when you run the tests). Then run `make test`.
+Set the environment variables `MYSQL_DATABASE`, `MYSQL_HOST`, `MYSQL_PORT`, `MYSQL_USER` and `MYSQL_PASSWORD`. Then run `npm test`.
 
 For example, if you have an installation of mysql running on localhost:3306 and no password set for the `root` user, run:
 
 ```
   mysql -u root -e "CREATE DATABASE IF NOT EXISTS node_mysql_test"
-  MYSQL_HOST=localhost MYSQL_PORT=3306 MYSQL_DATABASE=node_mysql_test MYSQL_USER=root MYSQL_PASSWORD= make test
+  MYSQL_HOST=localhost MYSQL_PORT=3306 MYSQL_DATABASE=node_mysql_test MYSQL_USER=root MYSQL_PASSWORD= npm test
 ```
-
-## Running unit tests on windows
-
-* Edit the variables in the file ```make.bat```  according to your system and mysql-settings.
-* Make sure the database (e.g. 'test') you want to use exists and the user you entered has the proper rights to use the test database. (E.g. do not forget to execute the SQL-command ```FLUSH PRIVILEGES``` after you have created the user.)
-* In a DOS-box (or CMD-shell) in the folder of your application run ```npm install mysql --dev``` or in the mysql folder (```node_modules\mysql```), run ```npm install --dev```. (This will install additional developer-dependencies for node-mysql.)
-* Run ```npm test mysql``` in your applications folder or ```npm test``` in the mysql subfolder.
-* If you want to log the output into a file use ```npm test mysql > test.log``` or ```npm test > test.log```.
 
 ## Todo
 
