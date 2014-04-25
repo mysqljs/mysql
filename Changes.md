@@ -14,6 +14,7 @@ you spot any mistakes.
 * Throw on unknown charset option #789
 * Update known charsets
 * Remove console.warn from PoolCluster #744
+* Fix `pool.end` to handle queued connections #797
 
 ## v2.1.1 (2014-03-13)
 
