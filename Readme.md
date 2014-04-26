@@ -167,8 +167,7 @@ issue [#501](https://github.com/felixge/node-mysql/issues/501). (Default: `'fals
   with this, it exposes you to SQL injection attacks. (Default: `false`)
 * `flags`: List of connection flags to use other than the default ones. It is
   also possible to blacklist default ones. For more information, check [Connection Flags](#connection-flags).
-* `ssl`: object with ssl parameters ( same format as [crypto.createCredentials](http://nodejs.org/api/crypto.html#crypto_crypto_createcredentials_details) argument ) 
-  or a string containing name of ssl profile. Currently only 'Amazon RDS' profile is bundled, containing CA from https://rds.amazonaws.com/doc/rds-ssl-ca-cert.pem
+* `ssl`: object with ssl parameters or a string containing name of ssl profile. See [SSL options](#ssl-options).
 
 
 In addition to passing these options as an object, you can also use a url
@@ -180,6 +179,28 @@ var connection = mysql.createConnection('mysql://user:pass@host/db?debug=true&ch
 
 Note: The query values are first attempted to be parsed as JSON, and if that
 fails assumed to be plaintext strings.
+
+### SSL options
+
+The `ssl` option in the connection options takes a string or an object. When given a string,
+it uses one of the predefined SSL profiles included. The following profiles are included:
+
+* `"Amazon RDS"`: this profile is for connecting to an Amazon RDS server and contains the
+  ca from https://rds.amazonaws.com/doc/rds-ssl-ca-cert.pem
+
+When connecting to other servers, you will need to provide an object of options, in the
+same format as [crypto.createCredentials](http://nodejs.org/api/crypto.html#crypto_crypto_createcredentials_details).
+Please note the arguments expect a string of the certificate, not a file name to the
+certificate. Here is a simple example:
+
+```js
+var connection = mysql.createConnection({
+  host : 'localhost',
+  ssl  : {
+    ca : fs.readFileSync(__dirname + '/mysql-ca.crt')
+  }
+});
+```
 
 ## Terminating connections
 
