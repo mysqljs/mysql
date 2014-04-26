@@ -1,6 +1,7 @@
 // An experimental fake MySQL server for tricky integration tests. Expanded
 // as needed.
 
+var _            = require('underscore');
 var Net          = require('net');
 var Packets      = require('../lib/protocol/packets');
 var PacketWriter = require('../lib/protocol/PacketWriter');
@@ -54,12 +55,14 @@ function FakeConnection(socket) {
 FakeConnection.prototype.handshake = function(options) {
   this._handshakeOptions = options || {};
 
-  this._handshakeInitializationPacket = new Packets.HandshakeInitializationPacket({
+  var packetOpiotns = _.extend({
     scrambleBuff1       : new Buffer('1020304050607080', 'hex'),
     scrambleBuff2       : new Buffer('0102030405060708090A0B0C', 'hex'),
     serverCapabilities1 : 512, // only 1 flag, PROTOCOL_41
     protocol41          : true
-  });
+  }, this._handshakeOptions);
+
+  this._handshakeInitializationPacket = new Packets.HandshakeInitializationPacket(packetOpiotns);
 
   this._sendPacket(this._handshakeInitializationPacket);
 };

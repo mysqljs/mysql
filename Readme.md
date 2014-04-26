@@ -105,7 +105,12 @@ var connection = mysql.createConnection({
 });
 
 connection.connect(function(err) {
-  // connected! (unless `err` is set)
+  if (err) {
+    console.error('error connecting: ' + err.stack);
+    return;
+  }
+
+  console.log('connected as id ' + connection.threadId);
 });
 ```
 
@@ -590,6 +595,18 @@ connection.query('UPDATE posts SET ...', function (err, response) {
 
   console.log('changed ' + result.changedRows + ' rows');
 })
+```
+
+## Getting the connection ID
+
+You can get the MySQL connection ID ("thread ID") of a given connection using the `threadId`
+property.
+
+```js
+connection.connect(function(err) {
+  if (err) throw err;
+  console.log('connected as id ' + connection.threadId);
+});
 ```
 
 ## Executing queries in parallel

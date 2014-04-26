@@ -17,6 +17,7 @@ you spot any mistakes.
 * Fix `pool.end` to handle queued connections #797
 * Fix `pool.releaseConnection` to keep connection queue flowing #797
 * Fix SSL handshake error to  be catchable #800
+* Add `connection.threadId` to get MySQL connection ID #602
 
 ## v2.1.1 (2014-03-13)
 
