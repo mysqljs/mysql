@@ -7,7 +7,8 @@ var pool   = common.createPool({
   waitForConnections : true
 });
 
-var connErr   = null;
+var conn1Err  = null;
+var conn2Err  = null;
 var poolEnded = false;
 var server    = common.createFakeServer();
 
@@ -27,7 +28,11 @@ server.listen(common.fakeServerPort, function(err) {
   });
 
   pool.getConnection(function(err, conn){
-    connErr = err;
+    conn1Err = err;
+  });
+
+  pool.getConnection(function(err, conn){
+    conn2Err = err;
   });
 });
 
@@ -37,6 +42,8 @@ server.on('connection', function(incomingConnection) {
 
 process.on('exit', function() {
   assert.ok(poolEnded);
-  assert.ok(connErr);
-  assert.equal(connErr.message, 'Pool is closed.');
+  assert.ok(conn1Err);
+  assert.ok(conn2Err);
+  assert.equal(conn1Err.message, 'Pool is closed.');
+  assert.equal(conn2Err.message, 'Pool is closed.');
 });
