@@ -16,6 +16,7 @@ you spot any mistakes.
 * Remove console.warn from PoolCluster #744
 * Fix `pool.end` to handle queued connections #797
 * Fix `pool.releaseConnection` to keep connection queue flowing #797
+* Fix SSL handshake error to  be catchable #800
 
 ## v2.1.1 (2014-03-13)
 
