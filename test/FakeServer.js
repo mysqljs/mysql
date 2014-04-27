@@ -131,6 +131,10 @@ FakeConnection.prototype._parsePacket = function(header) {
     case Packets.ComQueryPacket:
       this.emit('query', packet);
       break;
+    case Packets.ComPingPacket:
+      this._sendPacket(new Packets.OkPacket());
+      this._parser.resetPacketNumber();
+      break;
     case Packets.ComQuitPacket:
       this.emit('quit', packet);
       this._socket.end();
@@ -151,6 +155,7 @@ FakeConnection.prototype._determinePacket = function() {
   switch (firstByte) {
     case 0x01: return Packets.ComQuitPacket;
     case 0x03: return Packets.ComQueryPacket;
+    case 0x0e: return Packets.ComPingPacket;
     default:
       throw new Error('Unknown packet, first byte: ' + firstByte);
       break;

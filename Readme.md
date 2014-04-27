@@ -304,6 +304,9 @@ up to 100 connections, but only ever use 5 simultaneously, only 5 connections
 will be made. Connections are also cycled round-robin style, with connections
 being taken from the top of the pool and returning to the bottom.
 
+When a previous connection is retrieved from the pool, a ping packet is sent
+to the server to check if the connection is still good.
+
 ## Pool options
 
 Pools accept all the same options as a connection. When creating a new
