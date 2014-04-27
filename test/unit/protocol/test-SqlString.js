@@ -140,6 +140,11 @@ test('SqlString.format', {
     assert.equal(sql, "'hello?' and 'b'");
   },
 
+  'undefined is ignored': function () {
+    var sql = SqlString.format('?', undefined, false)
+    assert.equal(sql, '?')
+  },
+
   'objects is converted to values': function () {
     var sql = SqlString.format('?', { 'hello': 'world' }, false)
     assert.equal(sql, "`hello` = 'world'")

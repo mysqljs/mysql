@@ -20,6 +20,7 @@ you spot any mistakes.
 * Add `connection.threadId` to get MySQL connection ID #602
 * Ensure `pool.getConnection` retrieves good connections #434 #557 #778
 * Fix pool cluster wildcard matching #627
+* Pass query values through to `SqlString.format` #590
 
 ## v2.1.1 (2014-03-13)
 
