@@ -4,7 +4,7 @@ This file is a manually maintained list of changes for each release. Feel free
 to add your changes here when sending pull requests. Also send corrections if
 you spot any mistakes.
 
-## HEAD
+## v2.2.0 (2014-04-27)
 
 * Use indexOf instead of for loops removing conn from pool #611
 * Make callback to `pool.query` optional like `conn.query` #585
