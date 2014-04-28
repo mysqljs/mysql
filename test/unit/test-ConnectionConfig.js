@@ -51,3 +51,43 @@ test('ConnectionConfig#Constructor', {
     assert.equal(error.message, 'Unknown charset \'INVALID_CHARSET\'');
   },
 });
+
+test('ConnectionConfig#Constructor.connectTimeout', {
+  'defaults to 2 minutes': function() {
+    var config = new ConnectionConfig({});
+
+    assert.equal(config.connectTimeout, (2 * 60 * 1000));
+  },
+
+  'undefined uses default': function() {
+    var config = new ConnectionConfig({
+      connectTimeout: undefined
+    });
+
+    assert.equal(config.connectTimeout, (2 * 60 * 1000));
+  },
+
+  'can set to null': function() {
+    var config = new ConnectionConfig({
+      connectTimeout: null
+    });
+
+    assert.equal(config.connectTimeout, null);
+  },
+
+  'can set to 0': function() {
+    var config = new ConnectionConfig({
+      connectTimeout: 0
+    });
+
+    assert.equal(config.connectTimeout, 0);
+  },
+
+  'can set to custom value': function() {
+    var config = new ConnectionConfig({
+      connectTimeout: 10000
+    });
+
+    assert.equal(config.connectTimeout, 10000);
+  },
+});

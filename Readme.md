@@ -146,7 +146,7 @@ When establishing a connection, you can set the following options:
 * `charset`: The charset for the connection. (Default: `'UTF8_GENERAL_CI'`)
 * `timezone`: The timezone used to store local dates. (Default: `'local'`)
 * `connectTimeout`: The milliseconds before a timeout occurs during the initial connection
-  to the MySQL server. (Default: no timeout)
+  to the MySQL server. (Default: 2 minutes)
 * `stringifyObjects`: Stringify objects instead of converting to values. See
 issue [#501](https://github.com/felixge/node-mysql/issues/501). (Default: `'false'`)
 * `insecureAuth`: Allow connecting to MySQL instances that ask for the old
