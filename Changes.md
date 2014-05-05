@@ -6,6 +6,7 @@ you spot any mistakes.
 
 ## HEAD
 
+* Clone connection config for new pool connections
 * Default `connectTimeout` to 2 minutes
 
 ## v2.2.0 (2014-04-27)

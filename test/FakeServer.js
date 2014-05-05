@@ -135,6 +135,20 @@ FakeConnection.prototype._parsePacket = function(header) {
       this._sendPacket(new Packets.OkPacket());
       this._parser.resetPacketNumber();
       break;
+    case Packets.ComChangeUserPacket:
+      this._clientAuthenticationPacket = new Packets.ClientAuthenticationPacket({
+        clientFlags  : this._clientAuthenticationPacket.clientFlags,
+        filler       : this._clientAuthenticationPacket.filler,
+        maxPacketSize: this._clientAuthenticationPacket.maxPacketSize,
+        protocol41   : this._clientAuthenticationPacket.protocol41,
+        charsetNumber: packet.charsetNumber,
+        database     : packet.database,
+        scrambleBuff : packet.scrambleBuff,
+        user         : packet.user
+      });
+      this._sendPacket(new Packets.OkPacket());
+      this._parser.resetPacketNumber();
+      break;
     case Packets.ComQuitPacket:
       this.emit('quit', packet);
       this._socket.end();
@@ -156,6 +170,7 @@ FakeConnection.prototype._determinePacket = function() {
     case 0x01: return Packets.ComQuitPacket;
     case 0x03: return Packets.ComQueryPacket;
     case 0x0e: return Packets.ComPingPacket;
+    case 0x11: return Packets.ComChangeUserPacket;
     default:
       throw new Error('Unknown packet, first byte: ' + firstByte);
       break;
