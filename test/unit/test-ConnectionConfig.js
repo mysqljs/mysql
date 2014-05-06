@@ -17,7 +17,7 @@ test('ConnectionConfig#Constructor', {
   },
 
   'allows additional options via url query': function() {
-    var url    = 'mysql://myhost/mydb?debug=true&collation=BIG5_CHINESE_CI';
+    var url    = 'mysql://myhost/mydb?debug=true&charset=BIG5_CHINESE_CI';
     var config = new ConnectionConfig(url);
 
     assert.equal(config.host, 'myhost');
@@ -29,7 +29,7 @@ test('ConnectionConfig#Constructor', {
 
   'allows case-insensitive collation name': function() {
     var config = new ConnectionConfig({
-      collation: 'big5_chinese_ci',
+      charset: 'big5_chinese_ci',
     });
 
     assert.equal(config.charsetNumber, Collations.BIG5_CHINESE_CI);
