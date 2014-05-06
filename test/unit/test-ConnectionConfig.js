@@ -67,6 +67,21 @@ test('ConnectionConfig#Constructor', {
     assert.equal(config.charsetNumber, Collations.UTF8_GENERAL_CI);
   },
 
+  'throws if incompatible charset and collation are specified': function() {
+    var error;
+    try {
+      var config = new ConnectionConfig({
+        charset: 'latin1',
+        collation: 'UTF8MB4_BIN'
+      });
+    } catch (err) {
+      error = err;
+    }
+    assert.ok(error);
+    assert.equal(error.name, 'TypeError');
+    assert.equal(error.message, 'Invalid charset \'latin1\' specified with collation \'UTF8MB4_BIN\'');
+  }
+
 });
 
 test('ConnectionConfig#Constructor.connectTimeout', {
