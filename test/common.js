@@ -1,5 +1,8 @@
 var common     = exports;
+var crypto     = require('crypto');
+var fs         = require('fs');
 var path       = require('path');
+var tls        = require('tls');
 var _          = require('underscore');
 var FakeServer = require('./FakeServer');
 
@@ -45,6 +48,12 @@ common.createFakeServer = function(options) {
   return new FakeServer(_.extend({}, options));
 };
 
+common.createSecurePair = function() {
+  var credentials = crypto.createCredentials(common.getSSLConfig());
+
+  return tls.createSecurePair(credentials, true);
+};
+
 common.useTestDb = function(connection) {
   var query = connection.query('CREATE DATABASE ' + common.testDatabase, function(err) {
     if (err && err.code !== 'ER_DB_CREATE_EXISTS') throw err;
@@ -55,6 +64,13 @@ common.useTestDb = function(connection) {
 
 common.getTestConfig = function(config) {
   return mergeTestConfig(config);
+};
+
+common.getSSLConfig = function() {
+  return {
+    cert : fs.readFileSync(path.join(common.fixtures, 'server.crt'), 'ascii'),
+    key  : fs.readFileSync(path.join(common.fixtures, 'server.key'), 'ascii')
+  };
 };
 
 function mergeTestConfig(config) {

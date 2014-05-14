@@ -1,6 +1,7 @@
 // An experimental fake MySQL server for tricky integration tests. Expanded
 // as needed.
 
+var common       = require('./common');
 var _            = require('underscore');
 var Net          = require('net');
 var Packets      = require('../lib/protocol/packets');
@@ -42,6 +43,7 @@ function FakeConnection(socket) {
   EventEmitter.call(this);
 
   this._socket = socket;
+  this._stream = socket;
   this._parser = new Parser({onPacket: this._parsePacket.bind(this)});
 
   this._handshakeInitializationPacket = null;
@@ -92,7 +94,7 @@ FakeConnection.prototype._sendAuthResponse = function(packet, expected) {
 FakeConnection.prototype._sendPacket = function(packet) {
   var writer = new PacketWriter();
   packet.write(writer);
-  this._socket.write(writer.toBuffer(this._parser));
+  this._stream.write(writer.toBuffer(this._parser));
 };
 
 FakeConnection.prototype._handleData = function(buffer) {
@@ -102,13 +104,13 @@ FakeConnection.prototype._handleData = function(buffer) {
 FakeConnection.prototype._parsePacket = function(header) {
   var Packet   = this._determinePacket(header);
   var packet   = new Packet({protocol41: true});
+  var parser   = this._parser;
 
-  packet.parse(this._parser);
+  packet.parse(parser);
 
   switch (Packet) {
     case Packets.ClientAuthenticationPacket:
       this._clientAuthenticationPacket = packet;
-
       if (this._handshakeOptions.oldPassword) {
         this._sendPacket(new Packets.UseOldPasswordPacket());
       } else if (this._handshakeOptions.password === 'passwd') {
@@ -118,8 +120,29 @@ FakeConnection.prototype._parsePacket = function(header) {
         throw new Error('not implemented');
       } else {
         this._sendPacket(new Packets.OkPacket());
-        this._parser.resetPacketNumber();
+        parser.resetPacketNumber();
       }
+      break;
+    case Packets.SSLRequestPacket:
+      // halt parser
+      parser.pause();
+      this._socket.removeAllListeners('data');
+
+      // inject secure pair
+      var securePair = common.createSecurePair();
+      this._socket.pipe(securePair.encrypted);
+      this._stream = securePair.cleartext;
+      securePair.cleartext.on('data', this._handleData.bind(this));
+      securePair.encrypted.pipe(this._socket);
+
+      // resume
+      process.nextTick(function() {
+        var buffer = parser._buffer.slice(parser._offset);
+        parser._offset = parser._buffer.length;
+        parser.resume();
+        securePair.encrypted.write(buffer);
+      });
+
       break;
     case Packets.OldPasswordPacket:
       this._oldPasswordPacket = packet;
@@ -133,7 +156,7 @@ FakeConnection.prototype._parsePacket = function(header) {
       break;
     case Packets.ComPingPacket:
       this._sendPacket(new Packets.OkPacket());
-      this._parser.resetPacketNumber();
+      parser.resetPacketNumber();
       break;
     case Packets.ComChangeUserPacket:
       this._clientAuthenticationPacket = new Packets.ClientAuthenticationPacket({
@@ -147,7 +170,7 @@ FakeConnection.prototype._parsePacket = function(header) {
         user         : packet.user
       });
       this._sendPacket(new Packets.OkPacket());
-      this._parser.resetPacketNumber();
+      parser.resetPacketNumber();
       break;
     case Packets.ComQuitPacket:
       this.emit('quit', packet);
@@ -158,10 +181,18 @@ FakeConnection.prototype._parsePacket = function(header) {
   }
 };
 
-FakeConnection.prototype._determinePacket = function() {
+FakeConnection.prototype._determinePacket = function(header) {
   if (!this._clientAuthenticationPacket) {
+    // first packet phase
+
+    if (header.length === 32) {
+      return Packets.SSLRequestPacket;
+    }
+
     return Packets.ClientAuthenticationPacket;
-  } else if (this._handshakeOptions.oldPassword && !this._oldPasswordPacket) {
+  }
+
+  if (this._handshakeOptions.oldPassword && !this._oldPasswordPacket) {
     return Packets.OldPasswordPacket;
   }
 
