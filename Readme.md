@@ -240,9 +240,10 @@ Use pool directly.
 ```js
 var mysql = require('mysql');
 var pool  = mysql.createPool({
-  host     : 'example.org',
-  user     : 'bob',
-  password : 'secret'
+  connectionLimit : 10,
+  host            : 'example.org',
+  user            : 'bob',
+  password        : 'secret'
 });
 
 pool.query('SELECT 1 + 1 AS solution', function(err, rows, fields) {

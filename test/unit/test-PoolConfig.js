@@ -29,4 +29,15 @@ test('PoolConfig#Constructor', {
     assert.equal(config.connectionConfig.debug, true);
     assert.equal(config.connectionConfig.charsetNumber, Charsets.BIG5_CHINESE_CI);
   },
+
+  'connection string can configure pool': function() {
+    var url    = 'mysql://myhost:3333/mydb?connectionLimit=2';
+    var config = new PoolConfig(url);
+
+    assert.ok(config.connectionConfig);
+    assert.equal(config.connectionConfig.host, 'myhost');
+    assert.equal(config.connectionConfig.port, 3333);
+    assert.equal(config.connectionConfig.database, 'mydb');
+    assert.equal(config.connectionLimit, 2);
+  },
 });
