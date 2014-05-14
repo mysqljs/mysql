@@ -6,6 +6,7 @@ you spot any mistakes.
 
 ## HEAD
 
+* Accept MySQL charset (like `UTF8` or `UTF8MB4`) in `charset` option #808
 * Clone connection config for new pool connections
 * Default `connectTimeout` to 2 minutes
 * Throw on unknown SSL profile name #817

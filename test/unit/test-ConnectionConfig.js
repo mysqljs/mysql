@@ -26,13 +26,31 @@ test('ConnectionConfig#Constructor', {
     assert.equal(config.debug, true);
     assert.equal(config.charsetNumber, Charsets.BIG5_CHINESE_CI);
   },
+});
 
-  'allows case-insensitive charset name': function() {
+test('ConnectionConfig#Constructor.charset', {
+  'accepts charset name': function() {
+    var config = new ConnectionConfig({
+      charset: 'LATIN1_SWEDISH_CI',
+    });
+
+    assert.equal(config.charsetNumber, Charsets.LATIN1_SWEDISH_CI);
+  },
+
+  'accepts case-insensitive charset name': function() {
     var config = new ConnectionConfig({
       charset: 'big5_chinese_ci',
     });
 
     assert.equal(config.charsetNumber, Charsets.BIG5_CHINESE_CI);
+  },
+
+  'accepts short charset name': function() {
+    var config = new ConnectionConfig({
+      charset: 'UTF8MB4',
+    });
+
+    assert.equal(config.charsetNumber, Charsets.UTF8MB4_GENERAL_CI);
   },
 
   'throws on unknown charset': function() {
@@ -49,6 +67,16 @@ test('ConnectionConfig#Constructor', {
     assert.ok(error);
     assert.equal(error.name, 'TypeError');
     assert.equal(error.message, 'Unknown charset \'INVALID_CHARSET\'');
+  },
+
+  'all charsets should have short name': function() {
+    var charsets = Object.keys(Charsets);
+
+    for (var i = 0; i < charsets.length; i++) {
+      var charset = charsets[i];
+      assert.ok(Charsets[charset]);
+      assert.ok(Charsets[charset.split('_')[0]]);
+    }
   },
 });
 
