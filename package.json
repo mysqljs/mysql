@@ -3,6 +3,7 @@
   "name": "mysql",
   "description": "A node.js driver for mysql. It is written in JavaScript, does not require compiling, and is 100% MIT licensed.",
   "version": "2.2.0",
+  "license": "MIT",
   "homepage": "https://github.com/felixge/node-mysql",
   "repository": {
     "type": "git",
