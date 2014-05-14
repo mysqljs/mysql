@@ -91,3 +91,36 @@ test('ConnectionConfig#Constructor.connectTimeout', {
     assert.equal(config.connectTimeout, 10000);
   },
 });
+
+test('ConnectionConfig#Constructor.ssl', {
+  'defaults to false': function() {
+    var config = new ConnectionConfig({});
+
+    assert.equal(config.ssl, false);
+  },
+
+  'string loads pre-defined profile': function() {
+    var config = new ConnectionConfig({
+      ssl: 'Amazon RDS'
+    });
+
+    assert.ok(config.ssl);
+    assert.ok(/-----BEGIN CERTIFICATE-----/.test(config.ssl.ca));
+  },
+
+  'throws on unknown profile name': function() {
+    var error;
+
+    try {
+      var config = new ConnectionConfig({
+        ssl: 'invalid profile',
+      });
+    } catch (err) {
+      error = err;
+    }
+
+    assert.ok(error);
+    assert.equal(error.name, 'TypeError');
+    assert.equal(error.message, 'Unknown SSL profile \'invalid profile\'');
+  },
+});
