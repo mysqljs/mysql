@@ -1,9 +1,23 @@
 {
-  "author": "Felix Geisendörfer <felix@debuggable.com> (http://debuggable.com/)",
   "name": "mysql",
   "description": "A node.js driver for mysql. It is written in JavaScript, does not require compiling, and is 100% MIT licensed.",
   "version": "2.2.0",
   "license": "MIT",
+  "author": "Felix Geisendörfer <felix@debuggable.com> (http://debuggable.com/)",
+  "contributors": [
+    {
+      "name": "Andrey Sidorov",
+      "email": "sidorares@yandex.ru"
+    },
+    {
+      "name": "Douglas Christopher Wilson",
+      "email": "doug@somethingdoug.com"
+    },
+    {
+      "name": "Diogo Resende",
+      "email": "dresende@thinkdigital.pt"
+    }
+  ],
   "homepage": "https://github.com/felixge/node-mysql",
   "repository": {
     "type": "git",
