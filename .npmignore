@@ -1,2 +1,4 @@
-test
-benchmark
+benchmark/
+test/
+tool/
+.travis.yml
