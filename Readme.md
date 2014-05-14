@@ -1,11 +1,9 @@
-# node-mysql
-
-[![Build Status](https://travis-ci.org/felixge/node-mysql.svg?branch=master)](https://travis-ci.org/felixge/node-mysql)
+# mysql [![Build Status](https://travis-ci.org/felixge/node-mysql.svg?branch=master)](https://travis-ci.org/felixge/node-mysql) [![NPM version](https://badge.fury.io/js/mysql.svg)](http://badge.fury.io/js/mysql)
 
 ## Install
 
-```bash
-npm install mysql
+```sh
+$ npm install mysql
 ```
 
 For information about the previous 0.9.x releases, visit the [v0.9 branch][].
@@ -13,8 +11,8 @@ For information about the previous 0.9.x releases, visit the [v0.9 branch][].
 Sometimes I may also ask you to install the latest version from Github to check
 if a bugfix is working. In this case, please do:
 
-```
-npm install felixge/node-mysql
+```sh
+$ npm install felixge/node-mysql
 ```
 
 [v0.9 branch]: https://github.com/felixge/node-mysql/tree/v0.9
