@@ -10,6 +10,7 @@ you spot any mistakes.
 * Clone connection config for new pool connections
 * Default `connectTimeout` to 2 minutes
 * Throw on unknown SSL profile name #817
+* User newer TLS functions when available #809
 
 ## v2.2.0 (2014-04-27)
 

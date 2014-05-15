@@ -3,7 +3,9 @@
 
 var common       = require('./common');
 var _            = require('underscore');
+var Crypto       = require('crypto');
 var Net          = require('net');
+var tls          = require('tls');
 var Packets      = require('../lib/protocol/packets');
 var PacketWriter = require('../lib/protocol/PacketWriter');
 var Parser       = require('../lib/protocol/Parser');
@@ -102,11 +104,10 @@ FakeConnection.prototype._handleData = function(buffer) {
 };
 
 FakeConnection.prototype._parsePacket = function(header) {
-  var Packet   = this._determinePacket(header);
-  var packet   = new Packet({protocol41: true});
-  var parser   = this._parser;
+  var Packet = this._determinePacket(header);
+  var packet = new Packet({protocol41: true});
 
-  packet.parse(parser);
+  packet.parse(this._parser);
 
   switch (Packet) {
     case Packets.ClientAuthenticationPacket:
@@ -120,29 +121,11 @@ FakeConnection.prototype._parsePacket = function(header) {
         throw new Error('not implemented');
       } else {
         this._sendPacket(new Packets.OkPacket());
-        parser.resetPacketNumber();
+        this._parser.resetPacketNumber();
       }
       break;
     case Packets.SSLRequestPacket:
-      // halt parser
-      parser.pause();
-      this._socket.removeAllListeners('data');
-
-      // inject secure pair
-      var securePair = common.createSecurePair();
-      this._socket.pipe(securePair.encrypted);
-      this._stream = securePair.cleartext;
-      securePair.cleartext.on('data', this._handleData.bind(this));
-      securePair.encrypted.pipe(this._socket);
-
-      // resume
-      process.nextTick(function() {
-        var buffer = parser._buffer.slice(parser._offset);
-        parser._offset = parser._buffer.length;
-        parser.resume();
-        securePair.encrypted.write(buffer);
-      });
-
+      this._startTLS();
       break;
     case Packets.OldPasswordPacket:
       this._oldPasswordPacket = packet;
@@ -156,7 +139,7 @@ FakeConnection.prototype._parsePacket = function(header) {
       break;
     case Packets.ComPingPacket:
       this._sendPacket(new Packets.OkPacket());
-      parser.resetPacketNumber();
+      this._parser.resetPacketNumber();
       break;
     case Packets.ComChangeUserPacket:
       this._clientAuthenticationPacket = new Packets.ClientAuthenticationPacket({
@@ -170,7 +153,7 @@ FakeConnection.prototype._parsePacket = function(header) {
         user         : packet.user
       });
       this._sendPacket(new Packets.OkPacket());
-      parser.resetPacketNumber();
+      this._parser.resetPacketNumber();
       break;
     case Packets.ComQuitPacket:
       this.emit('quit', packet);
@@ -211,3 +194,56 @@ FakeConnection.prototype._determinePacket = function(header) {
 FakeConnection.prototype.destroy = function() {
   this._socket.destroy();
 };
+
+if (tls.TLSSocket) {
+  // 0.11+ environment
+  FakeConnection.prototype._startTLS = function _startTLS() {
+    // halt parser
+    this._parser.pause();
+    this._socket.removeAllListeners('data');
+
+    // socket <-> encrypted
+    var secureContext = tls.createSecureContext(common.getSSLConfig());
+    var secureSocket  = new tls.TLSSocket(this._socket, {
+      secureContext : secureContext,
+      isServer      : true
+    });
+
+    // cleartext <-> protocol
+    secureSocket.on('data', this._handleData.bind(this));
+    this._stream = secureSocket;
+
+    // resume
+    var parser = this._parser;
+    process.nextTick(function() {
+      var buffer = parser._buffer.slice(parser._offset);
+      parser._offset = parser._buffer.length;
+      parser.resume();
+      secureSocket.ssl.receive(buffer);
+    });
+  };
+} else {
+  // pre-0.11 environment
+  FakeConnection.prototype._startTLS = function _startTLS() {
+    // halt parser
+    this._parser.pause();
+    this._socket.removeAllListeners('data');
+
+    // inject secure pair
+    var credentials = Crypto.createCredentials(common.getSSLConfig());
+    var securePair = tls.createSecurePair(credentials, true);
+    this._socket.pipe(securePair.encrypted);
+    this._stream = securePair.cleartext;
+    securePair.cleartext.on('data', this._handleData.bind(this));
+    securePair.encrypted.pipe(this._socket);
+
+    // resume
+    var parser = this._parser;
+    process.nextTick(function() {
+      var buffer = parser._buffer.slice(parser._offset);
+      parser._offset = parser._buffer.length;
+      parser.resume();
+      securePair.encrypted.write(buffer);
+    });
+  };
+}

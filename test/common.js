@@ -1,8 +1,6 @@
 var common     = exports;
-var crypto     = require('crypto');
 var fs         = require('fs');
 var path       = require('path');
-var tls        = require('tls');
 var _          = require('underscore');
 var FakeServer = require('./FakeServer');
 
@@ -46,12 +44,6 @@ common.createPoolCluster = function(config) {
 
 common.createFakeServer = function(options) {
   return new FakeServer(_.extend({}, options));
-};
-
-common.createSecurePair = function() {
-  var credentials = crypto.createCredentials(common.getSSLConfig());
-
-  return tls.createSecurePair(credentials, true);
 };
 
 common.useTestDb = function(connection) {
