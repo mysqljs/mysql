@@ -207,6 +207,20 @@ var connection = mysql.createConnection({
 });
 ```
 
+You can also connect to a MySQL server without properly providing the appropriate
+CA to trust. _You should not do this_.
+
+```js
+var connection = mysql.createConnection({
+  host : 'localhost',
+  ssl  : {
+    // DO NOT DO THIS
+    // set up your ca correctly to trust the connection
+    rejectUnauthorized: false
+  }
+});
+```
+
 ## Terminating connections
 
 There are two ways to end a connection. Terminating a connection gracefully is

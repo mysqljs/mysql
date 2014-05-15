@@ -10,6 +10,7 @@ you spot any mistakes.
 * Accept pool options in connection string to `mysql.createPool` #811
 * Clone connection config for new pool connections
 * Default `connectTimeout` to 2 minutes
+* Reject unauthorized SSL connections (use `ssl.rejectUnauthorized` to override) #816
 * Throw on unknown SSL profile name #817
 * User newer TLS functions when available #809
 

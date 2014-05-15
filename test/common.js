@@ -60,6 +60,7 @@ common.getTestConfig = function(config) {
 
 common.getSSLConfig = function() {
   return {
+    ca   : fs.readFileSync(path.join(common.fixtures, 'server.crt'), 'ascii'),
     cert : fs.readFileSync(path.join(common.fixtures, 'server.crt'), 'ascii'),
     key  : fs.readFileSync(path.join(common.fixtures, 'server.key'), 'ascii')
   };
