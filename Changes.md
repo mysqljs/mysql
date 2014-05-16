@@ -12,6 +12,7 @@ you spot any mistakes.
 * Default `connectTimeout` to 2 minutes
 * Reject unauthorized SSL connections (use `ssl.rejectUnauthorized` to override) #816
 * Return last error when PoolCluster exhausts connection retries #818
+* Remove connection from pool after `conn.changeUser` is released #806
 * Throw on unknown SSL profile name #817
 * User newer TLS functions when available #809
 
