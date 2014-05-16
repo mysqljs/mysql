@@ -28,7 +28,7 @@
     "test": "node test/run.js"
   },
   "dependencies": {
-    "bignumber.js": "1.3.0",
+    "bignumber.js": "1.4.0",
     "readable-stream": "~1.1.13",
     "require-all": "0.0.8"
   },
