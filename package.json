@@ -34,7 +34,7 @@
   },
   "devDependencies": {
     "underscore": "1.6.0",
-    "urun": "0.0.7",
+    "urun": "0.0.8",
     "utest": "0.0.8"
   },
   "engines": {

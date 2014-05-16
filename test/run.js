@@ -1,3 +1,5 @@
+var urun = require('urun');
+
 var options = {};
 
 if (process.env.FILTER) {
@@ -5,5 +7,8 @@ if (process.env.FILTER) {
 }
 
 options.reporter = 'BashTapReporter';
+options.verbose  = process.env.VERBOSE
+  ? Boolean(JSON.parse(process.env.VERBOSE))
+  : true;
 
-require('urun')(__dirname, options);
+urun(__dirname, options);

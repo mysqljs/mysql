@@ -11,7 +11,6 @@ var assert     = require('assert');
 
 var errors = [];
 process.on('uncaughtException', function(err) {
-  console.log(err.stack);
   errors.push(err);
 });
 
