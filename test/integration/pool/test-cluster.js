@@ -221,7 +221,7 @@ function createPoolCluster(clusterConfig, poolConfig) {
   cluster.of('*', 'RR').getConnection(function (err, connection) {
     cluster.end();
     
-    assert.ok(err === null);
+    assert.ifError(err);
     assert.equal(connection._clusterId, 'CORRECT');
 
     assert.equal(removedNodeId, 'ERROR');
