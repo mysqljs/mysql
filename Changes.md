@@ -4,6 +4,10 @@ This file is a manually maintained list of changes for each release. Feel free
 to add your changes here when sending pull requests. Also send corrections if
 you spot any mistakes.
 
+## HEAD
+
+* Update known error codes
+
 ## v2.3.0 (2014-05-16)
 
 * Accept MySQL charset (like `UTF8` or `UTF8MB4`) in `charset` option #808
