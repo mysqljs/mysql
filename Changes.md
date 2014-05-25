@@ -6,6 +6,7 @@ you spot any mistakes.
 
 ## HEAD
 
+* Add global errors to error constants
 * Update known error codes
 
 ## v2.3.0 (2014-05-16)
