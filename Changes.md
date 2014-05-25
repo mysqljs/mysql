@@ -6,6 +6,7 @@ you spot any mistakes.
 
 ## HEAD
 
+* Add database errors to error constants
 * Add global errors to error constants
 * Update known error codes
 
