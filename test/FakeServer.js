@@ -10,6 +10,7 @@ var Packets      = require('../lib/protocol/packets');
 var PacketWriter = require('../lib/protocol/PacketWriter');
 var Parser       = require('../lib/protocol/Parser');
 var Auth         = require('../lib/protocol/Auth');
+var Errors       = require('../lib/protocol/constants/errors');
 var EventEmitter = require('events').EventEmitter;
 var Util         = require('util');
 
@@ -86,7 +87,7 @@ FakeConnection.prototype._sendAuthResponse = function(packet, expected) {
   } else {
     this._sendPacket(new Packets.ErrorPacket({
       message: 'expected ' + expected.toString('hex') + ' got ' + got.toString('hex'),
-      errno: 1045 // ER_ACCESS_DENIED_ERROR
+      errno: Errors.ER_ACCESS_DENIED_ERROR
     }));
   }
 
