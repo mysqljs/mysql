@@ -35,7 +35,12 @@ FakeServer.prototype._handleConnection = function(socket) {
 };
 
 FakeServer.prototype.destroy = function() {
-  this._server.close();
+  if (this._server._handle) {
+    // close server if listening
+    this._server.close();
+  }
+
+  // destroy all connections
   this._connections.forEach(function(connection) {
     connection.destroy();
   });
