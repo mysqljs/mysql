@@ -42,7 +42,7 @@ server.listen(common.fakeServerPort, function(err) {
     });
   }, 200);
 
-  timeout = setTimeout(end, 2000);
+  timeout = setTimeout(end, 5000);
 });
 
 function end() {
