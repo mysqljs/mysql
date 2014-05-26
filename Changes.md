@@ -8,6 +8,7 @@ you spot any mistakes.
 
 * Add database errors to error constants
 * Add global errors to error constants
+* Throw when calling `conn.release` multiple times #824 #827
 * Update known error codes
 
 ## v2.3.0 (2014-05-16)
