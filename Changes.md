@@ -4,7 +4,7 @@ This file is a manually maintained list of changes for each release. Feel free
 to add your changes here when sending pull requests. Also send corrections if
 you spot any mistakes.
 
-## HEAD
+## v2.3.1 (2014-05-26)
 
 * Add database errors to error constants
 * Add global errors to error constants
