@@ -144,8 +144,10 @@ FakeConnection.prototype._parsePacket = function(header) {
       this.emit('query', packet);
       break;
     case Packets.ComPingPacket:
-      this._sendPacket(new Packets.OkPacket());
-      this._parser.resetPacketNumber();
+      if (!this.emit('ping', packet)) {
+        this._sendPacket(new Packets.OkPacket());
+        this._parser.resetPacketNumber();
+      }
       break;
     case Packets.ComChangeUserPacket:
       this._clientAuthenticationPacket = new Packets.ClientAuthenticationPacket({
