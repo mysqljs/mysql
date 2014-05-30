@@ -4,6 +4,11 @@ This file is a manually maintained list of changes for each release. Feel free
 to add your changes here when sending pull requests. Also send corrections if
 you spot any mistakes.
 
+## NEXT
+
+* Pool resets credentials to pool configuration on returned connection instead
+  of destroying after changeUser is called #837
+
 ## v2.7.0 (2015-05-05)
 
 * Destroy/end connections removed from the pool on error
