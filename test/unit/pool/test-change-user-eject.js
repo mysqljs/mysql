@@ -35,16 +35,18 @@ server.listen(common.fakeServerPort, function(err) {
   pool.getConnection(function(err, conn1) {
     assert.ifError(err);
     assert.strictEqual(conn1.threadId, 1);
+    assert.strictEqual(conn1.config.user, 'user_1');
 
     pool.getConnection(function(err, conn2) {
       assert.ifError(err);
-      assert.strictEqual(conn2.threadId, 3);
+      assert.strictEqual(conn1.config.user, 'user_1');
+      assert.strictEqual(conn2.threadId, 2);
       conn1.release();
       conn2.release();
 
       pool.end(function(err) {
         assert.ifError(err);
-        assert.strictEqual(closed, 3);
+        assert.strictEqual(closed, 2);
         server.destroy();
       });
     });
