@@ -415,6 +415,12 @@ The available options for this feature are:
 A sometimes useful side effect of this functionality is that this function also
 resets any connection state (variables, transactions, etc.).
 
+In the context of connection being returned to a Pool the connection will be
+reset back to the defaults for the pool before the connection is released to
+another `getConnection()` call.  When this happens the pool will emit
+`connection` to give the listener a chance to setup state on the connection
+again since it will have been reset.
+
 Errors encountered during this operation are treated as fatal connection errors
 by this module.
 
