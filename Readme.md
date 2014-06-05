@@ -1,11 +1,9 @@
-# node-mysql
-
-[![Build Status](https://secure.travis-ci.org/felixge/node-mysql.png)](http://travis-ci.org/felixge/node-mysql)
+# mysql [![Build Status](https://travis-ci.org/felixge/node-mysql.svg?branch=master)](https://travis-ci.org/felixge/node-mysql) [![NPM version](https://badge.fury.io/js/mysql.svg)](http://badge.fury.io/js/mysql)
 
 ## Install
 
-```bash
-npm install mysql
+```sh
+$ npm install mysql
 ```
 
 For information about the previous 0.9.x releases, visit the [v0.9 branch][].
@@ -13,8 +11,8 @@ For information about the previous 0.9.x releases, visit the [v0.9 branch][].
 Sometimes I may also ask you to install the latest version from Github to check
 if a bugfix is working. In this case, please do:
 
-```
-npm install felixge/node-mysql
+```sh
+$ npm install felixge/node-mysql
 ```
 
 [v0.9 branch]: https://github.com/felixge/node-mysql/tree/v0.9
@@ -105,7 +103,12 @@ var connection = mysql.createConnection({
 });
 
 connection.connect(function(err) {
-  // connected! (unless `err` is set)
+  if (err) {
+    console.error('error connecting: ' + err.stack);
+    return;
+  }
+
+  console.log('connected as id ' + connection.threadId);
 });
 ```
 
@@ -138,10 +141,12 @@ When establishing a connection, you can set the following options:
 * `user`: The MySQL user to authenticate as.
 * `password`: The password of that MySQL user.
 * `database`: Name of the database to use for this connection (Optional).
-* `charset`: The charset for the connection. (Default: `'UTF8_GENERAL_CI'`. Value needs to be all in upper case letters!)
+* `charset`: The charset for the connection. This is called "collation" in the SQL-level
+  of MySQL (like `utf8_general_ci`). If a SQL-level charset is specified (like `utf8mb4`)
+  then the default collation for that charset is used. (Default: `'UTF8_GENERAL_CI'`)
 * `timezone`: The timezone used to store local dates. (Default: `'local'`)
 * `connectTimeout`: The milliseconds before a timeout occurs during the initial connection
-  to the MySQL server. (Default: no timeout)
+  to the MySQL server. (Default: 2 minutes)
 * `stringifyObjects`: Stringify objects instead of converting to values. See
 issue [#501](https://github.com/felixge/node-mysql/issues/501). (Default: `'false'`)
 * `insecureAuth`: Allow connecting to MySQL instances that ask for the old
@@ -167,8 +172,7 @@ issue [#501](https://github.com/felixge/node-mysql/issues/501). (Default: `'fals
   with this, it exposes you to SQL injection attacks. (Default: `false`)
 * `flags`: List of connection flags to use other than the default ones. It is
   also possible to blacklist default ones. For more information, check [Connection Flags](#connection-flags).
-* `ssl`: object with ssl parameters ( same format as [crypto.createCredentials](http://nodejs.org/api/crypto.html#crypto_crypto_createcredentials_details) argument ) 
-  or a string containing name of ssl profile. Currently only 'Amazon RDS' profile is bundled, containing CA from https://rds.amazonaws.com/doc/rds-ssl-ca-cert.pem
+* `ssl`: object with ssl parameters or a string containing name of ssl profile. See [SSL options](#ssl-options).
 
 
 In addition to passing these options as an object, you can also use a url
@@ -180,6 +184,42 @@ var connection = mysql.createConnection('mysql://user:pass@host/db?debug=true&ch
 
 Note: The query values are first attempted to be parsed as JSON, and if that
 fails assumed to be plaintext strings.
+
+### SSL options
+
+The `ssl` option in the connection options takes a string or an object. When given a string,
+it uses one of the predefined SSL profiles included. The following profiles are included:
+
+* `"Amazon RDS"`: this profile is for connecting to an Amazon RDS server and contains the
+  ca from https://rds.amazonaws.com/doc/rds-ssl-ca-cert.pem
+
+When connecting to other servers, you will need to provide an object of options, in the
+same format as [crypto.createCredentials](http://nodejs.org/api/crypto.html#crypto_crypto_createcredentials_details).
+Please note the arguments expect a string of the certificate, not a file name to the
+certificate. Here is a simple example:
+
+```js
+var connection = mysql.createConnection({
+  host : 'localhost',
+  ssl  : {
+    ca : fs.readFileSync(__dirname + '/mysql-ca.crt')
+  }
+});
+```
+
+You can also connect to a MySQL server without properly providing the appropriate
+CA to trust. _You should not do this_.
+
+```js
+var connection = mysql.createConnection({
+  host : 'localhost',
+  ssl  : {
+    // DO NOT DO THIS
+    // set up your ca correctly to trust the connection
+    rejectUnauthorized: false
+  }
+});
+```
 
 ## Terminating connections
 
@@ -214,9 +254,10 @@ Use pool directly.
 ```js
 var mysql = require('mysql');
 var pool  = mysql.createPool({
-  host     : 'example.org',
-  user     : 'bob',
-  password : 'secret'
+  connectionLimit : 10,
+  host            : 'example.org',
+  user            : 'bob',
+  password        : 'secret'
 });
 
 pool.query('SELECT 1 + 1 AS solution', function(err, rows, fields) {
@@ -295,6 +336,8 @@ pool.on('queue',function(queuedConnections) {
 
 ```
 
+When a previous connection is retrieved from the pool, a ping packet is sent
+to the server to check if the connection is still good.
 
 ## Pool options
 
@@ -400,45 +443,8 @@ events are considered fatal errors, and will have the `err.code =
 'PROTOCOL_CONNECTION_LOST'`.  See the [Error Handling](#error-handling) section
 for more information.
 
-A good way to handle such unexpected disconnects is shown below:
-
-```js
-var db_config = {
-  host: 'localhost',
-	user: 'root',
-	password: '',
-	database: 'example'
-};
-
-var connection;
-
-function handleDisconnect() {
-  connection = mysql.createConnection(db_config); // Recreate the connection, since
-                                                  // the old one cannot be reused.
-
-  connection.connect(function(err) {              // The server is either down
-    if(err) {                                     // or restarting (takes a while sometimes).
-      console.log('error when connecting to db:', err);
-      setTimeout(handleDisconnect, 2000); // We introduce a delay before attempting to reconnect,
-    }                                     // to avoid a hot loop, and to allow our node script to
-  });                                     // process asynchronous requests in the meantime.
-                                          // If you're also serving http, display a 503 error.
-  connection.on('error', function(err) {
-    console.log('db error', err);
-    if(err.code === 'PROTOCOL_CONNECTION_LOST') { // Connection to the MySQL server is usually
-      handleDisconnect();                         // lost due to either server restart, or a
-    } else {                                      // connnection idle timeout (the wait_timeout
-      throw err;                                  // server variable configures this)
-    }
-  });
-}
-
-handleDisconnect();
-```
-
-As you can see in the example above, re-connecting a connection is done by
-establishing a new connection. Once terminated, an existing connection object
-cannot be re-connected by design.
+Re-connecting a connection is done by establishing a new connection. Once
+terminated, an existing connection object cannot be re-connected by design.
 
 With Pool, disconnected connections will be removed from the pool freeing up
 space for a new connection to be created on the next getConnection call.
@@ -468,6 +474,9 @@ connection.query('SELECT * FROM users WHERE id = ?', [userId], function(err, res
 
 This looks similar to prepared statements in MySQL, however it really just uses
 the same `connection.escape()` method internally.
+
+**Caution** This also differs from prepared statements in that all `?` are
+replaced, even those contained in comments and strings.
 
 Different value types are escaped differently, here is how:
 
@@ -595,6 +604,45 @@ string, otherwise it will throw.
 
 This option is also required when fetching big numbers from the database, otherwise
 you will get values rounded to hundreds or thousands due to the precision limit.
+
+## Getting the number of affected rows.
+
+You can get the number of affected rows from an insert, update or delete statement.
+
+```js
+connection.query('DELETE FROM posts WHERE title = "wrong"', function (err, result) {
+  if (err) throw err;
+
+  console.log('deleted ' + result.affectedRows + ' rows');
+})
+```
+
+## Getting the number of changed rows.
+
+You can get the number of changed rows from an update statement.
+
+"changedRows" differs from "affectedRows" in that it does not count updated rows
+whose values were not changed.
+
+```js
+connection.query('UPDATE posts SET ...', function (err, response) {
+  if (err) throw err;
+
+  console.log('changed ' + result.changedRows + ' rows');
+})
+```
+
+## Getting the connection ID
+
+You can get the MySQL connection ID ("thread ID") of a given connection using the `threadId`
+property.
+
+```js
+connection.connect(function(err) {
+  if (err) throw err;
+  console.log('connected as id ' + connection.threadId);
+});
+```
 
 ## Executing queries in parallel
 
@@ -1048,25 +1096,17 @@ will have:
 
 ## Running unit tests
 
-Set the environment variables `MYSQL_DATABASE`, `MYSQL_HOST`, `MYSQL_PORT`, `MYSQL_USER` and `MYSQL_PASSWORD`. (You may want to put these in a `config.sh` file and source it when you run the tests). Then run `make test`.
+Set the environment variables `MYSQL_DATABASE`, `MYSQL_HOST`, `MYSQL_PORT`, `MYSQL_USER` and `MYSQL_PASSWORD`. Then run `npm test`.
 
 For example, if you have an installation of mysql running on localhost:3306 and no password set for the `root` user, run:
 
 ```
   mysql -u root -e "CREATE DATABASE IF NOT EXISTS node_mysql_test"
-  MYSQL_HOST=localhost MYSQL_PORT=3306 MYSQL_DATABASE=node_mysql_test MYSQL_USER=root MYSQL_PASSWORD= make test
+  MYSQL_HOST=localhost MYSQL_PORT=3306 MYSQL_DATABASE=node_mysql_test MYSQL_USER=root MYSQL_PASSWORD= npm test
 ```
-
-## Running unit tests on windows
-
-* Edit the variables in the file ```make.bat```  according to your system and mysql-settings.
-* Make sure the database (e.g. 'test') you want to use exists and the user you entered has the proper rights to use the test database. (E.g. do not forget to execute the SQL-command ```FLUSH PRIVILEGES``` after you have created the user.)
-* In a DOS-box (or CMD-shell) in the folder of your application run ```npm install mysql --dev``` or in the mysql folder (```node_modules\mysql```), run ```npm install --dev```. (This will install additional developer-dependencies for node-mysql.)
-* Run ```npm test mysql``` in your applications folder or ```npm test``` in the mysql subfolder.
-* If you want to log the output into a file use ```npm test mysql > test.log``` or ```npm test > test.log```.
 
 ## Todo
 
 * Prepared statements
-* setTimeout() for Connection / Query
+* setTimeout() for Query
 * Support for encodings other than UTF-8 / ASCII

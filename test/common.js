@@ -1,4 +1,5 @@
 var common     = exports;
+var fs         = require('fs');
 var path       = require('path');
 var _          = require('underscore');
 var FakeServer = require('./FakeServer');
@@ -55,6 +56,14 @@ common.useTestDb = function(connection) {
 
 common.getTestConfig = function(config) {
   return mergeTestConfig(config);
+};
+
+common.getSSLConfig = function() {
+  return {
+    ca   : fs.readFileSync(path.join(common.fixtures, 'server.crt'), 'ascii'),
+    cert : fs.readFileSync(path.join(common.fixtures, 'server.crt'), 'ascii'),
+    key  : fs.readFileSync(path.join(common.fixtures, 'server.key'), 'ascii')
+  };
 };
 
 function mergeTestConfig(config) {

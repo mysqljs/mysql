@@ -27,6 +27,7 @@ d1.run(function() {
       if (err) throw err;
       d7.run(function() {
         pool.query('SELECT 2', function(err, _rows, _fields) {
+          endPool(pool);
           if (err) throw err;
           throw new Error('inside domain 7');
         });
@@ -54,13 +55,13 @@ d1.run(function() {
     pool.getConnection(function(err, conn) {
       if (err) throw err;
       conn.release();
+      endPool(pool);
       throw new Error('inside domain 6');
     });
   });
   
   connection.end();
   setTimeout(function() {
-    pool.end();
     throw new Error('inside domain 1');
   }, 100);
 
@@ -104,3 +105,8 @@ process.on('exit', function() {
   assert.equal(''+err6, 'Error: inside domain 6') 
   assert.equal(''+err7, 'Error: inside domain 7') 
 });
+
+var poolWait = 2;
+function endPool(pool) {
+  if (!--poolWait) pool.end();
+}

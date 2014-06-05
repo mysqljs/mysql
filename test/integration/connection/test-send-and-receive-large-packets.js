@@ -1,5 +1,6 @@
 var common     = require('../../common');
 var connection = common.createConnection();
+var crypto     = require('crypto');
 var assert     = require('assert');
 
 connection.connect(function(err) {
@@ -48,18 +49,27 @@ function increaseMaxAllowedPacketIfNeeded() {
   });
 }
 
-var rows = [];
-var length = Math.pow(256, 3) / 2; // Half, because of hex encoding
-var buffer = new Buffer(length);
-var sql    = 'SELECT ? as bigField';
+var buffer;
+var length   = (Math.pow(256, 3) / 2) + 10; // Half, because of hex encoding
+var rows     = [];
+var trailing = 'tailing text';
 
 function triggerLargeQueryAndResponsePackets() {
-  connection.query(sql, [buffer], function(err, _rows) {
+  var random = crypto.pseudoRandomBytes || crypto.randomBytes; // Depends on node.js version
+  var sql    = 'SELECT ? as bigField, ? as trailingField';
+
+  random(length, function(err, buf) {
     if (err) throw err;
+    assert.equal(buf.length, length);
 
-    rows = _rows;
+    connection.query(sql, [buf, trailing], function(err, _rows) {
+      if (err) throw err;
 
-    resetMaxAllowedPacket();
+      buffer = buf;
+      rows = _rows;
+
+      resetMaxAllowedPacket();
+    });
   });
 }
 
@@ -77,5 +87,7 @@ function resetMaxAllowedPacket() {
 
 process.on('exit', function() {
   assert.equal(rows.length, 1);
-  assert.equal(rows[0].bigField.length, length);
+  assert.equal(rows[0].trailingField, trailing);
+  assert.equal(rows[0].bigField.length, buffer.length);
+  assert.equal(rows[0].bigField.toString('base64'), buffer.toString('base64'));
 });

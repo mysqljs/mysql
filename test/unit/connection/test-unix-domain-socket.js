@@ -1,12 +1,12 @@
 /**
- * This test is skipped, if the environment variable "windir" is set.
- * It assumes that it runs on a windows system then.
+ * This test is skipped on Windows.
  */
-if (process.env.windir) {
-  return console.log('Skipping "test-unix-domain-socket.js" - Environment' 
-    + ' variable "windir" is set. Skipping this, because we seem to be on' 
-    + ' a windows system');  
+
+if (process.platform === 'win32') {
+  console.log('skipping - windows does not support unix sockets');
+  return;
 }
+
 var common     = require('../../common');
 var connection = common.createConnection({socketPath: common.fakeServerSocket});
 var assert     = require('assert');

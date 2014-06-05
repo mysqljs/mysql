@@ -4,8 +4,53 @@ This file is a manually maintained list of changes for each release. Feel free
 to add your changes here when sending pull requests. Also send corrections if
 you spot any mistakes.
 
-## HEAD
+## v2.3.2 (2014-05-29)
 
+* Fix pool leaking connections after `conn.changeUser` #833
+
+## v2.3.1 (2014-05-26)
+
+* Add database errors to error constants
+* Add global errors to error constants
+* Throw when calling `conn.release` multiple times #824 #827
+* Update known error codes
+
+## v2.3.0 (2014-05-16)
+
+* Accept MySQL charset (like `UTF8` or `UTF8MB4`) in `charset` option #808
+* Accept pool options in connection string to `mysql.createPool` #811
+* Clone connection config for new pool connections
+* Default `connectTimeout` to 2 minutes
+* Reject unauthorized SSL connections (use `ssl.rejectUnauthorized` to override) #816
+* Return last error when PoolCluster exhausts connection retries #818
+* Remove connection from pool after `conn.changeUser` is released #806
+* Throw on unknown SSL profile name #817
+* User newer TLS functions when available #809
+
+## v2.2.0 (2014-04-27)
+
+* Use indexOf instead of for loops removing conn from pool #611
+* Make callback to `pool.query` optional like `conn.query` #585
+* Prevent enqueuing sequences after fatal error #400
+* Fix geometry parser for empty fields #742
+* Accept lower-case charset option
+* Throw on unknown charset option #789
+* Update known charsets
+* Remove console.warn from PoolCluster #744
+* Fix `pool.end` to handle queued connections #797
+* Fix `pool.releaseConnection` to keep connection queue flowing #797
+* Fix SSL handshake error to  be catchable #800
+* Add `connection.threadId` to get MySQL connection ID #602
+* Ensure `pool.getConnection` retrieves good connections #434 #557 #778
+* Fix pool cluster wildcard matching #627
+* Pass query values through to `SqlString.format` #590
+
+## v2.1.1 (2014-03-13)
+
+* fix authentication w/password failure for node.js 0.10.5 #746 #752
+* fix authentication w/password TypeError exception for node.js 0.10.0-0.10.4 #747
+* fix specifying `values` in `conn.query({...}).on(...)` pattern #755
+* fix long stack trace to include the `pool.query(...)` call #715
 
 ## v2.1.0 (2014-02-20)
 
