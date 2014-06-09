@@ -6,8 +6,8 @@ you spot any mistakes.
 
 ## NEXT
 
-* Pool resets credentials to pool configuration on returned connection instead
-  of destroying after changeUser is called #837
+* Add code `POOL_NOEXIST` in PoolCluster error #846
+* Return `Query` object from `pool.query` like `conn.query` #830
 
 ## v2.3.2 (2014-05-29)
 
