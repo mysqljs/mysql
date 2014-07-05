@@ -7,6 +7,7 @@ you spot any mistakes.
 ## HEAD
 
 * Add code `POOL_NOEXIST` in PoolCluster error #846
+* Return `Query` object from `pool.query` like `conn.query` #830
 
 ## v2.3.2 (2014-05-29)
 
