@@ -608,7 +608,7 @@ You can get the number of changed rows from an update statement.
 whose values were not changed.
 
 ```js
-connection.query('UPDATE posts SET ...', function (err, response) {
+connection.query('UPDATE posts SET ...', function (err, result) {
   if (err) throw err;
 
   console.log('changed ' + result.changedRows + ' rows');
