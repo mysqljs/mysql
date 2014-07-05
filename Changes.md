@@ -8,6 +8,7 @@ you spot any mistakes.
 
 * Add code `POOL_NOEXIST` in PoolCluster error #846
 * Return `Query` object from `pool.query` like `conn.query` #830
+* Use `EventEmitter.listenerCount` when possible for faster counting
 
 ## v2.3.2 (2014-05-29)
 
