@@ -81,10 +81,10 @@ test('ConnectionConfig#Constructor.charset', {
 });
 
 test('ConnectionConfig#Constructor.connectTimeout', {
-  'defaults to 2 minutes': function() {
+  'defaults to 10 seconds': function() {
     var config = new ConnectionConfig({});
 
-    assert.equal(config.connectTimeout, (2 * 60 * 1000));
+    assert.equal(config.connectTimeout, (10 * 1000));
   },
 
   'undefined uses default': function() {
@@ -92,7 +92,7 @@ test('ConnectionConfig#Constructor.connectTimeout', {
       connectTimeout: undefined
     });
 
-    assert.equal(config.connectTimeout, (2 * 60 * 1000));
+    assert.equal(config.connectTimeout, (10 * 1000));
   },
 
   'can set to null': function() {
