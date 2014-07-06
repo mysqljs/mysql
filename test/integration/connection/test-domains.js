@@ -1,5 +1,6 @@
 var assert = require('assert');
 var domain = require('domain');
+var d0 = domain.create();
 var d1 = domain.create();
 var d2 = domain.create();
 var d3 = domain.create();
@@ -7,14 +8,21 @@ var d4 = domain.create();
 var d5 = domain.create();
 var d6 = domain.create();
 var d7 = domain.create();
-var err1, err2, err3, err4, err5, err6, err7;
+var err0, err1, err2, err3, err4, err5, err6, err7;
 
-d1.run(function() {
+d0.run(function() {
   var common     = require('../../common');
   var connection = common.createConnection();
   var pool       = common.createPool({ connectionLimit: 1});
   var assert     = require('assert');
- 
+
+  d1.run(function() {
+    connection.connect(function(err) {
+      if (err) throw err;
+      throw new Error('inside domain 1');
+    });
+  });
+
   d2.run(function() {
     connection.query('SELECT 1', function(err, _rows, _fields) {
       if (err) throw err;
@@ -62,7 +70,7 @@ d1.run(function() {
   
   connection.end();
   setTimeout(function() {
-    throw new Error('inside domain 1');
+    throw new Error('inside domain 0');
   }, 100);
 
   d2.on('error', function(err) {
@@ -91,12 +99,18 @@ d1.run(function() {
   });
 });
 
+d0.on('error', function(err) {
+  assert.equal(''+err, 'Error: inside domain 0');
+  err0 = err;
+});
+
 d1.on('error', function(err) {
   assert.equal(''+err, 'Error: inside domain 1');
   err1 = err;
 });
 
 process.on('exit', function() {
+  assert.equal(''+err0, 'Error: inside domain 0')
   assert.equal(''+err1, 'Error: inside domain 1')
   assert.equal(''+err2, 'Error: inside domain 2')
   assert.equal(''+err3, 'Error: inside domain 3') 

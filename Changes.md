@@ -8,6 +8,7 @@ you spot any mistakes.
 
 * Add code `POOL_NOEXIST` in PoolCluster error #846
 * Default `connectTimeout` to 10 seconds
+* Fix domain binding with `conn.connect`
 * Return `Query` object from `pool.query` like `conn.query` #830
 * Use `EventEmitter.listenerCount` when possible for faster counting
 
