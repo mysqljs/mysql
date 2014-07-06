@@ -11,6 +11,7 @@ you spot any mistakes.
 * Add `timeout` option to all sequences #855 #863
 * Default `connectTimeout` to 10 seconds
 * Fix domain binding with `conn.connect`
+* Fix `PROTOCOL_PACKETS_OUT_OF_ORDER` error to be catchable #844
 * Return `Query` object from `pool.query` like `conn.query` #830
 * Use `EventEmitter.listenerCount` when possible for faster counting
 
