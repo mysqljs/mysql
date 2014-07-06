@@ -1,9 +1,7 @@
-var common     = require('../../common');
-var connection = common.createConnection();
-var assert     = require('assert');
+var assert = require('assert');
+var common = require('../../common');
 
-connection.connect(function(err) {
-  if (err) throw err;
-
+common.getTestConnection(function (err, connection) {
+  assert.ifError(err);
   connection.destroy();
 });

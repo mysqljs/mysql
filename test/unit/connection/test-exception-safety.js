@@ -4,15 +4,12 @@
 // the connection instance ending up in a bad state where it doesn't work
 // properly or doesn't execute the next sequence anymore.
 
-var assert       = require('assert');
-var common       = require('../../common');
-var connection   = common.createConnection({port: common.fakeServerPort});
-var Charsets     = require(common.lib + '/protocol/constants/charsets');
-var Errors       = require(common.lib + '/protocol/constants/errors');
-var Packets      = require(common.lib + '/protocol/packets');
-var PacketWriter = require(common.lib + '/protocol/PacketWriter');
-var server       = common.createFakeServer();
-var Types        = require(common.lib + '/protocol/constants/types');
+var assert     = require('assert');
+var common     = require('../../common');
+var connection = common.createConnection({port: common.fakeServerPort});
+var Errors     = require(common.lib + '/protocol/constants/errors');
+var Packets    = require(common.lib + '/protocol/packets');
+var server     = common.createFakeServer();
 
 server.listen(common.fakeServerPort, function(err) {
   assert.ifError(err);
@@ -77,28 +74,6 @@ server.on('connection', function (conn) {
   conn.handshake();
   conn.on('query', function(packet) {
     switch (packet.sql) {
-      case 'SELECT 1':
-        this._sendPacket(new Packets.ResultSetHeaderPacket({
-          fieldCount: 1
-        }));
-
-        this._sendPacket(new Packets.FieldPacket({
-          catalog    : 'def',
-          charsetNr  : Charsets.UTF8_GENERAL_CI,
-          name       : '1',
-          protocol41 : true,
-          type       : Types.LONG
-        }));
-
-        this._sendPacket(new Packets.EofPacket());
-
-        var writer = new PacketWriter();
-        writer.writeLengthCodedString('1');
-        this._socket.write(writer.toBuffer(this._parser));
-
-        this._sendPacket(new Packets.EofPacket());
-        this._parser.resetPacketNumber();
-        break;
       case 'INVALID SQL':
         this._sendPacket(new Packets.ErrorPacket({
           errno   : Errors.ER_PARSE_ERROR,
@@ -111,11 +86,7 @@ server.on('connection', function (conn) {
         this._parser.resetPacketNumber();
         break;
       default:
-        this._sendPacket(new Packets.ErrorPacket({
-          errno   : Errors.ER_QUERY_INTERRUPTED,
-          message : 'Interrupted unknown query'
-        }));
-        this._parser.resetPacketNumber();
+        this._handleQueryPacket(packet);
         break;
     }
   });

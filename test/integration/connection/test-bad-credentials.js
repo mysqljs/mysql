@@ -1,27 +1,12 @@
-var common     = require('../../common');
-var connection = common.createConnection({password: 'INVALID PASSWORD'});
-var assert     = require('assert');
+var assert = require('assert');
+var common = require('../../common');
 
-var endErr;
-connection.on('end', function(err) {
-  assert.equal(endErr, undefined);
-  endErr = err;
+common.getTestConnection({password: common.bogusPassword}, function (err, connection) {
+  if (!err && process.env.NO_GRANT) {
+    common.skipTest('no grant tables');
+  }
+
+  assert.ok(err, 'got error');
+  assert.equal(err.code, 'ER_ACCESS_DENIED_ERROR');
+  assert.ok(/access denied/i.test(err.message), 'message is acccess denied');
 });
-
-var connectErr;
-connection.connect(function(err) {
-  assert.equal(connectErr, undefined);
-  connectErr = err;
-
-  connection.end();
-});
-
-process.on('exit', function() {
-  if (process.env.NO_GRANT == '1' && typeof endErr == 'undefined') return;
-
-  assert.equal(endErr.code, 'ER_ACCESS_DENIED_ERROR');
-  assert.ok(/access denied/i.test(endErr.message));
-
-  assert.strictEqual(endErr, connectErr);
-});
-

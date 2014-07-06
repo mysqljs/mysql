@@ -2,6 +2,7 @@ var common           = require('../common');
 var test             = require('utest');
 var assert           = require('assert');
 var Charsets         = require(common.lib + '/protocol/constants/charsets');
+var ClientConstants  = require(common.lib + '/protocol/constants/client');
 var ConnectionConfig = require(common.lib + '/ConnectionConfig');
 
 test('ConnectionConfig#Constructor', {
@@ -150,5 +151,68 @@ test('ConnectionConfig#Constructor.ssl', {
     assert.ok(error);
     assert.equal(error.name, 'TypeError');
     assert.equal(error.message, 'Unknown SSL profile \'invalid profile\'');
+  },
+});
+
+test('ConnectionConfig#mergeFlags', {
+  'adds flag to empty list': function() {
+    var initial  = '';
+    var flags    = 'LONG_PASSWORD';
+    var combined = ConnectionConfig.mergeFlags(initial, flags);
+
+    assert.strictEqual(combined, ClientConstants.CLIENT_LONG_PASSWORD);
+  },
+
+  'adds flag to list': function() {
+    var initial  = ['LONG_PASSWORD', 'FOUND_ROWS'];
+    var flags    = 'LONG_FLAG';
+    var combined = ConnectionConfig.mergeFlags(initial, flags);
+
+    assert.strictEqual(combined, ClientConstants.CLIENT_LONG_PASSWORD
+      | ClientConstants.CLIENT_FOUND_ROWS
+      | ClientConstants.CLIENT_LONG_FLAG);
+  },
+
+  'adds unknown flag to list': function() {
+    var initial  = ['LONG_PASSWORD', 'FOUND_ROWS'];
+    var flags    = 'UNDEFINED_CONSTANT';
+    var combined = ConnectionConfig.mergeFlags(initial, flags);
+
+    assert.strictEqual(combined, ClientConstants.CLIENT_LONG_PASSWORD
+      | ClientConstants.CLIENT_FOUND_ROWS);
+  },
+
+  'removes flag from empty list': function() {
+    var initial  = '';
+    var flags    = '-LONG_PASSWORD';
+    var combined = ConnectionConfig.mergeFlags(initial, flags);
+
+    assert.strictEqual(combined, 0x0);
+  },
+
+  'removes existing flag from list': function() {
+    var initial  = ['LONG_PASSWORD', 'FOUND_ROWS'];
+    var flags    = '-LONG_PASSWORD';
+    var combined = ConnectionConfig.mergeFlags(initial, flags);
+
+    assert.strictEqual(combined, ClientConstants.CLIENT_FOUND_ROWS);
+  },
+
+  'removes non-existing flag from list': function() {
+    var initial  = ['LONG_PASSWORD', 'FOUND_ROWS'];
+    var flags    = '-LONG_FLAG';
+    var combined = ConnectionConfig.mergeFlags(initial, flags);
+
+    assert.strictEqual(combined, ClientConstants.CLIENT_LONG_PASSWORD
+      | ClientConstants.CLIENT_FOUND_ROWS);
+  },
+
+  'removes unknown flag to list': function() {
+    var initial  = ['LONG_PASSWORD', 'FOUND_ROWS'];
+    var flags    = '-UNDEFINED_CONSTANT';
+    var combined = ConnectionConfig.mergeFlags(initial, flags);
+
+    assert.strictEqual(combined, ClientConstants.CLIENT_LONG_PASSWORD
+      | ClientConstants.CLIENT_FOUND_ROWS);
   },
 });

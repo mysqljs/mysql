@@ -4,6 +4,21 @@ var assert    = require('assert');
 var SqlString = require(common.lib + '/protocol/SqlString');
 
 test('SqlString.escapeId', {
+  'value is quoted': function() {
+    assert.equal('`id`', SqlString.escapeId('id'));
+  },
+
+  'value containing escapes is quoted': function() {
+    assert.equal('`i``d`', SqlString.escapeId('i`d'));
+  },
+
+  'value containing separator is quoted': function() {
+    assert.equal('`id1`.`id2`', SqlString.escapeId('id1.id2'));
+  },
+  'value containing separator and escapes is quoted': function() {
+    assert.equal('`id``1`.`i``d2`', SqlString.escapeId('id`1.i`d2'));
+  },
+
   'arrays are turned into lists': function() {
     assert.equal(SqlString.escapeId(['a', 'b', 't.c']), "`a`, `b`, `t`.`c`");
   },

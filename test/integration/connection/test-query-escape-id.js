@@ -1,31 +1,28 @@
-var common     = require('../../common');
-var connection = common.createConnection();
-var assert     = require('assert');
-
-common.useTestDb(connection);
+var assert = require('assert');
+var common = require('../../common');
 
 var table = 'escape_id_test';
-connection.query([
-  'CREATE TEMPORARY TABLE `' + table + '` (',
-  '`id` int(11) unsigned NOT NULL AUTO_INCREMENT,',
-  '`example` varchar(255),',
-  'PRIMARY KEY (`id`)',
-  ') ENGINE=InnoDB DEFAULT CHARSET=utf8'
-].join('\n'));
 
-connection.query('INSERT INTO ?? SET ?? = ?, ?? = ?', [ table, 'id', 1, 'example', 'id escape']);
+common.getTestConnection(function (err, connection) {
+  assert.ifError(err);
 
-var rows;
-connection.query('SELECT * FROM ??', [ table ], function(err, _rows) {
-  if (err) throw err;
+  common.useTestDb(connection);
 
-  rows = _rows;
-});
+  connection.query([
+    'CREATE TEMPORARY TABLE ?? (',
+    '`id` int(11) unsigned NOT NULL AUTO_INCREMENT,',
+    '`example` varchar(255),',
+    'PRIMARY KEY (`id`)',
+    ') ENGINE=InnoDB DEFAULT CHARSET=utf8'
+  ].join('\n'), [table], assert.ifError);
 
-connection.end();
+  connection.query('INSERT INTO ?? SET ?? = ?, ?? = ?', [table, 'id', 1, 'example', 'id escape'], assert.ifError);
 
+  connection.query('SELECT * FROM ??', [table], function (err, rows) {
+    assert.ifError(err);
+    assert.equal(rows.length, 1);
+    assert.deepEqual(rows[0], {id: 1, example: 'id escape'});
 
-process.on('exit', function() {
-  assert.equal(rows.length, 1);
-  assert.deepEqual(rows[0], {id: 1, example: 'id escape'});
+    connection.end(assert.ifError);
+  });
 });

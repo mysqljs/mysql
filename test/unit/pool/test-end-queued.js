@@ -36,10 +36,6 @@ server.listen(common.fakeServerPort, function(err) {
   });
 });
 
-server.on('connection', function(incomingConnection) {
-  incomingConnection.handshake();
-});
-
 process.on('exit', function() {
   assert.ok(poolEnded);
   assert.ok(conn1Err);

@@ -1,15 +1,11 @@
-var common     = require('../../common');
-var connection = common.createConnection();
-var assert     = require('assert');
+var assert = require('assert');
+var common = require('../../common');
 
-var pingErr;
+common.getTestConnection(function (err, connection) {
+  assert.ifError(err);
 
-connection.ping(function(err) {
-  pingErr = err;
-});
-
-connection.end();
-
-process.on('exit', function() {
-  assert.equal(pingErr, null);
+  connection.ping(function (err) {
+    assert.ifError(err);
+    connection.end(assert.ifError);
+  });
 });

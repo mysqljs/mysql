@@ -1,34 +1,32 @@
-var common     = require('../../common');
-var connection = common.createConnection();
-var assert     = require('assert');
-
-common.useTestDb(connection);
+var assert = require('assert');
+var common = require('../../common');
 
 var table = 'insert_test';
-connection.query([
-  'CREATE TEMPORARY TABLE `' + table + '` (',
-  '`id` int(11) unsigned NOT NULL AUTO_INCREMENT,',
-  '`date` DATETIME NULL,',
-  '`number` INT NULL,',
-  'PRIMARY KEY (`id`)',
-  ') ENGINE=InnoDB DEFAULT CHARSET=utf8'
-].join('\n'));
 
-connection.query('INSERT INTO ' + table + ' SET ?', {
-  date   : null,
-  number : null,
-});
+common.getTestConnection(function (err, connection) {
+  assert.ifError(err);
 
-var results;
-connection.query('SELECT * FROM ' + table, function(err, _results) {
-  if (err) throw err;
+  common.useTestDb(connection);
 
-  results = _results;
-});
+  connection.query([
+    'CREATE TEMPORARY TABLE ?? (',
+    '`id` int(11) unsigned NOT NULL AUTO_INCREMENT,',
+    '`date` DATETIME NULL,',
+    '`number` INT NULL,',
+    'PRIMARY KEY (`id`)',
+    ') ENGINE=InnoDB DEFAULT CHARSET=utf8'
+  ].join('\n'), [table], assert.ifError);
 
-connection.end();
+  connection.query('INSERT INTO ?? SET ?', [table, {
+    date   : null,
+    number : null,
+  }]);
 
-process.on('exit', function() {
-  assert.strictEqual(results[0].date, null);
-  assert.strictEqual(results[0].number, null);
+  connection.query('SELECT * FROM ??', [table], function (err, results) {
+    assert.ifError(err);
+    assert.strictEqual(results[0].date, null);
+    assert.strictEqual(results[0].number, null);
+
+    connection.end(assert.ifError);
+  });
 });

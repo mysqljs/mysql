@@ -1,40 +1,29 @@
-var common     = require('../../common');
-var connection = common.createConnection();
-var assert     = require('assert');
-
-common.useTestDb(connection);
+var assert = require('assert');
+var common = require('../../common');
 
 var procedureName = 'multipleSelectProcedure';
-var input0 = 1;
-var input1 = 1000;
-var fieldName0 = 'param0';
-var fieldName1 = 'param1';
-var result = undefined;
 
-connection.query([
-  'CREATE DEFINER=root@localhost PROCEDURE '+procedureName+'(IN '+fieldName0+' INT, IN '+fieldName1+' INT)',
-  'BEGIN',
-  'SELECT '+fieldName0+';',
-  'SELECT '+fieldName1+';',
-  'END'
-].join('\n'));
+common.getTestConnection(function (err, connection) {
+  assert.ifError(err);
 
-connection.query('CALL '+procedureName+'(?,?)', [input0,input1], function(err, _result) {
-  if (err) throw err;
+  common.useTestDb(connection);
 
-  _result.pop(); // drop metadata
-  result = _result;
-});
+  var input0 = 1;
+  var input1 = 1000;
 
-connection.query('DROP PROCEDURE '+procedureName);
+  connection.query([
+    'CREATE DEFINER=root@localhost PROCEDURE ?? (IN param0 INT, IN param1 INT)',
+    'BEGIN',
+    'SELECT param0;',
+    'SELECT param1;',
+    'END'
+  ].join('\n'), [procedureName], assert.ifError);
 
-connection.end();
+  connection.query('CALL ?? (?,?)', [procedureName, input0, input1], function (err, result) {
+    assert.ifError(err);
+    assert.deepEqual(result[0], [{param0: input0}], [{param1: input1}]);
 
-process.on('exit', function() {
-  var result0Expected = {};
-  result0Expected[fieldName0] = input0;
-  var result1Expected = {};
-  result1Expected[fieldName1] = input1;
-
-  assert.deepEqual(result, [[result0Expected], [result1Expected]]);
+    connection.query('DROP PROCEDURE ??', [procedureName], assert.ifError);
+    connection.end(assert.ifError);
+  });
 });

@@ -1,37 +1,32 @@
-var common     = require('../../common');
-var connection = common.createConnection();
-var assert     = require('assert');
-
-common.useTestDb(connection);
+var assert = require('assert');
+var common = require('../../common');
 
 var table = 'timezone_test';
-connection.query([
-  'CREATE TEMPORARY TABLE `' + table + '`(',
-  '`offset` varchar(10),',
-  '`dt` datetime',
-  ') ENGINE=InnoDB DEFAULT CHARSET=utf8'
-].join('\n'));
+var tests = [0, 1, 5, 12, 26, -1, -5, -20, 'Z', 'local'];
 
-var tests = [ 0, 1, 5, 12, 26, -1, -5, -20, 'Z', 'local' ];
+common.getTestConnection(function (err, connection) {
+  assert.ifError(err);
 
-connection.query('DELETE FROM ' + table);
+  common.useTestDb(connection);
 
-testNextDate();
+  connection.query([
+    'CREATE TEMPORARY TABLE ?? (',
+    '`offset` varchar(10),',
+    '`dt` datetime',
+    ') ENGINE=InnoDB DEFAULT CHARSET=utf8'
+  ].join('\n'), [table], assert.ifError);
 
-function testNextDate() {
+  testNextDate(connection);
+});
+
+function testNextDate(connection) {
   if (tests.length === 0) {
-    return connection.end();
+    connection.end(assert.ifError);
+    return;
   }
 
-  var test = tests.pop();
-
-  testDate(test, function () {
-    testNextDate();
-  });
-}
-
-function testDate(offset, cb) {
   var dt = new Date();
+  var offset = tests.pop();
 
   // datetime will round fractional seconds up, which causes this test to fail
   // depending on when it is executed. MySQL 5.6.4 and up supports datetime(6)
@@ -39,32 +34,34 @@ function testDate(offset, cb) {
   // http://dev.mysql.com/doc/refman/5.6/en/fractional-seconds.html
   dt.setMilliseconds(0);
 
-  if (offset == 'Z' || offset == 'local') {
+  if (offset === 'Z' || offset === 'local') {
     connection.config.timezone = offset;
   } else {
     connection.config.timezone = (offset < 0 ? "-" : "+") + pad2(Math.abs(offset)) + ":00";
   }
-  connection.query('INSERT INTO ' + table + ' SET ?', { offset: offset, dt: dt });
 
-  if (offset == 'Z') {
+  connection.query('INSERT INTO ?? SET ?', [table, {offset: offset, dt: dt}], assert.ifError);
+
+  if (offset === 'Z') {
     dt.setTime(dt.getTime() + (dt.getTimezoneOffset() * 60000));
-  } else if (offset != 'local') {
+  } else if (offset !== 'local') {
     dt.setTime(dt.getTime() + (dt.getTimezoneOffset() * 60000) + (offset * 3600000));
   }
 
-  connection.query({
-    sql: 'SELECT * FROM ' + table + ' WHERE offset = \'' + offset + '\'',
+  var options = {
+    sql: 'SELECT * FROM ?? WHERE offset = ?',
     typeCast: function (field, next) {
       if (field.type != 'DATETIME') return next();
 
       return new Date(field.string());
-    }
-  }, function (err, result) {
-    if (err) throw err;
+    },
+    values: [table, offset]
+  };
 
-    assert.strictEqual(dt.toString(), result[0].dt.toString());
-
-    return cb();
+  connection.query(options, function (err, rows) {
+    assert.ifError(err);
+    assert.strictEqual(dt.toString(), rows[0].dt.toString());
+    testNextDate(connection);
   });
 }
 
