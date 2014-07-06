@@ -1,16 +1,12 @@
-var common     = require('../../common');
-var connection = common.createConnection();
-var assert     = require('assert');
+var assert = require('assert');
+var common = require('../../common');
 
-var rows;
-connection.query('SELECT ""', function(err, _rows) {
-  if (err) throw err;
+common.getTestConnection(function (err, connection) {
+  assert.ifError(err);
 
-  rows = _rows;
-});
-
-connection.end();
-
-process.on('exit', function() {
-  assert.deepEqual(rows, [{'': ''}]);
+  connection.query('SELECT ""', function (err, rows) {
+    assert.ifError(err);
+    assert.deepEqual(rows, [{'': ''}]);
+    connection.end(assert.ifError);
+  });
 });

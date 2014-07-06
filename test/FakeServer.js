@@ -3,12 +3,14 @@
 
 var common       = require('./common');
 var _            = require('underscore');
+var Charsets     = require('../lib/protocol/constants/charsets');
 var Crypto       = require('crypto');
 var Net          = require('net');
 var tls          = require('tls');
 var Packets      = require('../lib/protocol/packets');
 var PacketWriter = require('../lib/protocol/PacketWriter');
 var Parser       = require('../lib/protocol/Parser');
+var Types        = require('../lib/protocol/constants/types');
 var Auth         = require('../lib/protocol/Auth');
 var Errors       = require('../lib/protocol/constants/errors');
 var EventEmitter = require('events').EventEmitter;
@@ -30,7 +32,11 @@ FakeServer.prototype.listen = function(port, cb) {
 
 FakeServer.prototype._handleConnection = function(socket) {
   var connection = new FakeConnection(socket);
-  this.emit('connection', connection);
+
+  if (!this.emit('connection', connection)) {
+    connection.handshake();
+  }
+
   this._connections.push(connection);
 };
 
@@ -109,6 +115,114 @@ FakeConnection.prototype._handleData = function(buffer) {
   this._parser.write(buffer);
 };
 
+FakeConnection.prototype._handleQueryPacket = function _handleQueryPacket(packet) {
+  var conn = this;
+  var match;
+  var sql = packet.sql;
+
+  if ((match = /^SELECT ([0-9]+);?$/i.exec(sql))) {
+    var num = match[1];
+
+    this._sendPacket(new Packets.ResultSetHeaderPacket({
+      fieldCount: 1
+    }));
+
+    this._sendPacket(new Packets.FieldPacket({
+      catalog    : 'def',
+      charsetNr  : Charsets.UTF8_GENERAL_CI,
+      name       : num,
+      protocol41 : true,
+      type       : Types.LONG
+    }));
+
+    this._sendPacket(new Packets.EofPacket());
+
+    var writer = new PacketWriter();
+    writer.writeLengthCodedString(num);
+    this._socket.write(writer.toBuffer(this._parser));
+
+    this._sendPacket(new Packets.EofPacket());
+    this._parser.resetPacketNumber();
+    return;
+  }
+
+  if ((match = /^SELECT CURRENT_USER\(\);?$/i.exec(sql))) {
+    this._sendPacket(new Packets.ResultSetHeaderPacket({
+      fieldCount: 1
+    }));
+
+    this._sendPacket(new Packets.FieldPacket({
+      catalog    : 'def',
+      charsetNr  : Charsets.UTF8_GENERAL_CI,
+      name       : 'CURRENT_USER()',
+      protocol41 : true,
+      type       : Types.VARCHAR
+    }));
+
+    this._sendPacket(new Packets.EofPacket());
+
+    var writer = new PacketWriter();
+    writer.writeLengthCodedString((this._clientAuthenticationPacket.user || '') + '@localhost');
+    this._socket.write(writer.toBuffer(this._parser));
+
+    this._sendPacket(new Packets.EofPacket());
+    this._parser.resetPacketNumber();
+    return;
+  }
+
+  if ((match = /^SELECT SLEEP\(([0-9]+)\);?$/i.exec(sql))) {
+    var sec = match[1];
+    var time = sec * 1000;
+
+    setTimeout(function () {
+      conn._sendPacket(new Packets.ResultSetHeaderPacket({
+        fieldCount: 1
+      }));
+
+      conn._sendPacket(new Packets.FieldPacket({
+        catalog    : 'def',
+        charsetNr  : Charsets.UTF8_GENERAL_CI,
+        name       : 'SLEEP(' + sec + ')',
+        protocol41 : true,
+        type       : Types.LONG
+      }));
+
+      conn._sendPacket(new Packets.EofPacket());
+
+      var writer = new PacketWriter();
+      writer.writeLengthCodedString(0);
+      conn._socket.write(writer.toBuffer(conn._parser));
+
+      conn._sendPacket(new Packets.EofPacket());
+      conn._parser.resetPacketNumber();
+    }, time);
+    return;
+  }
+
+  if ((match = /^SELECT \* FROM stream LIMIT ([0-9]+);?$/i.exec(sql))) {
+    var num = match[1];
+
+    this._writePacketStream(num);
+    return;
+  }
+
+  if (/INVALID/i.test(sql)) {
+    this._sendPacket(new Packets.ErrorPacket({
+      errno   : Errors.ER_PARSE_ERROR,
+      message : 'Invalid SQL'
+    }));
+    this._parser.resetPacketNumber();
+    return;
+  }
+
+  this._sendPacket(new Packets.ErrorPacket({
+    errno   : Errors.ER_QUERY_INTERRUPTED,
+    message : 'Interrupted unknown query'
+  }));
+
+  this._parser.resetPacketNumber();
+};
+
 FakeConnection.prototype._parsePacket = function(header) {
   var Packet = this._determinePacket(header);
   var packet = new Packet({protocol41: true});
@@ -141,7 +255,9 @@ FakeConnection.prototype._parsePacket = function(header) {
       this._sendAuthResponse(packet, expected);
       break;
     case Packets.ComQueryPacket:
-      this.emit('query', packet);
+      if (!this.emit('query', packet)) {
+        this._handleQueryPacket(packet);
+      }
       break;
     case Packets.ComPingPacket:
       if (!this.emit('ping', packet)) {
@@ -150,6 +266,22 @@ FakeConnection.prototype._parsePacket = function(header) {
       }
       break;
     case Packets.ComChangeUserPacket:
+      if (packet.user === 'does-not-exist') {
+        this._sendPacket(new Packets.ErrorPacket({
+          errno   : Errors.ER_ACCESS_DENIED_ERROR,
+          message : 'User does not exist'
+        }));
+        this._parser.resetPacketNumber();
+        break;
+      } else if (packet.database === 'does-not-exist') {
+        this._sendPacket(new Packets.ErrorPacket({
+          errno   : Errors.ER_BAD_DB_ERROR,
+          message : 'Database does not exist'
+        }));
+        this._parser.resetPacketNumber();
+        break;
+      }
+
       this._clientAuthenticationPacket = new Packets.ClientAuthenticationPacket({
         clientFlags  : this._clientAuthenticationPacket.clientFlags,
         filler       : this._clientAuthenticationPacket.filler,
@@ -201,6 +333,59 @@ FakeConnection.prototype._determinePacket = function(header) {
 
 FakeConnection.prototype.destroy = function() {
   this._socket.destroy();
+};
+
+FakeConnection.prototype._writePacketStream = function _writePacketStream(count) {
+  var remaining = count;
+  var timer = setInterval(writeRow.bind(this), 20);
+
+  this._socket.on('close', cleanup);
+
+  this._sendPacket(new Packets.ResultSetHeaderPacket({
+    fieldCount: 2
+  }));
+
+  this._sendPacket(new Packets.FieldPacket({
+    catalog    : 'def',
+    charsetNr  : Charsets.UTF8_GENERAL_CI,
+    name       : 'id',
+    protocol41 : true,
+    type       : Types.LONG
+  }));
+
+  this._sendPacket(new Packets.FieldPacket({
+    catalog    : 'def',
+    charsetNr  : Charsets.UTF8_GENERAL_CI,
+    name       : 'title',
+    protocol41 : true,
+    type       : Types.VARCHAR
+  }));
+
+  this._sendPacket(new Packets.EofPacket());
+
+  function cleanup() {
+    var socket = this._socket || this;
+    socket.removeListener('close', cleanup);
+    clearInterval(timer);
+  }
+
+  function writeRow() {
+    if (remaining === 0) {
+      cleanup.call(this);
+
+      this._sendPacket(new Packets.EofPacket());
+      this._parser.resetPacketNumber();
+      return;
+    }
+
+    remaining -= 1;
+
+    var num = count - remaining;
+    var writer = new PacketWriter();
+    writer.writeLengthCodedString(num);
+    writer.writeLengthCodedString('Row #' + num);
+    this._socket.write(writer.toBuffer(this._parser));
+  }
 };
 
 if (tls.TLSSocket) {

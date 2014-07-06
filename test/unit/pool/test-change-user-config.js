@@ -26,7 +26,3 @@ server.listen(common.fakeServerPort, function(err) {
     });
   });
 });
-
-server.on('connection', function(incomingConnection) {
-  incomingConnection.handshake();
-});

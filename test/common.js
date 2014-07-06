@@ -17,7 +17,7 @@ common.fakeServerPort = 32893;
 // Used for simulating a fake mysql server
 common.fakeServerSocket = __dirname + '/fake_server.sock';
 
-common.testDatabase = process.env.MYSQL_DATABASE;
+common.testDatabase = process.env.MYSQL_DATABASE || 'test';
 
 var Mysql = require('../');
 
@@ -28,6 +28,19 @@ common.isTravis = function() {
 common.createConnection = function(config) {
   config = mergeTestConfig(config);
   return Mysql.createConnection(config);
+};
+
+common.createTestDatabase = function createTestDatabase(connection, callback) {
+  var database = common.testDatabase;
+
+  connection.query('CREATE DATABASE ??', [database], function (err) {
+    if (err && err.code !== 'ER_DB_CREATE_EXISTS') {
+      callback(err);
+      return;
+    }
+
+    callback(null, database);
+  });
 };
 
 common.createPool = function(config) {
@@ -46,9 +59,43 @@ common.createFakeServer = function(options) {
   return new FakeServer(_.extend({}, options));
 };
 
+common.getTestConnection = function getTestConnection(config, callback) {
+  if (!callback && typeof config === 'function') {
+    callback = config;
+    config = {};
+  }
+
+  var connection = common.createConnection(config);
+
+  connection.connect(function (err) {
+    if (err && err.code === 'ECONNREFUSED') {
+      if (common.isTravis()) {
+        throw err;
+      }
+
+      common.skipTest('cannot connect to MySQL server');
+    }
+
+    if (err) {
+      callback(err);
+      return;
+    }
+
+    callback(null, connection);
+  });
+};
+
+common.skipTest = function skipTest(message) {
+  var msg = 'skipping - ' + message + '\n';
+
+  fs.writeSync(process.stdout.fd, msg);
+  fs.fsyncSync(process.stdout.fd);
+  process.exit(0);
+};
+
 common.useTestDb = function(connection) {
-  var query = connection.query('CREATE DATABASE ' + common.testDatabase, function(err) {
-    if (err && err.code !== 'ER_DB_CREATE_EXISTS') throw err;
+  common.createTestDatabase(connection, function (err) {
+    if (err) throw err;
   });
 
   connection.query('USE ' + common.testDatabase);

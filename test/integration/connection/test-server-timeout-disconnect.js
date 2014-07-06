@@ -1,24 +1,30 @@
-var common     = require('../../common');
-var connection = common.createConnection();
-var assert     = require('assert');
+var assert = require('assert');
+var common = require('../../common');
 
-connection.query('SET wait_timeout = 1');
+var timeout = setTimeout(function () {
+  throw new Error('test timeout');
+}, 2000);
 
-var errorErr;
-var endErr;
-connection
-  .on('end', function(err) {
-    assert.ok(!endErr);
-    endErr = err;
-  })
-  .on('error', function(err) {
-    assert.ok(!errorErr);
-    errorErr = err;
+common.getTestConnection(function (err, connection) {
+  assert.ifError(err);
+
+  var wait = 2;
+  function done() {
+    if (--wait) return;
+    clearTimeout(timeout);
+  }
+
+  connection.query('SET wait_timeout = 1', assert.ifError);
+
+  connection.on('end', function (err) {
+    assert.strictEqual(err.code, 'PROTOCOL_CONNECTION_LOST');
+    assert.strictEqual(err.fatal, true);
+    done();
   });
 
-process.on('exit', function() {
-  assert.strictEqual(errorErr.code, 'PROTOCOL_CONNECTION_LOST');
-  assert.strictEqual(errorErr.fatal, true);
-
-  assert.strictEqual(endErr, errorErr);
+  connection.on('error', function (err) {
+    assert.strictEqual(err.code, 'PROTOCOL_CONNECTION_LOST');
+    assert.strictEqual(err.fatal, true);
+    done();
+  });
 });

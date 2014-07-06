@@ -63,10 +63,7 @@ server.on('connection', function(conn) {
         this._parser.resetPacketNumber();
         break;
       default:
-        this._sendPacket(new Packets.ErrorPacket({
-          errno   : Errors.ER_QUERY_INTERRUPTED,
-          message : 'Interrupted unknown query'
-        }));
+        this._handlePacketQuery(packet);
         break;
     }
   });

@@ -23,7 +23,3 @@ server.listen(common.fakeServerPort, function(err){
     server.destroy();
   });
 });
-
-server.on('connection', function(incomingConnection) {
-  incomingConnection.handshake();
-});

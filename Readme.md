@@ -1106,15 +1106,29 @@ will have:
 * As much debugging output and information about your environment (mysql
   version, node version, os, etc.) as you can gather.
 
-## Running unit tests
+## Running tests
 
-Set the environment variables `MYSQL_DATABASE`, `MYSQL_HOST`, `MYSQL_PORT`, `MYSQL_USER` and `MYSQL_PASSWORD`. Then run `npm test`.
+The test suite is split into two parts: unit tests and integration tests.
+The unit tests run on any machine while the integration tests require a
+MySQL server instance to be setup.
 
-For example, if you have an installation of mysql running on localhost:3306 and no password set for the `root` user, run:
+### Running unit tests
 
+```sh
+$ FILTER=unit npm test
 ```
-  mysql -u root -e "CREATE DATABASE IF NOT EXISTS node_mysql_test"
-  MYSQL_HOST=localhost MYSQL_PORT=3306 MYSQL_DATABASE=node_mysql_test MYSQL_USER=root MYSQL_PASSWORD= npm test
+
+### Running integration tests
+
+Set the environment variables `MYSQL_DATABASE`, `MYSQL_HOST`, `MYSQL_PORT`,
+`MYSQL_USER` and `MYSQL_PASSWORD`. Then run `npm test`.
+
+For example, if you have an installation of mysql running on localhost:3306
+and no password set for the `root` user, run:
+
+```sh
+$ mysql -u root -e "CREATE DATABASE IF NOT EXISTS node_mysql_test"
+$ MYSQL_HOST=localhost MYSQL_PORT=3306 MYSQL_DATABASE=node_mysql_test MYSQL_USER=root MYSQL_PASSWORD= FILTER=integration npm test
 ```
 
 ## Todo

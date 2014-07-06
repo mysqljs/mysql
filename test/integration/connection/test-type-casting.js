@@ -1,8 +1,5 @@
-var common     = require('../../common');
-var connection = common.createConnection();
-var assert     = require('assert');
-
-common.useTestDb(connection);
+var assert = require('assert');
+var common = require('../../common');
 
 var tests = [
   {type: 'decimal(3,3)', insert: '0.330', expect: 0.33 },
@@ -41,7 +38,7 @@ var tests = [
       buffer.writeUInt32LE(1, 1);
       buffer.writeDoubleLE(-5.6, 5);
       buffer.writeDoubleLE(10.23, 13);
-      return 'GeomFromWKB(' + connection.escape(buffer) + ')';
+      return 'GeomFromWKB(X\'' + buffer.toString('hex') + '\')';
     })(), expect: {x:-5.6, y:10.23}, deep: true},
   {type: 'point', insertRaw: '', insert: null, expect: null},
   {type: 'linestring', insertRaw: 'LINESTRING(POINT(1.2,-3.4),POINT(-5.6,10.23),POINT(0.2,0.7))', expect: [{x:1.2, y:-3.4}, {x:-5.6, y:10.23}, {x:0.2, y:0.7}], deep: true},
@@ -55,65 +52,68 @@ var tests = [
 
 var table = 'type_casting';
 
-var schema  = [];
-var inserts = [];
+common.getTestConnection(function (err, connection) {
+  assert.ifError(err);
 
-tests.forEach(function(test, index) {
-  var escaped = test.insertRaw || connection.escape(test.insert);
+  common.useTestDb(connection);
 
-  test.columnName = test.type + '_' + index;
+  var schema  = [];
+  var inserts = [];
 
-  schema.push(connection.escapeId(test.columnName) + ' ' + test.type + ',');
-  inserts.push(connection.escapeId(test.columnName) + ' = ' + escaped);
-});
+  tests.forEach(function(test, index) {
+    var escaped = test.insertRaw || connection.escape(test.insert);
 
-var createTable = [
-  'CREATE TEMPORARY TABLE ' + connection.escapeId(table) + ' (',
-  '`id` int(11) unsigned NOT NULL AUTO_INCREMENT,'
-  ].concat(schema).concat([
-  'PRIMARY KEY (`id`)',
-  ') ENGINE=InnoDB DEFAULT CHARSET=utf8'
-]).join('\n');
+    test.columnName = test.type + '_' + index;
 
-connection.query(createTable);
+    schema.push(connection.escapeId(test.columnName) + ' ' + test.type + ',');
+    inserts.push(connection.escapeId(test.columnName) + ' = ' + escaped);
+  });
 
-connection.query('INSERT INTO ' + table + ' SET' + inserts.join(',\n'));
+  var createTable = [
+    'CREATE TEMPORARY TABLE ' + connection.escapeId(table) + ' (',
+    '`id` int(11) unsigned NOT NULL AUTO_INCREMENT,'
+    ].concat(schema).concat([
+    'PRIMARY KEY (`id`)',
+    ') ENGINE=InnoDB DEFAULT CHARSET=utf8'
+  ]).join('\n');
 
-var row;
-connection.query('SELECT * FROM type_casting', function(err, rows) {
-  if (err) throw err;
+  connection.query(createTable);
 
-  row = rows[0];
-});
+  connection.query('INSERT INTO ?? SET' + inserts.join(',\n'), [table]);
 
-connection.end();
+  connection.query('SELECT * FROM type_casting', function (err, rows) {
+    assert.ifError(err);
 
-process.on('exit', function() {
-  tests.forEach(function(test) {
-    var expected = test.expect || test.insert;
-    var got      = row[test.columnName];
-    var message;
+    var row = rows[0];
 
-    if (expected instanceof Date) {
-      assert.equal(got instanceof Date, true, test.type);
+    tests.forEach(function(test) {
+      var expected = test.expect || test.insert;
+      var got      = row[test.columnName];
+      var message;
 
-      expected = String(expected);
-      got      = String(got);
-    } else if (Buffer.isBuffer(expected)) {
-      assert.equal(Buffer.isBuffer(got), true, test.type);
+      if (expected instanceof Date) {
+        assert.equal(got instanceof Date, true, test.type);
 
-      expected = String(Array.prototype.slice.call(expected));
-      got      = String(Array.prototype.slice.call(got));
-    }
+        expected = String(expected);
+        got      = String(got);
+      } else if (Buffer.isBuffer(expected)) {
+        assert.equal(Buffer.isBuffer(got), true, test.type);
 
-    if (test.deep) {
-      message = 'got: "' + JSON.stringify(got) + '" expected: "' + JSON.stringify(expected) +
-                '" test: ' + test.type + '';
-      assert.deepEqual(expected, got, message);
-    } else {
-      message = 'got: "' + got + '" (' + (typeof got) + ') expected: "' + expected +
-                '" (' + (typeof expected) + ') test: ' + test.type + '';
-      assert.strictEqual(expected, got, message);
-    }
+        expected = String(Array.prototype.slice.call(expected));
+        got      = String(Array.prototype.slice.call(got));
+      }
+
+      if (test.deep) {
+        message = 'got: "' + JSON.stringify(got) + '" expected: "' + JSON.stringify(expected) +
+                  '" test: ' + test.type + '';
+        assert.deepEqual(expected, got, message);
+      } else {
+        message = 'got: "' + got + '" (' + (typeof got) + ') expected: "' + expected +
+                  '" (' + (typeof expected) + ') test: ' + test.type + '';
+        assert.strictEqual(expected, got, message);
+      }
+    });
+
+    connection.end(assert.ifError);
   });
 });

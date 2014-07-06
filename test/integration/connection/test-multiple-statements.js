@@ -1,31 +1,16 @@
-var common     = require('../../common');
-var connection = common.createConnection({multipleStatements: true});
-var assert     = require('assert');
+var assert = require('assert');
+var common = require('../../common');
 
-var sql = [
-  'SELECT 1',
-  'USE ' + common.testDatabase,
-  'SELECT 2',
-].join('; ');
+common.getTestConnection({multipleStatements: true}, function (err, connection) {
+  assert.ifError(err);
 
-var results;
-var fields;
-connection.query(sql, function(err, _results, _fields) {
-  if (err) throw err;
+  connection.query('SELECT 1; SELECT 2; SELECT 3', function (err, results) {
+    assert.ifError(err);
+    assert.equal(results.length, 3);
+    assert.deepEqual(results[0], [{1: 1}]);
+    assert.deepEqual(results[1], [{2: 2}]);
+    assert.deepEqual(results[2], [{3: 3}]);
 
-  results = _results;
-  fields = _fields;
-});
-
-connection.end();
-
-process.on('exit', function() {
-  assert.equal(results.length, 3);
-  assert.deepEqual(results[0], [{1: 1}]);
-  assert.strictEqual(results[1].constructor.name, 'OkPacket');
-  assert.deepEqual(results[2], [{2: 2}]);
-
-  assert.equal(fields[0][0].name, '1');
-  assert.equal(fields[1], undefined);
-  assert.equal(fields[2][0].name, '2');
+    connection.end(assert.ifError);
+  });
 });

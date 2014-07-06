@@ -1,27 +1,26 @@
-var common     = require('../../common');
-var connection = common.createConnection();
-var crypto     = require('crypto');
-var assert     = require('assert');
+var assert = require('assert');
+var common = require('../../common');
+var crypto = require('crypto');
 
-connection.connect(function(err) {
-  if (err) throw err;
+common.getTestConnection(function (err, connection) {
+  assert.ifError(err);
 
-  getMaxAllowedPacket();
+  getMaxAllowedPacket(connection);
 });
 
 
 var oldMaxAllowedPacket;
-function getMaxAllowedPacket() {
+function getMaxAllowedPacket(connection) {
   connection.query('SHOW VARIABLES WHERE Variable_name = ?', ['max_allowed_packet'], function(err, rows) {
     if (err) throw err;
 
     oldMaxAllowedPacket = Number(rows[0].Value);
 
-    increaseMaxAllowedPacketIfNeeded();
+    increaseMaxAllowedPacketIfNeeded(connection);
   });
 }
 
-function increaseMaxAllowedPacketIfNeeded() {
+function increaseMaxAllowedPacketIfNeeded(connection) {
   // Our test generates a SQL query a few bytes larger than 16 MB, but lets
   // leave a little margin:
   var minMaxAllowedPacket = 20 * 1024 * 1024;
@@ -44,50 +43,33 @@ function increaseMaxAllowedPacketIfNeeded() {
     connection.connect(function(err) {
       if (err) throw err;
 
-      triggerLargeQueryAndResponsePackets();
+      triggerLargeQueryAndResponsePackets(connection);
     });
   });
 }
 
-var buffer;
 var length   = (Math.pow(256, 3) / 2) + 10; // Half, because of hex encoding
-var rows     = [];
 var trailing = 'tailing text';
 
-function triggerLargeQueryAndResponsePackets() {
+function triggerLargeQueryAndResponsePackets(connection) {
   var random = crypto.pseudoRandomBytes || crypto.randomBytes; // Depends on node.js version
   var sql    = 'SELECT ? as bigField, ? as trailingField';
 
-  random(length, function(err, buf) {
-    if (err) throw err;
+  random(length, function (err, buf) {
+    assert.ifError(err);
     assert.equal(buf.length, length);
 
-    connection.query(sql, [buf, trailing], function(err, _rows) {
-      if (err) throw err;
+    connection.query(sql, [buf, trailing], function (err, rows) {
+      assert.ifError(err);
 
-      buffer = buf;
-      rows = _rows;
-
-      resetMaxAllowedPacket();
+      connection.query('SET GLOBAL max_allowed_packet = ?', [oldMaxAllowedPacket], assert.ifError);
+      connection.end(function (err) {
+        assert.ifError(err);
+        assert.equal(rows.length, 1);
+        assert.equal(rows[0].trailingField, trailing);
+        assert.equal(rows[0].bigField.length, buf.length);
+        assert.equal(rows[0].bigField.toString('base64'), buf.toString('base64'));
+      });
     });
   });
 }
-
-function resetMaxAllowedPacket() {
-  connection.query('SET GLOBAL max_allowed_packet = ?', [oldMaxAllowedPacket], function(err, rows) {
-    if (err) {
-      err.message = 'Could not reset max_allowed_packet size, please check your server settings: ' + err.message;
-      throw err;
-    }
-  });
-
-  connection.end();
-}
-
-
-process.on('exit', function() {
-  assert.equal(rows.length, 1);
-  assert.equal(rows[0].trailingField, trailing);
-  assert.equal(rows[0].bigField.length, buffer.length);
-  assert.equal(rows[0].bigField.toString('base64'), buffer.toString('base64'));
-});

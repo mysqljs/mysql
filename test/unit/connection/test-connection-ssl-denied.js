@@ -17,10 +17,6 @@ server.listen(common.fakeServerPort, function(err) {
   });
 });
 
-server.on('connection', function(incomingConnection) {
-  incomingConnection.handshake();
-});
-
 process.on('exit', function() {
   assert.ok(connectErr);
   assert.equal(connectErr.code, 'HANDSHAKE_NO_SSL_SUPPORT');
