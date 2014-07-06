@@ -41,3 +41,35 @@ test('PoolConfig#Constructor', {
     assert.equal(config.connectionLimit, 2);
   },
 });
+
+test('PoolConfig#Constructor.acquireTimeout', {
+  'defaults to 10 seconds': function() {
+    var config = new PoolConfig({});
+
+    assert.equal(config.acquireTimeout, (10 * 1000));
+  },
+
+  'undefined uses default': function() {
+    var config = new PoolConfig({
+      acquireTimeout: undefined
+    });
+
+    assert.equal(config.acquireTimeout, (10 * 1000));
+  },
+
+  'can set to 0': function() {
+    var config = new PoolConfig({
+      acquireTimeout: 0
+    });
+
+    assert.equal(config.acquireTimeout, 0);
+  },
+
+  'can set to custom value': function() {
+    var config = new PoolConfig({
+      acquireTimeout: 10000
+    });
+
+    assert.equal(config.acquireTimeout, 10000);
+  },
+});
