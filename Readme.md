@@ -829,6 +829,29 @@ functions that execute the START TRANSACTION, COMMIT, and ROLLBACK commands resp
 It is important to understand that many commands in MySQL can cause an implicit commit,
 as described [in the MySQL documentation](http://dev.mysql.com/doc/refman/5.5/en/implicit-commit.html)
 
+## Timeouts
+
+Every operation takes an optional inactivity timeout option. This allows you to
+specify appropriate timeouts for operations. It is important to note that these
+timeouts are not part of the MySQL protocol, and rather timeout operations through
+the client. This means that when a timeout is reached, the connection it occurred
+on will be destroyed and no further operations can be performed.
+
+```js
+// Kill query after 60s
+connection.query({sql: 'SELECT COUNT(*) AS count FROM big_table', timeout: 60000}, function (err, rows) {
+  if (err && err.code === 'PROTOCOL_SEQUENCE_TIMEOUT') {
+    throw new Error('too long to count table rows!');
+  }
+
+  if (err) {
+    throw err;
+  }
+
+  console.log(rows[0].count + ' rows');
+});
+```
+
 ## Error handling
 
 This module comes with a consistent approach to error handling that you should

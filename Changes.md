@@ -7,6 +7,7 @@ you spot any mistakes.
 ## HEAD
 
 * Add code `POOL_NOEXIST` in PoolCluster error #846
+* Add `timeout` option to all sequences #855 #863
 * Default `connectTimeout` to 10 seconds
 * Fix domain binding with `conn.connect`
 * Return `Query` object from `pool.query` like `conn.query` #830
