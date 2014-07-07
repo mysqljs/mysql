@@ -505,22 +505,25 @@ console.log(query); // SELECT * FROM posts WHERE title='Hello MySQL'
 ## Escaping query identifiers
 
 If you can't trust an SQL identifier (database / table / column name) because it is
-provided by a user, you should escape it with `mysql.escapeId(identifier)` like this:
+provided by a user, you should escape it with `mysql.escapeId(identifier)`,
+`connection.escapeId(identifier)` or `pool.escapeId(identifier)` like this:
 
 ```js
 var sorter = 'date';
-var query = 'SELECT * FROM posts ORDER BY ' + mysql.escapeId(sorter);
-
-console.log(query); // SELECT * FROM posts ORDER BY `date`
+var sql    = 'SELECT * FROM posts ORDER BY ' + connection.escapeId(sorter);
+connection.query(sql, function(err, results) {
+  // ...
+});
 ```
 
 It also supports adding qualified identifiers. It will escape both parts.
 
 ```js
 var sorter = 'date';
-var query = 'SELECT * FROM posts ORDER BY ' + mysql.escapeId('posts.' + sorter);
-
-console.log(query); // SELECT * FROM posts ORDER BY `posts`.`date`
+var sql    = 'SELECT * FROM posts ORDER BY ' + connection.escapeId('posts.' + sorter);
+connection.query(sql, function(err, results) {
+  // ...
+});
 ```
 
 Alternatively, you can use `??` characters as placeholders for identifiers you would

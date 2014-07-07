@@ -8,6 +8,8 @@ assert.equal(pool.escape('Super'), "'Super'");
 assert.equal(pool.escape({ a: 123 }), "`a` = 123");
 // cannot simply test with default timezone, because i don't kown the test-database timezone.
 
+assert.equal(pool.escapeId('id'), '`id`');
+
 var poolMod= common.createPool({
   // change the defaults
   stringifyObjects   : true,
