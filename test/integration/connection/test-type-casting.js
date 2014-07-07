@@ -63,12 +63,12 @@ tests.forEach(function(test, index) {
 
   test.columnName = test.type + '_' + index;
 
-  schema.push('`' + test.columnName + '` ' + test.type + ',');
-  inserts.push('`' + test.columnName + '` = ' + escaped);
+  schema.push(connection.escapeId(test.columnName) + ' ' + test.type + ',');
+  inserts.push(connection.escapeId(test.columnName) + ' = ' + escaped);
 });
 
 var createTable = [
-  'CREATE TEMPORARY TABLE `' + table + '` (',
+  'CREATE TEMPORARY TABLE ' + connection.escapeId(table) + ' (',
   '`id` int(11) unsigned NOT NULL AUTO_INCREMENT,'
   ].concat(schema).concat([
   'PRIMARY KEY (`id`)',
