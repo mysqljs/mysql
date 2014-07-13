@@ -16,6 +16,7 @@ you spot any mistakes.
 * Fix `packet.default` to actually be a string
 * Fix `PARSER_*` errors to be catchable
 * Fix `PROTOCOL_PACKETS_OUT_OF_ORDER` error to be catchable #844
+* Include packets that failed parsing under `debug`
 * Return `Query` object from `pool.query` like `conn.query` #830
 * Use `EventEmitter.listenerCount` when possible for faster counting
 
