@@ -1,6 +1,6 @@
+var assert     = require('assert');
 var common     = require('../../common');
 var connection = common.createConnection({port: common.fakeServerPort});
-var assert     = require('assert');
 
 var endErr;
 connection.on('end', function(err) {

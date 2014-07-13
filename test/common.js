@@ -1,11 +1,11 @@
-var common     = exports;
-var fs         = require('fs');
-var path       = require('path');
-var _          = require('underscore');
-var FakeServer = require('./FakeServer');
+var _      = require('underscore');
+var common = exports;
+var fs     = require('fs');
+var mkdirp = require('mkdirp');
+var path   = require('path');
 
-common.lib      = path.join(__dirname, '../lib');
-common.fixtures = path.join(__dirname, 'fixtures');
+common.lib      = path.resolve(__dirname, '..', (process.env.TEST_COVERAGE || ''), 'lib');
+common.fixtures = path.resolve(__dirname, 'fixtures');
 
 // Useful for triggering ECONNREFUSED errors on connect()
 common.bogusPort     = 47378;
@@ -19,7 +19,29 @@ common.fakeServerSocket = __dirname + '/fake_server.sock';
 
 common.testDatabase = process.env.MYSQL_DATABASE || 'test';
 
-var Mysql = require('../');
+// Export common modules
+common.Charsets         = require(common.lib + '/protocol/constants/charsets');
+common.ClientConstants  = require(common.lib + '/protocol/constants/client');
+common.Connection       = require(common.lib + '/Connection');
+common.ConnectionConfig = require(common.lib + '/ConnectionConfig');
+common.Errors           = require(common.lib + '/protocol/constants/errors');
+common.Packets          = require(common.lib + '/protocol/packets');
+common.PacketWriter     = require(common.lib + '/protocol/PacketWriter');
+common.Parser           = require(common.lib + '/protocol/Parser');
+common.PoolConfig       = require(common.lib + '/PoolConfig');
+common.PoolConnection   = require(common.lib + '/PoolConnection');
+common.SqlString        = require(common.lib + '/protocol/SqlString');
+common.Types            = require(common.lib + '/protocol/constants/types');
+
+// Setup coverage hook
+if (process.env.TEST_COVERAGE) {
+  process.on('exit', function () {
+    writeCoverage(global.__coverage__ || {});
+  });
+}
+
+var Mysql      = require(path.resolve(common.lib, '../index'));
+var FakeServer = require('./FakeServer');
 
 common.isTravis = function() {
   return Boolean(process.env.CI);
@@ -128,4 +150,15 @@ function mergeTestConfig(config) {
     }, config);
   }
   return config;
+}
+
+function writeCoverage(coverage) {
+  var test = path.relative(__dirname, path.resolve(process.argv[1]));
+  var ext  = path.extname(test);
+  var cov  = test.substr(0, test.length - ext.length) + '.json';
+  var out  = path.resolve(__dirname, '..', process.env.TEST_COVERAGE, 'test', cov);
+
+  mkdirp.sync(path.dirname(out));
+
+  fs.writeFileSync(out, JSON.stringify(coverage));
 }

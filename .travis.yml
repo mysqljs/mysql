@@ -7,6 +7,12 @@ node_js:
 before_script:
 - "mysql -e 'create database node_mysql;'"
 
+script:
+- "npm run-script test-travis"
+
+after_script:
+- "npm install coveralls@2.10.0 && cat ./coverage/lcov.info | coveralls"
+
 env:
   - MYSQL_HOST=localhost MYSQL_DATABASE=node_mysql MYSQL_USER=root MYSQL_PASSWORD=
 

@@ -1,9 +1,7 @@
-var assert       = require('assert');
-var common       = require('../../common');
-var connection   = common.createConnection({port: common.fakeServerPort});
-var Packets      = require(common.lib + '/protocol/packets');
-var PacketWriter = require(common.lib + '/protocol/PacketWriter');
-var server       = common.createFakeServer();
+var assert     = require('assert');
+var common     = require('../../common');
+var connection = common.createConnection({port: common.fakeServerPort});
+var server     = common.createFakeServer();
 
 server.listen(common.fakeServerPort, function(err) {
   assert.ifError(err);
@@ -23,11 +21,11 @@ server.on('connection', function(conn) {
   conn.on('query', function(packet) {
     switch (packet.sql) {
       case 'SELECT value FROM stuff':
-        this._sendPacket(new Packets.ResultSetHeaderPacket({
+        this._sendPacket(new common.Packets.ResultSetHeaderPacket({
           fieldCount: 1
         }));
 
-        var writer = new PacketWriter();
+        var writer = new common.PacketWriter();
         writer.writeLengthCodedString('def');
         this._socket.write(writer.toBuffer(this._parser));
         this._parser.resetPacketNumber();

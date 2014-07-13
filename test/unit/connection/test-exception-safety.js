@@ -7,8 +7,6 @@
 var assert     = require('assert');
 var common     = require('../../common');
 var connection = common.createConnection({port: common.fakeServerPort});
-var Errors     = require(common.lib + '/protocol/constants/errors');
-var Packets    = require(common.lib + '/protocol/packets');
 var server     = common.createFakeServer();
 
 server.listen(common.fakeServerPort, function(err) {
@@ -75,14 +73,14 @@ server.on('connection', function (conn) {
   conn.on('query', function(packet) {
     switch (packet.sql) {
       case 'INVALID SQL':
-        this._sendPacket(new Packets.ErrorPacket({
-          errno   : Errors.ER_PARSE_ERROR,
+        this._sendPacket(new common.Packets.ErrorPacket({
+          errno   : common.Errors.ER_PARSE_ERROR,
           message : 'Parse error'
         }));
         this._parser.resetPacketNumber();
         break;
       case 'USE test':
-        this._sendPacket(new Packets.OkPacket());
+        this._sendPacket(new common.Packets.OkPacket());
         this._parser.resetPacketNumber();
         break;
       default:

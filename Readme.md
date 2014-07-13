@@ -1,4 +1,8 @@
-# mysql [![Build Status](https://travis-ci.org/felixge/node-mysql.svg?branch=master)](https://travis-ci.org/felixge/node-mysql) [![NPM version](https://badge.fury.io/js/mysql.svg)](http://badge.fury.io/js/mysql)
+# mysql
+
+[![NPM version](https://badge.fury.io/js/mysql.svg)](http://badge.fury.io/js/mysql)
+[![Build Status](https://travis-ci.org/felixge/node-mysql.svg?branch=master)](https://travis-ci.org/felixge/node-mysql)
+[![Coverage Status](https://img.shields.io/coveralls/felixge/node-mysql.svg)](https://coveralls.io/r/felixge/node-mysql)
 
 ## Install
 

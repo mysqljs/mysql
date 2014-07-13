@@ -1,7 +1,7 @@
 var common    = require('../../common');
 var test      = require('utest');
 var assert    = require('assert');
-var SqlString = require(common.lib + '/protocol/SqlString');
+var SqlString = common.SqlString;
 
 test('SqlString.escapeId', {
   'value is quoted': function() {

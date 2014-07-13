@@ -1,5 +1,9 @@
 *.un~
 
+npm-debug.log
+
+/coverage
+/lib-cov
 /node_modules
 /test/config.js
 

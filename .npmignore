@@ -1,4 +1,6 @@
 benchmark/
+coverage/
+lib-cov/
 test/
 tool/
 .travis.yml

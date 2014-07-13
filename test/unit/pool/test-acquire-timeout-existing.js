@@ -6,7 +6,6 @@ var pool   = common.createPool({
   port            : common.fakeServerPort
 });
 var server  = common.createFakeServer();
-var Packets = require(common.lib + '/protocol/packets');
 
 var fail       = false;
 var seq        = 0;
@@ -51,7 +50,7 @@ server.on('connection', function(incomingConnection) {
   });
   incomingConnection.on('ping', function() {
     if (!fail) {
-      this._sendPacket(new Packets.OkPacket());
+      this._sendPacket(new common.Packets.OkPacket());
       this._parser.resetPacketNumber();
     }
 

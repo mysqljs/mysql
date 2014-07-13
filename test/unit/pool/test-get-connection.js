@@ -1,6 +1,6 @@
 var common     = require('../../common');
 var assert     = require('assert');
-var Connection = require(common.lib + '/Connection');
+var Connection = common.Connection;
 var pool       = common.createPool({port: common.fakeServerPort});
 
 var server = common.createFakeServer();

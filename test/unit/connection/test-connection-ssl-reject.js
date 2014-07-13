@@ -1,7 +1,6 @@
-var assert          = require('assert');
-var common          = require('../../common');
-var ClientConstants = require('../../../lib/protocol/constants/client');
-var connection      = common.createConnection({
+var assert     = require('assert');
+var common     = require('../../common');
+var connection = common.createConnection({
   port : common.fakeServerPort,
   ssl  : 'Amazon RDS'
 });
@@ -23,6 +22,6 @@ server.listen(common.fakeServerPort, function(err) {
 
 server.on('connection', function(incomingConnection) {
   incomingConnection.handshake({
-    serverCapabilities1: ClientConstants.CLIENT_SSL
+    serverCapabilities1: common.ClientConstants.CLIENT_SSL
   });
 });
