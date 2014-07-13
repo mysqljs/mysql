@@ -4,7 +4,7 @@ This file is a manually maintained list of changes for each release. Feel free
 to add your changes here when sending pull requests. Also send corrections if
 you spot any mistakes.
 
-## HEAD
+## v2.4.0 (2014-07-13)
 
 * Add code `POOL_NOEXIST` in PoolCluster error #846
 * Add `acquireTimeout` pool option to specify a timeout for acquiring a connection #821 #854
