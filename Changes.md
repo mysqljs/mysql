@@ -14,6 +14,7 @@ you spot any mistakes.
 * Default `connectTimeout` to 10 seconds
 * Fix domain binding with `conn.connect`
 * Fix `packet.default` to actually be a string
+* Fix `PARSER_*` errors to be catchable
 * Fix `PROTOCOL_PACKETS_OUT_OF_ORDER` error to be catchable #844
 * Return `Query` object from `pool.query` like `conn.query` #830
 * Use `EventEmitter.listenerCount` when possible for faster counting
