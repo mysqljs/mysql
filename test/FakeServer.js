@@ -130,6 +130,7 @@ FakeConnection.prototype._handleQueryPacket = function _handleQueryPacket(packet
     this._sendPacket(new Packets.FieldPacket({
       catalog    : 'def',
       charsetNr  : Charsets.UTF8_GENERAL_CI,
+      default    : '0',
       name       : num,
       protocol41 : true,
       type       : Types.LONG
