@@ -1140,5 +1140,4 @@ $ MYSQL_HOST=localhost MYSQL_PORT=3306 MYSQL_DATABASE=node_mysql_test MYSQL_USER
 ## Todo
 
 * Prepared statements
-* setTimeout() for Query
 * Support for encodings other than UTF-8 / ASCII
