@@ -2,23 +2,22 @@
  * This test is skipped on Windows.
  */
 
+var assert = require('assert');
+var common = require('../../common');
+
 if (process.platform === 'win32') {
-  console.log('skipping - windows does not support unix sockets');
-  return;
+  common.skipTest('windows does not support unix sockets');
 }
 
-var common     = require('../../common');
 var connection = common.createConnection({socketPath: common.fakeServerSocket});
-var assert     = require('assert');
-
-var server = common.createFakeServer();
+var server     = common.createFakeServer();
 var didConnect = false;
 
-server.listen(common.fakeServerSocket, function(err) {
-  if (err) throw err;
+server.listen(common.fakeServerSocket, function (err) {
+  assert.ifError(err);
 
-  connection.connect(function(err) {
-    if (err) throw err;
+  connection.connect(function (err) {
+    assert.ifError(err);
 
     assert.equal(didConnect, false);
     didConnect = true;

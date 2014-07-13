@@ -1,8 +1,7 @@
 var assert     = require('assert');
 var common     = require('../common');
 var test       = require('utest');
-var Charsets   = require(common.lib + '/protocol/constants/charsets');
-var PoolConfig = require(common.lib + '/PoolConfig');
+var PoolConfig = common.PoolConfig;
 
 test('PoolConfig#Constructor', {
   'works with combined object': function() {
@@ -27,7 +26,7 @@ test('PoolConfig#Constructor', {
     assert.equal(config.connectionConfig.port, 3333);
     assert.equal(config.connectionConfig.database, 'mydb');
     assert.equal(config.connectionConfig.debug, true);
-    assert.equal(config.connectionConfig.charsetNumber, Charsets.BIG5_CHINESE_CI);
+    assert.equal(config.connectionConfig.charsetNumber, common.Charsets.BIG5_CHINESE_CI);
   },
 
   'connection string can configure pool': function() {

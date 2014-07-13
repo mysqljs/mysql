@@ -17,6 +17,9 @@
     "require-all": "0.0.8"
   },
   "devDependencies": {
+    "istanbul": "0.3.0",
+    "rimraf": "2.2.8",
+    "mkdirp": "0.5.0",
     "underscore": "1.6.0",
     "urun": "0.0.8",
     "utest": "0.0.8"
@@ -25,6 +28,8 @@
     "node": ">= 0.8"
   },
   "scripts": {
-    "test": "node test/run.js"
+    "test": "node test/run.js",
+    "test-cov": "node test/run-cov.js",
+    "test-travis": "node test/run-cov.js lcovonly"
   }
 }

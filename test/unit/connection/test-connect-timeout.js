@@ -1,3 +1,5 @@
+var assert     = require('assert');
+var common     = require('../../common');
 var os         = require('os');
 var interfaces = os.networkInterfaces();
 var external   = Object.keys(interfaces).some(function(name) {
@@ -7,13 +9,10 @@ var external   = Object.keys(interfaces).some(function(name) {
 });
 
 if (!external) {
-  console.log('skipping - no external network interfaces');
-  return;
+  common.skipTest('no external network interfaces');
 }
 
-var common     = require('../../common');
 var connection = common.createConnection({host: '1.1.1.1', port: common.fakeServerPort, connectTimeout: 500});
-var assert     = require('assert');
 
 var testTimeout = setTimeout(function() {
   connection.destroy();

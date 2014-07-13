@@ -3,16 +3,16 @@
 
 var common       = require('./common');
 var _            = require('underscore');
-var Charsets     = require('../lib/protocol/constants/charsets');
+var Charsets     = common.Charsets;
 var Crypto       = require('crypto');
 var Net          = require('net');
 var tls          = require('tls');
-var Packets      = require('../lib/protocol/packets');
-var PacketWriter = require('../lib/protocol/PacketWriter');
-var Parser       = require('../lib/protocol/Parser');
-var Types        = require('../lib/protocol/constants/types');
-var Auth         = require('../lib/protocol/Auth');
-var Errors       = require('../lib/protocol/constants/errors');
+var Packets      = common.Packets;
+var PacketWriter = common.PacketWriter;
+var Parser       = common.Parser;
+var Types        = common.Types;
+var Auth         = require(common.lib + '/protocol/Auth');
+var Errors       = common.Errors;
 var EventEmitter = require('events').EventEmitter;
 var Util         = require('util');
 

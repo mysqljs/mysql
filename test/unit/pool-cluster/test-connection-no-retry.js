@@ -2,7 +2,6 @@ var assert  = require('assert');
 var common  = require('../../common');
 var cluster = common.createPoolCluster({canRetry: false});
 var server  = common.createFakeServer();
-var Errors  = require(common.lib + '/protocol/constants/errors');
 
 var connCount  = 0;
 var poolConfig = common.getTestConfig({port: common.fakeServerPort});
@@ -22,5 +21,5 @@ server.listen(common.fakeServerPort, function(err) {
 
 server.on('connection', function (conn) {
   connCount += 1;
-  conn.deny('You suck.', Errors.ER_HOST_NOT_PRIVILEGED);
+  conn.deny('You suck.', common.Errors.ER_HOST_NOT_PRIVILEGED);
 });

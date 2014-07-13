@@ -1,8 +1,6 @@
 var assert     = require('assert');
 var common     = require('../../common');
 var connection = common.createConnection({port: common.fakeServerPort});
-var Packets    = require(common.lib + '/protocol/packets');
-
 var server     = common.createFakeServer();
 var serverConn = null;
 
@@ -12,7 +10,7 @@ server.listen(common.fakeServerPort, function(err) {
   connection.connect(function(err) {
     assert.ifError(err);
 
-    serverConn._sendPacket(new Packets.OkPacket());
+    serverConn._sendPacket(new common.Packets.OkPacket());
     serverConn._parser.resetPacketNumber();
 
     connection.end(function(err) {

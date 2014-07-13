@@ -1,7 +1,6 @@
+var assert     = require('assert');
 var common     = require('../../common');
 var connection = common.createConnection({port: common.fakeServerPort});
-var assert     = require('assert');
-var Errors     = require(common.lib + '/protocol/constants/errors');
 
 var server = common.createFakeServer();
 
@@ -51,7 +50,7 @@ function end() {
 }
 
 server.on('connection', function(incomingConnection) {
-  incomingConnection.deny('You suck.', Errors.ER_HOST_NOT_PRIVILEGED);
+  incomingConnection.deny('You suck.', common.Errors.ER_HOST_NOT_PRIVILEGED);
 });
 
 process.on('exit', function() {

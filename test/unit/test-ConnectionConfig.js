@@ -1,9 +1,7 @@
 var common           = require('../common');
 var test             = require('utest');
 var assert           = require('assert');
-var Charsets         = require(common.lib + '/protocol/constants/charsets');
-var ClientConstants  = require(common.lib + '/protocol/constants/client');
-var ConnectionConfig = require(common.lib + '/ConnectionConfig');
+var ConnectionConfig = common.ConnectionConfig;
 
 test('ConnectionConfig#Constructor', {
   'takes user,pw,host,port,db from url string': function() {
@@ -25,7 +23,7 @@ test('ConnectionConfig#Constructor', {
     assert.equal(config.port, 3306);
     assert.equal(config.database, 'mydb');
     assert.equal(config.debug, true);
-    assert.equal(config.charsetNumber, Charsets.BIG5_CHINESE_CI);
+    assert.equal(config.charsetNumber, common.Charsets.BIG5_CHINESE_CI);
   },
 });
 
@@ -35,7 +33,7 @@ test('ConnectionConfig#Constructor.charset', {
       charset: 'LATIN1_SWEDISH_CI',
     });
 
-    assert.equal(config.charsetNumber, Charsets.LATIN1_SWEDISH_CI);
+    assert.equal(config.charsetNumber, common.Charsets.LATIN1_SWEDISH_CI);
   },
 
   'accepts case-insensitive charset name': function() {
@@ -43,7 +41,7 @@ test('ConnectionConfig#Constructor.charset', {
       charset: 'big5_chinese_ci',
     });
 
-    assert.equal(config.charsetNumber, Charsets.BIG5_CHINESE_CI);
+    assert.equal(config.charsetNumber, common.Charsets.BIG5_CHINESE_CI);
   },
 
   'accepts short charset name': function() {
@@ -51,7 +49,7 @@ test('ConnectionConfig#Constructor.charset', {
       charset: 'UTF8MB4',
     });
 
-    assert.equal(config.charsetNumber, Charsets.UTF8MB4_GENERAL_CI);
+    assert.equal(config.charsetNumber, common.Charsets.UTF8MB4_GENERAL_CI);
   },
 
   'throws on unknown charset': function() {
@@ -71,12 +69,12 @@ test('ConnectionConfig#Constructor.charset', {
   },
 
   'all charsets should have short name': function() {
-    var charsets = Object.keys(Charsets);
+    var charsets = Object.keys(common.Charsets);
 
     for (var i = 0; i < charsets.length; i++) {
       var charset = charsets[i];
-      assert.ok(Charsets[charset]);
-      assert.ok(Charsets[charset.split('_')[0]]);
+      assert.ok(common.Charsets[charset]);
+      assert.ok(common.Charsets[charset.split('_')[0]]);
     }
   },
 });
@@ -160,7 +158,7 @@ test('ConnectionConfig#mergeFlags', {
     var flags    = 'LONG_PASSWORD';
     var combined = ConnectionConfig.mergeFlags(initial, flags);
 
-    assert.strictEqual(combined, ClientConstants.CLIENT_LONG_PASSWORD);
+    assert.strictEqual(combined, common.ClientConstants.CLIENT_LONG_PASSWORD);
   },
 
   'adds flag to list': function() {
@@ -168,9 +166,9 @@ test('ConnectionConfig#mergeFlags', {
     var flags    = 'LONG_FLAG';
     var combined = ConnectionConfig.mergeFlags(initial, flags);
 
-    assert.strictEqual(combined, ClientConstants.CLIENT_LONG_PASSWORD
-      | ClientConstants.CLIENT_FOUND_ROWS
-      | ClientConstants.CLIENT_LONG_FLAG);
+    assert.strictEqual(combined, common.ClientConstants.CLIENT_LONG_PASSWORD
+      | common.ClientConstants.CLIENT_FOUND_ROWS
+      | common.ClientConstants.CLIENT_LONG_FLAG);
   },
 
   'adds unknown flag to list': function() {
@@ -178,8 +176,8 @@ test('ConnectionConfig#mergeFlags', {
     var flags    = 'UNDEFINED_CONSTANT';
     var combined = ConnectionConfig.mergeFlags(initial, flags);
 
-    assert.strictEqual(combined, ClientConstants.CLIENT_LONG_PASSWORD
-      | ClientConstants.CLIENT_FOUND_ROWS);
+    assert.strictEqual(combined, common.ClientConstants.CLIENT_LONG_PASSWORD
+      | common.ClientConstants.CLIENT_FOUND_ROWS);
   },
 
   'removes flag from empty list': function() {
@@ -195,7 +193,7 @@ test('ConnectionConfig#mergeFlags', {
     var flags    = '-LONG_PASSWORD';
     var combined = ConnectionConfig.mergeFlags(initial, flags);
 
-    assert.strictEqual(combined, ClientConstants.CLIENT_FOUND_ROWS);
+    assert.strictEqual(combined, common.ClientConstants.CLIENT_FOUND_ROWS);
   },
 
   'removes non-existing flag from list': function() {
@@ -203,8 +201,8 @@ test('ConnectionConfig#mergeFlags', {
     var flags    = '-LONG_FLAG';
     var combined = ConnectionConfig.mergeFlags(initial, flags);
 
-    assert.strictEqual(combined, ClientConstants.CLIENT_LONG_PASSWORD
-      | ClientConstants.CLIENT_FOUND_ROWS);
+    assert.strictEqual(combined, common.ClientConstants.CLIENT_LONG_PASSWORD
+      | common.ClientConstants.CLIENT_FOUND_ROWS);
   },
 
   'removes unknown flag to list': function() {
@@ -212,7 +210,7 @@ test('ConnectionConfig#mergeFlags', {
     var flags    = '-UNDEFINED_CONSTANT';
     var combined = ConnectionConfig.mergeFlags(initial, flags);
 
-    assert.strictEqual(combined, ClientConstants.CLIENT_LONG_PASSWORD
-      | ClientConstants.CLIENT_FOUND_ROWS);
+    assert.strictEqual(combined, common.ClientConstants.CLIENT_LONG_PASSWORD
+      | common.ClientConstants.CLIENT_FOUND_ROWS);
   },
 });

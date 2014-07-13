@@ -1,7 +1,6 @@
 var assert     = require('assert');
 var common     = require('../../common');
 var connection = common.createConnection({port: common.fakeServerPort});
-var Errors     = require(common.lib + '/protocol/constants/errors');
 
 var server = common.createFakeServer();
 
@@ -19,5 +18,5 @@ server.listen(common.fakeServerPort, function (err) {
 });
 
 server.on('connection', function (conn) {
-  conn.deny('You suck.', Errors.ER_ACCESS_DENIED_ERROR);
+  conn.deny('You suck.', common.Errors.ER_ACCESS_DENIED_ERROR);
 });

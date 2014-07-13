@@ -1,8 +1,7 @@
-var assert     = require('assert');
-var common     = require('../../common');
-var Connection = require(common.lib + '/Connection')
+var assert = require('assert');
+var common = require('../../common');
 
-var query  = Connection.createQuery('SELECT 1')
+var query  = common.Connection.createQuery('SELECT 1')
 var stream = query.stream()
 
 assert.doesNotThrow(function () {
