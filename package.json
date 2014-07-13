@@ -5,28 +5,12 @@
   "license": "MIT",
   "author": "Felix Geisendörfer <felix@debuggable.com> (http://debuggable.com/)",
   "contributors": [
-    {
-      "name": "Andrey Sidorov",
-      "email": "sidorares@yandex.ru"
-    },
-    {
-      "name": "Douglas Christopher Wilson",
-      "email": "doug@somethingdoug.com"
-    },
-    {
-      "name": "Diogo Resende",
-      "email": "dresende@thinkdigital.pt"
-    }
+    "Andrey Sidorov <sidorares@yandex.ru>",
+    "Douglas Christopher Wilson <doug@somethingdoug.com>",
+    "Diogo Resende <dresende@thinkdigital.pt>"
   ],
   "homepage": "https://github.com/felixge/node-mysql",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/felixge/node-mysql"
-  },
-  "main": "./index",
-  "scripts": {
-    "test": "node test/run.js"
-  },
+  "repository": "felixge/node-mysql",
   "dependencies": {
     "bignumber.js": "1.4.0",
     "readable-stream": "~1.1.13",
@@ -39,5 +23,8 @@
   },
   "engines": {
     "node": ">= 0.8"
+  },
+  "scripts": {
+    "test": "node test/run.js"
   }
 }
