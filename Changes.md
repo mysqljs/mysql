@@ -4,6 +4,10 @@ This file is a manually maintained list of changes for each release. Feel free
 to add your changes here when sending pull requests. Also send corrections if
 you spot any mistakes.
 
+## HEAD
+
+* Add `enqueue` event to protocol and connection #381
+
 ## v2.4.3 (2014-08-25)
 
 * Fix `pool.query` to use `typeCast` configuration
