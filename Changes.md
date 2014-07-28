@@ -4,6 +4,10 @@ This file is a manually maintained list of changes for each release. Feel free
 to add your changes here when sending pull requests. Also send corrections if
 you spot any mistakes.
 
+## HEAD
+
+* Fix receiving large text fields #922
+
 ## v2.5.1 (2014-09-22)
 
 * Fix `pool.end` race conditions #915
