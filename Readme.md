@@ -175,7 +175,8 @@ issue [#501](https://github.com/felixge/node-mysql/issues/501). (Default: `'fals
 * `multipleStatements`: Allow multiple mysql statements per query. Be careful
   with this, it exposes you to SQL injection attacks. (Default: `false`)
 * `flags`: List of connection flags to use other than the default ones. It is
-  also possible to blacklist default ones. For more information, check [Connection Flags](#connection-flags).
+  also possible to blacklist default ones. For more information, check
+  [Connection Flags](#connection-flags).
 * `ssl`: object with ssl parameters or a string containing name of ssl profile. See [SSL options](#ssl-options).
 
 
@@ -1044,10 +1045,11 @@ __You can find which field function you need to use by looking at: [RowDataPacke
 If, for any reason, you would like to change the default connection flags, you
 can use the connection option `flags`. Pass a string with a comma separated list
 of items to add to the default flags. If you don't want a default flag to be used
-prepend the flag with a minus sign. To add a flag that is not in the default list, don't prepend it with a plus sign, just write the flag name (case insensitive).
+prepend the flag with a minus sign. To add a flag that is not in the default list,
+just write the flag name, or prefix it with a plus (case insensitive).
 
-**Please note that some available flags that are not default are still not supported
-(e.g.: SSL, Compression). Use at your own risk.**
+**Please note that some available flags that are not not supported (e.g.: Compression),
+are still not allowed to be specified.**
 
 ### Example
 
@@ -1059,31 +1061,41 @@ var connection = mysql.createConnection("mysql://localhost/test?flags=-FOUND_ROW
 
 ### Default Flags
 
-- LONG_PASSWORD
-- FOUND_ROWS
-- LONG_FLAG
-- CONNECT_WITH_DB
-- ODBC
-- LOCAL_FILES
-- IGNORE_SPACE
-- PROTOCOL_41
-- IGNORE_SIGPIPE
-- TRANSACTIONS
-- RESERVED
-- SECURE_CONNECTION
-- MULTI_RESULTS
-- MULTI_STATEMENTS (used if `multipleStatements` option is activated)
+The following flags are sent by default on a new connection:
+
+- `CONNECT_WITH_DB` - Ability to specify the database on connection.
+- `FOUND_ROWS` - Send the found rows instead of the affected rows as `affectedRows`.
+- `IGNORE_SIGPIPE` - Old; no effect.
+- `IGNORE_SPACE` - Let the parser ignore spaces before the `(` in queries.
+- `LOCAL_FILES` - Can use `LOAD DATA LOCAL`.
+- `LONG_FLAG`
+- `LONG_PASSWORD` - Use the improved version of Old Password Authentication.
+- `MULTI_RESULTS` - Can handle multiple resultsets for COM_QUERY.
+- `ODBC` Old; no effect.
+- `PROTOCOL_41` - Uses the 4.1 protocol.
+- `PS_MULTI_RESULTS` - Can handle multiple resultsets for COM_STMT_EXECUTE.
+- `RESERVED` - Old flag for the 4.1 protocol.
+- `SECURE_CONNECTION` - Support native 4.1 authentication.
+- `TRANSACTIONS` - Asks for the transaction status flags.
+
+In addition, the following flag will be sent if the option `multipleStatements`
+is set to `true`:
+
+- `MULTI_STATEMENTS` - The client may send multiple statement per query or
+  statement prepare.
 
 ### Other Available Flags
 
-- NO_SCHEMA
+There are other flags available. They may or may not function, but are still
+available to specify.
+
 - COMPRESS
 - INTERACTIVE
-- SSL
-- PS_MULTI_RESULTS
+- NO_SCHEMA
 - PLUGIN_AUTH
-- SSL_VERIFY_SERVER_CERT
 - REMEMBER_OPTIONS
+- SSL
+- SSL_VERIFY_SERVER_CERT
 
 ## Debugging and reporting problems
 

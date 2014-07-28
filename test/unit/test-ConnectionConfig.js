@@ -25,6 +25,22 @@ test('ConnectionConfig#Constructor', {
     assert.equal(config.debug, true);
     assert.equal(config.charsetNumber, common.Charsets.BIG5_CHINESE_CI);
   },
+
+  'accepts client flags': function() {
+    var config = new ConnectionConfig({ flags: '-FOUND_ROWS' });
+    assert.equal(config.clientFlags & common.ClientConstants.CLIENT_FOUND_ROWS, 0);
+  },
+
+  'ignores unknown client flags': function() {
+    var config1 = new ConnectionConfig({});
+    var config2 = new ConnectionConfig({ flags: '+HAPPY_MYSQL' });
+    assert.equal(config1.clientFlags, config2.clientFlags);
+  },
+
+  'blacklists unsupported client flags': function() {
+    var config = new ConnectionConfig({ flags: '+CONNECT_ATTRS' });
+    assert.equal(config.clientFlags & common.ClientConstants.CLIENT_CONNECT_ATTRS, 0);
+  },
 });
 
 test('ConnectionConfig#Constructor.charset', {
