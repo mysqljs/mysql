@@ -6,6 +6,7 @@ you spot any mistakes.
 
 ## HEAD
 
+* Fix incorrect sequence packet errors to be catchable #867
 * Fix stray protocol packet errors to be catchable #867
 * Fix timing of fatal protocol errors bubbling to user #879
 
