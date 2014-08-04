@@ -4,7 +4,7 @@ This file is a manually maintained list of changes for each release. Feel free
 to add your changes here when sending pull requests. Also send corrections if
 you spot any mistakes.
 
-## HEAD
+## v2.4.2 (2014-08-03)
 
 * Fix incorrect sequence packet errors to be catchable #867
 * Fix stray protocol packet errors to be catchable #867
