@@ -6,6 +6,7 @@ you spot any mistakes.
 
 ## HEAD
 
+* Fix stray protocol packet errors to be catchable #867
 * Fix timing of fatal protocol errors bubbling to user #879
 
 ## v2.4.1 (2014-07-17)
