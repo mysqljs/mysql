@@ -1,7 +1,7 @@
 var assert = require('assert');
 var common = require('../../common');
 var pool   = common.createPool({
-  acquireTimeout  : 100,
+  acquireTimeout  : 200,
   connectionLimit : 1,
   port            : common.fakeServerPort
 });
