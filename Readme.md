@@ -1,8 +1,10 @@
 # mysql
 
-[![NPM version](https://badge.fury.io/js/mysql.svg)](http://badge.fury.io/js/mysql)
-[![Build Status](https://travis-ci.org/felixge/node-mysql.svg?branch=master)](https://travis-ci.org/felixge/node-mysql)
-[![Coverage Status](https://img.shields.io/coveralls/felixge/node-mysql.svg)](https://coveralls.io/r/felixge/node-mysql)
+[![NPM Version][npm-image]][npm-url]
+[![NPM Downloads][downloads-image]][downloads-url]
+[![Node.js Version][node-version-image]][node-version-url]
+[![Build Status][travis-image]][travis-url]
+[![Test Coverage][coveralls-image]][coveralls-url]
 
 ## Install
 
@@ -1157,3 +1159,14 @@ $ MYSQL_HOST=localhost MYSQL_PORT=3306 MYSQL_DATABASE=node_mysql_test MYSQL_USER
 
 * Prepared statements
 * Support for encodings other than UTF-8 / ASCII
+
+[npm-image]: https://img.shields.io/npm/v/mysql.svg?style=flat
+[npm-url]: https://npmjs.org/package/mysql
+[node-version-image]: https://img.shields.io/badge/node.js-%3E%3D_0.8-brightgreen.svg?style=flat
+[node-version-url]: http://nodejs.org/download/
+[travis-image]: https://img.shields.io/travis/felixge/node-mysql.svg?style=flat
+[travis-url]: https://travis-ci.org/felixge/node-mysql
+[coveralls-image]: https://img.shields.io/coveralls/felixge/node-mysql.svg?style=flat
+[coveralls-url]: https://coveralls.io/r/felixge/node-mysql?branch=master
+[downloads-image]: https://img.shields.io/npm/dm/mysql.svg?style=flat
+[downloads-url]: https://npmjs.org/package/mysql
