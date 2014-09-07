@@ -8,6 +8,7 @@ you spot any mistakes.
 
 * Add `enqueue` event to protocol and connection #381
 * Blacklist unsupported connection flags #881
+* Make only column names enumerable in `RowDataPacket` #549 #895
 
 ## v2.4.3 (2014-08-25)
 
