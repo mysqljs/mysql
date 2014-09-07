@@ -30,6 +30,7 @@ server.listen(common.fakeServerPort, function (err) {
       assert.ifError(err);
       assert.ok(error);
       assert.equal(error.message, 'Queue limit reached.');
+      assert.equal(error.code, 'POOL_ENQUEUELIMIT');
       server.destroy();
     });
   });
