@@ -25,7 +25,7 @@
     "utest": "0.0.8"
   },
   "engines": {
-    "node": ">= 0.8"
+    "node": ">= 0.6"
   },
   "scripts": {
     "test": "node test/run.js",

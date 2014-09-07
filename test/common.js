@@ -110,8 +110,11 @@ common.getTestConnection = function getTestConnection(config, callback) {
 common.skipTest = function skipTest(message) {
   var msg = 'skipping - ' + message + '\n';
 
-  fs.writeSync(process.stdout.fd, msg);
-  fs.fsyncSync(process.stdout.fd);
+  try {
+    fs.writeSync(process.stdout.fd, msg);
+    fs.fsyncSync(process.stdout.fd);
+  } catch (e) {}
+
   process.exit(0);
 };
 

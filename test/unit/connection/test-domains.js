@@ -1,6 +1,13 @@
 var assert = require('assert');
 var common = require('../../common');
-var domain = require('domain');
+var domain = null;
+
+try {
+  domain = require('domain');
+} catch (e) {
+  common.skipTest('node ' + process.version + ' does not support domains');
+}
+
 var d0 = domain.create();
 var d1 = domain.create();
 var d2 = domain.create();
