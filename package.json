@@ -12,7 +12,7 @@
   "homepage": "https://github.com/felixge/node-mysql",
   "repository": "felixge/node-mysql",
   "dependencies": {
-    "bignumber.js": "1.4.0",
+    "bignumber.js": "1.4.1",
     "readable-stream": "~1.1.13",
     "require-all": "0.0.8"
   },
