@@ -348,6 +348,19 @@ addition to those options pools accept a few extras:
   before returning an error from `getConnection`. If set to `0`, there is no
   limit to the number of queued connection requests. (Default: `0`)
 
+## Pool events
+
+### enqueue
+
+The pool will emit an `enqueue` event when a callback has been queued to wait for
+an available connection.
+
+```js
+pool.on('enqueue', function () {
+  console.log('Waiting for available connection slot');
+});
+```
+
 ## PoolCluster
 
 PoolCluster provides multiple hosts connection. (group & retry & selector)
