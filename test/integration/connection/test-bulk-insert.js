@@ -1,6 +1,5 @@
 var common = require('../../common');
 var assert = require('assert');
-var _      = require('underscore');
 
 var table = 'insert_test';
 
@@ -28,7 +27,7 @@ common.getTestConnection(function (err, connection) {
     connection.query('SELECT title FROM ??', [table], function (err, rows) {
       assert.ifError(err);
 
-      var itemsFoundInTable = _.map(rows, function(row) { return [row.title]; });
+      var itemsFoundInTable = rows.map(function (r) { return [r.title]; });
 
       assert.deepEqual(items, itemsFoundInTable);
 

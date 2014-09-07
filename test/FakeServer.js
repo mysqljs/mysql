@@ -2,7 +2,6 @@
 // as needed.
 
 var common       = require('./common');
-var _            = require('underscore');
 var Charsets     = common.Charsets;
 var Crypto       = require('crypto');
 var Net          = require('net');
@@ -71,7 +70,7 @@ function FakeConnection(socket) {
 FakeConnection.prototype.handshake = function(options) {
   this._handshakeOptions = options || {};
 
-  var packetOpiotns = _.extend({
+  var packetOpiotns = common.extend({
     scrambleBuff1       : new Buffer('1020304050607080', 'hex'),
     scrambleBuff2       : new Buffer('0102030405060708090A0B0C', 'hex'),
     serverCapabilities1 : 512, // only 1 flag, PROTOCOL_41
