@@ -1,4 +1,3 @@
-var _      = require('underscore');
 var common = exports;
 var fs     = require('fs');
 var mkdirp = require('mkdirp');
@@ -78,7 +77,15 @@ common.createPoolCluster = function(config) {
 };
 
 common.createFakeServer = function(options) {
-  return new FakeServer(_.extend({}, options));
+  return new FakeServer(common.extend({}, options));
+};
+
+common.extend = function extend(dest, src) {
+  for (var key in src) {
+    dest[key] = src[key];
+  }
+
+  return dest;
 };
 
 common.getTestConnection = function getTestConnection(config, callback) {
@@ -141,11 +148,11 @@ common.getSSLConfig = function() {
 function mergeTestConfig(config) {
   if (common.isTravis()) {
     // see: http://about.travis-ci.org/docs/user/database-setup/
-    config = _.extend({
+    config = common.extend({
       user: 'root'
     }, config);
   } else {
-    config = _.extend({
+    config = common.extend({
       host     : process.env.MYSQL_HOST,
       port     : process.env.MYSQL_PORT,
       user     : process.env.MYSQL_USER,
