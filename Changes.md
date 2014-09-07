@@ -6,6 +6,7 @@ you spot any mistakes.
 
 ## HEAD
 
+* Add code `POOL_ENQUEUELIMIT` to error reaching `queueLimit`
 * Add `enqueue` event to protocol and connection #381
 * Blacklist unsupported connection flags #881
 * Make only column names enumerable in `RowDataPacket` #549 #895
