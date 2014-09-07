@@ -290,15 +290,6 @@ pool.getConnection(function(err, connection) {
 });
 ```
 
-If you need to set session variables on the connection before it gets used,
-you can listen to the `connection` event.
-
-```js
-pool.on('connection', function(connection) {
-  connection.query('SET SESSION auto_increment_increment=1')
-});
-```
-
 When you are done with a connection, just call `connection.release()` and the
 connection will return to the pool, ready to be used again by someone else.
 
@@ -349,6 +340,18 @@ addition to those options pools accept a few extras:
   limit to the number of queued connection requests. (Default: `0`)
 
 ## Pool events
+
+### connection
+
+The pool will emit a `connection` event when a new connection is made within the pool. 
+If you need to set session variables on the connection before it gets used, you can
+listen to the `connection` event.
+
+```js
+pool.on('connection', function (connection) {
+  connection.query('SET SESSION auto_increment_increment=1')
+});
+```
 
 ### enqueue
 
