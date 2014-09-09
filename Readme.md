@@ -406,6 +406,8 @@ poolCluster.end();
 * `canRetry`: If `true`, `PoolCluster` will attempt to reconnect when connection fails. (Default: `true`)
 * `removeNodeErrorCount`: If connection fails, node's `errorCount` increases. 
   When `errorCount` is greater than `removeNodeErrorCount`, remove a node in the `PoolCluster`. (Default: `5`)
+* `restoreNodeTimeout`: If value is greater than `0`, node will not be actually removed.
+  After `restoreNodeTimeout` (ms) node will be automatically restored in `PoolCluster` with `errorCount = 0`. (Default: `0`)
 * `defaultSelector`: The default selector. (Default: `RR`)
   * `RR`: Select one alternately. (Round-Robin)
   * `RANDOM`: Select the node by random function.
