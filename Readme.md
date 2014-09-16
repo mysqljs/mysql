@@ -364,6 +364,27 @@ pool.on('enqueue', function () {
 });
 ```
 
+## Closing all the connections in a pool
+
+When you are done using the pool, you have to end all the connections or the
+Node.js event loop will stay active until the connections are closed by the
+MySQL server. This is typically done if the pool is used in a script or when
+trying to gracefully shutdown a server. To end all the connections in the
+pool, use the `end` method on the pool:
+
+```js
+pool.end(function (err) {
+  // all connections in the pool have ended
+});
+```
+
+The `end` method takes an _optional_ callback that you can use to know once
+all the connections have ended. The connections end _gracefully_, so all
+pending queries will still complete and the time to end the pool will vary.
+
+**Once `pool.end()` has been called, `pool.getConnection` and other operations
+can no longer be performed**
+
 ## PoolCluster
 
 PoolCluster provides multiple hosts connection. (group & retry & selector)
