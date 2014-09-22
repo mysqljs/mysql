@@ -19,19 +19,23 @@ server.listen(common.fakeServerPort, function(err) {
   });
 
   var conn0;
+  var threadId;
   pool.getConnection(function(err, conn) {
     assert.ifError(err);
-    assert.strictEqual(conn.threadId, 1);
+    assert.ok(conn.threadId === 1 || conn.threadId === 2);
     conn0 = conn;
+    threadId = conn.threadId;
   });
 
   pool.getConnection(function(err, conn) {
     assert.ifError(err);
-    assert.strictEqual(conn.threadId, 2);
+    assert.ok(conn.threadId === 1 || conn.threadId === 2);
+
+    var threadId = conn.threadId;
 
     conn.changeUser({user: 'user_2'}, function(err) {
       assert.ifError(err);
-      assert.strictEqual(conn.threadId, 2);
+      assert.strictEqual(conn.threadId, threadId);
       conn.release();
       conn0.release();
     });

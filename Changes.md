@@ -7,6 +7,7 @@ you spot any mistakes.
 ## HEAD
 
 * Fix `pool.end` race conditions #915
+* Fix `pool.getConnection` race conditions
 
 ## v2.5.0 (2014-09-07)
 
