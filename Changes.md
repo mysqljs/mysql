@@ -4,6 +4,10 @@ This file is a manually maintained list of changes for each release. Feel free
 to add your changes here when sending pull requests. Also send corrections if
 you spot any mistakes.
 
+## HEAD
+
+* Fix `pool.end` race conditions #915
+
 ## v2.5.0 (2014-09-07)
 
 * Add code `POOL_ENQUEUELIMIT` to error reaching `queueLimit`
