@@ -6,6 +6,49 @@
 [![Build Status][travis-image]][travis-url]
 [![Test Coverage][coveralls-image]][coveralls-url]
 
+## Table of Contents
+
+- [Install](#install)
+- [Introduction](#introduction)
+- [Contributors](#contributors)
+- [Sponsors](#sponsors)
+- [Community](#community)
+- [Establishing connections](#establishing-connections)
+- [Connection options](#connection-options)
+- [SSL options](#ssl-options)
+- [Terminating connections](#terminating-connections)
+- [Pooling connections](#pooling-connections)
+- [Pool options](#pool-options)
+- [Pool events](#pool-events)
+- [Closing all the connections in a pool](#closing-all-the-connections-in-a-pool)
+- [PoolCluster](#poolcluster)
+- [PoolCluster Option](#poolcluster-option)
+- [Switching users / altering connection state](#switching-users--altering-connection-state)
+- [Server disconnects](#server-disconnects)
+- [Escaping query values](#escaping-query-values)
+- [Escaping query identifiers](#escaping-query-identifiers)
+- [Preparing Queries](#preparing-queries)
+- [Custom format](#custom-format)
+- [Getting the id of an inserted row](#getting-the-id-of-an-inserted-row)
+- [Getting the number of affected rows](#getting-the-number-of-affected-rows)
+- [Getting the number of changed rows](#getting-the-number-of-changed-rows)
+- [Getting the connection ID](#getting-the-connection-id)
+- [Executing queries in parallel](#executing-queries-in-parallel)
+- [Streaming query rows](#streaming-query-rows)
+- [Piping results with Streams2](#piping-results-with-streams2)
+- [Multiple statement queries](#multiple-statement-queries)
+- [Stored procedures](#stored-procedures)
+- [Joins with overlapping column names](#joins-with-overlapping-column-names)
+- [Transactions](#transactions)
+- [Timeouts](#timeouts)
+- [Error handling](#error-handling)
+- [Exception Safety](#exception-safety)
+- [Type casting](#type-casting)
+- [Connection Flags](#connection-flags)
+- [Debugging and reporting problems](#debugging-and-reporting-problems)
+- [Running tests](#running-tests)
+- [Todo](#todo)
+
 ## Install
 
 ```sh
@@ -638,7 +681,7 @@ string, otherwise it will throw.
 This option is also required when fetching big numbers from the database, otherwise
 you will get values rounded to hundreds or thousands due to the precision limit.
 
-## Getting the number of affected rows.
+## Getting the number of affected rows
 
 You can get the number of affected rows from an insert, update or delete statement.
 
@@ -650,7 +693,7 @@ connection.query('DELETE FROM posts WHERE title = "wrong"', function (err, resul
 })
 ```
 
-## Getting the number of changed rows.
+## Getting the number of changed rows
 
 You can get the number of changed rows from an update statement.
 
