@@ -4,6 +4,10 @@ This file is a manually maintained list of changes for each release. Feel free
 to add your changes here when sending pull requests. Also send corrections if
 you spot any mistakes.
 
+## HEAD
+
+* Fix `pool.query` streaming interface not emitting connection errors #941
+
 ## v2.5.2 (2014-10-10)
 
 * Fix receiving large text fields #922
