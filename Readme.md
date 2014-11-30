@@ -152,7 +152,7 @@ When establishing a connection, you can set the following options:
   then the default collation for that charset is used. (Default: `'UTF8_GENERAL_CI'`)
 * `timezone`: The timezone used to store local dates. (Default: `'local'`)
 * `connectTimeout`: The milliseconds before a timeout occurs during the initial connection
-  to the MySQL server. (Default: 10 seconds)
+  to the MySQL server. (Default: `10000`)
 * `stringifyObjects`: Stringify objects instead of converting to values. See
 issue [#501](https://github.com/felixge/node-mysql/issues/501). (Default: `'false'`)
 * `insecureAuth`: Allow connecting to MySQL instances that ask for the old
@@ -328,7 +328,7 @@ addition to those options pools accept a few extras:
 
 * `acquireTimeout`: The milliseconds before a timeout occurs during the connection
   acquisition. This is slightly different from `connectTimeout`, because acquiring
-  a pool connection does not always involve making a connection. (Default: 10 seconds)
+  a pool connection does not always involve making a connection. (Default: `10000`)
 * `waitForConnections`: Determines the pool's action when no connections are
   available and the limit has been reached. If `true`, the pool will queue the
   connection request and call it when one becomes available. If `false`, the
