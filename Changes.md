@@ -4,6 +4,10 @@ This file is a manually maintained list of changes for each release. Feel free
 to add your changes here when sending pull requests. Also send corrections if
 you spot any mistakes.
 
+## HEAD
+
+* Fix various error code strings #954
+
 ## v2.5.3 (2014-11-06)
 
 * Fix `pool.query` streaming interface not emitting connection errors #941
