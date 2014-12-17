@@ -6,6 +6,7 @@ you spot any mistakes.
 
 ## HEAD
 
+* Fix error if falsy error thrown in callback handler #960
 * Fix various error code strings #954
 
 ## v2.5.3 (2014-11-06)
