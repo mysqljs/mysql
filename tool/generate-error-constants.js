@@ -52,7 +52,7 @@ function appendGlobalErrorCodes(srcDir, codes) {
   var block      = false;
   var match      = null;
   var num        = 0;
-  var regexp     = /#define +(EE_[A-Z_]+)\s+([0-9]+)/mg;
+  var regexp     = /#define +(EE_[A-Z0-9_]+)\s+([0-9]+)/mg;
 
   while ((match = regexp.exec(contents))) {
     code = match[1];
@@ -80,7 +80,7 @@ function appendDatabseErrorCodes(srcDir, codes) {
   var block      = false;
   var match      = null;
   var num        = 0;
-  var regexp     = /#define +(HA_[A-Z_]+)\s+([0-9]+)/mg;
+  var regexp     = /#define +(HA_[A-Z0-9_]+)\s+([0-9]+)/mg;
 
   while ((match = regexp.exec(contents))) {
     code = match[1];
@@ -105,7 +105,7 @@ function appendSqlErrorCodes(srcDir, codes) {
   var errorFile = path.join(srcDir, 'sql', 'share', 'errmsg-utf8.txt');
   var contents  = fs.readFileSync(errorFile, 'utf-8');
   var offset    = Number(contents.match(/start-error-number (\d+)/)[1]);
-  var names     = contents.match(/^([A-Z_]+)/mg).map(fixupCode);
+  var names     = contents.match(/^([A-Z0-9_]+)/mg).map(fixupCode);
   var num       = 0;
 
   for (var i = 0; i < names.length; i++) {
