@@ -887,6 +887,19 @@ functions that execute the START TRANSACTION, COMMIT, and ROLLBACK commands resp
 It is important to understand that many commands in MySQL can cause an implicit commit,
 as described [in the MySQL documentation](http://dev.mysql.com/doc/refman/5.5/en/implicit-commit.html)
 
+## Ping
+
+A ping packet can be sent over a connection using the `connection.ping` method. This
+mehtod will send a ping packet to the server and when the server responds, the callback
+will fire. If an error occurred, the callback will fire with an error argument.
+
+```js
+connection.ping(function (err) {
+  if (err) throw err;
+  console.log('Server responded to ping');
+})
+```
+
 ## Timeouts
 
 Every operation takes an optional inactivity timeout option. This allows you to
