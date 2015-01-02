@@ -14,7 +14,7 @@
   "dependencies": {
     "bignumber.js": "1.4.1",
     "readable-stream": "~1.1.13",
-    "require-all": "0.0.8"
+    "require-all": "~1.0.0"
   },
   "devDependencies": {
     "istanbul": "0.3.5",
