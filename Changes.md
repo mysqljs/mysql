@@ -4,6 +4,10 @@ This file is a manually maintained list of changes for each release. Feel free
 to add your changes here when sending pull requests. Also send corrections if
 you spot any mistakes.
 
+## HEAD
+
+* Support Node.js 0.12
+
 ## v2.5.4 (2014-12-16)
 
 * Fix error if falsy error thrown in callback handler #960
