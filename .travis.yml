@@ -5,6 +5,8 @@ node_js:
   - '0.10'
   - '0.11'
 
+sudo: false
+
 before_script:
 - "mysql -e 'create database node_mysql;'"
 
