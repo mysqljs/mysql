@@ -483,7 +483,7 @@ space for a new connection to be created on the next getConnection call.
 
 In order to avoid SQL Injection attacks, you should always escape any user
 provided data before using it inside a SQL query. You can do so using the
-`connection.escape()` or `pool.escape()` methods:
+`mysql.escape()`, `connection.escape()` or `pool.escape()` methods:
 
 ```js
 var userId = 'some user provided value';
@@ -1208,7 +1208,7 @@ $ MYSQL_HOST=localhost MYSQL_PORT=3306 MYSQL_DATABASE=node_mysql_test MYSQL_USER
 
 [npm-image]: https://img.shields.io/npm/v/mysql.svg?style=flat
 [npm-url]: https://npmjs.org/package/mysql
-[node-version-image]: https://img.shields.io/badge/node.js-%3E%3D_0.6-brightgreen.svg?style=flat
+[node-version-image]: http://img.shields.io/node/v/mysql.svg?style=flat
 [node-version-url]: http://nodejs.org/download/
 [travis-image]: https://img.shields.io/travis/felixge/node-mysql.svg?style=flat
 [travis-url]: https://travis-ci.org/felixge/node-mysql

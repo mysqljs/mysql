@@ -3,7 +3,9 @@ node_js:
   - '0.6'
   - '0.8'
   - '0.10'
-  - '0.11'
+  - '0.12'
+
+sudo: false
 
 before_script:
 - "mysql -e 'create database node_mysql;'"
@@ -23,8 +25,3 @@ mysql:
   username: root
   encoding: utf8
   database: node_mysql
-
-matrix:
-  allow_failures:
-    - node_js: '0.11'
-  fast_finish: true
