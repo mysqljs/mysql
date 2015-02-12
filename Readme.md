@@ -518,8 +518,10 @@ Different value types are escaped differently, here is how:
 * Arrays are turned into list, e.g. `['a', 'b']` turns into `'a', 'b'`
 * Nested arrays are turned into grouped lists (for bulk inserts), e.g. `[['a',
   'b'], ['c', 'd']]` turns into `('a', 'b'), ('c', 'd')`
-* Objects are turned into `key = 'val'` pairs. Nested objects are cast to
-  strings.
+* Objects are turned into `key = 'val'` pairs for each enumerable property on
+  the object. If the property's value is a function, it is skipped; if the
+  property's value is an object, toString() is called on it and the returned
+  value is used.
 * `undefined` / `null` are converted to `NULL`
 * `NaN` / `Infinity` are left as-is. MySQL does not support these, and trying
   to insert them as values will trigger MySQL errors until they implement
