@@ -32,6 +32,7 @@ function testNextDate(connection) {
   // depending on when it is executed. MySQL 5.6.4 and up supports datetime(6)
   // which would not require this change.
   // http://dev.mysql.com/doc/refman/5.6/en/fractional-seconds.html
+  dt.setSeconds(0);
   dt.setMilliseconds(0);
 
   if (offset === 'Z' || offset === 'local') {
@@ -47,6 +48,9 @@ function testNextDate(connection) {
   } else if (offset !== 'local') {
     dt.setTime(dt.getTime() + (dt.getTimezoneOffset() * 60000) + (offset * 3600000));
   }
+
+  dt.setSeconds(0);
+  dt.setMilliseconds(0);
 
   var options = {
     sql: 'SELECT * FROM ?? WHERE offset = ?',
