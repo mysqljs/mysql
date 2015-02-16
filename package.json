@@ -28,7 +28,7 @@
   },
   "scripts": {
     "test": "node test/run.js",
-    "test-cov": "node test/run-cov.js",
-    "test-travis": "node test/run-cov.js lcovonly"
+    "test-ci": "node test/run-cov.js lcovonly",
+    "test-cov": "node test/run-cov.js"
   }
 }
