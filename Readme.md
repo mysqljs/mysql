@@ -3,7 +3,8 @@
 [![NPM Version][npm-image]][npm-url]
 [![NPM Downloads][downloads-image]][downloads-url]
 [![Node.js Version][node-version-image]][node-version-url]
-[![Build Status][travis-image]][travis-url]
+[![Linux Build][travis-image]][travis-url]
+[![Windows Build][appveyor-image]][appveyor-url]
 [![Test Coverage][coveralls-image]][coveralls-url]
 
 ## Table of Contents
@@ -1255,8 +1256,10 @@ $ MYSQL_HOST=localhost MYSQL_PORT=3306 MYSQL_DATABASE=node_mysql_test MYSQL_USER
 [npm-url]: https://npmjs.org/package/mysql
 [node-version-image]: http://img.shields.io/node/v/mysql.svg
 [node-version-url]: http://nodejs.org/download/
-[travis-image]: https://img.shields.io/travis/felixge/node-mysql/master.svg
+[travis-image]: https://img.shields.io/travis/felixge/node-mysql/master.svg?label=linux
 [travis-url]: https://travis-ci.org/felixge/node-mysql
+[appveyor-image]: https://img.shields.io/appveyor/ci/dougwilson/node-mysql/master.svg?label=windows
+[appveyor-url]: https://ci.appveyor.com/project/dougwilson/node-mysql
 [coveralls-image]: https://img.shields.io/coveralls/felixge/node-mysql/master.svg
 [coveralls-url]: https://coveralls.io/r/felixge/node-mysql?branch=master
 [downloads-image]: https://img.shields.io/npm/dm/mysql.svg
