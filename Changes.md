@@ -6,6 +6,7 @@ you spot any mistakes.
 
 ## HEAD
 
+* Store SSL presets in JS instead of JSON #959
 * Support Node.js 0.12
 
 ## v2.5.4 (2014-12-16)
