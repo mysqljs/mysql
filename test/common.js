@@ -42,10 +42,6 @@ if (process.env.TEST_COVERAGE) {
 var Mysql      = require(path.resolve(common.lib, '../index'));
 var FakeServer = require('./FakeServer');
 
-common.isTravis = function() {
-  return Boolean(process.env.CI);
-};
-
 common.createConnection = function(config) {
   config = mergeTestConfig(config);
   return Mysql.createConnection(config);
@@ -98,7 +94,7 @@ common.getTestConnection = function getTestConnection(config, callback) {
 
   connection.connect(function (err) {
     if (err && err.code === 'ECONNREFUSED') {
-      if (common.isTravis()) {
+      if (process.env.CI) {
         throw err;
       }
 
@@ -146,19 +142,13 @@ common.getSSLConfig = function() {
 };
 
 function mergeTestConfig(config) {
-  if (common.isTravis()) {
-    // see: http://about.travis-ci.org/docs/user/database-setup/
-    config = common.extend({
-      user: 'root'
-    }, config);
-  } else {
-    config = common.extend({
-      host     : process.env.MYSQL_HOST,
-      port     : process.env.MYSQL_PORT,
-      user     : process.env.MYSQL_USER,
-      password : process.env.MYSQL_PASSWORD
-    }, config);
-  }
+  config = common.extend({
+    host     : process.env.MYSQL_HOST,
+    port     : process.env.MYSQL_PORT,
+    user     : process.env.MYSQL_USER,
+    password : process.env.MYSQL_PASSWORD
+  }, config);
+
   return config;
 }
 
