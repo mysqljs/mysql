@@ -1,7 +1,6 @@
-var common     = require('../../common');
-var connection = common.createConnection();
-var assert     = require('assert');
-var util       = require('util');
+var common = require('../../common');
+var assert = require('assert');
+var util   = require('util');
 
 var table = 'dates_as_strings';
 
