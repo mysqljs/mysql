@@ -1,0 +1,32 @@
+environment:
+  MYSQL_DATABASE: node_mysql
+  MYSQL_HOST: localhost
+  MYSQL_USER: root
+  MYSQL_PASSWORD: Password12!
+  MYSQL_PATH: C:\Program Files\MySQL\MySQL Server 5.6
+
+  matrix:
+    - nodejs_version: "0.8"
+    - nodejs_version: "0.10"
+    - nodejs_version: "0.12"
+
+services:
+  - mysql
+
+install:
+  - ps: Install-Product node $env:nodejs_version
+  - npm install
+
+build: off
+
+before_test:
+  - SET PATH=%MYSQL_PATH%\bin;%PATH%
+  - mysqladmin --host=%MYSQL_HOST% --user=%MYSQL_USER% --password=%MYSQL_PASSWORD% create %MYSQL_DATABASE%
+
+test_script:
+  - mysql --version
+  - node --version
+  - npm --version
+  - npm run test-ci
+
+version: "{build}"

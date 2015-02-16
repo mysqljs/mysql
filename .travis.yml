@@ -12,7 +12,7 @@ before_script:
 
 script:
   - "test $TRAVIS_NODE_VERSION != '0.6' || npm test"
-  - "test $TRAVIS_NODE_VERSION  = '0.6' || npm run-script test-travis"
+  - "test $TRAVIS_NODE_VERSION  = '0.6' || npm run-script test-ci"
 
 after_script:
   - "test $TRAVIS_NODE_VERSION = '0.6' || npm install coveralls@2 && cat ./coverage/lcov.info | coveralls"
