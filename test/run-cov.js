@@ -10,7 +10,6 @@ var libcov   = path.resolve(__dirname, '../lib-cov');
 
 rimraf.sync(libcov);
 mkdirp.sync(libcov);
-copyFixtures(libcov);
 
 instrument('index.js', function (err) {
   if (err) return handleError(err);
@@ -45,18 +44,6 @@ function collectCoverage(dir) {
   }
 
   return collector;
-}
-
-function copyFixtures(dest) {
-  var fixtures = path.resolve(__dirname, '../fixtures');
-  var into     = path.resolve(dest, 'fixtures');
-  var files    = fs.readdirSync(fixtures);
-
-  mkdirp.sync(into);
-
-  files.forEach(function (file) {
-    fs.writeFileSync(path.resolve(into, file), fs.readFileSync(path.resolve(fixtures, file)));
-  });
 }
 
 function handleError(err) {
