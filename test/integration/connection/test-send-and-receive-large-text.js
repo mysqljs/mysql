@@ -68,7 +68,13 @@ function triggerLargeQueryAndResponsePackets(connection) {
 
     var text = buf.toString('hex');
 
-    connection.query('INSERT INTO ?? SET ?', [table, {bt: text}], assert.ifError);
+    connection.query('INSERT INTO ?? SET ?', [table, {bt: text}], function (err) {
+      if (err && err.code === 'ER_TOO_BIG_ROWSIZE') {
+        common.skipTest('storage engine unable to store ' + text.length + ' byte text value');
+      }
+
+      assert.ifError(err);
+    });
 
     connection.query('SELECT `id`, `bt` FROM ??', [table], function (err, rows) {
       assert.ifError(err);
