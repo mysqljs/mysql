@@ -438,10 +438,15 @@ PoolCluster provides multiple hosts connection. (group & retry & selector)
 // create
 var poolCluster = mysql.createPoolCluster();
 
+// add configurations
 poolCluster.add(config); // anonymous group
 poolCluster.add('MASTER', masterConfig);
 poolCluster.add('SLAVE1', slave1Config);
 poolCluster.add('SLAVE2', slave2Config);
+
+// remove configurations
+poolCluster.remove('SLAVE2'); // By nodeId
+poolCluster.remove('SLAVE*'); // By target group : SLAVE1-2
 
 // Target Group : ALL(anonymous, MASTER, SLAVE1-2), Selector : round-robin(default)
 poolCluster.getConnection(function (err, connection) {});
