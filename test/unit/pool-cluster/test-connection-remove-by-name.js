@@ -23,8 +23,11 @@ server.listen(common.fakeServerPort, function(err) {
         cluster.getConnection('SLAVE1', function (err, connection) {
             assert.ok(err);
             assert.equal(err.message, 'Pool does not exist.');
-            server.destroy();
         });
     });
 
 });
+
+setTimeout(function serverDestroy(){
+    server.destroy();
+}, 10000);

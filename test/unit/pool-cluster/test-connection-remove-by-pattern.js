@@ -3,7 +3,7 @@ var common  = require('../../common');
 var cluster = common.createPoolCluster({defaultSelector: 'ORDER'});
 var server  = common.createFakeServer();
 
-var connCount  = 0;
+var connCount  = 2;
 var poolConfig = common.getTestConfig({port: common.fakeServerPort});
 cluster.add('SLAVE1', poolConfig);
 cluster.add('SLAVE2', poolConfig);
@@ -37,4 +37,4 @@ server.listen(common.fakeServerPort, function(err) {
 
 setTimeout(function serverDestroy(){
     server.destroy();
-}, 2000);
+}, 10000);
