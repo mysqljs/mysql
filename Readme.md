@@ -242,7 +242,8 @@ The `ssl` option in the connection options takes a string or an object. When giv
 it uses one of the predefined SSL profiles included. The following profiles are included:
 
 * `"Amazon RDS"`: this profile is for connecting to an Amazon RDS server and contains the
-  ca from https://rds.amazonaws.com/doc/rds-ssl-ca-cert.pem
+  certificates from https://rds.amazonaws.com/doc/rds-ssl-ca-cert.pem and
+  https://s3.amazonaws.com/rds-downloads/rds-combined-ca-bundle.pem
 
 When connecting to other servers, you will need to provide an object of options, in the
 same format as [crypto.createCredentials](http://nodejs.org/api/crypto.html#crypto_crypto_createcredentials_details).
