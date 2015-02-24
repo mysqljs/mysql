@@ -8,6 +8,7 @@ you spot any mistakes.
 
 * Store SSL presets in JS instead of JSON #959
 * Support Node.js 0.12
+* Update Amazon RDS SSL certificates #1001
 
 ## v2.5.4 (2014-12-16)
 
