@@ -4,7 +4,7 @@ This file is a manually maintained list of changes for each release. Feel free
 to add your changes here when sending pull requests. Also send corrections if
 you spot any mistakes.
 
-## HEAD
+## v2.5.5 (2015-02-23)
 
 * Store SSL presets in JS instead of JSON #959
 * Support Node.js 0.12
