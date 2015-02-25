@@ -213,7 +213,7 @@ issue [#501](https://github.com/felixge/node-mysql/issues/501). (Default: `'fals
   (which happens when they exceed the [-2^53, +2^53] range), otherwise they will be returned as
   Number objects. This option is ignored if `supportBigNumbers` is disabled.
 * `dateStrings`: Force date types (TIMESTAMP, DATETIME, DATE) to be returned as strings rather then
-   inflated into JavaScript Date objects. (Default: `false`)
+   inflated into JavaScript Date objects. e.g.: "2011-10-10" (DATE) or "2011-10-10T14:48:00" (DATETIME). (Default: `false`)
 * `debug`: Prints protocol details to stdout. (Default: `false`)
 * `trace`: Generates stack traces on `Error` to include call site of library
    entrance ("long stack traces"). Slight performance penalty for most calls.
