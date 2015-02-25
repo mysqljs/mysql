@@ -562,7 +562,7 @@ replaced, even those contained in comments and strings.
 Different value types are escaped differently, here is how:
 
 * Numbers are left untouched
-* Booleans are converted to `true` / `false` strings
+* Booleans are converted to `true` / `false`
 * Date objects are converted to `'YYYY-mm-dd HH:ii:ss'` strings
 * Buffers are converted to hex strings, e.g. `X'0fa5'`
 * Strings are safely escaped
