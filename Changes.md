@@ -7,6 +7,7 @@ you spot any mistakes.
 ## HEAD
 
 * Add `poolCluster.remove` to remove pools from the cluster #1006 #1007
+* Improve speed formatting SQL #1019
 
 ## v2.5.5 (2015-02-23)
 
