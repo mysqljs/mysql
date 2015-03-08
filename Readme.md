@@ -443,6 +443,20 @@ poolCluster.add('MASTER', masterConfig);
 poolCluster.add('SLAVE1', slave1Config);
 poolCluster.add('SLAVE2', slave2Config);
 
+// remove manually
+poolCluster.remove('SLAVE2'); // By nodeId
+poolCluster.remove('SLAVE*'); // By target group : SLAVE1-2
+
+// event on manually removing (for each node)
+poolCluster.on('removeManually', function (nodeId) {
+  console.log('REMOVED MANUALLY NODE: ' + nodeId); // nodeId = SLAVE1
+});
+
+// event on auto removing (i.e. when connection was lost)
+poolCluster.on('remove', function (nodeId) {
+  console.log('REMOVED NODE : ' + nodeId); // nodeId = SLAVE1
+});
+
 // Target Group : ALL(anonymous, MASTER, SLAVE1-2), Selector : round-robin(default)
 poolCluster.getConnection(function (err, connection) {});
 
@@ -451,10 +465,6 @@ poolCluster.getConnection('MASTER', function (err, connection) {});
 
 // Target Group : SLAVE1-2, Selector : order
 // If can't connect to SLAVE1, return SLAVE2. (remove SLAVE1 in the cluster)
-poolCluster.on('remove', function (nodeId) {
-  console.log('REMOVED NODE : ' + nodeId); // nodeId = SLAVE1 
-});
-
 poolCluster.getConnection('SLAVE*', 'ORDER', function (err, connection) {});
 
 // of namespace : of(pattern, selector)
