@@ -773,6 +773,11 @@ Please note a few things about the example above:
 * You MUST NOT provide a callback to the `query()` method when streaming rows.
 * The `'result'` event will fire for both rows as well as OK packets
   confirming the success of a INSERT/UPDATE query.
+* It is very important not to leave the result paused too long, or you may
+  encounter `Error: Connection lost: The server closed the connection.`
+  The time limit for this is determined by the
+  [net_write_timeout setting](https://dev.mysql.com/doc/refman/5.5/en/server-system-variables.html#sysvar_net_write_timeout)
+  on your MySQL server.
 
 Additionally you may be interested to know that it is currently not possible to
 stream individual row columns, they will always be buffered up entirely. If you
