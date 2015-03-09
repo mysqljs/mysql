@@ -26,6 +26,7 @@
 - [PoolCluster Option](#poolcluster-option)
 - [Switching users and altering connection state](#switching-users-and-altering-connection-state)
 - [Server disconnects](#server-disconnects)
+- [Performing queries](#performing-queries)
 - [Escaping query values](#escaping-query-values)
 - [Escaping query identifiers](#escaping-query-identifiers)
 - [Preparing Queries](#preparing-queries)
@@ -528,6 +529,51 @@ terminated, an existing connection object cannot be re-connected by design.
 
 With Pool, disconnected connections will be removed from the pool freeing up
 space for a new connection to be created on the next getConnection call.
+
+## Performing queries
+
+In the MySQL library library, the most basic way to perform a query is to call
+the `.query()` method on an object (like on a `Connection`, `Pool`, `PoolNamespace`
+or other similar objects).
+
+The simplest form on query comes as `.query(sqlString, callback)`, where a string
+of a MySQL query is the first argument and the second is a callback:
+
+```js
+connection.query('SELECT * FROM `books` WHERE `author` = "David"', function (error, results, fields) {
+  // error will be an Error if one occurred during the query
+  // results will contain the results of the query
+  // fields will contain information about the returned results fields (if any)
+});
+```
+
+The second form `.query(sqlString, parameters, callback)` comes when using
+placeholders (see [escaping query values](#escaping-query-values)):
+
+```js
+connection.query('SELECT * FROM `books` WHERE `author` = ?', ['David'], function (error, results, fields) {
+  // error will be an Error if one occurred during the query
+  // results will contain the results of the query
+  // fields will contain information about the returned results fields (if any)
+});
+```
+
+The third form `.query(options, callback)` comes when using various advanced
+options on the query, like [escaping query values](#escaping-query-values),
+[joins with overlapping column names](#joins-with-overlapping-column-names),
+[timeouts](#timeout), and [type casting](#type-casting).
+
+```js
+connection.query({
+  sql: 'SELECT * FROM `books` WHERE `author` = ?',
+  timeout: 40000, // 40s
+  values: ['David']
+}, function (error, results, fields) {
+  // error will be an Error if one occurred during the query
+  // results will contain the results of the query
+  // fields will contain information about the returned results fields (if any)
+});
+```
 
 ## Escaping query values
 
