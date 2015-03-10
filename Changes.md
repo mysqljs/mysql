@@ -8,6 +8,7 @@ you spot any mistakes.
 
 * Add `poolCluster.remove` to remove pools from the cluster #1006 #1007
 * Improve speed formatting SQL #1019
+* Support io.js
 
 ## v2.5.5 (2015-02-23)
 
