@@ -8,5 +8,6 @@ npm-debug.log
 /test/config.js
 
 *.sublime-*
+.idea
 
 .DS_Store
