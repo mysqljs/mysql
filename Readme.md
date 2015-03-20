@@ -220,7 +220,7 @@ issue [#501](https://github.com/felixge/node-mysql/issues/501). (Default: `'fals
    entrance ("long stack traces"). Slight performance penalty for most calls.
    (Default: `true`)
 * `multipleStatements`: Allow multiple mysql statements per query. Be careful
-  with this, it exposes you to SQL injection attacks. (Default: `false`)
+  with this, it could increase the scope of SQL injection attacks. (Default: `false`)
 * `flags`: List of connection flags to use other than the default ones. It is
   also possible to blacklist default ones. For more information, check
   [Connection Flags](#connection-flags).
