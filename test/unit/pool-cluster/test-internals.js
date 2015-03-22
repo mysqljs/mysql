@@ -13,7 +13,7 @@ server.listen(common.fakeServerPort, function(err) {
   assert.ifError(err);
 
   // added nodes
-  assert.deepEqual(cluster._serviceableNodeIds, ['CLUSTER::1', 'MASTER', 'SLAVE1', 'SLAVE2']);
+  assert.deepEqual(Object.keys(cluster._nodes), ['CLUSTER::1', 'MASTER', 'SLAVE1', 'SLAVE2']);
 
   // _findNodeIds
   assert.deepEqual(cluster._findNodeIds('MASTER'), ['MASTER']);
