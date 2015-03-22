@@ -23,6 +23,13 @@
     "urun": "0.0.8",
     "utest": "0.0.8"
   },
+  "files": [
+    "lib/",
+    "Changes.md",
+    "License",
+    "Readme.md",
+    "index.js"
+  ],
   "engines": {
     "node": ">= 0.6"
   },
