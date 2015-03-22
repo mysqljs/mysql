@@ -17,7 +17,13 @@ server.listen(common.fakeServerPort, function (err) {
     assert.ifError(err);
     assert.equal(connCount, 2);
     assert.equal(connection._clusterId, 'MASTER');
-    server.destroy();
+
+    connection.release();
+
+    cluster.end(function (err) {
+      assert.ifError(err);
+      server.destroy();
+    });
   });
 });
 

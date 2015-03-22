@@ -13,14 +13,21 @@ server.listen(common.fakeServerPort, function(err) {
 
   var pool = cluster.of('SLAVE*');
 
-  pool.getConnection(function (err, connection) {
+  pool.getConnection(function (err, conn1) {
     assert.ifError(err);
-    assert.strictEqual(connection._clusterId, 'SLAVE1');
+    assert.strictEqual(conn1._clusterId, 'SLAVE1');
 
-    pool.getConnection(function (err, connection) {
+    pool.getConnection(function (err, conn2) {
       assert.ifError(err);
-      assert.strictEqual(connection._clusterId, 'SLAVE1');
-      server.destroy();
+      assert.strictEqual(conn2._clusterId, 'SLAVE1');
+
+      conn1.release();
+      conn2.release();
+
+      cluster.end(function (err) {
+        assert.ifError(err);
+        server.destroy();
+      });
     });
   });
 });

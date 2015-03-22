@@ -17,7 +17,11 @@ server.listen(common.fakeServerPort, function (err) {
     assert.ok(err, 'got error');
     assert.equal(err.code, 'PROTOCOL_SEQUENCE_TIMEOUT');
     assert.equal(err.fatal, true);
-    server.destroy();
+
+    cluster.end(function (err) {
+      assert.ifError(err);
+      server.destroy();
+    });
   });
 });
 

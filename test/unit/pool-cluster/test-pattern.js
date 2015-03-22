@@ -15,6 +15,10 @@ server.listen(common.fakeServerPort, function(err) {
   cluster.getConnection('SLAVE4', function(err, conn){
     assert.ok(err);
     assert.equal(err.message, 'Pool does not exist.');
-    server.destroy();
+
+    cluster.end(function (err) {
+      assert.ifError(err);
+      server.destroy();
+    });
   });
 });
