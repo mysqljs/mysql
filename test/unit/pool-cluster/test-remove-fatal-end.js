@@ -17,27 +17,9 @@ server.listen(common.fakeServerPort, function (err) {
     assert.strictEqual(connection._clusterId, 'SLAVE1');
 
     connection.release();
-    cluster.remove('SLAVE1');
+    server.destroy();
+    cluster.remove('SLAVE*');
 
-    pool.getConnection(function (err, connection) {
-      assert.ifError(err);
-      assert.strictEqual(connection._clusterId, 'SLAVE2');
-
-      connection.release();
-      cluster.remove('SLAVE2');
-
-      pool.getConnection(function (err, connection) {
-        assert.ok(err);
-        assert.equal(err.code, 'POOL_NOEXIST');
-
-        cluster.remove('SLAVE1');
-        cluster.remove('SLAVE2');
-
-        cluster.end(function (err) {
-          assert.ifError(err);
-          server.destroy();
-        });
-      });
-    });
+    cluster.end(assert.ifError);
   });
 });
