@@ -8,6 +8,7 @@ you spot any mistakes.
 
 * Add `poolCluster.remove` to remove pools from the cluster #1006 #1007
 * Add optional callback to `poolCluster.end`
+* Fix un-catchable error from `PoolCluster` when MySQL server offline #1033
 * Improve speed formatting SQL #1019
 * Support io.js
 
