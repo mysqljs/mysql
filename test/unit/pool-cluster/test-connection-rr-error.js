@@ -23,8 +23,14 @@ server1.listen(common.fakeServerPort + 0, function (err) {
       assert.ifError(err);
       assert.equal(connCount, 2);
       assert.equal(connection._clusterId, 'SLAVE2');
-      server1.destroy();
-      server2.destroy();
+
+      connection.release();
+
+      cluster.end(function (err) {
+        assert.ifError(err);
+        server1.destroy();
+        server2.destroy();
+      });
     });
   });
 });

@@ -7,6 +7,7 @@ you spot any mistakes.
 ## HEAD
 
 * Add `poolCluster.remove` to remove pools from the cluster #1006 #1007
+* Add optional callback to `poolCluster.end`
 * Improve speed formatting SQL #1019
 * Support io.js
 

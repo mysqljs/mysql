@@ -15,7 +15,11 @@ server.listen(common.fakeServerPort, function(err) {
     assert.equal(err.code, 'ER_HOST_NOT_PRIVILEGED');
     assert.equal(err.fatal, true);
     assert.equal(connCount, 1);
-    server.destroy();
+
+    cluster.end(function (err) {
+      assert.ifError(err);
+      server.destroy();
+    });
   });
 });
 

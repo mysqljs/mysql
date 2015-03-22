@@ -470,8 +470,10 @@ var pool = poolCluster.of('SLAVE*', 'RANDOM');
 pool.getConnection(function (err, connection) {});
 pool.getConnection(function (err, connection) {});
 
-// destroy
-poolCluster.end();
+// close all connections
+poolCluster.end(function (err) {
+  // all connections in the pool cluster have ended
+});
 ```
 
 ## PoolCluster Option
