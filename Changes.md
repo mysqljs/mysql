@@ -8,6 +8,7 @@ you spot any mistakes.
 
 * Add `poolCluster.remove` to remove pools from the cluster #1006 #1007
 * Add optional callback to `poolCluster.end`
+* Add `restoreNodeTimeout` option to `PoolCluster` #880 #906
 * Fix `poolCluster.add` to throw if `PoolCluster` has been closed
 * Fix `poolCluster.add` to throw if `id` already defined
 * Fix un-catchable error from `PoolCluster` when MySQL server offline #1033
