@@ -2,10 +2,11 @@ var assert = require('assert');
 var common = require('../../common');
 var fs     = require('fs');
 
-var path  = common.fixtures + '/data.csv';
-var table = 'multi_load_data_test';
+var badPath = common.fixtures + '/does_not_exist.csv';
+var path    = common.fixtures + '/data.csv';
+var table   = 'load_data_test';
 
-common.getTestConnection({multipleStatements: true}, function (err, connection) {
+common.getTestConnection({multipleStatements: true, debug: true}, function (err, connection) {
   assert.ifError(err);
 
   common.useTestDb(connection);
