@@ -4,7 +4,7 @@ This file is a manually maintained list of changes for each release. Feel free
 to add your changes here when sending pull requests. Also send corrections if
 you spot any mistakes.
 
-## HEAD
+## v2.6.0 (2015-03-24)
 
 * Add `poolCluster.remove` to remove pools from the cluster #1006 #1007
 * Add optional callback to `poolCluster.end`
