@@ -998,7 +998,7 @@ as described [in the MySQL documentation](http://dev.mysql.com/doc/refman/5.5/en
 ## Ping
 
 A ping packet can be sent over a connection using the `connection.ping` method. This
-mehtod will send a ping packet to the server and when the server responds, the callback
+method will send a ping packet to the server and when the server responds, the callback
 will fire. If an error occurred, the callback will fire with an error argument.
 
 ```js
@@ -1096,7 +1096,7 @@ connection.on('error', function(err) {
 connection.query('USE name_of_db_that_does_not_exist');
 ```
 
-Note: `'error'` are special in node. If they occur without an attached
+Note: `'error'` events are special in node. If they occur without an attached
 listener, a stack trace is printed and your process is killed.
 
 **tl;dr:** This module does not want you to deal with silent failures. You
