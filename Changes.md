@@ -4,6 +4,10 @@ This file is a manually maintained list of changes for each release. Feel free
 to add your changes here when sending pull requests. Also send corrections if
 you spot any mistakes.
 
+## HEAD
+
+* Update `bignumber.js` to 2.0.7
+
 ## v2.6.1 (2015-03-26)
 
 * Update `bignumber.js` to 2.0.5 #1037 #1038
