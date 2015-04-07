@@ -956,30 +956,38 @@ Simple transaction support is available at the connection level:
 
 ```js
 connection.beginTransaction(function(err) {
+
   if (err) { throw err; }
+
   connection.query('INSERT INTO posts SET title=?', title, function(err, result) {
+
     if (err) {
       connection.rollback(function() {
         throw err;
       });
     }
 
-	var log = 'Post ' + result.insertId + ' added';
+    var log = 'Post ' + result.insertId + ' added';
 
-	connection.query('INSERT INTO log SET data=?', log, function(err, result) {
-	  if (err) { 
+    connection.query('INSERT INTO log SET data=?', log, function(err, result) {
+
+      if (err) {
         connection.rollback(function() {
           throw err;
         });
-      }  
-	  connection.commit(function(err) {
-	    if (err) { 
+      };
+
+      connection.commit(function(err) {
+
+        if (err) {
           connection.rollback(function() {
             throw err;
           });
         }
-	    console.log('success!');
-	  });
+
+        console.log('success!');
+
+      });
     });
   });
 });
