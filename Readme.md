@@ -551,8 +551,8 @@ connection.query('SELECT * FROM `books` WHERE `author` = "David"', function(erro
 });
 ```
 
-The second form `.query(sqlString, parameters, callback)` comes when using
-placeholders (see [escaping query values](#escaping-query-values)):
+The second form `.query(sqlString, values, callback)` comes when using
+placeholder values (see [escaping query values](#escaping-query-values)):
 
 ```js
 connection.query('SELECT * FROM `books` WHERE `author` = ?', ['David'], function(error, results, fields) {
