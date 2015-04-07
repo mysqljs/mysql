@@ -537,12 +537,11 @@ space for a new connection to be created on the next getConnection call.
 
 ## Performing queries
 
-In the MySQL library, the most basic way to perform a query is to call
-the `.query()` method on an object (like on a `Connection`, `Pool`, `PoolNamespace`
-or other similar objects).
+The most basic way to perform a query is to call the `.query()` method on an object
+(like on a `Connection`, `Pool`, `PoolNamespace` or other similar objects).
 
-The simplest form on query comes as `.query(sqlString, callback)`, where a string
-of a MySQL query is the first argument and the second is a callback:
+The simplest form of .`query()` is `.query(sqlString, callback)`, where a SQL string
+is the first argument and the second is a callback:
 
 ```js
 connection.query('SELECT * FROM `books` WHERE `author` = "David"', function (error, results, fields) {
@@ -552,8 +551,8 @@ connection.query('SELECT * FROM `books` WHERE `author` = "David"', function (err
 });
 ```
 
-The second form `.query(sqlString, parameters, callback)` comes when using
-placeholders (see [escaping query values](#escaping-query-values)):
+The second form `.query(sqlString, values, callback)` comes when using
+placeholder values (see [escaping query values](#escaping-query-values)):
 
 ```js
 connection.query('SELECT * FROM `books` WHERE `author` = ?', ['David'], function (error, results, fields) {
@@ -578,6 +577,24 @@ connection.query({
   // results will contain the results of the query
   // fields will contain information about the returned results fields (if any)
 });
+```
+
+Note that a combination of the second and third forms can be used where the
+placeholder values are passes as an argument and not in the options object.
+The `values` argument will override the `values` in the option object.
+
+```js
+connection.query({
+    sql: 'SELECT * FROM `books` WHERE `author` = ?',
+    timeout: 40000, // 40s
+  },
+  ['David'],
+  function (error, results, fields) {
+    // error will be an Error if one occurred during the query
+    // results will contain the results of the query
+    // fields will contain information about the returned results fields (if any)
+  }
+);
 ```
 
 ## Escaping query values
