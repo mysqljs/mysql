@@ -537,12 +537,11 @@ space for a new connection to be created on the next getConnection call.
 
 ## Performing queries
 
-In the MySQL library library, the most basic way to perform a query is to call
-the `.query()` method on an object (like on a `Connection`, `Pool`, `PoolNamespace`
-or other similar objects).
+The most basic way to perform a query is to call the `.query()` method on an object
+(like on a `Connection`, `Pool`, `PoolNamespace` or other similar objects).
 
-The simplest form on query comes as `.query(sqlString, callback)`, where a string
-of a MySQL query is the first argument and the second is a callback:
+The simplest form of .`query()` is `.query(sqlString, callback)`, where a SQL string
+is the first argument and the second is a callback:
 
 ```js
 connection.query('SELECT * FROM `books` WHERE `author` = "David"', function(error, results, fields) {
