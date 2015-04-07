@@ -389,12 +389,12 @@ addition to those options pools accept a few extras:
 
 ### connection
 
-The pool will emit a `connection` event when a new connection is made within the pool. 
+The pool will emit a `connection` event when a new connection is made within the pool.
 If you need to set session variables on the connection before it gets used, you can
 listen to the `connection` event.
 
 ```js
-pool.on('connection', function (connection) {
+pool.on('connection', function(connection) {
   connection.query('SET SESSION auto_increment_increment=1')
 });
 ```
@@ -405,7 +405,7 @@ The pool will emit an `enqueue` event when a callback has been queued to wait fo
 an available connection.
 
 ```js
-pool.on('enqueue', function () {
+pool.on('enqueue', function() {
   console.log('Waiting for available connection slot');
 });
 ```
@@ -419,7 +419,7 @@ trying to gracefully shutdown a server. To end all the connections in the
 pool, use the `end` method on the pool:
 
 ```js
-pool.end(function (err) {
+pool.end(function(err) {
   // all connections in the pool have ended
 });
 ```
@@ -450,35 +450,35 @@ poolCluster.remove('SLAVE2'); // By nodeId
 poolCluster.remove('SLAVE*'); // By target group : SLAVE1-2
 
 // Target Group : ALL(anonymous, MASTER, SLAVE1-2), Selector : round-robin(default)
-poolCluster.getConnection(function (err, connection) {});
+poolCluster.getConnection(function(err, connection) {});
 
 // Target Group : MASTER, Selector : round-robin
-poolCluster.getConnection('MASTER', function (err, connection) {});
+poolCluster.getConnection('MASTER', function(err, connection) {});
 
 // Target Group : SLAVE1-2, Selector : order
 // If can't connect to SLAVE1, return SLAVE2. (remove SLAVE1 in the cluster)
-poolCluster.on('remove', function (nodeId) {
-  console.log('REMOVED NODE : ' + nodeId); // nodeId = SLAVE1 
+poolCluster.on('remove', function(nodeId) {
+  console.log('REMOVED NODE : ' + nodeId); // nodeId = SLAVE1
 });
 
-poolCluster.getConnection('SLAVE*', 'ORDER', function (err, connection) {});
+poolCluster.getConnection('SLAVE*', 'ORDER', function(err, connection) {});
 
 // of namespace : of(pattern, selector)
-poolCluster.of('*').getConnection(function (err, connection) {});
+poolCluster.of('*').getConnection(function(err, connection) {});
 
 var pool = poolCluster.of('SLAVE*', 'RANDOM');
-pool.getConnection(function (err, connection) {});
-pool.getConnection(function (err, connection) {});
+pool.getConnection(function(err, connection) {});
+pool.getConnection(function(err, connection) {});
 
 // close all connections
-poolCluster.end(function (err) {
+poolCluster.end(function(err) {
   // all connections in the pool cluster have ended
 });
 ```
 
 ## PoolCluster Option
 * `canRetry`: If `true`, `PoolCluster` will attempt to reconnect when connection fails. (Default: `true`)
-* `removeNodeErrorCount`: If connection fails, node's `errorCount` increases. 
+* `removeNodeErrorCount`: If connection fails, node's `errorCount` increases.
   When `errorCount` is greater than `removeNodeErrorCount`, remove a node in the `PoolCluster`. (Default: `5`)
 * `restoreNodeTimeout`: If connection fails, specifies the number of milliseconds
   before another connection attempt will be made. If set to `0`, then node will bd
@@ -537,27 +537,26 @@ space for a new connection to be created on the next getConnection call.
 
 ## Performing queries
 
-In the MySQL library library, the most basic way to perform a query is to call
-the `.query()` method on an object (like on a `Connection`, `Pool`, `PoolNamespace`
-or other similar objects).
+The most basic way to perform a query is to call the `.query()` method on an object
+(like on a `Connection`, `Pool`, `PoolNamespace` or other similar objects).
 
-The simplest form on query comes as `.query(sqlString, callback)`, where a string
-of a MySQL query is the first argument and the second is a callback:
+The simplest form of .`query()` is `.query(sqlString, callback)`, where a SQL string
+is the first argument and the second is a callback:
 
 ```js
-connection.query('SELECT * FROM `books` WHERE `author` = "David"', function (error, results, fields) {
-  // error will be an Error if one occurred during the query
+connection.query('SELECT * FROM `books` WHERE `author` = "David"', function(err, results, fields) {
+  // err will be an Error if one occurred during the query
   // results will contain the results of the query
   // fields will contain information about the returned results fields (if any)
 });
 ```
 
-The second form `.query(sqlString, parameters, callback)` comes when using
-placeholders (see [escaping query values](#escaping-query-values)):
+The second form `.query(sqlString, values, callback)` comes when using
+placeholder values (see [escaping query values](#escaping-query-values)):
 
 ```js
-connection.query('SELECT * FROM `books` WHERE `author` = ?', ['David'], function (error, results, fields) {
-  // error will be an Error if one occurred during the query
+connection.query('SELECT * FROM `books` WHERE `author` = ?', ['David'], function(err, results, fields) {
+  // err will be an Error if one occurred during the query
   // results will contain the results of the query
   // fields will contain information about the returned results fields (if any)
 });
@@ -573,11 +572,28 @@ connection.query({
   sql: 'SELECT * FROM `books` WHERE `author` = ?',
   timeout: 40000, // 40s
   values: ['David']
-}, function (error, results, fields) {
-  // error will be an Error if one occurred during the query
+}, function(err, results, fields) {
+  // err will be an Error if one occurred during the query
   // results will contain the results of the query
   // fields will contain information about the returned results fields (if any)
 });
+```
+
+Note that a combination of the second and third forms can be used where the
+placeholder values are passes as an argument and not in the options object.
+
+```js
+connection.query({
+    sql: 'SELECT * FROM `books` WHERE `author` = ?',
+    timeout: 40000, // 40s
+  },
+  ['David'],
+  function(err, results, fields) {
+    // err will be an Error if one occurred during the query
+    // results will contain the results of the query
+    // fields will contain information about the returned results fields (if any)
+  }
+);
 ```
 
 ## Escaping query values
@@ -708,9 +724,9 @@ If you prefer to have another type of query escape format, there's a connection 
 Here's an example of how to implement another format:
 
 ```js
-connection.config.queryFormat = function (query, values) {
+connection.config.queryFormat = function(query, values) {
   if (!values) return query;
-  return query.replace(/\:(\w+)/g, function (txt, key) {
+  return query.replace(/\:(\w+)/g, function(txt, key) {
     if (values.hasOwnProperty(key)) {
       return this.escape(values[key]);
     }
@@ -746,7 +762,7 @@ you will get values rounded to hundreds or thousands due to the precision limit.
 You can get the number of affected rows from an insert, update or delete statement.
 
 ```js
-connection.query('DELETE FROM posts WHERE title = "wrong"', function (err, result) {
+connection.query('DELETE FROM posts WHERE title = "wrong"', function(err, result) {
   if (err) throw err;
 
   console.log('deleted ' + result.affectedRows + ' rows');
@@ -761,7 +777,7 @@ You can get the number of changed rows from an update statement.
 whose values were not changed.
 
 ```js
-connection.query('UPDATE posts SET ...', function (err, result) {
+connection.query('UPDATE posts SET ...', function(err, result) {
   if (err) throw err;
 
   console.log('changed ' + result.changedRows + ' rows');
@@ -956,30 +972,38 @@ Simple transaction support is available at the connection level:
 
 ```js
 connection.beginTransaction(function(err) {
+
   if (err) { throw err; }
+
   connection.query('INSERT INTO posts SET title=?', title, function(err, result) {
-    if (err) { 
+
+    if (err) {
       connection.rollback(function() {
         throw err;
       });
     }
 
-	var log = 'Post ' + result.insertId + ' added';
+    var log = 'Post ' + result.insertId + ' added';
 
-	connection.query('INSERT INTO log SET data=?', log, function(err, result) {
-	  if (err) { 
+    connection.query('INSERT INTO log SET data=?', log, function(err, result) {
+
+      if (err) {
         connection.rollback(function() {
           throw err;
         });
-      }  
-	  connection.commit(function(err) {
-	    if (err) { 
+      };
+
+      connection.commit(function(err) {
+
+        if (err) {
           connection.rollback(function() {
             throw err;
           });
         }
-	    console.log('success!');
-	  });
+
+        console.log('success!');
+
+      });
     });
   });
 });
@@ -996,7 +1020,7 @@ method will send a ping packet to the server and when the server responds, the c
 will fire. If an error occurred, the callback will fire with an error argument.
 
 ```js
-connection.ping(function (err) {
+connection.ping(function(err) {
   if (err) throw err;
   console.log('Server responded to ping');
 })
@@ -1012,7 +1036,7 @@ on will be destroyed and no further operations can be performed.
 
 ```js
 // Kill query after 60s
-connection.query({sql: 'SELECT COUNT(*) AS count FROM big_table', timeout: 60000}, function (err, rows) {
+connection.query({sql: 'SELECT COUNT(*) AS count FROM big_table', timeout: 60000}, function(err, rows) {
   if (err && err.code === 'PROTOCOL_SEQUENCE_TIMEOUT') {
     throw new Error('too long to count table rows!');
   }
@@ -1178,7 +1202,7 @@ fallback to the default. Here's an example of converting `TINYINT(1)` to boolean
 ```js
 connection.query({
   sql: '...',
-  typeCast: function (field, next) {
+  typeCast: function(field, next) {
     if (field.type == 'TINY' && field.length == 1) {
       return (field.string() == '1'); // 1 = true, 0 = false
     }
