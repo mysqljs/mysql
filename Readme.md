@@ -579,6 +579,23 @@ connection.query({
 });
 ```
 
+Note that a combination of the second and third forms can be used where the
+placeholder values are passes as an argument and not in the options object.
+
+```js
+connection.query({
+    sql: 'SELECT * FROM `books` WHERE `author` = ?',
+    timeout: 40000, // 40s
+  },
+  ['David'],
+  function(err, results, fields) {
+    // err will be an Error if one occurred during the query
+    // results will contain the results of the query
+    // fields will contain information about the returned results fields (if any)
+  }
+);
+```
+
 ## Escaping query values
 
 In order to avoid SQL Injection attacks, you should always escape any user
