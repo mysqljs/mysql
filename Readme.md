@@ -389,7 +389,7 @@ addition to those options pools accept a few extras:
 
 ### connection
 
-The pool will emit a `connection` event when a new connection is made within the pool. 
+The pool will emit a `connection` event when a new connection is made within the pool.
 If you need to set session variables on the connection before it gets used, you can
 listen to the `connection` event.
 
@@ -478,7 +478,7 @@ poolCluster.end(function(err) {
 
 ## PoolCluster Option
 * `canRetry`: If `true`, `PoolCluster` will attempt to reconnect when connection fails. (Default: `true`)
-* `removeNodeErrorCount`: If connection fails, node's `errorCount` increases. 
+* `removeNodeErrorCount`: If connection fails, node's `errorCount` increases.
   When `errorCount` is greater than `removeNodeErrorCount`, remove a node in the `PoolCluster`. (Default: `5`)
 * `restoreNodeTimeout`: If connection fails, specifies the number of milliseconds
   before another connection attempt will be made. If set to `0`, then node will bd
@@ -958,7 +958,7 @@ Simple transaction support is available at the connection level:
 connection.beginTransaction(function(err) {
   if (err) { throw err; }
   connection.query('INSERT INTO posts SET title=?', title, function(err, result) {
-    if (err) { 
+    if (err) {
       connection.rollback(function() {
         throw err;
       });
