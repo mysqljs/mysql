@@ -537,7 +537,7 @@ space for a new connection to be created on the next getConnection call.
 
 ## Performing queries
 
-In the MySQL library library, the most basic way to perform a query is to call
+In the MySQL library, the most basic way to perform a query is to call
 the `.query()` method on an object (like on a `Connection`, `Pool`, `PoolNamespace`
 or other similar objects).
 
