@@ -6,6 +6,7 @@ you spot any mistakes.
 
 ## HEAD
 
+* Fix `Connection.createQuery` for no SQL #1058
 * Update `bignumber.js` to 2.0.7
 
 ## v2.6.1 (2015-03-26)
