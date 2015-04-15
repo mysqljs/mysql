@@ -4,7 +4,7 @@ This file is a manually maintained list of changes for each release. Feel free
 to add your changes here when sending pull requests. Also send corrections if
 you spot any mistakes.
 
-## HEAD
+## v2.6.2 (2015-04-14)
 
 * Fix `Connection.createQuery` for no SQL #1058
 * Update `bignumber.js` to 2.0.7
