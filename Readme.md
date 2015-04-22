@@ -1227,7 +1227,7 @@ of items to add to the default flags. If you don't want a default flag to be use
 prepend the flag with a minus sign. To add a flag that is not in the default list,
 just write the flag name, or prefix it with a plus (case insensitive).
 
-**Please note that some available flags that are not not supported (e.g.: Compression),
+**Please note that some available flags that are not supported (e.g.: Compression),
 are still not allowed to be specified.**
 
 ### Example
