@@ -481,7 +481,7 @@ poolCluster.end(function (err) {
 * `removeNodeErrorCount`: If connection fails, node's `errorCount` increases. 
   When `errorCount` is greater than `removeNodeErrorCount`, remove a node in the `PoolCluster`. (Default: `5`)
 * `restoreNodeTimeout`: If connection fails, specifies the number of milliseconds
-  before another connection attempt will be made. If set to `0`, then node will bd
+  before another connection attempt will be made. If set to `0`, then node will be
   removed instead and never re-used. (Default: `0`)
 * `defaultSelector`: The default selector. (Default: `RR`)
   * `RR`: Select one alternately. (Round-Robin)
