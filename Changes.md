@@ -7,6 +7,7 @@ you spot any mistakes.
 ## HEAD
 
 * Delay implied connect until after `.query` argument validation
+* Lazy-load modules from many entry point; reduced memory use
 
 ## v2.6.2 (2015-04-14)
 
