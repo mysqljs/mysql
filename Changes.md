@@ -7,6 +7,7 @@ you spot any mistakes.
 ## HEAD
 
 * Delay implied connect until after `.query` argument validation
+* Do not remove connections with non-fatal errors from the pool
 * Error early if `callback` argument to `.query` is not a function #1060
 * Lazy-load modules from many entry point; reduced memory use
 
