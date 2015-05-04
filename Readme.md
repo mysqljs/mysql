@@ -1164,6 +1164,9 @@ types by default. The following mappings exist:
 
 ### String
 
+**Note** text in the binary character set is returned as `Buffer`, rather
+than a string.
+
 * CHAR
 * VARCHAR
 * TINYTEXT
