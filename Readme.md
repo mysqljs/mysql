@@ -390,7 +390,7 @@ addition to those options pools accept a few extras:
 
 ### connection
 
-The pool will emit a `connection` event when a new connection is made within the pool. 
+The pool will emit a `connection` event when a new connection is made within the pool.
 If you need to set session variables on the connection before it gets used, you can
 listen to the `connection` event.
 
@@ -459,7 +459,7 @@ poolCluster.getConnection('MASTER', function (err, connection) {});
 // Target Group : SLAVE1-2, Selector : order
 // If can't connect to SLAVE1, return SLAVE2. (remove SLAVE1 in the cluster)
 poolCluster.on('remove', function (nodeId) {
-  console.log('REMOVED NODE : ' + nodeId); // nodeId = SLAVE1 
+  console.log('REMOVED NODE : ' + nodeId); // nodeId = SLAVE1
 });
 
 poolCluster.getConnection('SLAVE*', 'ORDER', function (err, connection) {});
@@ -479,7 +479,7 @@ poolCluster.end(function (err) {
 
 ## PoolCluster Option
 * `canRetry`: If `true`, `PoolCluster` will attempt to reconnect when connection fails. (Default: `true`)
-* `removeNodeErrorCount`: If connection fails, node's `errorCount` increases. 
+* `removeNodeErrorCount`: If connection fails, node's `errorCount` increases.
   When `errorCount` is greater than `removeNodeErrorCount`, remove a node in the `PoolCluster`. (Default: `5`)
 * `restoreNodeTimeout`: If connection fails, specifies the number of milliseconds
   before another connection attempt will be made. If set to `0`, then node will be
@@ -518,6 +518,12 @@ The available options for this feature are:
 
 A sometimes useful side effect of this functionality is that this function also
 resets any connection state (variables, transactions, etc.).
+
+In the context of connection being returned to a Pool the connection will be
+reset back to the defaults for the pool before the connection is released to
+another `getConnection()` call.  When this happens the pool will emit
+`connection` to give the listener a chance to setup state on the connection
+again since it will have been reset.
 
 Errors encountered during this operation are treated as fatal connection errors
 by this module.
