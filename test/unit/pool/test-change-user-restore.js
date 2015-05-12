@@ -19,38 +19,49 @@ server.listen(common.fakeServerPort, function(err) {
     assert.ifError(err);
     assert.ok(conn.threadId === 1 || conn.threadId === 2);
     conn0 = conn;
-    threadId = conn.threadId;
   });
 
   pool.getConnection(function(err, conn) {
     assert.ifError(err);
     assert.ok(conn.threadId === 1 || conn.threadId === 2);
-
-    var threadId = conn.threadId;
+    threadId = conn.threadId;
 
     conn.changeUser({user: 'user_2'}, function(err) {
       assert.ifError(err);
       assert.strictEqual(conn.threadId, threadId);
-      conn.release();
-      conn0.release();
+
+      conn.query('SELECT CURRENT_USER()', function (err, rows) {
+        assert.ifError(err);
+        assert.strictEqual(rows.length, 1);
+        assert.strictEqual(rows[0]['CURRENT_USER()'], 'user_2@localhost');
+        conn.release();
+      });
     });
   });
 
   pool.getConnection(function(err, conn1) {
     assert.ifError(err);
-    assert.strictEqual(conn1.threadId, 3);
+    assert.strictEqual(conn1.threadId, threadId);
 
-    pool.getConnection(function(err, conn2) {
+    conn1.query('SELECT CURRENT_USER()', function (err, rows) {
       assert.ifError(err);
-      assert.strictEqual(conn2.threadId, threadId);
-      conn1.release();
-      conn2.release();
+      assert.strictEqual(rows.length, 1);
+      assert.strictEqual(rows[0]['CURRENT_USER()'], 'user_1@localhost');
 
-      pool.end(function(err) {
+      pool.getConnection(function(err, conn2) {
         assert.ifError(err);
-        assert.strictEqual(closed, 3);
-        server.destroy();
+        assert.ok(conn2.threadId === 1 || conn2.threadId === 2);
+        conn1.release();
+        conn2.release();
+
+        pool.end(function(err) {
+          assert.ifError(err);
+          assert.strictEqual(closed, 2);
+          server.destroy();
+        });
       });
+
+      conn0.release();
     });
   });
 });

@@ -8,6 +8,7 @@ you spot any mistakes.
 
 * Fix a sync callback when sequence enqueue fails #1147
 * Provide static require analysis
+* Re-use connection from pool after `conn.changeUser` is used #837 #1088
 
 ## v2.7.0 (2015-05-27)
 
