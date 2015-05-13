@@ -340,6 +340,7 @@ FakeConnection.prototype._writePacketStream = function _writePacketStream(count)
   var timer = setInterval(writeRow.bind(this), 20);
 
   this._socket.on('close', cleanup);
+  this._socket.on('error', cleanup);
 
   this._sendPacket(new Packets.ResultSetHeaderPacket({
     fieldCount: 2
@@ -366,6 +367,7 @@ FakeConnection.prototype._writePacketStream = function _writePacketStream(count)
   function cleanup() {
     var socket = this._socket || this;
     socket.removeListener('close', cleanup);
+    socket.removeListener('error', cleanup);
     clearInterval(timer);
   }
 
