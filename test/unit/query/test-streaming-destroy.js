@@ -14,6 +14,9 @@ server.listen(common.fakeServerPort, function (err) {
     count++;
     assert.equal(count, 1);
     connection.destroy();
-    server.destroy();
+
+    process.nextTick(function () {
+      server.destroy();
+    });
   });
 });
