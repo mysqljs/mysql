@@ -3,7 +3,7 @@ var Net        = require('net');
 var common     = require('../../common');
 
 function streamFactory() {
-  return Net.connect({port: common.fakeServerPort});
+  return Net.createConnection(common.fakeServerPort);
 }
 
 var connection = common.createConnection({stream: streamFactory});
