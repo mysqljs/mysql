@@ -855,7 +855,7 @@ get your thoughts and contributions on this.
 
 The query object provides a convenience method `.stream([options])` that wraps
 query events into a [Readable](http://nodejs.org/api/stream.html#stream_class_stream_readable)
-Streams2[Streams2](http://blog.nodejs.org/2012/12/20/streams2/) object. This
+[Streams2](http://blog.nodejs.org/2012/12/20/streams2/) object. This
 stream can easily be piped downstream and provides automatic pause/resume,
 based on downstream congestion and the optional `highWaterMark`. The
 `objectMode` parameter of the stream is set to `true` and cannot be changed
