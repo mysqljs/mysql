@@ -18,7 +18,7 @@
   "devDependencies": {
     "istanbul": "0.3.9",
     "rimraf": "2.2.8",
-    "require-all": "~1.0.0",
+    "require-all": "~1.1.0",
     "mkdirp": "0.5.1",
     "urun": "0.0.8",
     "utest": "0.0.8"
