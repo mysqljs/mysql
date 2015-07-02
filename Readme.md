@@ -80,7 +80,8 @@ var mysql      = require('mysql');
 var connection = mysql.createConnection({
   host     : 'localhost',
   user     : 'me',
-  password : 'secret'
+  password : 'secret',
+  database : 'database_name'
 });
 
 connection.connect();
