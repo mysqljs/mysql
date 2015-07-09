@@ -6,6 +6,7 @@ you spot any mistakes.
 
 ## HEAD
 
+* Fix a sync callback when sequence enqueue fails #1147
 * Provide static require analysis
 
 ## v2.7.0 (2015-05-27)
