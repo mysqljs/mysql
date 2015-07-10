@@ -365,15 +365,15 @@ FakeConnection.prototype._writePacketStream = function _writePacketStream(count)
   this._sendPacket(new Packets.EofPacket());
 
   function cleanup() {
-    var socket = this._socket || this;
-    socket.removeListener('close', cleanup);
-    socket.removeListener('error', cleanup);
     clearInterval(timer);
   }
 
   function writeRow() {
     if (remaining === 0) {
-      cleanup.call(this);
+      cleanup();
+
+      this._socket.removeListener('close', cleanup);
+      this._socket.removeListener('error', cleanup);
 
       this._sendPacket(new Packets.EofPacket());
       this._parser.resetPacketNumber();
