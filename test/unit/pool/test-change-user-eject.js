@@ -9,18 +9,28 @@ var pool   = common.createPool({
 var closed = 0;
 var server = common.createFakeServer();
 var thread = 0;
+var connections = 0;
 
 server.listen(common.fakeServerPort, function(err) {
   assert.ifError(err);
+
+  pool.on('connection', function(conn) {
+    connections++;
+  });
 
   var conn0;
   var threadId;
   pool.getConnection(function(err, conn) {
     assert.ifError(err);
     assert.ok(conn.threadId === 1 || conn.threadId === 2);
+    conn.query('SELECT CURRENT_USER()', function (err, rows) {
+      assert.ifError(err);
+      assert.strictEqual(rows[0]['CURRENT_USER()'].indexOf('user_1'), 0);
+    });
     conn0 = conn;
     threadId = conn.threadId;
   });
+
 
   pool.getConnection(function(err, conn) {
     assert.ifError(err);
@@ -31,6 +41,10 @@ server.listen(common.fakeServerPort, function(err) {
     conn.changeUser({user: 'user_2'}, function(err) {
       assert.ifError(err);
       assert.strictEqual(conn.threadId, threadId);
+      conn.query('SELECT CURRENT_USER()', function (err, rows) {
+        assert.ifError(err);
+        assert.strictEqual(rows[0]['CURRENT_USER()'].indexOf('user_2'), 0);
+      });
       conn.release();
       conn0.release();
     });
@@ -38,17 +52,28 @@ server.listen(common.fakeServerPort, function(err) {
 
   pool.getConnection(function(err, conn1) {
     assert.ifError(err);
-    assert.strictEqual(conn1.threadId, 3);
+    assert.ok(conn1.threadId === 1 || conn1.threadId === 2);
+    assert.strictEqual(conn1.config.user, 'user_1');
+    conn1.query('SELECT CURRENT_USER()', function (err, rows) {
+      assert.ifError(err);
+      assert.strictEqual(rows[0]['CURRENT_USER()'].indexOf('user_1'), 0);
+    });
 
     pool.getConnection(function(err, conn2) {
       assert.ifError(err);
-      assert.strictEqual(conn2.threadId, threadId);
-      conn1.release();
-      conn2.release();
+      assert.ok(conn2.threadId === 1 || conn2.threadId === 2);
+      assert.strictEqual(conn1.config.user, 'user_1');
+      conn2.query('SELECT CURRENT_USER()', function (err, rows) {
+        assert.ifError(err);
+        assert.strictEqual(rows[0]['CURRENT_USER()'].indexOf('user_1'), 0);
+        conn1.release();
+        conn2.release();
+      });
 
       pool.end(function(err) {
         assert.ifError(err);
-        assert.strictEqual(closed, 3);
+        assert.strictEqual(connections, 3);
+        assert.strictEqual(closed, 2);
         server.destroy();
       });
     });
