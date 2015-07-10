@@ -6,6 +6,7 @@ you spot any mistakes.
 
 ## HEAD
 
+* Add `connect` event to `Connection` #1129
 * Fix a sync callback when sequence enqueue fails #1147
 * Provide static require analysis
 * Re-use connection from pool after `conn.changeUser` is used #837 #1088
