@@ -4,7 +4,7 @@ This file is a manually maintained list of changes for each release. Feel free
 to add your changes here when sending pull requests. Also send corrections if
 you spot any mistakes.
 
-## HEAD
+## v2.8.0 (2015-07-13)
 
 * Add `connect` event to `Connection` #1129
 * Default `timeout` for `connection.end` to 30 seconds #1057
