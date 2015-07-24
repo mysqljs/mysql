@@ -4,6 +4,10 @@ This file is a manually maintained list of changes for each release. Feel free
 to add your changes here when sending pull requests. Also send corrections if
 you spot any mistakes.
 
+## HEAD
+
+* Fix bad timezone conversion from `Date` to string for certain times #1045 #1155
+
 ## v2.8.0 (2015-07-13)
 
 * Add `connect` event to `Connection` #1129
