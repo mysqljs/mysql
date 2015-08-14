@@ -1,8 +1,15 @@
+var timezone_mock = require('timezone-mock');
+
 var assert = require('assert');
 var common = require('../../common');
 
+function registerMock() {
+  timezone_mock.register('US/Pacific');
+  assert.ok(new Date().getTimezoneOffset() === 420 || new Date().getTimezoneOffset() === 480);
+}
+
 var table = 'timezone_test';
-var pre_statements = ['', 'SET TIME_ZONE="+00:00"', 'SET TIME_ZONE="SYSTEM"'];
+var pre_statements = ['', 'SET TIME_ZONE="+00:00"', 'SET TIME_ZONE="SYSTEM"', registerMock];
 var pre_idx = 0;
 var test_days = ['01-01', '03-07', '03-08', '03-09', '12-31'].map(function (day) {
   // Choosing this because 2015-03-08 02:30 Pacific does not exist (due to DST),
@@ -23,6 +30,7 @@ common.getTestConnection(function (err, connection) {
     'CREATE TEMPORARY TABLE ?? (',
     '`day` varchar(24),',
     '`timezone` varchar(10),',
+    '`pre_idx` int,',
     '`dt` datetime',
     ') ENGINE=InnoDB DEFAULT CHARSET=utf8'
   ].join('\n'), [table], assert.ifError);
@@ -40,7 +48,11 @@ function testNextDate(connection) {
       connection.end(assert.ifError);
       return;
     } else {
-      connection.query(pre_statements[pre_idx], assert.ifError);
+      if (typeof pre_statements[pre_idx] === 'function') {
+        pre_statements[pre_idx]();
+      } else {
+        connection.query(pre_statements[pre_idx], assert.ifError);
+      }
       day_idx = tz_idx = 0;
     }
   }
@@ -86,11 +98,11 @@ function testNextDate(connection) {
   }
 
   connection.config.timezone = timezone;
-  connection.query('INSERT INTO ?? SET ?', [table, {day: day, timezone: timezone, dt: dt}], assert.ifError);
+  connection.query('INSERT INTO ?? SET ?', [table, {day: day, timezone: timezone, dt: dt, pre_idx: pre_idx}], assert.ifError);
 
   var options = {
-    sql: 'SELECT * FROM ?? WHERE timezone = ? AND day = ?',
-    values: [table, timezone, day],
+    sql: 'SELECT * FROM ?? WHERE timezone = ? AND day = ? AND pre_idx = ?',
+    values: [table, timezone, day, pre_idx],
     typeCast: function (field, next) {
       if (field.type !== 'DATETIME') {
         return next();
@@ -101,11 +113,13 @@ function testNextDate(connection) {
 
   connection.query(options, function (err, rows_raw) {
     assert.ifError(err);
+    assert.equal(rows_raw.length, 1);
     delete options.typeCast;
     connection.query(options, function (err, rows) {
       assert.ifError(err);
+      assert.equal(rows.length, 1);
       if (dt.getTime() !== rows[0].dt.getTime() || expected_date_string !== rows_raw[0].dt) {
-        console.log('Failure while testing date: ' + day + ', Timzone: ' + timezone);
+        console.log('Failure while testing date: ' + day + ', Timezone: ' + timezone);
         console.log('Pre-statement: ' + pre_statements[pre_idx]);
         console.log('Expected raw string: ' + expected_date_string);
         console.log('Received raw string: ' + rows_raw[0].dt);
