@@ -12,7 +12,7 @@ environment:
     - nodejs_version: "1.0"
     - nodejs_version: "1.8"
     - nodejs_version: "2.0"
-    - nodejs_version: "2.3"
+    - nodejs_version: "2.5"
 
 services:
   - mysql
