@@ -6,6 +6,7 @@ you spot any mistakes.
 
 ## HEAD
 
+* Accept the `ciphers` property in connection `ssl` option #1185
 * Fix bad timezone conversion from `Date` to string for certain times #1045 #1155
 
 ## v2.8.0 (2015-07-13)

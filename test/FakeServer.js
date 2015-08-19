@@ -56,6 +56,7 @@ function FakeConnection(socket) {
   EventEmitter.call(this);
 
   this._socket = socket;
+  this._ssl    = null;
   this._stream = socket;
   this._parser = new Parser({onPacket: this._parsePacket.bind(this)});
 
@@ -203,6 +204,39 @@ FakeConnection.prototype._handleQueryPacket = function _handleQueryPacket(packet
     var num = match[1];
 
     this._writePacketStream(num);
+    return;
+  }
+
+  if ((match = /^SHOW STATUS LIKE 'Ssl_cipher';?$/i.exec(sql))) {
+    this._sendPacket(new Packets.ResultSetHeaderPacket({
+      fieldCount: 2
+    }));
+
+    this._sendPacket(new Packets.FieldPacket({
+      catalog    : 'def',
+      charsetNr  : Charsets.UTF8_GENERAL_CI,
+      name       : 'Variable_name',
+      protocol41 : true,
+      type       : Types.VARCHAR
+    }));
+
+    this._sendPacket(new Packets.FieldPacket({
+      catalog    : 'def',
+      charsetNr  : Charsets.UTF8_GENERAL_CI,
+      name       : 'Value',
+      protocol41 : true,
+      type       : Types.VARCHAR
+    }));
+
+    this._sendPacket(new Packets.EofPacket());
+
+    var writer = new PacketWriter();
+    writer.writeLengthCodedString('Ssl_cipher');
+    writer.writeLengthCodedString(this._ssl ? this._ssl.getCurrentCipher().name : '');
+    this._stream.write(writer.toBuffer(this._parser));
+
+    this._sendPacket(new Packets.EofPacket());
+    this._parser.resetPacketNumber();
     return;
   }
 
@@ -408,6 +442,11 @@ if (tls.TLSSocket) {
     secureSocket.on('data', this._handleData.bind(this));
     this._stream = secureSocket;
 
+    var conn = this;
+    secureSocket.on('secure', function () {
+      conn._ssl = this.ssl;
+    });
+
     // resume
     var parser = this._parser;
     process.nextTick(function() {
@@ -431,6 +470,11 @@ if (tls.TLSSocket) {
     this._stream = securePair.cleartext;
     securePair.cleartext.on('data', this._handleData.bind(this));
     securePair.encrypted.pipe(this._socket);
+
+    var conn = this;
+    securePair.on('secure', function () {
+      conn._ssl = this.ssl;
+    });
 
     // resume
     var parser = this._parser;
