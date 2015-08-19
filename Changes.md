@@ -4,7 +4,7 @@ This file is a manually maintained list of changes for each release. Feel free
 to add your changes here when sending pull requests. Also send corrections if
 you spot any mistakes.
 
-## HEAD
+## v2.9.0 (2015-08-19)
 
 * Accept the `ciphers` property in connection `ssl` option #1185
 * Fix bad timezone conversion from `Date` to string for certain times #1045 #1155
