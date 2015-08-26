@@ -12,8 +12,39 @@ node_js:
 
 sudo: false
 
+matrix:
+    include:
+        - addons:
+             mariadb: 5.5
+          node_js: '1.8'
+        - addons:
+             mariadb: 10.0
+          node_js: '1.8'
+        - addons:
+             mariadb: 10.1
+          node_js: '1.8'
+        - addons:
+             mariadb: 5.5
+          node_js: '2.0'
+        - addons:
+             mariadb: 10.0
+          node_js: '2.0'
+        - addons:
+             mariadb: 10.1
+          node_js: '2.0'
+        - addons:
+             mariadb: 5.5
+          node_js: '2.3'
+        - addons:
+             mariadb: 10.0
+          node_js: '2.3'
+        - addons:
+             mariadb: 10.1
+          node_js: '2.3'
+
+
 before_script:
-- "mysql -e 'create database node_mysql;'"
+- "mysql -e 'create database node_mysql; select version();'"
 
 script:
   - "test $TRAVIS_NODE_VERSION != '0.6' || npm test"
