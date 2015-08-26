@@ -13,6 +13,12 @@ node_js:
   - '4.0'
   - '4.2'
 
+matrix:
+  include:
+    - node_js: '4.2'
+      env: MYSQL_TYPE=mariadb MYSQL_HOST=localhost MYSQL_DATABASE=node_mysql MYSQL_USER=root MYSQL_PASSWORD=
+      addons: {mariadb: '10.1'}
+
 sudo: false
 
 before_install:
@@ -21,7 +27,7 @@ before_install:
   - "test $TRAVIS_NODE_VERSION != '0.8' || npm rm --save-dev istanbul"
 
 before_script:
-- "mysql -e 'create database node_mysql;'"
+- "mysql -e 'create database node_mysql; select version();'"
 
 script:
   # Run test script, depending on istanbul install
@@ -32,7 +38,7 @@ after_script:
   - "test -e ./coverage/lcov.info && npm install coveralls@2 && cat ./coverage/lcov.info | coveralls"
 
 env:
-  - MYSQL_HOST=localhost MYSQL_DATABASE=node_mysql MYSQL_USER=root MYSQL_PASSWORD=
+  - MYSQL_TYPE=mysql MYSQL_HOST=localhost MYSQL_DATABASE=node_mysql MYSQL_USER=root MYSQL_PASSWORD=
 
 mysql:
   adapter: mysql2
