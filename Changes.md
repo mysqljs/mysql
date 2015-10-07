@@ -6,6 +6,7 @@ you spot any mistakes.
 
 ## HEAD
 
+* Minor SqlString Date to string performance improvement #1233
 * Support Node.js 4.x
 * Update `bignumber.js` to 2.0.8
 
