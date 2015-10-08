@@ -12,15 +12,21 @@ node_js:
 
 sudo: false
 
+before_install:
+  # Setup Node.js version-specific dependencies
+  - "test $TRAVIS_NODE_VERSION != '0.6' || npm rm --save-dev istanbul"
+  - "test $TRAVIS_NODE_VERSION != '0.8' || npm rm --save-dev istanbul"
+
 before_script:
 - "mysql -e 'create database node_mysql;'"
 
 script:
-  - "test $TRAVIS_NODE_VERSION != '0.6' || npm test"
-  - "test $TRAVIS_NODE_VERSION  = '0.6' || npm run-script test-ci"
+  # Run test script, depending on istanbul install
+  - "test ! -z $(npm -ps ls istanbul) || npm test"
+  - "test   -z $(npm -ps ls istanbul) || npm run-script test-ci"
 
 after_script:
-  - "test $TRAVIS_NODE_VERSION = '0.6' || npm install coveralls@2 && cat ./coverage/lcov.info | coveralls"
+  - "test -e ./coverage/lcov.info && npm install coveralls@2 && cat ./coverage/lcov.info | coveralls"
 
 env:
   - MYSQL_HOST=localhost MYSQL_DATABASE=node_mysql MYSQL_USER=root MYSQL_PASSWORD=
