@@ -4,6 +4,10 @@ This file is a manually maintained list of changes for each release. Feel free
 to add your changes here when sending pull requests. Also send corrections if
 you spot any mistakes.
 
+## HEAD
+
+* Update `bignumber.js` to 2.0.8
+
 ## v2.9.0 (2015-08-19)
 
 * Accept the `ciphers` property in connection `ssl` option #1185
