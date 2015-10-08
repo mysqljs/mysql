@@ -16,7 +16,7 @@
     "readable-stream": "~1.1.13"
   },
   "devDependencies": {
-    "istanbul": "0.3.9",
+    "istanbul": "0.3.22",
     "rimraf": "2.2.8",
     "require-all": "~1.1.0",
     "timezone-mock": "0.0.0",
