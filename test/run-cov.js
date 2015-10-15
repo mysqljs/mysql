@@ -6,7 +6,7 @@ var rimraf   = require('rimraf');
 var spawn    = require('child_process').spawn;
 
 var istanbulcli = path.resolve(__dirname, '../node_modules/istanbul/lib/cli.js');
-var libcov   = path.resolve(__dirname, '../lib-cov');
+var libcov      = path.resolve(__dirname, '../lib-cov');
 
 rimraf.sync(libcov);
 mkdirp.sync(libcov);
