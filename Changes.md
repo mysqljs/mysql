@@ -6,6 +6,7 @@ you spot any mistakes.
 
 ## HEAD
 
+* Support Node.js 4.x
 * Update `bignumber.js` to 2.0.8
 
 ## v2.9.0 (2015-08-19)

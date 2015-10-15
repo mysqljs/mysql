@@ -15,6 +15,8 @@ environment:
     - nodejs_version: "2.5"
     - nodejs_version: "3.0"
     - nodejs_version: "3.3"
+    - nodejs_version: "4.0"
+    - nodejs_version: "4.2"
 
 services:
   - mysql
