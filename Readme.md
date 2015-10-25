@@ -539,7 +539,7 @@ space for a new connection to be created on the next getConnection call.
 ## Performing queries
 
 The most basic way to perform a query is to call the `.query()` method on an object
-(like on a `Connection`, `Pool`, `PoolNamespace` or other similar objects).
+(like a `Connection` or `Pool` instance).
 
 The simplest form of .`query()` is `.query(sqlString, callback)`, where a SQL string
 is the first argument and the second is a callback:
