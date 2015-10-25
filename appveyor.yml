@@ -24,6 +24,7 @@ services:
 install:
   - ps: Install-Product node $env:nodejs_version
   - if "%nodejs_version%" equ "0.8" npm rm --save-dev istanbul
+  - npm rm --save-dev eslint
   - npm install
 
 build: off

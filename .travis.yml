@@ -25,6 +25,7 @@ before_install:
   # Setup Node.js version-specific dependencies
   - "test $TRAVIS_NODE_VERSION != '0.6' || npm rm --save-dev istanbul"
   - "test $TRAVIS_NODE_VERSION != '0.8' || npm rm --save-dev istanbul"
+  - "test $TRAVIS_NODE_VERSION  = '4.2' || npm rm --save-dev eslint"
 
 before_script:
 - "mysql -e 'create database node_mysql; select version();'"
@@ -33,6 +34,7 @@ script:
   # Run test script, depending on istanbul install
   - "test ! -z $(npm -ps ls istanbul) || npm test"
   - "test   -z $(npm -ps ls istanbul) || npm run-script test-ci"
+  - "test   -z $(npm -ps ls eslint) || npm run-script lint"
 
 after_script:
   - "test -e ./coverage/lcov.info && npm install coveralls@2 && cat ./coverage/lcov.info | coveralls"
