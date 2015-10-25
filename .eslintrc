@@ -3,7 +3,7 @@
     "node": true
   },
   "rules": {
-    "comma-dangle": [1, "never"],
+    "comma-dangle": [2, "never"],
     "no-cond-assign": 2,
     "no-constant-condition": 2,
     "no-control-regex": 2,
