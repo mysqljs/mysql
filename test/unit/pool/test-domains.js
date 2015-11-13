@@ -58,7 +58,7 @@ server.listen(common.fakeServerPort, function (err) {
         throw new Error('inside domain 3');
       });
     });
-  
+
     setTimeout(function() {
       throw new Error('inside domain 0');
     }, 100);

@@ -18,7 +18,7 @@ common.getTestConnection(function (err, connection) {
 
   connection.beginTransaction(function (err) {
     assert.ifError(err);
-  
+
     var row = {
       id: 1,
       title: 'Test row'
