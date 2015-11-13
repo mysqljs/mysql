@@ -15,6 +15,17 @@ test('ConnectionConfig#Constructor', {
     assert.equal(config.database, 'mydb');
   },
 
+  'work with password containing colon': function() {
+    var url    = 'mysql://myuser:my:pass@myhost:3333/mydb';
+    var config = new ConnectionConfig(url);
+
+    assert.equal(config.host, 'myhost');
+    assert.equal(config.port, 3333);
+    assert.equal(config.user, 'myuser');
+    assert.equal(config.password, 'my:pass');
+    assert.equal(config.database, 'mydb');
+  },
+
   'allows additional options via url query': function() {
     var url    = 'mysql://myhost/mydb?debug=true&charset=BIG5_CHINESE_CI';
     var config = new ConnectionConfig(url);
