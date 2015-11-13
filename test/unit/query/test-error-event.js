@@ -10,7 +10,7 @@ server.listen(common.fakeServerPort, function (err) {
   var query = connection.query('INVALID SQL');
 
   query.on('error', function (err) {
-    assert.ok(err, 'got error')
+    assert.ok(err, 'got error');
     assert.equal(err.code, 'ER_PARSE_ERROR');
     assert.ok(!err.fatal);
     connection.destroy();

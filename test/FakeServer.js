@@ -335,7 +335,7 @@ FakeConnection.prototype._parsePacket = function(header) {
       }
       break;
     default:
-      throw new Error('Unexpected packet: ' + Packet.name)
+      throw new Error('Unexpected packet: ' + Packet.name);
   }
 };
 
