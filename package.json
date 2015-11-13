@@ -36,7 +36,7 @@
     "node": ">= 0.6"
   },
   "scripts": {
-    "lint": "eslint lib/**",
+    "lint": "eslint lib/** index.js",
     "test": "node test/run.js",
     "test-ci": "node test/run-cov.js lcovonly",
     "test-cov": "node test/run-cov.js"
