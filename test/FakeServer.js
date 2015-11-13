@@ -86,7 +86,7 @@ FakeConnection.prototype.handshake = function(options) {
 FakeConnection.prototype.deny = function(message, errno) {
   this._sendPacket(new Packets.ErrorPacket({
     message: message,
-    errno: errno,
+    errno: errno
   }));
 };
 
@@ -362,7 +362,6 @@ FakeConnection.prototype._determinePacket = function(header) {
     case 0x11: return Packets.ComChangeUserPacket;
     default:
       throw new Error('Unknown packet, first byte: ' + firstByte);
-      break;
   }
 };
 

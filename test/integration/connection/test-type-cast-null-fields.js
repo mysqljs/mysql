@@ -19,7 +19,7 @@ common.getTestConnection(function (err, connection) {
 
   connection.query('INSERT INTO ?? SET ?', [table, {
     date   : null,
-    number : null,
+    number : null
   }]);
 
   connection.query('SELECT * FROM ??', [table], function (err, results) {

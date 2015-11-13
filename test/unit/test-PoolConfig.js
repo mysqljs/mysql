@@ -38,7 +38,7 @@ test('PoolConfig#Constructor', {
     assert.equal(config.connectionConfig.port, 3333);
     assert.equal(config.connectionConfig.database, 'mydb');
     assert.equal(config.connectionLimit, 2);
-  },
+  }
 });
 
 test('PoolConfig#Constructor.acquireTimeout', {
@@ -70,5 +70,5 @@ test('PoolConfig#Constructor.acquireTimeout', {
     });
 
     assert.equal(config.acquireTimeout, 10000);
-  },
+  }
 });

@@ -25,7 +25,7 @@ test('SqlString.escapeId', {
 
   'nested arrays are flattened': function() {
     assert.equal(SqlString.escapeId(['a', ['b', ['t.c']]]), "`a`, `b`, `t`.`c`");
-  },
+  }
 });
 
 test('SqlString.escape', {

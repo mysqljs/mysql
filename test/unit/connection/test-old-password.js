@@ -2,7 +2,7 @@ var common     = require('../../common');
 var connection = common.createConnection({
   port         : common.fakeServerPort,
   password     : 'oldpw',
-  insecureAuth : true,
+  insecureAuth : true
 });
 var assert     = require('assert');
 
@@ -26,7 +26,7 @@ server.on('connection', function(incomingConnection) {
   incomingConnection.handshake({
     user        : connection.config.user,
     password    : connection.config.password,
-    oldPassword : true,
+    oldPassword : true
   });
 });
 

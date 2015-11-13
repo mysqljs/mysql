@@ -116,7 +116,9 @@ common.skipTest = function skipTest(message) {
   try {
     fs.writeSync(process.stdout.fd, msg);
     fs.fsyncSync(process.stdout.fd);
-  } catch (e) {}
+  } catch (e) {
+    // Ignore error
+  }
 
   process.exit(0);
 };

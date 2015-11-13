@@ -143,5 +143,5 @@ test('Parser', {
 
     var str = parser.parsePacketTerminatedString();
     assert.equal(str, 'Hi');
-  },
+  }
 });

@@ -1,7 +1,7 @@
 var common     = require('../../common');
 var connection = common.createConnection({
   port     : common.fakeServerPort,
-  password : 'passwd',
+  password : 'passwd'
 });
 var assert     = require('assert');
 
@@ -24,7 +24,7 @@ server.listen(common.fakeServerPort, function(err) {
 server.on('connection', function(incomingConnection) {
   incomingConnection.handshake({
     user     : connection.config.user,
-    password : connection.config.password,
+    password : connection.config.password
   });
 });
 

@@ -51,13 +51,13 @@ test('ConnectionConfig#Constructor', {
   'blacklists unsupported client flags': function() {
     var config = new ConnectionConfig({ flags: '+CONNECT_ATTRS' });
     assert.equal(config.clientFlags & common.ClientConstants.CLIENT_CONNECT_ATTRS, 0);
-  },
+  }
 });
 
 test('ConnectionConfig#Constructor.charset', {
   'accepts charset name': function() {
     var config = new ConnectionConfig({
-      charset: 'LATIN1_SWEDISH_CI',
+      charset: 'LATIN1_SWEDISH_CI'
     });
 
     assert.equal(config.charsetNumber, common.Charsets.LATIN1_SWEDISH_CI);
@@ -65,7 +65,7 @@ test('ConnectionConfig#Constructor.charset', {
 
   'accepts case-insensitive charset name': function() {
     var config = new ConnectionConfig({
-      charset: 'big5_chinese_ci',
+      charset: 'big5_chinese_ci'
     });
 
     assert.equal(config.charsetNumber, common.Charsets.BIG5_CHINESE_CI);
@@ -73,7 +73,7 @@ test('ConnectionConfig#Constructor.charset', {
 
   'accepts short charset name': function() {
     var config = new ConnectionConfig({
-      charset: 'UTF8MB4',
+      charset: 'UTF8MB4'
     });
 
     assert.equal(config.charsetNumber, common.Charsets.UTF8MB4_GENERAL_CI);
@@ -84,7 +84,7 @@ test('ConnectionConfig#Constructor.charset', {
 
     try {
       var config = new ConnectionConfig({
-        charset: 'INVALID_CHARSET',
+        charset: 'INVALID_CHARSET'
       });
     } catch (err) {
       error = err;
@@ -103,7 +103,7 @@ test('ConnectionConfig#Constructor.charset', {
       assert.ok(common.Charsets[charset]);
       assert.ok(common.Charsets[charset.split('_')[0]]);
     }
-  },
+  }
 });
 
 test('ConnectionConfig#Constructor.connectTimeout', {
@@ -143,7 +143,7 @@ test('ConnectionConfig#Constructor.connectTimeout', {
     });
 
     assert.equal(config.connectTimeout, 10000);
-  },
+  }
 });
 
 test('ConnectionConfig#Constructor.ssl', {
@@ -167,7 +167,7 @@ test('ConnectionConfig#Constructor.ssl', {
 
     try {
       var config = new ConnectionConfig({
-        ssl: 'invalid profile',
+        ssl: 'invalid profile'
       });
     } catch (err) {
       error = err;
@@ -176,7 +176,7 @@ test('ConnectionConfig#Constructor.ssl', {
     assert.ok(error);
     assert.equal(error.name, 'TypeError');
     assert.equal(error.message, 'Unknown SSL profile \'invalid profile\'');
-  },
+  }
 });
 
 test('ConnectionConfig#mergeFlags', {
@@ -239,5 +239,5 @@ test('ConnectionConfig#mergeFlags', {
 
     assert.strictEqual(combined, common.ClientConstants.CLIENT_LONG_PASSWORD
       | common.ClientConstants.CLIENT_FOUND_ROWS);
-  },
+  }
 });

@@ -108,7 +108,7 @@ function testNextDate(connection) {
         return next();
       }
       return field.string();
-    },
+    }
   };
 
   connection.query(options, function (err, rows_raw) {
