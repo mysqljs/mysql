@@ -330,8 +330,9 @@ FakeConnection.prototype._parsePacket = function(header) {
       this._parser.resetPacketNumber();
       break;
     case Packets.ComQuitPacket:
-      this.emit('quit', packet);
-      this._socket.end();
+      if (!this.emit('quit', packet)) {
+        this._socket.end();
+      }
       break;
     default:
       throw new Error('Unexpected packet: ' + Packet.name)

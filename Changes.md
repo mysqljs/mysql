@@ -6,6 +6,7 @@ you spot any mistakes.
 
 ## HEAD
 
+* Handle MySQL servers not closing TCP connection after QUIT -> OK exchange #1277
 * Minor SqlString Date to string performance improvement #1233
 * Support Node.js 4.x
 * Support Node.js 5.x

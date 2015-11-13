@@ -72,5 +72,6 @@ server.on('connection', function(incomingConnection) {
   });
   incomingConnection.on('quit', function() {
     closed++;
+    incomingConnection._socket.end();
   });
 });
