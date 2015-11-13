@@ -12,6 +12,7 @@ node_js:
   - '3.3'
   - '4.0'
   - '4.2'
+  - '5.0'
 
 matrix:
   include:
