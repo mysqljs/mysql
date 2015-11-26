@@ -6,6 +6,7 @@ you spot any mistakes.
 
 ## HEAD
 
+* Fix `connection.destroy()` on pool connection creating sequences #1291
 * Fix reading password from MySQL URL that has bare colon #1278
 * Handle MySQL servers not closing TCP connection after QUIT -> OK exchange #1277
 * Minor SqlString Date to string performance improvement #1233
