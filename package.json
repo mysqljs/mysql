@@ -16,7 +16,7 @@
     "readable-stream": "~1.1.13"
   },
   "devDependencies": {
-    "eslint": "1.7.3",
+    "eslint": "1.10.1",
     "istanbul": "0.4.1",
     "require-all": "2.0.0",
     "rimraf": "2.2.8",
