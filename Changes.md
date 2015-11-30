@@ -11,6 +11,7 @@ you spot any mistakes.
 * Add types for fractional seconds support
 * Fix `connection.destroy()` on pool connection creating sequences #1291
 * Fix error code 139 `HA_ERR_TO_BIG_ROW` to be `HA_ERR_TOO_BIG_ROW`
+* Fix error when call site error is missing stack #1179
 * Fix reading password from MySQL URL that has bare colon #1278
 * Handle MySQL servers not closing TCP connection after QUIT -> OK exchange #1277
 * Minor SqlString Date to string performance improvement #1233
