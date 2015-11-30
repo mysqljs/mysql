@@ -7,6 +7,7 @@ you spot any mistakes.
 ## HEAD
 
 * Add new error codes up to MySQL 5.7.9 #1294
+* Add types for fractional seconds support
 * Fix `connection.destroy()` on pool connection creating sequences #1291
 * Fix error code 139 `HA_ERR_TO_BIG_ROW` to be `HA_ERR_TOO_BIG_ROW`
 * Fix reading password from MySQL URL that has bare colon #1278
