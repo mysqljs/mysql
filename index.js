@@ -80,9 +80,7 @@ exports.escapeId = function escapeId(value, forbidQualified) {
  */
 exports.format = function format(sql, values, stringifyObjects, timeZone) {
   var SqlString = loadClass('SqlString');
-  console.log(0)
-  console.log(SqlString.format(sql, values, stringifyObjects, timeZone))
-  console.log(0)
+
   return SqlString.format(sql, values, stringifyObjects, timeZone);
 };
 
