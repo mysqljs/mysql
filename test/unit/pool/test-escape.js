@@ -12,7 +12,7 @@ server.listen(common.fakeServerPort, function (err) {
   assert.equal(pool.escape({ a: 123 }), "`a` = 123");
 
   assert.equal(pool2.escape('Super'), "'Super'");
-  assert.equal(pool2.escape({ a: 123 }), "'[object Object]'");
+  assert.equal(pool2.escape({ a: 123 }), "''{\\\"a\\\":123}''");
 
   pool.end(function (err) {
     assert.ifError(err);
