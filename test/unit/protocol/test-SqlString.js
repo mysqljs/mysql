@@ -55,7 +55,7 @@ test('SqlString.escape', {
   },
 
   'nested objects are cast to strings': function() {
-    assert.equal(SqlString.escape({a: {nested: true}}), "`a` = '[object Object]'");
+    assert.equal(SqlString.escape({a: {nested: true}}), "`a` = '{\\\"nested\\\":true}'");
   },
 
   'arrays are turned into lists': function() {
@@ -63,11 +63,11 @@ test('SqlString.escape', {
   },
 
   'nested arrays are turned into grouped lists': function() {
-    assert.equal(SqlString.escape([[1,2,3], [4,5,6], ['a', 'b', {nested: true}]]), "(1, 2, 3), (4, 5, 6), ('a', 'b', '[object Object]')");
+    assert.equal(SqlString.escape([[1,2,3], [4,5,6], ['a', 'b', {nested: true}]]), "(1, 2, 3), (4, 5, 6), ('a', 'b', '{\\\"nested\\\":true}')");
   },
 
   'nested objects inside arrays are cast to strings': function() {
-    assert.equal(SqlString.escape([1, {nested: true}, 2]), "1, '[object Object]', 2");
+    assert.equal(SqlString.escape([1, {nested: true}, 2]), "1, '{\\\"nested\\\":true}', 2");
   },
 
   'strings are quoted': function() {
@@ -167,7 +167,7 @@ test('SqlString.format', {
 
   'objects is not converted to values': function () {
     var sql = SqlString.format('?', { 'hello': 'world' }, true);
-    assert.equal(sql, "'[object Object]'");
+    assert.equal(sql, "'{\\\"hello\\\":\\\"world\\\"}'");
 
     var sql = SqlString.format('?', { toString: function () { return 'hello'; } }, true);
     assert.equal(sql, "'hello'");
