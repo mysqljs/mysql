@@ -17,7 +17,7 @@ you spot any mistakes.
 * Minor SqlString Date to string performance improvement #1233
 * Support Node.js 4.x
 * Support Node.js 5.x
-* Update `bignumber.js` to 2.1.0
+* Update `bignumber.js` to 2.1.2
 
 ## v2.9.0 (2015-08-19)
 
