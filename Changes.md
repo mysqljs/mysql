@@ -4,7 +4,7 @@ This file is a manually maintained list of changes for each release. Feel free
 to add your changes here when sending pull requests. Also send corrections if
 you spot any mistakes.
 
-## HEAD
+## v2.10.1 (2016-01-11)
 
 * Add new Amazon RDS ap-northeast-2 certificate CA to Amazon RDS SSL profile #1329
 
