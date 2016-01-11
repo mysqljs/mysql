@@ -4,6 +4,10 @@ This file is a manually maintained list of changes for each release. Feel free
 to add your changes here when sending pull requests. Also send corrections if
 you spot any mistakes.
 
+## HEAD
+
+* Add new Amazon RDS ap-northeast-2 certificate CA to Amazon RDS SSL profile #1329
+
 ## v2.10.0 (2015-12-15)
 
 * Add new error codes up to MySQL 5.7.9 #1294
