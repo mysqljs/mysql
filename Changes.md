@@ -7,6 +7,7 @@ you spot any mistakes.
 ## HEAD
 
 * Fix exception/hang from certain SSL connection errors #1153
+* Update `bignumber.js` to 2.1.4
 
 ## v2.10.1 (2016-01-11)
 
