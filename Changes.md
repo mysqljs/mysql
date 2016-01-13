@@ -4,7 +4,7 @@ This file is a manually maintained list of changes for each release. Feel free
 to add your changes here when sending pull requests. Also send corrections if
 you spot any mistakes.
 
-## HEAD
+## v2.10.2 (2016-01-12)
 
 * Fix exception/hang from certain SSL connection errors #1153
 * Update `bignumber.js` to 2.1.4
