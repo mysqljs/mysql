@@ -1048,14 +1048,15 @@ connection.query({sql: 'SELECT COUNT(*) AS count FROM big_table', timeout: 60000
 This module comes with a consistent approach to error handling that you should
 review carefully in order to write solid applications.
 
-All errors created by this module are instances of the JavaScript [Error][]
-object. Additionally they come with two properties:
+Most errors created by this module are instances of the JavaScript [Error][]
+object. Additionally they typically come with two extra properties:
 
 * `err.code`: Either a [MySQL server error][] (e.g.
-  `'ER_ACCESS_DENIED_ERROR'`), a node.js error (e.g. `'ECONNREFUSED'`) or an
-  internal error (e.g.  `'PROTOCOL_CONNECTION_LOST'`).
+  `'ER_ACCESS_DENIED_ERROR'`), a Node.js error (e.g. `'ECONNREFUSED'`) or an
+  internal error (e.g. `'PROTOCOL_CONNECTION_LOST'`).
 * `err.fatal`: Boolean, indicating if this error is terminal to the connection
-  object.
+  object. If the error is not from a MySQL protocol operation, this properly
+  will not be defined.
 
 [Error]: https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Error
 [MySQL server error]: http://dev.mysql.com/doc/refman/5.5/en/error-messages-server.html
