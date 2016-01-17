@@ -17,8 +17,8 @@ server.listen(common.fakeServerPort, function(err){
 
     pool.getConnection(function (err) {
       assert.ok(err);
-      assert.equal(err.fatal);
       assert.equal(err.message, 'No connections available.');
+      assert.equal(err.code, 'POOL_CONNLIMIT');
 
       connection.destroy();
       server.destroy();
