@@ -1338,8 +1338,8 @@ $ MYSQL_HOST=localhost MYSQL_PORT=3306 MYSQL_DATABASE=node_mysql_test MYSQL_USER
 
 [npm-image]: https://img.shields.io/npm/v/mysql.svg
 [npm-url]: https://npmjs.org/package/mysql
-[node-version-image]: http://img.shields.io/node/v/mysql.svg
-[node-version-url]: http://nodejs.org/download/
+[node-version-image]: https://img.shields.io/node/v/mysql.svg
+[node-version-url]: https://nodejs.org/en/download/
 [travis-image]: https://img.shields.io/travis/felixge/node-mysql/master.svg?label=linux
 [travis-url]: https://travis-ci.org/felixge/node-mysql
 [appveyor-image]: https://img.shields.io/appveyor/ci/dougwilson/node-mysql/master.svg?label=windows
