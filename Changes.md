@@ -7,6 +7,7 @@ you spot any mistakes.
 ## HEAD
 
 * Add `POOL_CONNLIMIT` code to "No connections available." error #1332
+* Fix Query stream to emit close after ending #1349 #1350
 * Performance improvements for array/object escaping in SqlString #1331
 
 ## v2.10.2 (2016-01-12)
