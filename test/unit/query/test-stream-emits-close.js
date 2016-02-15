@@ -16,7 +16,10 @@ server.listen(common.fakeServerPort, function (err) {
     server.destroy();
   }
 
-  stream.once('close', done);
+  stream.once('close', function () {
+    assert(stream._readableState.ended, "Stream was still readable when closed.");
+    done();
+  });
 
   connection.end(function (err) {
     assert.ifError(err);
