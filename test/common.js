@@ -150,7 +150,7 @@ function mergeTestConfig(config) {
     port     : process.env.MYSQL_PORT,
     user     : process.env.MYSQL_USER,
     password : process.env.MYSQL_PASSWORD,
-    supportBigNumbers: true,
+    supportBigNumbers: true
   }, config);
 
   return config;
