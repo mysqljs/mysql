@@ -26,12 +26,12 @@ common.getTestConnection(function (err, connection) {
   connection.query('SELECT * FROM ??', [table], function (err, rows) {
     assert.ifError(err);
     assert.equal(rows.length, 6);
-    assert.deepStrictEqual(rows[0].big, '9223372036854775807');
-    assert.deepStrictEqual(rows[1].big, '-9223372036854775807');
-    assert.deepStrictEqual(rows[2].big, '1111111111111111111');
-    assert.deepStrictEqual(rows[3].big, '-1111111111111111111');
-    assert.deepStrictEqual(rows[4].big, '9007199254740993');
-    assert.deepStrictEqual(rows[5].big, '-9007199254740993');
+    assert.strictEqual(rows[0].big.toString(), '9223372036854775807');
+    assert.strictEqual(rows[1].big.toString(), '-9223372036854775807');
+    assert.strictEqual(rows[2].big.toString(), '1111111111111111111');
+    assert.strictEqual(rows[3].big.toString(), '-1111111111111111111');
+    assert.strictEqual(rows[4].big.toString(), '9007199254740993');
+    assert.strictEqual(rows[5].big.toString(), '-9007199254740993');
     connection.end(assert.ifError);
   });
 });
