@@ -3,7 +3,7 @@ var common = require('../../common');
 
 var table = 'bigint_test';
 
-common.getTestConnection(function (err, connection) {
+common.getTestConnection({supportBigNumbers: true}, function (err, connection) {
   assert.ifError(err);
 
   common.useTestDb(connection);
