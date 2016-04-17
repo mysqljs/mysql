@@ -10,6 +10,7 @@ you spot any mistakes.
 * Fix Query stream to emit close after ending #1349 #1350
 * Fix type cast for BIGINT columns when number is negative #1376
 * Performance improvements for array/object escaping in SqlString #1331
+* Performance improvements for string escaping in SqlString #1390
 * Support Node.js 6.x
 * Update `bignumber.js` to 2.3.0
 * Update `readable-stream` to 1.1.14
