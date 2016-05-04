@@ -146,10 +146,11 @@ common.getSSLConfig = function() {
 
 function mergeTestConfig(config) {
   config = common.extend({
-    host     : process.env.MYSQL_HOST,
-    port     : process.env.MYSQL_PORT,
-    user     : process.env.MYSQL_USER,
-    password : process.env.MYSQL_PASSWORD
+    host       : process.env.MYSQL_HOST,
+    port       : process.env.MYSQL_PORT,
+    user       : process.env.MYSQL_USER,
+    password   : process.env.MYSQL_PASSWORD,
+    socketPath : process.env.MYSQL_SOCKET
   }, config);
 
   return config;

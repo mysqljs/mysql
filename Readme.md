@@ -1321,7 +1321,9 @@ $ FILTER=unit npm test
 ### Running integration tests
 
 Set the environment variables `MYSQL_DATABASE`, `MYSQL_HOST`, `MYSQL_PORT`,
-`MYSQL_USER` and `MYSQL_PASSWORD`. Then run `npm test`.
+`MYSQL_USER` and `MYSQL_PASSWORD`. `MYSQL_SOCKET` can also be used in place
+of `MYSQL_HOST` and `MYSQL_PORT` to connect over a UNIX socket. Then run
+`npm test`.
 
 For example, if you have an installation of mysql running on localhost:3306
 and no password set for the `root` user, run:
