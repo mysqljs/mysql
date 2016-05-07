@@ -13,7 +13,7 @@
   "repository": "felixge/node-mysql",
   "dependencies": {
     "bignumber.js": "2.3.0",
-    "readable-stream": "~1.1.13"
+    "readable-stream": "1.1.14"
   },
   "devDependencies": {
     "eslint": "1.10.3",

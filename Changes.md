@@ -11,6 +11,7 @@ you spot any mistakes.
 * Performance improvements for array/object escaping in SqlString #1331
 * Support Node.js 6.x
 * Update `bignumber.js` to 2.3.0
+* Update `readable-stream` to 1.1.14
 
 ## v2.10.2 (2016-01-12)
 
