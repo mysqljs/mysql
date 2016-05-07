@@ -17,7 +17,7 @@
   },
   "devDependencies": {
     "eslint": "1.10.3",
-    "istanbul": "0.4.2",
+    "istanbul": "0.4.3",
     "require-all": "2.0.0",
     "rimraf": "2.2.8",
     "timezone-mock": "0.0.0",
