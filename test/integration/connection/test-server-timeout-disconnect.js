@@ -1,3 +1,4 @@
+var after  = require('after');
 var assert = require('assert');
 var common = require('../../common');
 
@@ -8,11 +9,9 @@ var timeout = setTimeout(function () {
 common.getTestConnection(function (err, connection) {
   assert.ifError(err);
 
-  var wait = 2;
-  function done() {
-    if (--wait) return;
+  var done = after(2, function () {
     clearTimeout(timeout);
-  }
+  });
 
   connection.query('SET wait_timeout = 1', assert.ifError);
 

@@ -1,3 +1,4 @@
+var after      = require('after');
 var assert     = require('assert');
 var common     = require('../../common');
 var connection = common.createConnection({port: common.fakeServerPort});
@@ -8,11 +9,9 @@ var server = common.createFakeServer();
 server.listen(common.fakeServerPort, function (err) {
   assert.ifError(err);
 
-  var wait = 3;
-  function done() {
-    if (--wait) return;
+  var done = after(3, function () {
     server.destroy();
-  }
+  });
 
   connection.connect(function (err) {
     assert.ok(err, 'got error');

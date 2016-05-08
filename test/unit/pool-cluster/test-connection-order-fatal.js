@@ -1,3 +1,4 @@
+var after   = require('after');
 var assert  = require('assert');
 var common  = require('../../common');
 var cluster = common.createPoolCluster();
@@ -14,16 +15,13 @@ server.listen(common.fakeServerPort, function(err) {
   var conn1;
   var conn2;
   var pool = cluster.of('SLAVE*', 'ORDER');
-  var wait = 2;
 
-  function done() {
-    if (--wait) return;
-
+  var done = after(2, function () {
     cluster.end(function (err) {
       assert.ifError(err);
       server.destroy();
     });
-  }
+  });
 
   pool.getConnection(function (err, connection) {
     assert.ifError(err);

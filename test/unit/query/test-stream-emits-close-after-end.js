@@ -1,3 +1,4 @@
+var after      = require('after');
 var assert     = require('assert');
 var common     = require('../../common');
 var connection = common.createConnection({port: common.fakeServerPort});
@@ -7,16 +8,14 @@ var server = common.createFakeServer();
 server.listen(common.fakeServerPort, function (err) {
   assert.ifError(err);
 
+  var done = after(3, function () {
+    server.destroy();
+  });
+
   var closed = false;
   var ended  = false;
   var query  = connection.query('SELECT * FROM stream LIMIT 2');
   var stream = query.stream();
-  var wait   = 3;
-
-  function done() {
-    if (--wait) return;
-    server.destroy();
-  }
 
   stream.once('close', function () {
     assert.ok(ended);

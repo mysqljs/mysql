@@ -1,3 +1,4 @@
+var after  = require('after');
 var assert = require('assert');
 var common = require('../../common');
 var domain = null;
@@ -19,15 +20,13 @@ var d7 = domain.create();
 
 var pool;
 var server = common.createFakeServer();
-var wait   = 4;
 
-function done() {
-  if (--wait) return;
+var done = after(4, function () {
   pool.end(function (err) {
     assert.ifError(err);
     server.destroy();
   });
-}
+});
 
 server.listen(common.fakeServerPort, function (err) {
   assert.ifError(err);
