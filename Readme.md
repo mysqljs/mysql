@@ -311,7 +311,8 @@ var pool  = mysql.createPool({
   connectionLimit : 10,
   host            : 'example.org',
   user            : 'bob',
-  password        : 'secret'
+  password        : 'secret',
+  database        : 'example'
 });
 
 pool.query('SELECT 1 + 1 AS solution', function(err, rows, fields) {
@@ -329,7 +330,8 @@ var mysql = require('mysql');
 var pool  = mysql.createPool({
   host     : 'example.org',
   user     : 'bob',
-  password : 'secret'
+  password : 'secret',
+  database : 'example'
 });
 
 pool.getConnection(function(err, connection) {
