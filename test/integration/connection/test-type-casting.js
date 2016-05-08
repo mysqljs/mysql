@@ -11,6 +11,12 @@ var tests = [
   {type: 'double', insert: 5.5},
   {type: 'bigint', insert: '6', expect: 6},
   {type: 'bigint', insert: 6},
+  {type: 'bigint', insert: '9007199254740991', expect: 9007199254740991},
+  {type: 'bigint', insert: '9007199254740992', expect: '9007199254740992'},
+  {type: 'bigint', insert: '9223372036854775807', expect: '9223372036854775807'},
+  {type: 'bigint', insert: '-9007199254740991', expect: -9007199254740991},
+  {type: 'bigint', insert: '-9007199254740992', expect: '-9007199254740992'},
+  {type: 'bigint', insert: '-9223372036854775807', expect: '-9223372036854775807'},
   {type: 'mediumint', insert: 7},
   {type: 'year', insert: 2012},
   {type: 'timestamp', insert: new Date('2012-05-12 11:00:23')},
@@ -52,7 +58,7 @@ var tests = [
 
 var table = 'type_casting';
 
-common.getTestConnection(function (err, connection) {
+common.getTestConnection({supportBigNumbers: true}, function (err, connection) {
   assert.ifError(err);
 
   common.useTestDb(connection);
