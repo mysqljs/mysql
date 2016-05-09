@@ -1178,6 +1178,19 @@ than a string.
 * TIME (could be mapped to Date, but what date would be set?)
 * GEOMETRY (never used those, get in touch if you do)
 
+### JSON Object
+
+Any string, that can be converted to JSON ("{json_object:true}") is return as JSON object.
+To insert or update JSON into TEXT column you can simply do:
+```js
+var query = connection.query('insert into table ?',[text_column:{json_object:true}], function(err, results) {
+```
+
+You cannot do this:
+```js
+var query = connection.query('insert into table text_column=?',{json_object:true}, function(err, results) {
+```
+
 It is not recommended (and may go away / change in the future) to disable type
 casting, but you can currently do so on either the connection:
 
