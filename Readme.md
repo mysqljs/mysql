@@ -623,6 +623,17 @@ connection.query('SELECT * FROM users WHERE id = ?', [userId], function(err, res
 });
 ```
 
+Multiple placeholders are mapped to values in the same order as passed. For example:
+
+```js
+var values = ['a', 'b', 'c']
+connection.query('INSERT INTO users(foo, bar, baz) VALUES(?, ?, ?)', [userId], function(err, results) {
+  // ...
+});
+```    
+Would perform the insert such that `foo` equals `a`, `bar` equals `b` and `baz` equals `c`.
+
+
 This looks similar to prepared statements in MySQL, however it really just uses
 the same `connection.escape()` method internally.
 
