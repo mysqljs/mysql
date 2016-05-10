@@ -626,8 +626,8 @@ connection.query('SELECT * FROM users WHERE id = ?', [userId], function(err, res
 Multiple placeholders are mapped to values in the same order as passed. For example:
 
 ```js
-var values = ['a', 'b', 'c']
-connection.query('INSERT INTO users(foo, bar, baz) VALUES(?, ?, ?)', [userId], function(err, results) {
+var myArr = ['a', 'b', 'c']
+connection.query('INSERT INTO users(foo, bar, baz) VALUES(?, ?, ?)', myArr, function(err, results) {
   // ...
 });
 ```    
