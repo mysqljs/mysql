@@ -766,7 +766,7 @@ connection.query('INSERT INTO posts SET ?', {title: 'test'}, function(err, resul
 
 When dealing with big numbers (above JavaScript Number precision limit), you should
 consider enabling `supportBigNumbers` option to be able to read the insert id as a
-string, otherwise it will throw.
+string, otherwise it will throw an error.
 
 This option is also required when fetching big numbers from the database, otherwise
 you will get values rounded to hundreds or thousands due to the precision limit.
