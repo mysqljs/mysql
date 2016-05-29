@@ -17,7 +17,7 @@
   },
   "devDependencies": {
     "after": "0.8.1",
-    "eslint": "1.10.3",
+    "eslint": "2.11.0",
     "istanbul": "0.4.3",
     "require-all": "2.0.0",
     "rimraf": "2.2.8",

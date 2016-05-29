@@ -12,11 +12,11 @@ rimraf.sync(libcov);
 mkdirp.sync(libcov);
 
 instrument('index.js', function (err) {
-  if (err) return handleError(err);
+  if (err) handleError(err);
   instrument('lib', function (err) {
-    if (err) return handleError(err);
+    if (err) handleError(err);
     run(function (err, code) {
-      if (err) return handleError(err);
+      if (err) handleError(err);
       reportCoverage(collectCoverage(path.resolve(libcov, 'test')));
       rimraf.sync(libcov);
       process.exit(code);
