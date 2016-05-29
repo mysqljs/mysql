@@ -180,5 +180,15 @@ test('SqlString.format', {
 
     var sql = SqlString.format('?', { toString: function () { return 'hello'; } }, true);
     assert.equal(sql, "'hello'");
+  },
+
+  'sql is untouched if no values are provided': function () {
+    var sql = SqlString.format('SELECT ??');
+    assert.equal(sql, 'SELECT ??');
+  },
+
+  'sql is untouched if values are provided but there are no placeholders': function () {
+    var sql = SqlString.format('SELECT COUNT(*) FROM table', ['a', 'b']);
+    assert.equal(sql, 'SELECT COUNT(*) FROM table');
   }
 });
