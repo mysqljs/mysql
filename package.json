@@ -7,7 +7,8 @@
   "contributors": [
     "Andrey Sidorov <sidorares@yandex.ru>",
     "Douglas Christopher Wilson <doug@somethingdoug.com>",
-    "Diogo Resende <dresende@thinkdigital.pt>"
+    "Diogo Resende <dresende@thinkdigital.pt>",
+    "Nathan Woltman <nwoltman@outlook.com>"
   ],
   "homepage": "https://github.com/felixge/node-mysql",
   "repository": "felixge/node-mysql",
