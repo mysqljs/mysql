@@ -30,7 +30,7 @@
     "no-unreachable": 2,
     "semi": [2, "always"],
     "use-isnan": 2,
-    "valid-jsdoc": 1,
+    "valid-jsdoc": 2,
     "valid-typeof": 2
   }
 }
