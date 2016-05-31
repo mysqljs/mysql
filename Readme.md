@@ -442,9 +442,9 @@ PoolCluster provides multiple hosts connection. (group & retry & selector)
 // create
 var poolCluster = mysql.createPoolCluster();
 
-// add configurations
-poolCluster.add(config); // anonymous group
-poolCluster.add('MASTER', masterConfig);
+// add configurations (the config is a pool config object)
+poolCluster.add(config); // add configuration with automatic name
+poolCluster.add('MASTER', masterConfig); // add a named configuration
 poolCluster.add('SLAVE1', slave1Config);
 poolCluster.add('SLAVE2', slave2Config);
 
