@@ -41,5 +41,7 @@ process.on('exit', function() {
   assert.ok(conn1Err);
   assert.ok(conn2Err);
   assert.equal(conn1Err.message, 'Pool is closed.');
-  assert.equal(conn2Err.message, 'Pool is closed.');
+  assert.equal(conn2Err.code, 'POOL_CLOSED');
+  assert.equal(conn1Err.message, 'Pool is closed.');
+  assert.equal(conn2Err.code, 'POOL_CLOSED');
 });

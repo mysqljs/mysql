@@ -22,6 +22,7 @@ server.listen(common.fakeServerPort, function (err) {
     pool.getConnection(function (err, conn) {
       assert.ok(err);
       assert.equal(err.message, 'Pool is closed.');
+      assert.equal(err.code, 'POOL_CLOSED');
     });
 
     pool.end(function (err) {

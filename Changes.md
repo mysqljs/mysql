@@ -6,6 +6,7 @@ you spot any mistakes.
 
 ## HEAD
 
+* Add `POOL_CLOSED` code to "Pool is closed." error
 * Add `POOL_CONNLIMIT` code to "No connections available." error #1332
 * Fix Query stream to emit close after ending #1349 #1350
 * Fix type cast for BIGINT columns when number is negative #1376
