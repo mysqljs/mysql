@@ -371,9 +371,9 @@ to the server to check if the connection is still good.
 
 ## Pool options
 
-Pools accept all the same options as a connection. When creating a new
-connection, the options are simply passed to the connection constructor. In
-addition to those options pools accept a few extras:
+Pools accept all the same [options as a connection](#connection-options).
+When creating a new connection, the options are simply passed to the connection
+constructor. In addition to those options pools accept a few extras:
 
 * `acquireTimeout`: The milliseconds before a timeout occurs during the connection
   acquisition. This is slightly different from `connectTimeout`, because acquiring
