@@ -23,7 +23,7 @@
 - [Pool events](#pool-events)
 - [Closing all the connections in a pool](#closing-all-the-connections-in-a-pool)
 - [PoolCluster](#poolcluster)
-- [PoolCluster Option](#poolcluster-option)
+- [PoolCluster options](#poolcluster-options)
 - [Switching users and altering connection state](#switching-users-and-altering-connection-state)
 - [Server disconnects](#server-disconnects)
 - [Performing queries](#performing-queries)
@@ -479,7 +479,8 @@ poolCluster.end(function (err) {
 });
 ```
 
-## PoolCluster Option
+### PoolCluster options
+
 * `canRetry`: If `true`, `PoolCluster` will attempt to reconnect when connection fails. (Default: `true`)
 * `removeNodeErrorCount`: If connection fails, node's `errorCount` increases. 
   When `errorCount` is greater than `removeNodeErrorCount`, remove a node in the `PoolCluster`. (Default: `5`)
