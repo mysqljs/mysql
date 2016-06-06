@@ -22,6 +22,7 @@ you spot any mistakes.
 * Support Node.js 6.x
 * Update `bignumber.js` to 2.3.0
 * Update `readable-stream` to 1.1.14
+* Use the `sqlstring` module for SQL escaping and formatting
 
 ## v2.10.2 (2016-01-12)
 

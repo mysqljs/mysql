@@ -14,7 +14,8 @@
   "repository": "felixge/node-mysql",
   "dependencies": {
     "bignumber.js": "2.3.0",
-    "readable-stream": "1.1.14"
+    "readable-stream": "1.1.14",
+    "sqlstring": "2.0.1"
   },
   "devDependencies": {
     "after": "0.8.1",
