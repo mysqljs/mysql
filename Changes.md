@@ -4,7 +4,7 @@ This file is a manually maintained list of changes for each release. Feel free
 to add your changes here when sending pull requests. Also send corrections if
 you spot any mistakes.
 
-## HEAD
+## v2.11.0 (2016-06-06)
 
 * Add `POOL_CLOSED` code to "Pool is closed." error
 * Add `POOL_CONNLIMIT` code to "No connections available." error #1332
