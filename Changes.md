@@ -10,6 +10,7 @@ you spot any mistakes.
 * Add `POOL_CONNLIMIT` code to "No connections available." error #1332
 * Bind underlying connections in pool to same domain as pool #1242
 * Bind underlying socket to same domain as connection #1243
+* Fix allocation errors receiving many result rows #918 #1265 #1324 #1415
 * Fix edge cases constructing long stack traces #1387
 * Fix handshake inactivity timeout on Node.js v4.2.0 #1223 #1236 #1239 #1240 #1241 #1252
 * Fix Query stream to emit close after ending #1349 #1350
