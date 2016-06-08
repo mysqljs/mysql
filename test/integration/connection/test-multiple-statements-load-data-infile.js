@@ -2,8 +2,9 @@ var assert = require('assert');
 var common = require('../../common');
 var fs     = require('fs');
 
-var path  = common.fixtures + '/data.csv';
-var table = 'multi_load_data_test';
+var path    = common.fixtures + '/data.csv';
+var table   = 'multi_load_data_test';
+var newline = common.detectNewline(path);
 
 common.getTestConnection({multipleStatements: true}, function (err, connection) {
   assert.ifError(err);
@@ -20,11 +21,13 @@ common.getTestConnection({multipleStatements: true}, function (err, connection) 
 
   var stmt =
     'LOAD DATA LOCAL INFILE ? INTO TABLE ?? CHARACTER SET utf8 ' +
-    'FIELDS TERMINATED BY ? (id, title)';
+    'FIELDS TERMINATED BY ? ' +
+    'LINES TERMINATED BY ? ' +
+    '(id, title)';
 
   var sql =
-    connection.format(stmt, [path, table, ',']) + ';' +
-    connection.format(stmt, [path, table, ',']) + ';';
+    connection.format(stmt, [path, table, ',', newline]) + ';' +
+    connection.format(stmt, [path, table, ',', newline]) + ';';
 
   connection.query(sql, function (err, results) {
     assert.ifError(err);

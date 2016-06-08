@@ -5,6 +5,7 @@ var fs     = require('fs');
 var badPath = common.fixtures + '/does_not_exist.csv';
 var path    = common.fixtures + '/data.csv';
 var table   = 'load_data_test';
+var newline = common.detectNewline(path);
 
 common.getTestConnection(function (err, connection) {
   assert.ifError(err);
@@ -21,9 +22,11 @@ common.getTestConnection(function (err, connection) {
 
   var sql =
     'LOAD DATA LOCAL INFILE ? INTO TABLE ?? CHARACTER SET utf8 ' +
-    'FIELDS TERMINATED BY ? (id, title)';
+    'FIELDS TERMINATED BY ? ' +
+    'LINES TERMINATED BY ? ' +
+    '(id, title)';
 
-  connection.query(sql, [path, table, ','], function (err, result) {
+  connection.query(sql, [path, table, ',', newline], function (err, result) {
     assert.ifError(err);
     assert.equal(result.affectedRows, 5);
   });
@@ -40,7 +43,7 @@ common.getTestConnection(function (err, connection) {
     assert.equal(rows[4].title, 'this is a long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long string');
   });
 
-  connection.query(sql, [badPath, table, ','], function (err) {
+  connection.query(sql, [badPath, table, ',', newline], function (err) {
     assert.ok(err);
     assert.equal(err.code, 'ENOENT');
   });
