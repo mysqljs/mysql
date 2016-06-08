@@ -4,6 +4,10 @@ This file is a manually maintained list of changes for each release. Feel free
 to add your changes here when sending pull requests. Also send corrections if
 you spot any mistakes.
 
+## HEAD
+
+* Fix writing truncated packets starting with large string/buffer #1438
+
 ## v2.11.0 (2016-06-06)
 
 * Add `POOL_CLOSED` code to "Pool is closed." error

@@ -14,7 +14,7 @@ common.getTestConnection(function (err, connection) {
   connection.query([
     'CREATE TEMPORARY TABLE ?? (',
     '`id` int(11) unsigned NOT NULL AUTO_INCREMENT,',
-    '`title` varchar(255),',
+    '`title` varchar(400),',
     'PRIMARY KEY (`id`)',
     ') ENGINE=InnoDB DEFAULT CHARSET=utf8'
   ].join('\n'), [table], assert.ifError);
@@ -25,16 +25,19 @@ common.getTestConnection(function (err, connection) {
 
   connection.query(sql, [path, table, ','], function (err, result) {
     assert.ifError(err);
-    assert.equal(result.affectedRows, 4);
+    assert.equal(result.affectedRows, 5);
   });
 
   connection.query('SELECT * FROM ??', [table], function (err, rows) {
     assert.ifError(err);
-    assert.equal(rows.length, 4);
+    assert.equal(rows.length, 5);
     assert.equal(rows[0].id, 1);
     assert.equal(rows[0].title, 'Hello World');
     assert.equal(rows[3].id, 4);
     assert.equal(rows[3].title, '中文内容');
+    assert.equal(rows[4].id, 5);
+    assert.equal(rows[4].title.length, 321);
+    assert.equal(rows[4].title, 'this is a long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long string');
   });
 
   connection.query(sql, [badPath, table, ','], function (err) {
