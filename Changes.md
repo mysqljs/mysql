@@ -4,7 +4,7 @@ This file is a manually maintained list of changes for each release. Feel free
 to add your changes here when sending pull requests. Also send corrections if
 you spot any mistakes.
 
-## HEAD
+## v2.11.1 (2016-06-07)
 
 * Fix writing truncated packets starting with large string/buffer #1438
 
