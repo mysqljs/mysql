@@ -53,7 +53,8 @@ var tests = [
   {type: 'multipoint', insertRaw: "GeomFromText('MULTIPOINT(0 0, 20 20, 60 60)')", expect: [{x:0, y:0}, {x:20, y:20}, {x:60, y:60}], deep: true},
   {type: 'multilinestring', insertRaw: "GeomFromText('MULTILINESTRING((10 10, 20 20), (15 15, 30 15))')", expect: [[{x:10,y:10},{x:20,y:20}],[{x:15,y:15},{x:30,y:15}]], deep: true},
   {type: 'multipolygon', insertRaw: "GeomFromText('MULTIPOLYGON(((0 0,10 0,10 10,0 10,0 0)),((5 5,7 5,7 7,5 7, 5 5)))')", expect: [[[{x:0,y:0},{x:10,y:0},{x:10,y:10},{x:0,y:10},{x:0,y:0}]],[[{x:5,y:5},{x:7,y:5},{x:7,y:7},{x:5,y:7},{x:5,y:5}]]], deep: true},
-  {type: 'geometrycollection', insertRaw: "GeomFromText('GEOMETRYCOLLECTION(POINT(10 10), POINT(30 30), LINESTRING(15 15, 20 20))')", expect: [{x:10,y:10},{x:30,y:30},[{x:15,y:15},{x:20,y:20}]], deep: true}
+  {type: 'geometrycollection', insertRaw: "GeomFromText('GEOMETRYCOLLECTION(POINT(10 10), POINT(30 30), LINESTRING(15 15, 20 20))')", expect: [{x:10,y:10},{x:30,y:30},[{x:15,y:15},{x:20,y:20}]], deep: true},
+  {type: 'json', insert: { name: "mysql", data: [{ id: 5}, { id: 6}]}}
 ];
 
 var table = 'type_casting';
