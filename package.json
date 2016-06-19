@@ -10,8 +10,7 @@
     "Diogo Resende <dresende@thinkdigital.pt>",
     "Nathan Woltman <nwoltman@outlook.com>"
   ],
-  "homepage": "https://github.com/felixge/node-mysql",
-  "repository": "felixge/node-mysql",
+  "repository": "mysqljs/mysql",
   "dependencies": {
     "bignumber.js": "2.3.0",
     "readable-stream": "1.1.14",

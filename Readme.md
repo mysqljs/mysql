@@ -63,10 +63,10 @@ Sometimes I may also ask you to install the latest version from Github to check
 if a bugfix is working. In this case, please do:
 
 ```sh
-$ npm install felixge/node-mysql
+$ npm install mysqljs/mysql
 ```
 
-[v0.9 branch]: https://github.com/felixge/node-mysql/tree/v0.9
+[v0.9 branch]: https://github.com/mysqljs/mysql/tree/v0.9
 
 ## Introduction
 
@@ -106,7 +106,7 @@ From this example, you can learn the following:
 Thanks goes to the people who have contributed code to this module, see the
 [GitHub Contributors page][].
 
-[GitHub Contributors page]: https://github.com/felixge/node-mysql/graphs/contributors
+[GitHub Contributors page]: https://github.com/mysqljs/mysql/graphs/contributors
 
 Additionally I'd like to thank the following people:
 
@@ -200,7 +200,7 @@ When establishing a connection, you can set the following options:
 * `connectTimeout`: The milliseconds before a timeout occurs during the initial connection
   to the MySQL server. (Default: `10000`)
 * `stringifyObjects`: Stringify objects instead of converting to values. See
-issue [#501](https://github.com/felixge/node-mysql/issues/501). (Default: `'false'`)
+issue [#501](https://github.com/mysqljs/mysql/issues/501). (Default: `'false'`)
 * `insecureAuth`: Allow connecting to MySQL instances that ask for the old
   (insecure) authentication method. (Default: `false`)
 * `typeCast`: Determines if column values should be converted to native
@@ -1221,7 +1221,7 @@ connection.query({
   }
 });
 ```
-__WARNING: YOU MUST INVOKE the parser using one of these three field functions in your custom typeCast callback. They can only be called once. (see [#539](https://github.com/felixge/node-mysql/issues/539) for discussion)__
+__WARNING: YOU MUST INVOKE the parser using one of these three field functions in your custom typeCast callback. They can only be called once. (see [#539](https://github.com/mysqljs/mysql/issues/539) for discussion)__
 
 ```
 field.string()
@@ -1234,7 +1234,7 @@ parser.parseLengthCodedString()
 parser.parseLengthCodedBuffer()
 parser.parseGeometryValue()
 ```
-__You can find which field function you need to use by looking at: [RowDataPacket.prototype._typeCast](https://github.com/felixge/node-mysql/blob/master/lib/protocol/packets/RowDataPacket.js#L41)__
+__You can find which field function you need to use by looking at: [RowDataPacket.prototype._typeCast](https://github.com/mysqljs/mysql/blob/master/lib/protocol/packets/RowDataPacket.js#L41)__
 
 
 ## Connection Flags
@@ -1355,11 +1355,11 @@ $ MYSQL_HOST=localhost MYSQL_PORT=3306 MYSQL_DATABASE=node_mysql_test MYSQL_USER
 [npm-url]: https://npmjs.org/package/mysql
 [node-version-image]: https://img.shields.io/node/v/mysql.svg
 [node-version-url]: https://nodejs.org/en/download/
-[travis-image]: https://img.shields.io/travis/felixge/node-mysql/master.svg?label=linux
-[travis-url]: https://travis-ci.org/felixge/node-mysql
+[travis-image]: https://img.shields.io/travis/mysqljs/mysql/master.svg?label=linux
+[travis-url]: https://travis-ci.org/mysqljs/mysql
 [appveyor-image]: https://img.shields.io/appveyor/ci/dougwilson/node-mysql/master.svg?label=windows
 [appveyor-url]: https://ci.appveyor.com/project/dougwilson/node-mysql
-[coveralls-image]: https://img.shields.io/coveralls/felixge/node-mysql/master.svg
-[coveralls-url]: https://coveralls.io/r/felixge/node-mysql?branch=master
+[coveralls-image]: https://img.shields.io/coveralls/mysqljs/mysql/master.svg
+[coveralls-url]: https://coveralls.io/r/mysqljs/mysql?branch=master
 [downloads-image]: https://img.shields.io/npm/dm/mysql.svg
 [downloads-url]: https://npmjs.org/package/mysql
