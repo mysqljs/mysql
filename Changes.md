@@ -4,6 +4,10 @@ This file is a manually maintained list of changes for each release. Feel free
 to add your changes here when sending pull requests. Also send corrections if
 you spot any mistakes.
 
+## HEAD
+
+* Add `sql` property to query `Error` objects #1462 #1628 #1629
+
 ## v2.13.0 (2017-01-24)
 
 * Accept regular expression as pool cluster pattern #1572

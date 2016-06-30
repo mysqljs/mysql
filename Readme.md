@@ -1114,6 +1114,9 @@ object. Additionally they typically come with two extra properties:
 * `err.fatal`: Boolean, indicating if this error is terminal to the connection
   object. If the error is not from a MySQL protocol operation, this properly
   will not be defined.
+* `err.sql`: String, contains the full SQL of the failed query. This can be
+  useful when using a higher level interface like an ORM that is generating
+  the queries.
 
 [Error]: https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Error
 [MySQL server error]: http://dev.mysql.com/doc/refman/5.5/en/error-messages-server.html
