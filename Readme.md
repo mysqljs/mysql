@@ -1118,6 +1118,10 @@ object. Additionally they typically come with two extra properties:
 [Error]: https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Error
 [MySQL server error]: http://dev.mysql.com/doc/refman/5.5/en/error-messages-server.html
 
+In addition, MySQL server errors will have an `err.sql` property that contains the SQL
+of the failed query. This can we useful when using a higher level interface like an
+ORM that is generating your queries for you.
+
 Fatal errors are propagated to *all* pending callbacks. In the example below, a
 fatal error is triggered by trying to connect to an invalid port. Therefore the
 error object is propagated to both pending callbacks:
