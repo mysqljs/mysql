@@ -42,6 +42,8 @@
 - [Stored procedures](#stored-procedures)
 - [Joins with overlapping column names](#joins-with-overlapping-column-names)
 - [Transactions](#transactions)
+- [Ping](#ping)
+- [Reset connection](#reset-connection)
 - [Timeouts](#timeouts)
 - [Error handling](#error-handling)
 - [Exception Safety](#exception-safety)
@@ -1025,6 +1027,22 @@ as described [in the MySQL documentation](http://dev.mysql.com/doc/refman/5.5/en
 A ping packet can be sent over a connection using the `connection.ping` method. This
 method will send a ping packet to the server and when the server responds, the callback
 will fire. If an error occurred, the callback will fire with an error argument.
+
+```js
+connection.ping(function (err) {
+  if (err) throw err;
+  console.log('Server responded to ping');
+})
+```
+
+## Reset Connection
+
+The `connection.reset` method causes the server to clear the session state (such as
+user variables and temporary tables). This is similar to but more light-weight than
+`connection.changeUser`, because reset does not close the connection and reauthenticate.
+
+Documentation defining what is cleared.
+[mysql-reset-connection]: https://dev.mysql.com/doc/refman/5.7/en/mysql-reset-connection.html
 
 ```js
 connection.ping(function (err) {

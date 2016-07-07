@@ -1,26 +1,26 @@
-var common     = require('../../common');
-var connection = common.createConnection();
-var assert     = require('assert');
+var assert = require('assert');
+var common = require('../../common');
 
-connection.connect(assertError);
-
-connection.query('SET @user_var = \'apple\'', assertError);
-
-connection.query('SELECT @user_var AS var', function(err, rows) {
+common.getTestConnection(function (err, connection) {
   assert.ifError(err);
-  assert.equal(rows.length, 1);
-  assert.equal(rows[0].var, 'apple');
+
+  connection.query('SET @var1 = ?', [1234], assert.ifError);
+
+  connection.query('SELECT @var1 AS var1', function(err, rows) {
+    assert.ifError(err);
+    assert.equal(rows.length, 1);
+    assert.equal(rows[0].var1, 1234);
+
+	connection.reset(function(err) {
+      assert.ifError(err);
+
+      connection.query('SELECT @var1 AS var1', function(err, rows2) {
+        assert.ifError(err);
+        assert.equal(rows2.length, 1);
+        assert.equal(rows2[0].var1, null);
+      });
+
+      connection.end(assert.ifError);
+    });
+  });
 });
-
-connection.reset(assertError);
-
-connection.query('SELECT @user_var AS var', function(err, _rows) {
-  assert.ifError(err);
-  assert.equal(rows.length, 0);
-});
-
-connection.end(assertError);
-
-function assertError(err) {
-  assert.ifError(err);
-}
