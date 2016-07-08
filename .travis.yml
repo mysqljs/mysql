@@ -12,24 +12,16 @@ node_js:
   - '5.11'
   - '6.2'
 
-matrix:
-  include:
-    - node_js: '4.4'
-      env: MYSQL_TYPE=mariadb MYSQL_HOST=localhost MYSQL_DATABASE=node_mysql MYSQL_USER=root MYSQL_PASSWORD=
-      addons: {mariadb: '10.1'}
-  allow_failures:
-    # Allow MariaDB to fail while https://github.com/travis-ci/travis-ci/issues/5837 is being resolved
-    - node_js: '4.4'
-      env: MYSQL_TYPE=mariadb MYSQL_HOST=localhost MYSQL_DATABASE=node_mysql MYSQL_USER=root MYSQL_PASSWORD=
-      addons: {mariadb: '10.1'}
-
-sudo: false
+sudo: required
 
 cache:
   directories:
     - node_modules
 
 before_install:
+  # install MySQL 5.7
+  - bash .travis.install-mysql-5.7.sh
+  
   # Setup Node.js version-specific dependencies
   - "test $TRAVIS_NODE_VERSION != '0.6' || npm rm --save-dev istanbul"
   - "test $TRAVIS_NODE_VERSION != '0.8' || npm rm --save-dev istanbul"
@@ -40,7 +32,7 @@ before_install:
   - "test ! -d node_modules || npm rebuild"
 
 before_script:
-- "mysql -e 'create database node_mysql; select version();'"
+- "mysql -u root -ppass -e 'create database node_mysql; select version();'"
 
 script:
   # Run test script, depending on istanbul install
@@ -52,7 +44,7 @@ after_script:
   - "test -e ./coverage/lcov.info && npm install coveralls@2 && cat ./coverage/lcov.info | coveralls"
 
 env:
-  - MYSQL_TYPE=mysql MYSQL_HOST=localhost MYSQL_DATABASE=node_mysql MYSQL_USER=root MYSQL_PASSWORD=
+  - MYSQL_TYPE=mysql MYSQL_HOST=localhost MYSQL_DATABASE=node_mysql MYSQL_USER=root MYSQL_PASSWORD=pass
 
 mysql:
   adapter: mysql2
