@@ -467,6 +467,7 @@ poolCluster.of('*').getConnection(function (err, connection) {});
 var pool = poolCluster.of('SLAVE*', 'RANDOM');
 pool.getConnection(function (err, connection) {});
 pool.getConnection(function (err, connection) {});
+pool.query(function (err, result) {});
 
 // close all connections
 poolCluster.end(function (err) {
