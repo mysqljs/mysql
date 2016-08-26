@@ -468,6 +468,7 @@ poolCluster.of('*').getConnection(function (err, connection) {});
 var pool = poolCluster.of('SLAVE*', 'RANDOM');
 pool.getConnection(function (err, connection) {});
 pool.getConnection(function (err, connection) {});
+pool.query(function (err, result) {});
 
 // close all connections
 poolCluster.end(function (err) {
@@ -538,7 +539,7 @@ space for a new connection to be created on the next getConnection call.
 ## Performing queries
 
 The most basic way to perform a query is to call the `.query()` method on an object
-(like a `Connection` or `Pool` instance).
+(like a `Connection`, `Pool`, or `PoolNamespace` instance).
 
 The simplest form of .`query()` is `.query(sqlString, callback)`, where a SQL string
 is the first argument and the second is a callback:

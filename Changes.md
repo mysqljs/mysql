@@ -6,6 +6,8 @@ you spot any mistakes.
 
 ## HEAD
 
+* Add `query` method to `PoolNamespace` #1256 #1505 #1506
+  - Used as `cluster.of(...).query(...)`
 * Update `bignumber.js` to 2.4.0
 * Update `sqlstring` to 2.1.0
   - Accept numbers and other value types in `escapeId`
