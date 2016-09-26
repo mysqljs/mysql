@@ -17,7 +17,7 @@
     "sqlstring": "2.0.1"
   },
   "devDependencies": {
-    "after": "0.8.1",
+    "after": "0.8.2",
     "eslint": "2.13.1",
     "istanbul": "0.4.3",
     "require-all": "2.0.0",
