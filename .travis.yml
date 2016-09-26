@@ -9,7 +9,7 @@ node_js:
   - '3.3'
   - '4.2.0' # Test timers regression
   - '4.5'
-  - '5.11'
+  - '5.12'
   - '6.2'
 
 matrix:
