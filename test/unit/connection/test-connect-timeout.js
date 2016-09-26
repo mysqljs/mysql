@@ -12,7 +12,7 @@ if (!external) {
   common.skipTest('no external network interfaces');
 }
 
-var connection = common.createConnection({host: '1.1.1.1', port: common.fakeServerPort, connectTimeout: 500});
+var connection = common.createConnection({host: '10.255.255.1', port: common.fakeServerPort, connectTimeout: 500});
 
 var testTimeout = setTimeout(function() {
   connection.destroy();
