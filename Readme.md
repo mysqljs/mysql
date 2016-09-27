@@ -128,11 +128,6 @@ spend more time on it (ordered by time of contribution):
 * [Holiday Extras](http://www.holidayextras.co.uk/) (they are [hiring](http://join.holidayextras.co.uk/))
 * [Newscope](http://newscope.com/) (they are [hiring](http://www.newscope.com/stellenangebote))
 
-If you are interested in sponsoring a day or more of my time, please
-[get in touch][].
-
-[get in touch]: http://felixge.de/#consulting
-
 ## Community
 
 If you'd like to discuss this module, or ask questions about it, please use one
