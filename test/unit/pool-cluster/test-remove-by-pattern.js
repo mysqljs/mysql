@@ -25,10 +25,10 @@ server.listen(common.fakeServerPort, function (err) {
 
       cluster.remove('SLAVE*');
 
-        cluster.end(function (err) {
-          assert.ifError(err);
-          server.destroy();
-        });
+      cluster.end(function (err) {
+        assert.ifError(err);
+        server.destroy();
+      });
     });
   });
 });

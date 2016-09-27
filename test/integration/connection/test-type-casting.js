@@ -39,13 +39,13 @@ var tests = [
   {type: 'text', insert: 'Hello World'},
   {type: 'point', insertRaw: 'POINT(1.2,-3.4)', expect: {x:1.2, y:-3.4}, deep: true},
   {type: 'point', insertRaw: (function() {
-      var buffer = new Buffer(21);
-      buffer.writeUInt8(1, 0);
-      buffer.writeUInt32LE(1, 1);
-      buffer.writeDoubleLE(-5.6, 5);
-      buffer.writeDoubleLE(10.23, 13);
-      return 'GeomFromWKB(X\'' + buffer.toString('hex') + '\')';
-    })(), expect: {x:-5.6, y:10.23}, deep: true},
+    var buffer = new Buffer(21);
+    buffer.writeUInt8(1, 0);
+    buffer.writeUInt32LE(1, 1);
+    buffer.writeDoubleLE(-5.6, 5);
+    buffer.writeDoubleLE(10.23, 13);
+    return 'GeomFromWKB(X\'' + buffer.toString('hex') + '\')';
+  })(), expect: {x:-5.6, y:10.23}, deep: true},
   {type: 'point', insertRaw: '', insert: null, expect: null},
   {type: 'linestring', insertRaw: 'LINESTRING(POINT(1.2,-3.4),POINT(-5.6,10.23),POINT(0.2,0.7))', expect: [{x:1.2, y:-3.4}, {x:-5.6, y:10.23}, {x:0.2, y:0.7}], deep: true},
   {type: 'polygon', insertRaw: "GeomFromText('POLYGON((0 0,10 0,10 10,0 10,0 0),(5 5,7 5,7 7,5 7, 5 5))')", expect: [[{x:0,y:0},{x:10,y:0},{x:10,y:10},{x:0,y:10},{x:0,y:0}],[{x:5,y:5},{x:7,y:5},{x:7,y:7},{x:5,y:7},{x:5,y:5}]], deep: true},
@@ -78,7 +78,7 @@ common.getTestConnection({supportBigNumbers: true}, function (err, connection) {
   var createTable = [
     'CREATE TEMPORARY TABLE ' + connection.escapeId(table) + ' (',
     '`id` int(11) unsigned NOT NULL AUTO_INCREMENT,'
-    ].concat(schema).concat([
+  ].concat(schema).concat([
     'PRIMARY KEY (`id`)',
     ') ENGINE=InnoDB DEFAULT CHARSET=utf8'
   ]).join('\n');
