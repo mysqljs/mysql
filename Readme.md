@@ -48,6 +48,7 @@
 - [Type casting](#type-casting)
 - [Connection Flags](#connection-flags)
 - [Debugging and reporting problems](#debugging-and-reporting-problems)
+- [Contributing](#contributing)
 - [Running tests](#running-tests)
 - [Todo](#todo)
 
@@ -1313,6 +1314,31 @@ will have:
 * The minimal amount of code required to reproduce the problem (if possible)
 * As much debugging output and information about your environment (mysql
   version, node version, os, etc.) as you can gather.
+
+## Contributing
+
+This project welcomes contributions from the community. Contributions are
+accepted using GitHub pull requests. If you're not familiar with making
+GitHub pull requests, please refer to the
+[GitHub documentation "Creating a pull request"](https://help.github.com/articles/creating-a-pull-request/).
+
+For a good pull request, we ask you provide the following:
+
+1. Try to include a clear description of your pull request in the description.
+   It should include the basic "what" and "why"s for the request.
+2. The tests should pass as best as you can. See the [Running tests](#running-tests)
+   section on hwo to run the different tests. GitHub will automatically run
+   the tests as well, to act as a safety net.
+3. The pull request should include tests for the change. A new feature should
+   have tests for the new feature and bug fixes should include a test that fails
+   without the corresponding code change and passes after they are applied.
+   The command `npm run test-cov` will generate a `coverage/` folder that
+   contains HTML pages of the code coverage, to better understand if everything
+   you're adding is being tested.
+4. If the pull request is a new feature, please be sure to include all
+   appropriate documentation additions in the `Readme.md` file as well.
+5. To help ensure that your code is similar in style to the existing code,
+   run the command `npm run lint` and fix any displayed issues.
 
 ## Running tests
 
