@@ -6,7 +6,7 @@ common.getTestConnection({typeCast: true}, function (err, connection) {
   assert.ifError(err);
 
   var options = {
-    sql      : "SELECT NOW() as date, POINT(1.2,-3.4) as point",
+    sql      : 'SELECT NOW() as date, POINT(1.2,-3.4) as point',
     typeCast : false
   };
 
