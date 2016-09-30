@@ -6,6 +6,7 @@ you spot any mistakes.
 
 ## HEAD
 
+* Accept array of type names to `dateStrings` option #605 #1481
 * Add `query` method to `PoolNamespace` #1256 #1505 #1506
   - Used as `cluster.of(...).query(...)`
 * Fix typo in `HANDSHAKE_NO_SSL_SUPPORT` error message #1534

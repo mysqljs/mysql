@@ -6,7 +6,7 @@ var server = common.createFakeServer();
 server.listen(common.fakeServerPort, function (err) {
   assert.ifError(err);
 
-  var done = after(2, function () {
+  var done = after(4, function () {
     server.destroy();
   });
 
@@ -39,6 +39,39 @@ server.listen(common.fakeServerPort, function (err) {
     assert.strictEqual(rows[2].value, '2000-01-00');
     assert.strictEqual(rows[3].value, '2000-01-02');
     conn2.destroy();
+    done();
+  });
+
+  var conn3 = common.createConnection({
+    dateStrings : ['DATE'],
+    port        : common.fakeServerPort,
+    timezone    : 'Z'
+  });
+  conn3.query('SELECT value FROM date_rows', function (err, rows) {
+    assert.ifError(err);
+    assert.equal(rows.length, 4);
+    assert.strictEqual(rows[0].value, '0000-00-00');
+    assert.strictEqual(rows[1].value, '2000-00-00');
+    assert.strictEqual(rows[2].value, '2000-01-00');
+    assert.strictEqual(rows[3].value, '2000-01-02');
+    conn3.destroy();
+    done();
+  });
+
+  var conn4 = common.createConnection({
+    dateStrings : ['DATETIME', 'TIMESTAMP'],
+    port        : common.fakeServerPort,
+    timezone    : 'Z'
+  });
+  conn4.query('SELECT value FROM date_rows', function (err, rows) {
+    assert.ifError(err);
+    assert.equal(rows.length, 4);
+    assert.strictEqual(rows[0].value, '0000-00-00');
+    assert.strictEqual(rows[1].value, '2000-00-00');
+    assert.strictEqual(rows[2].value, '2000-01-00');
+    assert.ok(rows[3].value instanceof Date);
+    assert.strictEqual(rows[3].value.toISOString(), '2000-01-02T00:00:00.000Z');
+    conn4.destroy();
     done();
   });
 });
