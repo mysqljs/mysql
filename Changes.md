@@ -8,6 +8,7 @@ you spot any mistakes.
 
 * Add `query` method to `PoolNamespace` #1256 #1505 #1506
   - Used as `cluster.of(...).query(...)`
+* Fix typo in `HANDSHAKE_NO_SSL_SUPPORT` error message #1534
 * Update `bignumber.js` to 2.4.0
 * Update `sqlstring` to 2.1.0
   - Accept numbers and other value types in `escapeId`
