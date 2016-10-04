@@ -8,19 +8,28 @@ var dateOptionsArray = ['date', 'DATE', 'Date'];
 var truthyOptionTests = [
   {type: 'timestamp', insert: '2016-09-30 09:00:23'},
   {type: 'datetime', insert: '2016-09-30 09:00:23'},
-  {type: 'date', insert: '2016-09-30'}
+  {type: 'date', insert: '2016-09-30'},
+  {type: 'timestamp', insert: new Date('2016-09-30 09:00:23'), expect: '2016-09-30 09:00:23'},
+  {type: 'datetime', insert: new Date('2016-09-30 09:00:23'), expect: '2016-09-30 09:00:23'},
+  {type: 'date', insert: new Date('2016-09-30 09:00:23'), expect: '2016-09-30'}
 ];
 
 var falsyOptionTests = [
   {type: 'timestamp', insert: new Date('2016-09-30 09:00:23')},
   {type: 'datetime', insert: new Date('2016-09-30 09:00:23')},
-  {type: 'date', insert: new Date('2016-09-30 00:00:00')}
+  {type: 'date', insert: new Date('2016-09-30 00:00:00')},
+  {type: 'timestamp', insert: '2016-09-30 09:00:23', expect: new Date('2016-09-30 09:00:23')},
+  {type: 'datetime', insert: '2016-09-30 09:00:23', expect: new Date('2016-09-30 09:00:23')},
+  {type: 'date', insert: '2016-09-30 09:00:23', expect: new Date('2016-09-30 00:00:00')}
 ];
 
 var dateOptionTests = [
   {type: 'timestamp', insert: new Date('2016-09-30 09:00:23')},
   {type: 'datetime', insert: new Date('2016-09-30 09:00:23')},
-  {type: 'date', insert: '2016-09-30'}
+  {type: 'date', insert: new Date('2016-09-30 09:00:23'), expect: '2016-09-30'},
+  {type: 'timestamp', insert: '2016-09-30 09:00:23', expect: new Date('2016-09-30 09:00:23')},
+  {type: 'datetime', insert: '2016-09-30 09:00:23', expect: new Date('2016-09-30 09:00:23')},
+  {type: 'date', insert: '2016-09-30', expect: '2016-09-30'}
 ];
 
 for(i=0; i<truthyOptionsArray.length; i++){
