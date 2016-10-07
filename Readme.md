@@ -700,9 +700,16 @@ It also supports adding qualified identifiers. It will escape both parts.
 ```js
 var sorter = 'date';
 var sql    = 'SELECT * FROM posts ORDER BY ' + connection.escapeId('posts.' + sorter);
-connection.query(sql, function(err, results) {
-  // ...
-});
+// -> SELECT * FROM posts ORDER BY `posts`.`date`
+```
+
+If you do not want to treat `.` as qualified identifiers, you can set the second
+argument to `true` in order to keep the string as a literal identifier:
+
+```js
+var sorter = 'date.2';
+var sql    = 'SELECT * FROM posts ORDER BY ' + connection.escapeId(sorter, true);
+// -> SELECT * FROM posts ORDER BY `date.2`
 ```
 
 Alternatively, you can use `??` characters as placeholders for identifiers you would
