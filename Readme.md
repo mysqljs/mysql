@@ -300,6 +300,8 @@ Unlike `end()` the `destroy()` method does not take a callback argument.
 
 ## Pooling connections
 
+Pooling is a connection manager, which handles the connections for your queries, and reconnects if needed. If you have a longer running process, you probably want to use this instead of using connection directly.
+
 Use pool directly.
 ```js
 var mysql = require('mysql');
