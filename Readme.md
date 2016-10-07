@@ -300,6 +300,10 @@ Unlike `end()` the `destroy()` method does not take a callback argument.
 
 ## Pooling connections
 
+Rather than creating and managing connections one-by-one, this module also
+provides built-in connection pooling using `mysql.createPool(config)`.
+[Read more about connection pooling](https://en.wikipedia.org/wiki/Connection_pool).
+
 Use pool directly.
 ```js
 var mysql = require('mysql');
