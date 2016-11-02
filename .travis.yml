@@ -10,7 +10,7 @@ node_js:
   - '4.2.0' # Test timers regression
   - '4.6'
   - '5.12'
-  - '6.6'
+  - '6.9'
 
 matrix:
   include:
