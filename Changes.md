@@ -10,8 +10,9 @@ you spot any mistakes.
   - Used as `cluster.of(...).query(...)`
 * Fix typo in `HANDSHAKE_NO_SSL_SUPPORT` error message #1534
 * Update `bignumber.js` to 2.4.0
-* Update `sqlstring` to 2.1.0
+* Update `sqlstring` to 2.2.0
   - Accept numbers and other value types in `escapeId`
+  - Escape invalid `Date` objects as `NULL`
   - Run `buffer.toString()` through escaping
 
 ## v2.11.1 (2016-06-07)
