@@ -1,12 +1,20 @@
-var assert     = require('assert');
-var common     = require('../../common');
-var connection = common.createConnection({port: common.fakeServerPort, timezone: 'Z'});
-var server     = common.createFakeServer();
+var after  = require('after');
+var assert = require('assert');
+var common = require('../../common');
+var server = common.createFakeServer();
 
 server.listen(common.fakeServerPort, function (err) {
   assert.ifError(err);
 
-  connection.query('SELECT value FROM datetime_rows', function (err, rows) {
+  var done = after(2, function () {
+    server.destroy();
+  });
+
+  var conn1 = common.createConnection({
+    port     : common.fakeServerPort,
+    timezone : 'Z'
+  });
+  conn1.query('SELECT value FROM datetime_rows', function (err, rows) {
     assert.ifError(err);
     assert.equal(rows.length, 7);
     assert.strictEqual(rows[0].value, '0000-00-00 00:00:00');
@@ -19,9 +27,27 @@ server.listen(common.fakeServerPort, function (err) {
     assert.strictEqual(rows[5].value.toISOString(), '2000-01-02T03:04:05.000Z');
     assert.ok(rows[6].value instanceof Date);
     assert.strictEqual(rows[6].value.toISOString(), '2000-01-02T03:04:05.006Z');
+    conn1.destroy();
+    done();
+  });
 
-    connection.destroy();
-    server.destroy();
+  var conn2 = common.createConnection({
+    dateStrings : true,
+    port        : common.fakeServerPort,
+    timezone    : 'Z'
+  });
+  conn2.query('SELECT value FROM datetime_rows', function (err, rows) {
+    assert.ifError(err);
+    assert.equal(rows.length, 7);
+    assert.strictEqual(rows[0].value, '0000-00-00 00:00:00');
+    assert.strictEqual(rows[1].value, '2000-00-00 00:00:00');
+    assert.strictEqual(rows[2].value, '2000-01-00 00:00:00');
+    assert.strictEqual(rows[3].value, '2000-01-02 03:04:60');
+    assert.strictEqual(rows[4].value, '2000-01-02 00:00:00');
+    assert.strictEqual(rows[5].value, '2000-01-02 03:04:05');
+    assert.strictEqual(rows[6].value, '2000-01-02 03:04:05.006');
+    conn2.destroy();
+    done();
   });
 });
 
