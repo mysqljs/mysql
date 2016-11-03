@@ -4,7 +4,7 @@ This file is a manually maintained list of changes for each release. Feel free
 to add your changes here when sending pull requests. Also send corrections if
 you spot any mistakes.
 
-## HEAD
+## v2.12.0 (2016-11-02)
 
 * Accept array of type names to `dateStrings` option #605 #1481
 * Add `query` method to `PoolNamespace` #1256 #1505 #1506
