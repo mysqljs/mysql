@@ -213,7 +213,8 @@ issue [#501](https://github.com/mysqljs/mysql/issues/501). (Default: `false`)
 * `dateStrings`: Force date types (TIMESTAMP, DATETIME, DATE) to be returned as strings rather then
    inflated into JavaScript Date objects. Can be `true`/`false` or an array of type names to keep as
    strings. (Default: `false`)
-* `debug`: Prints protocol details to stdout. (Default: `false`)
+* `debug`: Prints protocol details to stdout. Can be `true`/`false` or an array of packet type names
+   that should be printed. (Default: `false`)
 * `trace`: Generates stack traces on `Error` to include call site of library
    entrance ("long stack traces"). Slight performance penalty for most calls.
    (Default: `true`)
