@@ -27,7 +27,7 @@ test('ConnectionConfig#Constructor', {
   },
 
   'allows additional options via url query': function() {
-    var url    = 'mysql://myhost/mydb?debug=true&charset=BIG5_CHINESE_CI';
+    var url    = 'mysql://myhost/mydb?debug=true&charset=BIG5_CHINESE_CI&timezone=Z';
     var config = new ConnectionConfig(url);
 
     assert.equal(config.host, 'myhost');
@@ -35,6 +35,7 @@ test('ConnectionConfig#Constructor', {
     assert.equal(config.database, 'mydb');
     assert.equal(config.debug, true);
     assert.equal(config.charsetNumber, common.Charsets.BIG5_CHINESE_CI);
+    assert.equal(config.timezone, 'Z');
   },
 
   'accepts client flags': function() {
@@ -176,6 +177,24 @@ test('ConnectionConfig#Constructor.ssl', {
     assert.ok(error);
     assert.equal(error.name, 'TypeError');
     assert.equal(error.message, 'Unknown SSL profile \'invalid profile\'');
+  }
+});
+
+test('ConnectionConfig#Constructor.timezone', {
+  'defaults to "local"': function() {
+    var config = new ConnectionConfig({});
+
+    assert.equal(config.timezone, 'local');
+  },
+
+  'accepts url timezone with encoded +': function() {
+    var config = new ConnectionConfig('mysql://myhost/mydb?timezone=%2b0200');
+    assert.equal(config.timezone, '+0200');
+  },
+
+  'accepts url timezone with literal +': function() {
+    var config = new ConnectionConfig('mysql://myhost/mydb?timezone=+0200');
+    assert.equal(config.timezone, '+0200');
   }
 });
 
