@@ -10,6 +10,7 @@ you spot any mistakes.
 * Add `query` method to `PoolNamespace` #1256 #1505 #1506
   - Used as `cluster.of(...).query(...)`
 * Add new error codes up to MySQL 5.7.16
+* Fix edge cases writing certain length coded values
 * Fix typo in `HANDSHAKE_NO_SSL_SUPPORT` error message #1534
 * Support Node.js 7.x
 * Update `bignumber.js` to 2.4.0
