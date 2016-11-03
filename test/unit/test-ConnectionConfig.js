@@ -43,10 +43,22 @@ test('ConnectionConfig#Constructor', {
     assert.equal(config.clientFlags & common.ClientConstants.CLIENT_FOUND_ROWS, 0);
   },
 
+  'accepts multiple client flags': function() {
+    var config = new ConnectionConfig({ flags: '-FOUND_ROWS,+IGNORE_SPACE' });
+    assert.equal(config.clientFlags & common.ClientConstants.CLIENT_FOUND_ROWS, 0);
+    assert.notEqual(config.clientFlags & common.ClientConstants.CLIENT_IGNORE_SPACE, 0);
+  },
+
   'ignores unknown client flags': function() {
     var config1 = new ConnectionConfig({});
     var config2 = new ConnectionConfig({ flags: '+HAPPY_MYSQL' });
     assert.equal(config1.clientFlags, config2.clientFlags);
+  },
+
+  'ignores empty client flags': function() {
+    var config = new ConnectionConfig({ flags: '-FOUND_ROWS,,+IGNORE_SPACE' });
+    assert.equal(config.clientFlags & common.ClientConstants.CLIENT_FOUND_ROWS, 0);
+    assert.notEqual(config.clientFlags & common.ClientConstants.CLIENT_IGNORE_SPACE, 0);
   },
 
   'blacklists unsupported client flags': function() {
