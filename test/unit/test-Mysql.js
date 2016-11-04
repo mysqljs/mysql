@@ -19,3 +19,20 @@ test('Mysql.format', {
     );
   }
 });
+
+test('Mysql.Types', {
+  'exported object of types': function() {
+    assert.equal(typeof Mysql.Types, 'object');
+    assert.ok(Mysql.Types);
+    assert.equal(Mysql.Types, common.Types);
+  },
+
+  'string names to integer values': function() {
+    var types = Object.keys(Mysql.Types);
+    assert.ok(types.length > 0);
+    types.forEach(function (type) {
+      assert.ok(/^[A-Z_]+/.test(type));
+      assert.equal(typeof Mysql.Types[type], 'number');
+    });
+  }
+});
