@@ -468,7 +468,11 @@ poolCluster.on('remove', function (nodeId) {
   console.log('REMOVED NODE : ' + nodeId); // nodeId = SLAVE1
 });
 
+// A pattern can be passed with *  as wildcard at end of string
 poolCluster.getConnection('SLAVE*', 'ORDER', function (err, connection) {});
+
+// The pattern can also be a regular expression
+poolCluster.getConnection(/^SLAVE[12]$/, function (err, connection) {});
 
 // of namespace : of(pattern, selector)
 poolCluster.of('*').getConnection(function (err, connection) {});

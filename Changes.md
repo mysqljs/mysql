@@ -6,6 +6,7 @@ you spot any mistakes.
 
 ## HEAD
 
+* Accept regular expression as pool cluster pattern #1570 #1572
 * Add new error codes up to MySQL 5.7.17
 * Fix memory leak when using long-running domains #1619 #1620
 * Update `bignumber.js` to 3.1.2
