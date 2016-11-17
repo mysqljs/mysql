@@ -587,7 +587,7 @@ connection.query({
 ```
 
 Note that a combination of the second and third forms can be used where the
-placeholder values are passes as an argument and not in the options object.
+placeholder values are passed as an argument and not in the options object.
 The `values` argument will override the `values` in the option object.
 
 ```js
