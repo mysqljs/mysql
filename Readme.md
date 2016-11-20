@@ -176,6 +176,13 @@ appropriate. Any type of connection error (handshake or network) is considered
 a fatal error, see the [Error Handling](#error-handling) section for more
 information.
 
+**Be careful:**
+The callback is still passed more than two arguments. If not taken into
+account, this could cause confusing results if you intend to use a
+callback given to you by another module.
+Queries are explained in more detail in [Performing queries](#performing-queries).
+
+
 ## Connection options
 
 When establishing a connection, you can set the following options:
