@@ -15,7 +15,7 @@ environment:
     - nodejs_version: "4.6"
     - nodejs_version: "5.12"
     - nodejs_version: "6.9"
-    - nodejs_version: "7.0"
+    - nodejs_version: "7.2"
 
 services:
   - mysql
