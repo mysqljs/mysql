@@ -389,12 +389,27 @@ constructor. In addition to those options pools accept a few extras:
 * `queueLimit`: The maximum number of connection requests the pool will queue
   before returning an error from `getConnection`. If set to `0`, there is no
   limit to the number of queued connection requests. (Default: `0`)
+* `queueWaitTimeout`: The maximum number of milliseconds that the pool will wait
+  for a connection when there are no available spare connections. If set to `0`,
+  there is no limit. (Default: `0`)
+* `pingCheckInterval`: The number of milliseconds to indicate how often to check
+  the validity of the connection. If set to `0`, checks whether or not the connection
+  to the server is working every time. Setting this value in high-traffic can
+  improve performance. (Default: `0`)
+* `startConnections`: The initial number of connections that are created when the
+  pool is started. (Default: `0`)
+* `minSpareConnections`: The minimum number of spare connections that should be
+  kept in the pool at all times. If set to `0`, it doen't work. (Default: `0`)
+* `maxSpareConnections`: The maximum number of spare connections that should be
+  kept in the pool at all times. If set to `0`, it doen't work. (Default: `0`)
+* `spareCheckInterval`: The number of milliseconds to indicate how often to check
+  the status of spare connections. If set to `0`, it doen't work. (Default: `0`)
 
 ## Pool events
 
 ### connection
 
-The pool will emit a `connection` event when a new connection is made within the pool. 
+The pool will emit a `connection` event when a new connection is made within the pool.
 If you need to set session variables on the connection before it gets used, you can
 listen to the `connection` event.
 
@@ -414,6 +429,11 @@ pool.on('enqueue', function () {
   console.log('Waiting for available connection slot');
 });
 ```
+
+### prepared
+
+The pool will emit an `prepared` event when all new connections are created in.
+It's meaningful when `startConnections` is set.
 
 ## Closing all the connections in a pool
 
@@ -463,7 +483,7 @@ poolCluster.getConnection('MASTER', function (err, connection) {});
 // Target Group : SLAVE1-2, Selector : order
 // If can't connect to SLAVE1, return SLAVE2. (remove SLAVE1 in the cluster)
 poolCluster.on('remove', function (nodeId) {
-  console.log('REMOVED NODE : ' + nodeId); // nodeId = SLAVE1 
+  console.log('REMOVED NODE : ' + nodeId); // nodeId = SLAVE1
 });
 
 poolCluster.getConnection('SLAVE*', 'ORDER', function (err, connection) {});
@@ -485,7 +505,7 @@ poolCluster.end(function (err) {
 ### PoolCluster options
 
 * `canRetry`: If `true`, `PoolCluster` will attempt to reconnect when connection fails. (Default: `true`)
-* `removeNodeErrorCount`: If connection fails, node's `errorCount` increases. 
+* `removeNodeErrorCount`: If connection fails, node's `errorCount` increases.
   When `errorCount` is greater than `removeNodeErrorCount`, remove a node in the `PoolCluster`. (Default: `5`)
 * `restoreNodeTimeout`: If connection fails, specifies the number of milliseconds
   before another connection attempt will be made. If set to `0`, then node will be
