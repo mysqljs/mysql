@@ -7,6 +7,7 @@ you spot any mistakes.
 ## HEAD
 
 * Add new error codes up to MySQL 5.7.17
+* Fix memory leak when using long-running domains #1619 #1620
 * Update `bignumber.js` to 3.1.2
 
 ## v2.12.0 (2016-11-02)
