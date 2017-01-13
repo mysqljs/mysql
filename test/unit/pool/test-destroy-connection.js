@@ -14,7 +14,7 @@ server.listen(common.fakeServerPort, function (err) {
     assert.strictEqual(connection, pool._allConnections[0]);
     connection.destroy();
 
-    assert.ok(pool._allConnections.length == 0);
+    assert.strictEqual(pool._allConnections.length, 0);
     assert.ok(!connection._pool);
 
     assert.doesNotThrow(function () { connection.release(); });

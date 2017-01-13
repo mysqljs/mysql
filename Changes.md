@@ -4,6 +4,21 @@ This file is a manually maintained list of changes for each release. Feel free
 to add your changes here when sending pull requests. Also send corrections if
 you spot any mistakes.
 
+## v2.12.0 (2016-11-02)
+
+* Accept array of type names to `dateStrings` option #605 #1481
+* Add `query` method to `PoolNamespace` #1256 #1505 #1506
+  - Used as `cluster.of(...).query(...)`
+* Add new error codes up to MySQL 5.7.16
+* Fix edge cases writing certain length coded values
+* Fix typo in `HANDSHAKE_NO_SSL_SUPPORT` error message #1534
+* Support Node.js 7.x
+* Update `bignumber.js` to 2.4.0
+* Update `sqlstring` to 2.2.0
+  - Accept numbers and other value types in `escapeId`
+  - Escape invalid `Date` objects as `NULL`
+  - Run `buffer.toString()` through escaping
+
 ## v2.11.1 (2016-06-07)
 
 * Fix writing truncated packets starting with large string/buffer #1438
@@ -445,21 +460,21 @@ or open an issue to improve this document.
 
 These releases were done before maintaining this file:
 
-* [v0.9.0](https://github.com/felixge/node-mysql/compare/v0.8.0...v0.9.0)
+* [v0.9.0](https://github.com/mysqljs/mysql/compare/v0.8.0...v0.9.0)
   (2011-01-04)
-* [v0.8.0](https://github.com/felixge/node-mysql/compare/v0.7.0...v0.8.0)
+* [v0.8.0](https://github.com/mysqljs/mysql/compare/v0.7.0...v0.8.0)
   (2010-10-30)
-* [v0.7.0](https://github.com/felixge/node-mysql/compare/v0.6.0...v0.7.0)
+* [v0.7.0](https://github.com/mysqljs/mysql/compare/v0.6.0...v0.7.0)
   (2010-10-14)
-* [v0.6.0](https://github.com/felixge/node-mysql/compare/v0.5.0...v0.6.0)
+* [v0.6.0](https://github.com/mysqljs/mysql/compare/v0.5.0...v0.6.0)
   (2010-09-28)
-* [v0.5.0](https://github.com/felixge/node-mysql/compare/v0.4.0...v0.5.0)
+* [v0.5.0](https://github.com/mysqljs/mysql/compare/v0.4.0...v0.5.0)
   (2010-09-17)
-* [v0.4.0](https://github.com/felixge/node-mysql/compare/v0.3.0...v0.4.0)
+* [v0.4.0](https://github.com/mysqljs/mysql/compare/v0.3.0...v0.4.0)
   (2010-09-02)
-* [v0.3.0](https://github.com/felixge/node-mysql/compare/v0.2.0...v0.3.0)
+* [v0.3.0](https://github.com/mysqljs/mysql/compare/v0.2.0...v0.3.0)
   (2010-08-25)
-* [v0.2.0](https://github.com/felixge/node-mysql/compare/v0.1.0...v0.2.0)
+* [v0.2.0](https://github.com/mysqljs/mysql/compare/v0.1.0...v0.2.0)
   (2010-08-22)
-* [v0.1.0](https://github.com/felixge/node-mysql/commits/v0.1.0)
+* [v0.1.0](https://github.com/mysqljs/mysql/commits/v0.1.0)
   (2010-08-22)

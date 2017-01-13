@@ -20,11 +20,11 @@ test('SqlString.escapeId', {
   },
 
   'arrays are turned into lists': function() {
-    assert.equal(SqlString.escapeId(['a', 'b', 't.c']), "`a`, `b`, `t`.`c`");
+    assert.equal(SqlString.escapeId(['a', 'b', 't.c']), '`a`, `b`, `t`.`c`');
   },
 
   'nested arrays are flattened': function() {
-    assert.equal(SqlString.escapeId(['a', ['b', ['t.c']]]), "`a`, `b`, `t`.`c`");
+    assert.equal(SqlString.escapeId(['a', ['b', ['t.c']]]), '`a`, `b`, `t`.`c`');
   }
 });
 

@@ -47,6 +47,8 @@ common.createConnection = function(config) {
   return Mysql.createConnection(config);
 };
 
+common.createQuery = Mysql.createQuery;
+
 common.createTestDatabase = function createTestDatabase(connection, callback) {
   var database = common.testDatabase;
 

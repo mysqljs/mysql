@@ -9,7 +9,7 @@ server.listen(common.fakeServerPort, function (err) {
   assert.ifError(err);
 
   assert.equal(pool.escape('Super'), "'Super'");
-  assert.equal(pool.escape({ a: 123 }), "`a` = 123");
+  assert.equal(pool.escape({ a: 123 }), '`a` = 123');
 
   assert.equal(pool2.escape('Super'), "'Super'");
   assert.equal(pool2.escape({ a: 123 }), "'[object Object]'");

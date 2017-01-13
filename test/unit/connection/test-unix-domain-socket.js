@@ -36,6 +36,6 @@ server.on('connection', function(connection) {
 });
 
 process.on('exit', function() {
-    assert.equal(didConnect, true);
-    assert.equal(hadConnection, true);
+  assert.equal(didConnect, true);
+  assert.equal(hadConnection, true);
 });

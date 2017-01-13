@@ -48,6 +48,7 @@
 - [Type casting](#type-casting)
 - [Connection Flags](#connection-flags)
 - [Debugging and reporting problems](#debugging-and-reporting-problems)
+- [Contributing](#contributing)
 - [Running tests](#running-tests)
 - [Todo](#todo)
 
@@ -63,10 +64,10 @@ Sometimes I may also ask you to install the latest version from Github to check
 if a bugfix is working. In this case, please do:
 
 ```sh
-$ npm install felixge/node-mysql
+$ npm install mysqljs/mysql
 ```
 
-[v0.9 branch]: https://github.com/felixge/node-mysql/tree/v0.9
+[v0.9 branch]: https://github.com/mysqljs/mysql/tree/v0.9
 
 ## Introduction
 
@@ -106,7 +107,7 @@ From this example, you can learn the following:
 Thanks goes to the people who have contributed code to this module, see the
 [GitHub Contributors page][].
 
-[GitHub Contributors page]: https://github.com/felixge/node-mysql/graphs/contributors
+[GitHub Contributors page]: https://github.com/mysqljs/mysql/graphs/contributors
 
 Additionally I'd like to thank the following people:
 
@@ -127,11 +128,6 @@ spend more time on it (ordered by time of contribution):
 * [pinkbike.com](http://pinkbike.com/)
 * [Holiday Extras](http://www.holidayextras.co.uk/) (they are [hiring](http://join.holidayextras.co.uk/))
 * [Newscope](http://newscope.com/) (they are [hiring](http://www.newscope.com/stellenangebote))
-
-If you are interested in sponsoring a day or more of my time, please
-[get in touch][].
-
-[get in touch]: http://felixge.de/#consulting
 
 ## Community
 
@@ -200,7 +196,7 @@ When establishing a connection, you can set the following options:
 * `connectTimeout`: The milliseconds before a timeout occurs during the initial connection
   to the MySQL server. (Default: `10000`)
 * `stringifyObjects`: Stringify objects instead of converting to values. See
-issue [#501](https://github.com/felixge/node-mysql/issues/501). (Default: `'false'`)
+issue [#501](https://github.com/mysqljs/mysql/issues/501). (Default: `false`)
 * `insecureAuth`: Allow connecting to MySQL instances that ask for the old
   (insecure) authentication method. (Default: `false`)
 * `typeCast`: Determines if column values should be converted to native
@@ -215,8 +211,10 @@ issue [#501](https://github.com/felixge/node-mysql/issues/501). (Default: `'fals
   (which happens when they exceed the [-2^53, +2^53] range), otherwise they will be returned as
   Number objects. This option is ignored if `supportBigNumbers` is disabled.
 * `dateStrings`: Force date types (TIMESTAMP, DATETIME, DATE) to be returned as strings rather then
-   inflated into JavaScript Date objects. (Default: `false`)
-* `debug`: Prints protocol details to stdout. (Default: `false`)
+   inflated into JavaScript Date objects. Can be `true`/`false` or an array of type names to keep as
+   strings. (Default: `false`)
+* `debug`: Prints protocol details to stdout. Can be `true`/`false` or an array of packet type names
+   that should be printed. (Default: `false`)
 * `trace`: Generates stack traces on `Error` to include call site of library
    entrance ("long stack traces"). Slight performance penalty for most calls.
    (Default: `true`)
@@ -303,6 +301,10 @@ connection.destroy();
 Unlike `end()` the `destroy()` method does not take a callback argument.
 
 ## Pooling connections
+
+Rather than creating and managing connections one-by-one, this module also
+provides built-in connection pooling using `mysql.createPool(config)`.
+[Read more about connection pooling](https://en.wikipedia.org/wiki/Connection_pool).
 
 Use pool directly.
 ```js
@@ -472,6 +474,7 @@ poolCluster.of('*').getConnection(function (err, connection) {});
 var pool = poolCluster.of('SLAVE*', 'RANDOM');
 pool.getConnection(function (err, connection) {});
 pool.getConnection(function (err, connection) {});
+pool.query(function (err, result) {});
 
 // close all connections
 poolCluster.end(function (err) {
@@ -542,7 +545,7 @@ space for a new connection to be created on the next getConnection call.
 ## Performing queries
 
 The most basic way to perform a query is to call the `.query()` method on an object
-(like a `Connection` or `Pool` instance).
+(like a `Connection`, `Pool`, or `PoolNamespace` instance).
 
 The simplest form of .`query()` is `.query(sqlString, callback)`, where a SQL string
 is the first argument and the second is a callback:
@@ -699,9 +702,16 @@ It also supports adding qualified identifiers. It will escape both parts.
 ```js
 var sorter = 'date';
 var sql    = 'SELECT * FROM posts ORDER BY ' + connection.escapeId('posts.' + sorter);
-connection.query(sql, function(err, results) {
-  // ...
-});
+// -> SELECT * FROM posts ORDER BY `posts`.`date`
+```
+
+If you do not want to treat `.` as qualified identifiers, you can set the second
+argument to `true` in order to keep the string as a literal identifier:
+
+```js
+var sorter = 'date.2';
+var sql    = 'SELECT * FROM posts ORDER BY ' + connection.escapeId(sorter, true);
+// -> SELECT * FROM posts ORDER BY `date.2`
 ```
 
 Alternatively, you can use `??` characters as placeholders for identifiers you would
@@ -1221,7 +1231,7 @@ connection.query({
   }
 });
 ```
-__WARNING: YOU MUST INVOKE the parser using one of these three field functions in your custom typeCast callback. They can only be called once. (see [#539](https://github.com/felixge/node-mysql/issues/539) for discussion)__
+__WARNING: YOU MUST INVOKE the parser using one of these three field functions in your custom typeCast callback. They can only be called once. (see [#539](https://github.com/mysqljs/mysql/issues/539) for discussion)__
 
 ```
 field.string()
@@ -1234,7 +1244,7 @@ parser.parseLengthCodedString()
 parser.parseLengthCodedBuffer()
 parser.parseGeometryValue()
 ```
-__You can find which field function you need to use by looking at: [RowDataPacket.prototype._typeCast](https://github.com/felixge/node-mysql/blob/master/lib/protocol/packets/RowDataPacket.js#L41)__
+__You can find which field function you need to use by looking at: [RowDataPacket.prototype._typeCast](https://github.com/mysqljs/mysql/blob/master/lib/protocol/packets/RowDataPacket.js#L41)__
 
 
 ## Connection Flags
@@ -1319,6 +1329,31 @@ will have:
 * As much debugging output and information about your environment (mysql
   version, node version, os, etc.) as you can gather.
 
+## Contributing
+
+This project welcomes contributions from the community. Contributions are
+accepted using GitHub pull requests. If you're not familiar with making
+GitHub pull requests, please refer to the
+[GitHub documentation "Creating a pull request"](https://help.github.com/articles/creating-a-pull-request/).
+
+For a good pull request, we ask you provide the following:
+
+1. Try to include a clear description of your pull request in the description.
+   It should include the basic "what" and "why"s for the request.
+2. The tests should pass as best as you can. See the [Running tests](#running-tests)
+   section on hwo to run the different tests. GitHub will automatically run
+   the tests as well, to act as a safety net.
+3. The pull request should include tests for the change. A new feature should
+   have tests for the new feature and bug fixes should include a test that fails
+   without the corresponding code change and passes after they are applied.
+   The command `npm run test-cov` will generate a `coverage/` folder that
+   contains HTML pages of the code coverage, to better understand if everything
+   you're adding is being tested.
+4. If the pull request is a new feature, please be sure to include all
+   appropriate documentation additions in the `Readme.md` file as well.
+5. To help ensure that your code is similar in style to the existing code,
+   run the command `npm run lint` and fix any displayed issues.
+
 ## Running tests
 
 The test suite is split into two parts: unit tests and integration tests.
@@ -1355,11 +1390,11 @@ $ MYSQL_HOST=localhost MYSQL_PORT=3306 MYSQL_DATABASE=node_mysql_test MYSQL_USER
 [npm-url]: https://npmjs.org/package/mysql
 [node-version-image]: https://img.shields.io/node/v/mysql.svg
 [node-version-url]: https://nodejs.org/en/download/
-[travis-image]: https://img.shields.io/travis/felixge/node-mysql/master.svg?label=linux
-[travis-url]: https://travis-ci.org/felixge/node-mysql
+[travis-image]: https://img.shields.io/travis/mysqljs/mysql/master.svg?label=linux
+[travis-url]: https://travis-ci.org/mysqljs/mysql
 [appveyor-image]: https://img.shields.io/appveyor/ci/dougwilson/node-mysql/master.svg?label=windows
 [appveyor-url]: https://ci.appveyor.com/project/dougwilson/node-mysql
-[coveralls-image]: https://img.shields.io/coveralls/felixge/node-mysql/master.svg
-[coveralls-url]: https://coveralls.io/r/felixge/node-mysql?branch=master
+[coveralls-image]: https://img.shields.io/coveralls/mysqljs/mysql/master.svg
+[coveralls-url]: https://coveralls.io/r/mysqljs/mysql?branch=master
 [downloads-image]: https://img.shields.io/npm/dm/mysql.svg
 [downloads-url]: https://npmjs.org/package/mysql

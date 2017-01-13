@@ -73,7 +73,7 @@ function testNextDate(connection) {
   } else if (offset === 'local') {
     timezone = offset;
   } else {
-    timezone = (offset < 0 ? "-" : "+") + pad2(Math.abs(offset)) + ":00";
+    timezone = (offset < 0 ? '-' : '+') + pad2(Math.abs(offset)) + ':00';
   }
 
   var dt = new Date(day);
@@ -134,5 +134,5 @@ function testNextDate(connection) {
 }
 
 function pad2(v) {
-  return (v < 10 ? "0" : "") + v;
+  return (v < 10 ? '0' : '') + v;
 }
