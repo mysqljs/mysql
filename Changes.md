@@ -6,6 +6,7 @@ you spot any mistakes.
 
 ## HEAD
 
+* Add new error codes up to MySQL 5.7.17
 * Update `bignumber.js` to 3.1.2
 
 ## v2.12.0 (2016-11-02)
