@@ -8,19 +8,19 @@ node_js:
   - '2.5'
   - '3.3'
   - '4.2.0' # Test timers regression
-  - '4.6'
+  - '4.7'
   - '5.12'
   - '6.9'
   - '7.2'
 
 matrix:
   include:
-    - node_js: '4.6'
+    - node_js: '4.7'
       env: MYSQL_TYPE=mariadb MYSQL_HOST=localhost MYSQL_DATABASE=node_mysql MYSQL_USER=root MYSQL_PASSWORD=
       addons: {mariadb: '10.1'}
   allow_failures:
     # Allow MariaDB to fail while https://github.com/travis-ci/travis-ci/issues/5837 is being resolved
-    - node_js: '4.6'
+    - node_js: '4.7'
       env: MYSQL_TYPE=mariadb MYSQL_HOST=localhost MYSQL_DATABASE=node_mysql MYSQL_USER=root MYSQL_PASSWORD=
       addons: {mariadb: '10.1'}
 
@@ -34,7 +34,7 @@ before_install:
   # Setup Node.js version-specific dependencies
   - "test $TRAVIS_NODE_VERSION != '0.6' || npm rm --save-dev istanbul"
   - "test $TRAVIS_NODE_VERSION != '0.8' || npm rm --save-dev istanbul"
-  - "test $TRAVIS_NODE_VERSION  = '4.6' || npm rm --save-dev eslint"
+  - "test $TRAVIS_NODE_VERSION  = '4.7' || npm rm --save-dev eslint"
 
   # Update Node.js modules
   - "test ! -d node_modules || npm prune"
