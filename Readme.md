@@ -87,10 +87,9 @@ var connection = mysql.createConnection({
 
 connection.connect();
 
-connection.query('SELECT 1 + 1 AS solution', function(err, rows, fields) {
-  if (err) throw err;
-
-  console.log('The solution is: ', rows[0].solution);
+connection.query('SELECT 1 + 1 AS solution', function (error, results, fields) {
+  if (error) throw error;
+  console.log('The solution is: ', results[0].solution);
 });
 
 connection.end();
@@ -166,8 +165,8 @@ However, a connection can also be implicitly established by invoking a query:
 var mysql      = require('mysql');
 var connection = mysql.createConnection(...);
 
-connection.query('SELECT 1', function(err, rows) {
-  // connected! (unless `err` is set)
+connection.query('SELECT 1', function (error, results, fields) {
+  // connected! (unless `error` is set)
 });
 ```
 
@@ -317,9 +316,8 @@ var pool  = mysql.createPool({
   database        : 'my_db'
 });
 
-pool.query('SELECT 1 + 1 AS solution', function(err, rows, fields) {
-  if (err) throw err;
-
+pool.query('SELECT 1 + 1 AS solution', function (error, results, fields) {
+  if (error) throw error;
   console.log('The solution is: ', rows[0].solution);
 });
 ```
@@ -350,7 +348,7 @@ var pool  = mysql.createPool(...);
 
 pool.getConnection(function(err, connection) {
   // Use the connection
-  connection.query( 'SELECT something FROM sometable', function(err, rows) {
+  connection.query('SELECT something FROM sometable', function (error, results, fields) {
     // And done with the connection.
     connection.release();
 
@@ -474,7 +472,7 @@ poolCluster.of('*').getConnection(function (err, connection) {});
 var pool = poolCluster.of('SLAVE*', 'RANDOM');
 pool.getConnection(function (err, connection) {});
 pool.getConnection(function (err, connection) {});
-pool.query(function (err, result) {});
+pool.query(function (error, results, fields) {});
 
 // close all connections
 poolCluster.end(function (err) {
@@ -613,7 +611,7 @@ provided data before using it inside a SQL query. You can do so using the
 ```js
 var userId = 'some user provided value';
 var sql    = 'SELECT * FROM users WHERE id = ' + connection.escape(userId);
-connection.query(sql, function(err, results) {
+connection.query(sql, function (error, results, fields) {
   // ...
 });
 ```
@@ -622,7 +620,7 @@ Alternatively, you can use `?` characters as placeholders for values you would
 like to have escaped like this:
 
 ```js
-connection.query('SELECT * FROM users WHERE id = ?', [userId], function(err, results) {
+connection.query('SELECT * FROM users WHERE id = ?', [userId], function (error, results, fields) {
   // ...
 });
 ```
@@ -632,7 +630,7 @@ in the following query `foo` equals `a`, `bar` equals `b`, `baz` equals `c`, and
 `id` will be `userId`:
 
 ```js
-connection.query('UPDATE users SET foo = ?, bar = ?, baz = ? WHERE id = ?', ['a', 'b', 'c', userId], function(err, results) {
+connection.query('UPDATE users SET foo = ?, bar = ?, baz = ? WHERE id = ?', ['a', 'b', 'c', userId], function (error, results, fields) {
   // ...
 });
 ```
@@ -667,7 +665,8 @@ to do neat things like this:
 
 ```js
 var post  = {id: 1, title: 'Hello MySQL'};
-var query = connection.query('INSERT INTO posts SET ?', post, function(err, result) {
+var query = connection.query('INSERT INTO posts SET ?', post, function (error, results, fields) {
+  if (error) throw error;
   // Neat!
 });
 console.log(query.sql); // INSERT INTO posts SET `id` = 1, `title` = 'Hello MySQL'
@@ -692,7 +691,7 @@ provided by a user, you should escape it with `mysql.escapeId(identifier)`,
 ```js
 var sorter = 'date';
 var sql    = 'SELECT * FROM posts ORDER BY ' + connection.escapeId(sorter);
-connection.query(sql, function(err, results) {
+connection.query(sql, function (error, results, fields) {
   // ...
 });
 ```
@@ -720,7 +719,7 @@ like to have escaped like this:
 ```js
 var userId = 1;
 var columns = ['username', 'email'];
-var query = connection.query('SELECT ?? FROM ?? WHERE id = ?', [columns, 'users', userId], function(err, results) {
+var query = connection.query('SELECT ?? FROM ?? WHERE id = ?', [columns, 'users', userId], function (error, results, fields) {
   // ...
 });
 
@@ -768,9 +767,8 @@ If you are inserting a row into a table with an auto increment primary key, you
 can retrieve the insert id like this:
 
 ```js
-connection.query('INSERT INTO posts SET ?', {title: 'test'}, function(err, result) {
-  if (err) throw err;
-
+connection.query('INSERT INTO posts SET ?', {title: 'test'}, function (error, results, fields) {
+  if (error) throw error;
   console.log(result.insertId);
 });
 ```
@@ -787,9 +785,8 @@ you will get values rounded to hundreds or thousands due to the precision limit.
 You can get the number of affected rows from an insert, update or delete statement.
 
 ```js
-connection.query('DELETE FROM posts WHERE title = "wrong"', function (err, result) {
-  if (err) throw err;
-
+connection.query('DELETE FROM posts WHERE title = "wrong"', function (error, results, fields) {
+  if (error) throw error;
   console.log('deleted ' + result.affectedRows + ' rows');
 })
 ```
@@ -802,9 +799,8 @@ You can get the number of changed rows from an update statement.
 whose values were not changed.
 
 ```js
-connection.query('UPDATE posts SET ...', function (err, result) {
-  if (err) throw err;
-
+connection.query('UPDATE posts SET ...', function (error, results, fields) {
+  if (error) throw error;
   console.log('changed ' + result.changedRows + ' rows');
 })
 ```
@@ -908,9 +904,8 @@ var connection = mysql.createConnection({multipleStatements: true});
 Once enabled, you can execute multiple statement queries like any other query:
 
 ```js
-connection.query('SELECT 1; SELECT 2', function(err, results) {
-  if (err) throw err;
-
+connection.query('SELECT 1; SELECT 2', function (error, results, fields) {
+  if (error) throw error;
   // `results` is an array with one element for every statement in the query:
   console.log(results[0]); // [{1: 1}]
   console.log(results[1]); // [{2: 2}]
@@ -959,7 +954,7 @@ the table name like this:
 
 ```js
 var options = {sql: '...', nestTables: true};
-connection.query(options, function(err, results) {
+connection.query(options, function (error, results, fields) {
   /* results will be an array like this now:
   [{
     table1: {
@@ -979,7 +974,7 @@ Or use a string separator to have your results merged.
 
 ```js
 var options = {sql: '...', nestTables: '_'};
-connection.query(options, function(err, results) {
+connection.query(options, function (error, results, fields) {
   /* results will be an array like this now:
   [{
     table1_fieldA: '...',
@@ -998,19 +993,19 @@ Simple transaction support is available at the connection level:
 ```js
 connection.beginTransaction(function(err) {
   if (err) { throw err; }
-  connection.query('INSERT INTO posts SET title=?', title, function(err, result) {
-    if (err) {
+  connection.query('INSERT INTO posts SET title=?', title, function (error, results, fields) {
+    if (error) {
       return connection.rollback(function() {
-        throw err;
+        throw error;
       });
     }
 
     var log = 'Post ' + result.insertId + ' added';
 
-    connection.query('INSERT INTO log SET data=?', log, function(err, result) {
-      if (err) {
+    connection.query('INSERT INTO log SET data=?', log, function (error, results, fields) {
+      if (error) {
         return connection.rollback(function() {
-          throw err;
+          throw error;
         });
       }  
       connection.commit(function(err) {
@@ -1053,13 +1048,13 @@ on will be destroyed and no further operations can be performed.
 
 ```js
 // Kill query after 60s
-connection.query({sql: 'SELECT COUNT(*) AS count FROM big_table', timeout: 60000}, function (err, rows) {
-  if (err && err.code === 'PROTOCOL_SEQUENCE_TIMEOUT') {
+connection.query({sql: 'SELECT COUNT(*) AS count FROM big_table', timeout: 60000}, function (error, results, fields) {
+  if (error && error.code === 'PROTOCOL_SEQUENCE_TIMEOUT') {
     throw new Error('too long to count table rows!');
   }
 
-  if (err) {
-    throw err;
+  if (error) {
+    throw error;
   }
 
   console.log(rows[0].count + ' rows');
@@ -1098,9 +1093,9 @@ connection.connect(function(err) {
   console.log(err.fatal); // true
 });
 
-connection.query('SELECT 1', function(err) {
-  console.log(err.code); // 'ECONNREFUSED'
-  console.log(err.fatal); // true
+connection.query('SELECT 1', function (error, results, fields) {
+  console.log(error.code); // 'ECONNREFUSED'
+  console.log(error.fatal); // true
 });
 ```
 
@@ -1109,13 +1104,13 @@ the example below, only the first callback receives an error, the second query
 works as expected:
 
 ```js
-connection.query('USE name_of_db_that_does_not_exist', function(err, rows) {
-  console.log(err.code); // 'ER_BAD_DB_ERROR'
+connection.query('USE name_of_db_that_does_not_exist', function (error, results, fields) {
+  console.log(error.code); // 'ER_BAD_DB_ERROR'
 });
 
-connection.query('SELECT 1', function(err, rows) {
-  console.log(err); // null
-  console.log(rows.length); // 1
+connection.query('SELECT 1', function (error, results, fields) {
+  console.log(error); // null
+  console.log(results.length); // 1
 });
 ```
 
@@ -1210,8 +1205,8 @@ Or on the query level:
 
 ```js
 var options = {sql: '...', typeCast: false};
-var query = connection.query(options, function(err, results) {
-
+var query = connection.query(options, function (error, results, fields) {
+  // ...
 });
 ```
 
