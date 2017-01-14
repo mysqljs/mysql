@@ -166,7 +166,8 @@ var mysql      = require('mysql');
 var connection = mysql.createConnection(...);
 
 connection.query('SELECT 1', function (error, results, fields) {
-  // connected! (unless `error` is set)
+  if (error) throw error;
+  // connected!
 });
 ```
 
@@ -351,6 +352,9 @@ pool.getConnection(function(err, connection) {
   connection.query('SELECT something FROM sometable', function (error, results, fields) {
     // And done with the connection.
     connection.release();
+
+    // Handle error after the release.
+    if (error) throw error;
 
     // Don't use the connection here, it has been returned to the pool.
   });
@@ -612,6 +616,7 @@ provided data before using it inside a SQL query. You can do so using the
 var userId = 'some user provided value';
 var sql    = 'SELECT * FROM users WHERE id = ' + connection.escape(userId);
 connection.query(sql, function (error, results, fields) {
+  if (error) throw error;
   // ...
 });
 ```
@@ -621,6 +626,7 @@ like to have escaped like this:
 
 ```js
 connection.query('SELECT * FROM users WHERE id = ?', [userId], function (error, results, fields) {
+  if (error) throw error;
   // ...
 });
 ```
@@ -631,6 +637,7 @@ in the following query `foo` equals `a`, `bar` equals `b`, `baz` equals `c`, and
 
 ```js
 connection.query('UPDATE users SET foo = ?, bar = ?, baz = ? WHERE id = ?', ['a', 'b', 'c', userId], function (error, results, fields) {
+  if (error) throw error;
   // ...
 });
 ```
@@ -692,6 +699,7 @@ provided by a user, you should escape it with `mysql.escapeId(identifier)`,
 var sorter = 'date';
 var sql    = 'SELECT * FROM posts ORDER BY ' + connection.escapeId(sorter);
 connection.query(sql, function (error, results, fields) {
+  if (error) throw error;
   // ...
 });
 ```
@@ -720,6 +728,7 @@ like to have escaped like this:
 var userId = 1;
 var columns = ['username', 'email'];
 var query = connection.query('SELECT ?? FROM ?? WHERE id = ?', [columns, 'users', userId], function (error, results, fields) {
+  if (error) throw error;
   // ...
 });
 
@@ -955,6 +964,7 @@ the table name like this:
 ```js
 var options = {sql: '...', nestTables: true};
 connection.query(options, function (error, results, fields) {
+  if (error) throw error;
   /* results will be an array like this now:
   [{
     table1: {
@@ -975,6 +985,7 @@ Or use a string separator to have your results merged.
 ```js
 var options = {sql: '...', nestTables: '_'};
 connection.query(options, function (error, results, fields) {
+  if (error) throw error;
   /* results will be an array like this now:
   [{
     table1_fieldA: '...',
@@ -1206,6 +1217,7 @@ Or on the query level:
 ```js
 var options = {sql: '...', typeCast: false};
 var query = connection.query(options, function (error, results, fields) {
+  if (error) throw error;
   // ...
 });
 ```
