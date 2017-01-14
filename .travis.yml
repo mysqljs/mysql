@@ -18,11 +18,6 @@ matrix:
     - node_js: '4.7'
       env: MYSQL_TYPE=mariadb MYSQL_HOST=localhost MYSQL_DATABASE=node_mysql MYSQL_USER=root MYSQL_PASSWORD=
       addons: {mariadb: '10.1'}
-  allow_failures:
-    # Allow MariaDB to fail while https://github.com/travis-ci/travis-ci/issues/5837 is being resolved
-    - node_js: '4.7'
-      env: MYSQL_TYPE=mariadb MYSQL_HOST=localhost MYSQL_DATABASE=node_mysql MYSQL_USER=root MYSQL_PASSWORD=
-      addons: {mariadb: '10.1'}
 
 sudo: false
 
