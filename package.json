@@ -12,7 +12,7 @@
   ],
   "repository": "mysqljs/mysql",
   "dependencies": {
-    "bignumber.js": "2.4.0",
+    "bignumber.js": "3.1.2",
     "readable-stream": "1.1.14",
     "sqlstring": "2.2.0"
   },
