@@ -406,6 +406,26 @@ pool.on('connection', function (connection) {
 });
 ```
 
+### acquire
+
+The pool will emit an `acquire` event when a connection is acquired within the pool.
+
+```js
+pool.on('acquire', function (connection) {
+  console.log('Connection acquired');
+});
+```
+
+### release
+
+The pool will emit a `release` event when a connection is released.
+
+```js
+pool.on('release', function (connection) {
+  console.log('Connection released');
+});
+```
+
 ### enqueue
 
 The pool will emit an `enqueue` event when a callback has been queued to wait for
