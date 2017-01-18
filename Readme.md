@@ -394,6 +394,18 @@ constructor. In addition to those options pools accept a few extras:
 
 ## Pool events
 
+### acquire
+
+The pool will emit an `acquire` event when a connection is acquired from the pool.
+This is called after all acquiring activity has been performed on the connection,
+right before the connection is handed to the callback of the acquiring code.
+
+```js
+pool.on('acquire', function (connection) {
+  console.log('Connection %d acquired', connection.threadId);
+});
+```
+
 ### connection
 
 The pool will emit a `connection` event when a new connection is made within the pool.
@@ -414,6 +426,18 @@ an available connection.
 ```js
 pool.on('enqueue', function () {
   console.log('Waiting for available connection slot');
+});
+```
+
+### release
+
+The pool will emit a `release` event when a connection is released back to the
+pool. This is called after all release activity has been performed on the connection,
+so the connection will be listed as free at the time of the event.
+
+```js
+pool.on('release', function (connection) {
+  console.log('Connection %d released', connection.threadId);
 });
 ```
 

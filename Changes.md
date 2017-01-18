@@ -8,6 +8,7 @@ you spot any mistakes.
 
 * Accept regular expression as pool cluster pattern #1572
 * Accept wildcard anywhere in pool cluster pattern #1570
+* Add `acquire` and `release` events to `Pool` for tracking #1366 #1449 #1528 #1625
 * Add new error codes up to MySQL 5.7.17
 * Fix edge cases when determing Query result packets #1547
 * Fix memory leak when using long-running domains #1619 #1620
