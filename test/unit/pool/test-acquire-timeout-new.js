@@ -10,7 +10,7 @@ var server  = common.createFakeServer();
 server.listen(common.fakeServerPort, function (err) {
   assert.ifError(err);
 
-  pool.getConnection(function (err, conn) {
+  pool.getConnection(function (err) {
     assert.ok(err, 'got error');
     assert.equal(err.code, 'PROTOCOL_SEQUENCE_TIMEOUT');
     assert.equal(err.fatal, true);
@@ -19,6 +19,6 @@ server.listen(common.fakeServerPort, function (err) {
   });
 });
 
-server.on('connection', function (conn) {
+server.on('connection', function () {
   // timeout handshake
 });

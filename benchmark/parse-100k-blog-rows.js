@@ -11,6 +11,7 @@ var options = {
 };
 
 console.error('Config:', options);
+run();
 
 function createBuffers() {
   var parser = new Parser();
@@ -18,7 +19,6 @@ function createBuffers() {
   process.stderr.write('Creating row buffers ... ');
 
   var number = 1;
-  var id     = 0;
   var start  = Date.now();
 
   var buffers = [
@@ -53,7 +53,7 @@ function createPacketBuffer(parser, packet) {
   return writer.toBuffer(parser);
 }
 
-function createRowDataPacketBuffer(parser, number) {
+function createRowDataPacketBuffer(parser) {
   var writer = new PacketWriter();
 
   writer.writeLengthCodedString(parser._nextPacketNumber);

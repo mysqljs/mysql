@@ -1,6 +1,5 @@
 var assert = require('assert');
 var common = require('../../common');
-var util   = require('util');
 
 common.getTestConnection({typeCast: true}, function (err, connection) {
   assert.ifError(err);

@@ -32,6 +32,7 @@
     "no-trailing-spaces": 2,
     "no-unexpected-multiline": 2,
     "no-unreachable": 2,
+    "no-unused-vars": 2,
     "quotes": [2, "single", { "avoidEscape": true, "allowTemplateLiterals": true }],
     "semi": [2, "always"],
     "use-isnan": 2,

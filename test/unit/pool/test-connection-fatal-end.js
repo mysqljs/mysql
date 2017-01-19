@@ -5,7 +5,7 @@ var pool   = common.createPool({
   port            : common.bogusPort
 });
 
-pool.getConnection(function (err, conn) {
+pool.getConnection(function (err) {
   assert.ok(err);
   assert.ok(err.fatal);
   assert.equal(err.code, 'ECONNREFUSED');

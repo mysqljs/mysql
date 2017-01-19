@@ -7,7 +7,6 @@ var connection = common.createConnection({
 
 var server = common.createFakeServer();
 
-var connectErr;
 server.listen(common.fakeServerPort, function(err) {
   if (err) throw err;
 

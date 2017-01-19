@@ -7,10 +7,9 @@ var pool   = common.createPool({
 });
 var server  = common.createFakeServer();
 
-var fail       = false;
-var seq        = 0;
-var serverConn = null;
-var tid        = 0;
+var fail = false;
+var seq  = 0;
+var tid  = 0;
 
 server.listen(common.fakeServerPort, function (err) {
   assert.ifError(err);

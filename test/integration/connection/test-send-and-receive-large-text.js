@@ -28,7 +28,7 @@ function increaseMaxAllowedPacketIfNeeded(connection) {
     ? minMaxAllowedPacket
     : oldMaxAllowedPacket;
 
-  connection.query('SET GLOBAL max_allowed_packet = ?', [newMaxAllowedPacket], function (err, rows) {
+  connection.query('SET GLOBAL max_allowed_packet = ?', [newMaxAllowedPacket], function (err) {
     assert.ifError(err);
 
     // We need to re-connect for this change to take effect, bah

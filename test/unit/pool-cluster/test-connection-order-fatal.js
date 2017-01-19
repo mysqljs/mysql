@@ -12,8 +12,6 @@ cluster.add('SLAVE2', poolConfig2);
 server.listen(common.fakeServerPort, function(err) {
   assert.ifError(err);
 
-  var conn1;
-  var conn2;
   var pool = cluster.of('SLAVE*', 'ORDER');
 
   var done = after(2, function () {

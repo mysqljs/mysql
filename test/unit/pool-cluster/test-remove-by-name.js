@@ -26,7 +26,7 @@ server.listen(common.fakeServerPort, function (err) {
       connection.release();
       cluster.remove('SLAVE2');
 
-      pool.getConnection(function (err, connection) {
+      pool.getConnection(function (err) {
         assert.ok(err);
         assert.equal(err.code, 'POOL_NOEXIST');
 

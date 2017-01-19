@@ -13,7 +13,6 @@ var d0 = domain.create();
 var d1 = domain.create();
 var d2 = domain.create();
 var d3 = domain.create();
-var d4 = domain.create();
 
 var server = common.createFakeServer();
 

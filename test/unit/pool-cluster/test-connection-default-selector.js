@@ -3,7 +3,6 @@ var common  = require('../../common');
 var cluster = common.createPoolCluster({defaultSelector: 'ORDER'});
 var server  = common.createFakeServer();
 
-var connCount  = 0;
 var poolConfig = common.getTestConfig({port: common.fakeServerPort});
 cluster.add('SLAVE1', poolConfig);
 cluster.add('SLAVE2', poolConfig);

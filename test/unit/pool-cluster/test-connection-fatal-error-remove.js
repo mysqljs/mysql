@@ -13,7 +13,7 @@ server.listen(common.fakeServerPort, function (err) {
 
   var pool = cluster.of('*', 'RR');
 
-  pool.getConnection(function (err, connection) {
+  pool.getConnection(function (err) {
     assert.ok(err, 'got error');
     assert.equal(err.code, 'PROTOCOL_SEQUENCE_TIMEOUT');
     assert.equal(err.fatal, true);

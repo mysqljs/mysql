@@ -17,7 +17,7 @@ var Util         = require('util');
 
 module.exports = FakeServer;
 Util.inherits(FakeServer, EventEmitter);
-function FakeServer(options) {
+function FakeServer() {
   EventEmitter.call(this);
 
   this._server      = null;
