@@ -37,6 +37,7 @@
     "quotes": [2, "single", { "avoidEscape": true, "allowTemplateLiterals": true }],
     "semi": [2, "always"],
     "semi-spacing": 2,
+    "space-infix-ops": 2,
     "use-isnan": 2,
     "valid-jsdoc": 2,
     "valid-typeof": 2

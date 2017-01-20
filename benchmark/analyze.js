@@ -83,12 +83,12 @@ function sdev() {
 function variance() {
   var t = 0, squares = 0, len = numbers.length;
 
-  for (var i=0; i<len; i++) {
+  for (var i = 0; i < len; i++) {
     var obs = numbers[i];
     t += obs;
     squares += Math.pow(obs, 2);
   }
-  return (squares/len) - Math.pow(t/len, 2);
+  return (squares / len) - Math.pow(t / len, 2);
 }
 
 setInterval(report, 1000);
