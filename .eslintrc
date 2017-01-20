@@ -36,6 +36,7 @@
     "no-unused-vars": 2,
     "quotes": [2, "single", { "avoidEscape": true, "allowTemplateLiterals": true }],
     "semi": [2, "always"],
+    "semi-spacing": 2,
     "use-isnan": 2,
     "valid-jsdoc": 2,
     "valid-typeof": 2
