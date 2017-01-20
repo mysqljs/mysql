@@ -85,8 +85,8 @@ FakeConnection.prototype.handshake = function(options) {
 
 FakeConnection.prototype.deny = function(message, errno) {
   this._sendPacket(new Packets.ErrorPacket({
-    message: message,
-    errno: errno
+    message : message,
+    errno   : errno
   }));
 };
 
@@ -97,8 +97,8 @@ FakeConnection.prototype._sendAuthResponse = function(packet, expected) {
     this._sendPacket(new Packets.OkPacket());
   } else {
     this._sendPacket(new Packets.ErrorPacket({
-      message: 'expected ' + expected.toString('hex') + ' got ' + got.toString('hex'),
-      errno: Errors.ER_ACCESS_DENIED_ERROR
+      message : 'expected ' + expected.toString('hex') + ' got ' + got.toString('hex'),
+      errno   : Errors.ER_ACCESS_DENIED_ERROR
     }));
   }
 
@@ -317,14 +317,14 @@ FakeConnection.prototype._parsePacket = function(header) {
       }
 
       this._clientAuthenticationPacket = new Packets.ClientAuthenticationPacket({
-        clientFlags  : this._clientAuthenticationPacket.clientFlags,
-        filler       : this._clientAuthenticationPacket.filler,
-        maxPacketSize: this._clientAuthenticationPacket.maxPacketSize,
-        protocol41   : this._clientAuthenticationPacket.protocol41,
-        charsetNumber: packet.charsetNumber,
-        database     : packet.database,
-        scrambleBuff : packet.scrambleBuff,
-        user         : packet.user
+        clientFlags   : this._clientAuthenticationPacket.clientFlags,
+        filler        : this._clientAuthenticationPacket.filler,
+        maxPacketSize : this._clientAuthenticationPacket.maxPacketSize,
+        protocol41    : this._clientAuthenticationPacket.protocol41,
+        charsetNumber : packet.charsetNumber,
+        database      : packet.database,
+        scrambleBuff  : packet.scrambleBuff,
+        user          : packet.user
       });
       this._sendPacket(new Packets.OkPacket());
       this._parser.resetPacketNumber();

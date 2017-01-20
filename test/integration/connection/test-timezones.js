@@ -101,9 +101,9 @@ function testNextDate(connection) {
   connection.query('INSERT INTO ?? SET ?', [table, {day: day, timezone: timezone, dt: dt, pre_idx: pre_idx}], assert.ifError);
 
   var options = {
-    sql: 'SELECT * FROM ?? WHERE timezone = ? AND day = ? AND pre_idx = ?',
-    values: [table, timezone, day, pre_idx],
-    typeCast: function (field, next) {
+    sql      : 'SELECT * FROM ?? WHERE timezone = ? AND day = ? AND pre_idx = ?',
+    values   : [table, timezone, day, pre_idx],
+    typeCast : function (field, next) {
       if (field.type !== 'DATETIME') {
         return next();
       }

@@ -20,8 +20,8 @@ common.getTestConnection(function (err, connection) {
     assert.ifError(err);
 
     var row = {
-      id: 1,
-      title: 'Test row'
+      id    : 1,
+      title : 'Test row'
     };
 
     connection.query('INSERT INTO ?? SET ?', [table, row], function (err) {
