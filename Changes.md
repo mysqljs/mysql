@@ -12,6 +12,7 @@ you spot any mistakes.
 * Add new error codes up to MySQL 5.7.17
 * Fix edge cases when determing Query result packets #1547
 * Fix memory leak when using long-running domains #1619 #1620
+* Remove unnecessary buffer copies when receiving large packets
 * Update `bignumber.js` to 3.1.2
 * Use a simple buffer list to improve performance #566 #1590
 
