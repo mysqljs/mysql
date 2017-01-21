@@ -13,6 +13,7 @@ you spot any mistakes.
 * Fix edge cases when determing Query result packets #1547
 * Fix memory leak when using long-running domains #1619 #1620
 * Update `bignumber.js` to 3.1.2
+* Use a simple buffer list to improve performance #566 #1590
 
 ## v2.12.0 (2016-11-02)
 
