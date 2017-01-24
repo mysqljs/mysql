@@ -10,7 +10,10 @@
     "Diogo Resende <dresende@thinkdigital.pt>",
     "Nathan Woltman <nwoltman@outlook.com>"
   ],
-  "repository": "mysqljs/mysql",
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/mysqljs/mysql"
+  },
   "dependencies": {
     "bignumber.js": "3.1.2",
     "readable-stream": "1.1.14",
