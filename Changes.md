@@ -4,7 +4,7 @@ This file is a manually maintained list of changes for each release. Feel free
 to add your changes here when sending pull requests. Also send corrections if
 you spot any mistakes.
 
-## HEAD
+## v2.13.0 (2017-01-24)
 
 * Accept regular expression as pool cluster pattern #1572
 * Accept wildcard anywhere in pool cluster pattern #1570
