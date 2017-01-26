@@ -1115,7 +1115,7 @@ object. Additionally they typically come with two extra properties:
   object. If the error is not from a MySQL protocol operation, this properly
   will not be defined.
 * `err.sql`: String, not enumerable, contains the SQL of the failed query.
-  This can we useful when using a higher level interface like an ORM
+  This can be useful when using a higher level interface like an ORM
   that is generating your queries for you.
 
 [Error]: https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Error
