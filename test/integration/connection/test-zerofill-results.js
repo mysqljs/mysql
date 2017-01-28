@@ -20,8 +20,8 @@ common.getTestConnection(function (err, connection) {
 
   for (var i = 0; i < test_numbers.length; i++) {
     connection.query('INSERT INTO ?? SET ?', [table, {
-      id: (i + 1),
-      num: (test_numbers[i] !== null ? parseInt(test_numbers[i], 10) : null)
+      id  : (i + 1),
+      num : (test_numbers[i] !== null ? parseInt(test_numbers[i], 10) : null)
     }], assert.ifError);
   }
 

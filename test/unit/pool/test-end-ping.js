@@ -7,10 +7,7 @@ var pool   = common.createPool({
   waitForConnections : true
 });
 
-var conn1Err  = null;
-var conn2Err  = null;
-var poolEnded = false;
-var server    = common.createFakeServer();
+var server = common.createFakeServer();
 
 server.listen(common.fakeServerPort, function (err) {
   assert.ifError(err);
@@ -19,7 +16,7 @@ server.listen(common.fakeServerPort, function (err) {
     assert.ifError(err);
     conn.release();
 
-    pool.getConnection(function (err, conn) {
+    pool.getConnection(function (err) {
       assert.ok(err);
       assert.equal(err.message, 'Pool is closed.');
       assert.equal(err.code, 'POOL_CLOSED');

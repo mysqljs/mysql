@@ -4,8 +4,7 @@ var common = require('../../common');
 common.getTestConnection(function (err, connection) {
   assert.ifError(err);
 
-  // should change charset
-  connection.changeUser({charset:'KOI8R_GENERAL_CI'}, function (err) {
+  connection.changeUser({charset: 'KOI8R_GENERAL_CI'}, function (err) {
     assert.ifError(err);
 
     connection.query('SHOW VARIABLES LIKE \'character_set_client\'', function (err, result) {

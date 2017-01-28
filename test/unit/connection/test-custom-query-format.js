@@ -2,7 +2,7 @@ var assert     = require('assert');
 var common     = require('../../common');
 var connection = common.createConnection({port: common.fakeServerPort, queryFormat: queryFormat});
 
-function queryFormat(query, values, tz) {
+function queryFormat(query, values) {
   if (!values) {
     return query;
   }

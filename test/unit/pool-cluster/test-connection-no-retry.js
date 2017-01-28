@@ -10,7 +10,7 @@ cluster.add('MASTER', poolConfig);
 server.listen(common.fakeServerPort, function(err) {
   assert.ifError(err);
 
-  cluster.getConnection('MASTER', function(err, conn){
+  cluster.getConnection('MASTER', function (err) {
     assert.ok(err);
     assert.equal(err.code, 'ER_HOST_NOT_PRIVILEGED');
     assert.equal(err.fatal, true);

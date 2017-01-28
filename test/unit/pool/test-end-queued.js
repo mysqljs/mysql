@@ -27,11 +27,11 @@ server.listen(common.fakeServerPort, function(err) {
     conn.release();
   });
 
-  pool.getConnection(function(err, conn){
+  pool.getConnection(function (err) {
     conn1Err = err;
   });
 
-  pool.getConnection(function(err, conn){
+  pool.getConnection(function (err) {
     conn2Err = err;
   });
 });

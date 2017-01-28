@@ -1,4 +1,3 @@
-var fs       = require('fs');
 var istanbul = require('istanbul');
 var mkdirp   = require('mkdirp');
 var path     = require('path');

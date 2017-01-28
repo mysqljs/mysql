@@ -1,6 +1,5 @@
 var assert = require('assert');
 var common = require('../../common');
-var util   = require('util');
 
 common.getTestConnection({typeCast: true}, function (err, connection) {
   assert.ifError(err);
@@ -15,9 +14,9 @@ common.getTestConnection({typeCast: true}, function (err, connection) {
 
     var point = rows[0].point;
     var byteOrder = point.readUInt8(4);
-    var wkbType = byteOrder? point.readUInt32LE(5) : point.readUInt32BE(5);
-    var x = byteOrder? point.readDoubleLE(9) : point.readDoubleBE(9);
-    var y = byteOrder? point.readDoubleLE(17) : point.readDoubleBE(17);
+    var wkbType = byteOrder ? point.readUInt32LE(5) : point.readUInt32BE(5);
+    var x = byteOrder ? point.readDoubleLE(9) : point.readDoubleBE(9);
+    var y = byteOrder ? point.readDoubleLE(17) : point.readDoubleBE(17);
 
     assert.strictEqual(typeof rows[0].date, 'object');
     assert.equal(Buffer.isBuffer(rows[0].date), true);

@@ -3,13 +3,12 @@ var common     = require('../../common');
 var connection = common.createConnection({
   port : common.fakeServerPort,
   ssl  : {
-    ca : common.getSSLConfig().ca
+    ca: common.getSSLConfig().ca
   }
 });
 
 var server = common.createFakeServer();
 
-var connectErr;
 server.listen(common.fakeServerPort, function(err) {
   if (err) throw err;
 

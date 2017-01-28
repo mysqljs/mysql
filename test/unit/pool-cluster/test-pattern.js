@@ -12,7 +12,7 @@ cluster.add('SLAVE2', poolConfig);
 server.listen(common.fakeServerPort, function(err) {
   assert.ifError(err);
 
-  cluster.getConnection('SLAVE4', function(err, conn){
+  cluster.getConnection('SLAVE4', function (err) {
     assert.ok(err);
     assert.equal(err.message, 'Pool does not exist.');
 

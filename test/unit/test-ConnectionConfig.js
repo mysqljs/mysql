@@ -93,16 +93,18 @@ test('ConnectionConfig#Constructor.charset', {
   },
 
   'throws on unknown charset': function() {
+    var config;
     var error;
 
     try {
-      var config = new ConnectionConfig({
+      config = new ConnectionConfig({
         charset: 'INVALID_CHARSET'
       });
     } catch (err) {
       error = err;
     }
 
+    assert.ok(config === undefined);
     assert.ok(error);
     assert.equal(error.name, 'TypeError');
     assert.equal(error.message, 'Unknown charset \'INVALID_CHARSET\'');
@@ -176,16 +178,18 @@ test('ConnectionConfig#Constructor.ssl', {
   },
 
   'throws on unknown profile name': function() {
+    var config;
     var error;
 
     try {
-      var config = new ConnectionConfig({
+      config = new ConnectionConfig({
         ssl: 'invalid profile'
       });
     } catch (err) {
       error = err;
     }
 
+    assert.ok(config === undefined);
     assert.ok(error);
     assert.equal(error.name, 'TypeError');
     assert.equal(error.message, 'Unknown SSL profile \'invalid profile\'');

@@ -1,8 +1,8 @@
 var assert = require('assert');
 var common = require('../../common');
 var pool   = common.createPool({
-  user: 'user_1',
-  port: common.fakeServerPort
+  user : 'user_1',
+  port : common.fakeServerPort
 });
 
 var server = common.createFakeServer();

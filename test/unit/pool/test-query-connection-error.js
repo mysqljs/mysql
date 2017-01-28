@@ -6,7 +6,7 @@ var server = common.createFakeServer();
 server.listen(common.fakeServerPort, function (err) {
   assert.ifError(err);
 
-  pool.query('SELECT 1', function (err, rows) {
+  pool.query('SELECT 1', function (err) {
     assert.ok(err, 'got error');
     assert.equal(err.code, 'ER_HOST_NOT_PRIVILEGED');
     assert.equal(err.fatal, true);

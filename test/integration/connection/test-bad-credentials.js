@@ -1,7 +1,7 @@
 var assert = require('assert');
 var common = require('../../common');
 
-common.getTestConnection({password: common.bogusPassword}, function (err, connection) {
+common.getTestConnection({password: common.bogusPassword}, function (err) {
   if (!err && process.env.NO_GRANT) {
     common.skipTest('no grant tables');
   }

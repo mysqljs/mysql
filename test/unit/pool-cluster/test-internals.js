@@ -17,7 +17,10 @@ server.listen(common.fakeServerPort, function(err) {
 
   // _findNodeIds
   assert.deepEqual(cluster._findNodeIds('MASTER'), ['MASTER']);
+  assert.deepEqual(cluster._findNodeIds('MA*ER'), ['MASTER']);
+  assert.deepEqual(cluster._findNodeIds('*TER*'), ['CLUSTER::1', 'MASTER']);
   assert.deepEqual(cluster._findNodeIds('SLAVE*'), ['SLAVE1', 'SLAVE2']);
+  assert.deepEqual(cluster._findNodeIds(/slave[1-2]/i), ['SLAVE1', 'SLAVE2']);
 
   // of singletone instance
   var poolNamespace = cluster.of('*', 'RR');

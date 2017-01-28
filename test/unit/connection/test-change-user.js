@@ -1,8 +1,8 @@
 var assert     = require('assert');
 var common     = require('../../common');
 var connection = common.createConnection({
-  port: common.fakeServerPort,
-  user: 'user_1'
+  port : common.fakeServerPort,
+  user : 'user_1'
 });
 
 var server = common.createFakeServer();

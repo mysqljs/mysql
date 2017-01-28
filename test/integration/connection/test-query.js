@@ -8,13 +8,13 @@ common.getTestConnection(function (err, connection) {
     assert.ifError(err);
     assert.deepEqual(rows, [{1: 1}]);
     assert.equal(fields[0].name, '1');
-
-    // this is a coverage test, it shuold perform exactly as the previous one
-    connection.query({ sql: 'SELECT ?' }, [ 1 ], function (err, rows, fields) {
-      assert.ifError(err);
-      assert.deepEqual(rows, [{1: 1}]);
-      assert.equal(fields[0].name, '1');
-      connection.end(assert.ifError);
-    });
   });
+
+  connection.query({ sql: 'SELECT ?' }, [ 1 ], function (err, rows, fields) {
+    assert.ifError(err);
+    assert.deepEqual(rows, [{1: 1}]);
+    assert.equal(fields[0].name, '1');
+  });
+
+  connection.end(assert.ifError);
 });

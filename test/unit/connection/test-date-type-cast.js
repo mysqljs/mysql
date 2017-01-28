@@ -29,7 +29,7 @@ server.listen(common.fakeServerPort, function (err) {
   var conn2 = common.createConnection({
     dateStrings : true,
     port        : common.fakeServerPort,
-    timezone : 'Z'
+    timezone    : 'Z'
   });
   conn2.query('SELECT value FROM date_rows', function (err, rows) {
     assert.ifError(err);

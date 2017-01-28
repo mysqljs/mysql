@@ -5,7 +5,7 @@ var rowsPerRun = 100000;
 client.connect(function(err) {
   if (err) throw err;
 
-  client.query('USE node_mysql_test', function(err, results) {
+  client.query('USE node_mysql_test', function(err) {
     if (err) throw err;
 
     selectRows();
@@ -39,4 +39,4 @@ function selectRows() {
 
     selectRows();
   });
-};
+}

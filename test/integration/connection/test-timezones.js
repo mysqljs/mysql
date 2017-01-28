@@ -88,7 +88,7 @@ function testNextDate(connection) {
       pad2(dt.getHours()) + ':' + pad2(dt.getMinutes()) + ':' + pad2(dt.getSeconds());
   } else {
     // If using a specific timezone, it should be a simple offset from the UTC date
-    var expected_dt = new Date(dt.getTime() + offset * 60*60*1000);
+    var expected_dt = new Date(dt.getTime() + offset * 60 * 60 * 1000);
     expected_date_string = expected_dt.getUTCFullYear() + '-' +
       pad2(expected_dt.getUTCMonth() + 1) + '-' +
       pad2(expected_dt.getUTCDate()) + ' ' +
@@ -101,9 +101,9 @@ function testNextDate(connection) {
   connection.query('INSERT INTO ?? SET ?', [table, {day: day, timezone: timezone, dt: dt, pre_idx: pre_idx}], assert.ifError);
 
   var options = {
-    sql: 'SELECT * FROM ?? WHERE timezone = ? AND day = ? AND pre_idx = ?',
-    values: [table, timezone, day, pre_idx],
-    typeCast: function (field, next) {
+    sql      : 'SELECT * FROM ?? WHERE timezone = ? AND day = ? AND pre_idx = ?',
+    values   : [table, timezone, day, pre_idx],
+    typeCast : function (field, next) {
       if (field.type !== 'DATETIME') {
         return next();
       }

@@ -1,7 +1,7 @@
 {
   "name": "mysql",
   "description": "A node.js driver for mysql. It is written in JavaScript, does not require compiling, and is 100% MIT licensed.",
-  "version": "2.12.0",
+  "version": "2.13.0",
   "license": "MIT",
   "author": "Felix Geisendörfer <felix@debuggable.com> (http://debuggable.com/)",
   "contributors": [
@@ -12,16 +12,17 @@
   ],
   "repository": "mysqljs/mysql",
   "dependencies": {
-    "bignumber.js": "2.4.0",
+    "bignumber.js": "3.1.2",
     "readable-stream": "1.1.14",
     "sqlstring": "2.2.0"
   },
   "devDependencies": {
     "after": "0.8.2",
-    "eslint": "3.9.1",
+    "eslint": "3.13.1",
     "istanbul": "0.4.5",
-    "require-all": "2.0.0",
+    "require-all": "2.1.0",
     "rimraf": "2.2.8",
+    "seedrandom": "2.4.2",
     "timezone-mock": "0.0.0",
     "mkdirp": "0.5.1",
     "urun": "0.0.8",
@@ -38,7 +39,7 @@
     "node": ">= 0.6"
   },
   "scripts": {
-    "lint": "eslint lib/**/*.js index.js test/**/*.js tool/**/*.js",
+    "lint": "eslint .",
     "test": "node test/run.js",
     "test-ci": "node test/run-cov.js lcovonly",
     "test-cov": "node test/run-cov.js"

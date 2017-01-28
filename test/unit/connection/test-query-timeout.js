@@ -10,7 +10,7 @@ var timer = setTimeout(function () {
 server.listen(common.fakeServerPort, function(err) {
   if (err) throw err;
 
-  connection.query({sql: 'SELECT 1', timeout: 200}, function (err, rows) {
+  connection.query({sql: 'SELECT 1', timeout: 200}, function (err) {
     assert.ok(err);
     assert.equal(err.code, 'PROTOCOL_SEQUENCE_TIMEOUT');
     assert.equal(err.fatal, true);
@@ -25,7 +25,7 @@ server.on('connection', function(conn) {
     clearTimeout(timer);
     server.destroy();
   });
-  conn.on('query', function(packet) {
+  conn.on('query', function () {
     // Do nothing; timeout
   });
 });

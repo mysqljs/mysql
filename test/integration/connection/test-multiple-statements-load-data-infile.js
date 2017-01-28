@@ -1,6 +1,5 @@
 var assert = require('assert');
 var common = require('../../common');
-var fs     = require('fs');
 
 var path    = common.fixtures + '/data.csv';
 var table   = 'multi_load_data_test';

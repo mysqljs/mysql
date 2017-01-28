@@ -13,10 +13,10 @@ cluster.add('MASTER', poolConfig);
 server.listen(common.fakeServerPort, function (err) {
   assert.ifError(err);
 
-  cluster.getConnection('MASTER', function (err, conn1) {
+  cluster.getConnection('MASTER', function (err) {
     assert.ifError(err);
 
-    cluster.getConnection('MASTER', function (err, conn2) {
+    cluster.getConnection('MASTER', function (err) {
       assert.ok(err);
 
       cluster.end(function (err) {

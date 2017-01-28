@@ -1,6 +1,5 @@
 var assert = require('assert');
 var common = require('../../common');
-var fs     = require('fs');
 
 var badPath = common.fixtures + '/does_not_exist.csv';
 var path    = common.fixtures + '/data.csv';

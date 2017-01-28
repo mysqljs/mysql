@@ -74,8 +74,8 @@ server.listen(common.fakeServerPort, function (err) {
 
   var conn4 = common.createConnection({
     dateStrings : ['DATETIME', 'TIMESTAMP'],
-    port     : common.fakeServerPort,
-    timezone : 'Z'
+    port        : common.fakeServerPort,
+    timezone    : 'Z'
   });
   conn4.query('SELECT value FROM datetime_rows', function (err, rows) {
     assert.ifError(err);

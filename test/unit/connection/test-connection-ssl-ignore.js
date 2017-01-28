@@ -10,7 +10,6 @@ connection.config.ssl.rejectUnauthorized = false;
 
 var server = common.createFakeServer();
 
-var connectErr;
 server.listen(common.fakeServerPort, function(err) {
   if (err) throw err;
 
