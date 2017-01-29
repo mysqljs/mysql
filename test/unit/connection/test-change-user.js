@@ -21,18 +21,8 @@ server.listen(common.fakeServerPort, function(err) {
         assert.ifError(err);
         assert.strictEqual(result[0]['CURRENT_USER()'], 'user_2@localhost');
 
-        // should keep current user
-        connection.changeUser(function (err) {
-          assert.ifError(err);
-
-          connection.query('SELECT CURRENT_USER()', function (err, result) {
-            assert.ifError(err);
-            assert.strictEqual(result[0]['CURRENT_USER()'], 'user_2@localhost');
-
-            connection.destroy();
-            server.destroy();
-          });
-        });
+        connection.destroy();
+        server.destroy();
       });
     });
   });
