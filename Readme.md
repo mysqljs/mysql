@@ -224,6 +224,7 @@ issue [#501](https://github.com/mysqljs/mysql/issues/501). (Default: `false`)
   also possible to blacklist default ones. For more information, check
   [Connection Flags](#connection-flags).
 * `ssl`: object with ssl parameters or a string containing name of ssl profile. See [SSL options](#ssl-options).
+* `rowsAsArray`: If `true`, resultsets return as an array type instead of an object. (Default: `false`)
 
 
 In addition to passing these options as an object, you can also use a url
