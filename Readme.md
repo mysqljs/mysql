@@ -319,7 +319,7 @@ var pool  = mysql.createPool({
 
 pool.query('SELECT 1 + 1 AS solution', function (error, results, fields) {
   if (error) throw error;
-  console.log('The solution is: ', rows[0].solution);
+  console.log('The solution is: ', results[0].solution);
 });
 ```
 
@@ -1096,7 +1096,7 @@ connection.query({sql: 'SELECT COUNT(*) AS count FROM big_table', timeout: 60000
     throw error;
   }
 
-  console.log(rows[0].count + ' rows');
+  console.log(results[0].count + ' rows');
 });
 ```
 
