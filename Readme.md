@@ -806,7 +806,7 @@ can retrieve the insert id like this:
 ```js
 connection.query('INSERT INTO posts SET ?', {title: 'test'}, function (error, results, fields) {
   if (error) throw error;
-  console.log(result.insertId);
+  console.log(results.insertId);
 });
 ```
 
@@ -824,7 +824,7 @@ You can get the number of affected rows from an insert, update or delete stateme
 ```js
 connection.query('DELETE FROM posts WHERE title = "wrong"', function (error, results, fields) {
   if (error) throw error;
-  console.log('deleted ' + result.affectedRows + ' rows');
+  console.log('deleted ' + results.affectedRows + ' rows');
 })
 ```
 
@@ -838,7 +838,7 @@ whose values were not changed.
 ```js
 connection.query('UPDATE posts SET ...', function (error, results, fields) {
   if (error) throw error;
-  console.log('changed ' + result.changedRows + ' rows');
+  console.log('changed ' + results.changedRows + ' rows');
 })
 ```
 
@@ -1039,7 +1039,7 @@ connection.beginTransaction(function(err) {
       });
     }
 
-    var log = 'Post ' + result.insertId + ' added';
+    var log = 'Post ' + results.insertId + ' added';
 
     connection.query('INSERT INTO log SET data=?', log, function (error, results, fields) {
       if (error) {
