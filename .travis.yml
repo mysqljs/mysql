@@ -8,14 +8,14 @@ node_js:
   - '2.5'
   - '3.3'
   - '4.2.0' # Test timers regression
-  - '4.7'
+  - '4.8'
   - '5.12'
   - '6.9'
   - '7.4'
 
 matrix:
   include:
-    - node_js: '4.7'
+    - node_js: '4.8'
       env: MYSQL_TYPE=mariadb MYSQL_HOST=localhost MYSQL_DATABASE=node_mysql MYSQL_USER=root MYSQL_PASSWORD=
       addons: {mariadb: '10.1'}
 
