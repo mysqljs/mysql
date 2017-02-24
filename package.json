@@ -20,7 +20,7 @@
     "after": "0.8.2",
     "eslint": "3.13.1",
     "istanbul": "0.4.5",
-    "require-all": "2.1.0",
+    "require-all": "2.2.0",
     "rimraf": "2.2.8",
     "seedrandom": "2.4.2",
     "timezone-mock": "0.0.0",
