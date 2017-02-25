@@ -13,9 +13,11 @@ node_js:
   - "6.10"
   - "7.6"
 env:
-  - "DOCKER_MYSQL_TYPE=mysql DOCKER_MYSQL_VERSION=5.5"
+  - "DOCKER_MYSQL_TYPE=mysql DOCKER_MYSQL_VERSION=5.6"
 matrix:
   include:
+    - node_js: "6.10"
+      env: "DOCKER_MYSQL_TYPE=mysql DOCKER_MYSQL_VERSION=5.5"
     - node_js: "6.10"
       env: "DOCKER_MYSQL_TYPE=mariadb DOCKER_MYSQL_VERSION=5.5"
     - node_js: "6.10"
