@@ -1,10 +1,11 @@
+var Buffer = require('safe-buffer').Buffer;
 var common = require('../../common');
 var test   = require('utest');
 var assert = require('assert');
 var Parser = common.Parser;
 
 function packet(bytes) {
-  var buffer = new Buffer(bytes);
+  var buffer = Buffer.from(bytes);
   var parser = new Parser();
 
   parser.append(buffer);
@@ -14,17 +15,16 @@ function packet(bytes) {
 
 test('Parser', {
   "parseBuffer: buffer won\'t change after appending another one": function() {
-    var startBuffer = new Buffer(5);
-    startBuffer.fill('a');
+    var startBuffer = Buffer.alloc(5, 'a');
+    var parser      = new Parser();
 
-    var parser = new Parser();
     parser.append(startBuffer);
 
     var value = parser.parseBuffer(4);
 
     assert.equal(value.toString(), 'aaaa');
 
-    parser.append(new Buffer('b'));
+    parser.append(Buffer.from('b'));
 
     assert.equal(value.toString(), 'aaaa');
   },

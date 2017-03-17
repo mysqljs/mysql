@@ -1,3 +1,4 @@
+var Buffer    = require('safe-buffer').Buffer;
 var common    = require('../../common');
 var test      = require('utest');
 var assert    = require('assert');
@@ -128,7 +129,7 @@ test('SqlString.escape', {
   },
 
   'buffers are converted to hex': function() {
-    var buffer = new Buffer([0, 1, 254, 255]);
+    var buffer = Buffer.from([0, 1, 254, 255]);
     var string = SqlString.escape(buffer);
 
     assert.strictEqual(string, "X'0001feff'");

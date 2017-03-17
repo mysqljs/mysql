@@ -7,6 +7,7 @@ you spot any mistakes.
 ## HEAD
 
 * Add `sql` property to query `Error` objects #1462 #1628 #1629
+* Use `safe-buffer` for improved Buffer API
 
 ## v2.13.0 (2017-01-24)
 

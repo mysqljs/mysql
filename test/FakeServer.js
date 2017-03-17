@@ -1,6 +1,7 @@
 // An experimental fake MySQL server for tricky integration tests. Expanded
 // as needed.
 
+var Buffer       = require('safe-buffer').Buffer;
 var common       = require('./common');
 var Charsets     = common.Charsets;
 var Crypto       = require('crypto');
@@ -72,8 +73,8 @@ FakeConnection.prototype.handshake = function(options) {
   this._handshakeOptions = options || {};
 
   var packetOpiotns = common.extend({
-    scrambleBuff1       : new Buffer('1020304050607080', 'hex'),
-    scrambleBuff2       : new Buffer('0102030405060708090A0B0C', 'hex'),
+    scrambleBuff1       : Buffer.from('1020304050607080', 'hex'),
+    scrambleBuff2       : Buffer.from('0102030405060708090A0B0C', 'hex'),
     serverCapabilities1 : 512, // only 1 flag, PROTOCOL_41
     protocol41          : true
   }, this._handshakeOptions);
@@ -269,7 +270,7 @@ FakeConnection.prototype._parsePacket = function(header) {
       if (this._handshakeOptions.oldPassword) {
         this._sendPacket(new Packets.UseOldPasswordPacket());
       } else if (this._handshakeOptions.password === 'passwd') {
-        var expected = new Buffer('3DA0ADA7C9E1BB3A110575DF53306F9D2DE7FD09', 'hex');
+        var expected = Buffer.from('3DA0ADA7C9E1BB3A110575DF53306F9D2DE7FD09', 'hex');
         this._sendAuthResponse(packet, expected);
       } else if (this._handshakeOptions.user || this._handshakeOptions.password) {
         throw new Error('not implemented');

@@ -1,4 +1,5 @@
 var assert = require('assert');
+var Buffer = require('safe-buffer').Buffer;
 var common = require('../../common');
 
 var tests = [
@@ -23,13 +24,13 @@ var tests = [
   {type: 'datetime', insert: new Date('2012-05-12 12:00:23')},
   {type: 'date', insert: new Date('2012-05-12 00:00:00')},
   {type: 'time', insert: '13:13:23'},
-  {type: 'binary(4)', insert: new Buffer([0, 1, 254, 255])},
-  {type: 'varbinary(4)', insert: new Buffer([0, 1, 254, 255])},
-  {type: 'tinyblob', insert: new Buffer([0, 1, 254, 255])},
-  {type: 'mediumblob', insert: new Buffer([0, 1, 254, 255])},
-  {type: 'longblob', insert: new Buffer([0, 1, 254, 255])},
-  {type: 'blob', insert: new Buffer([0, 1, 254, 255])},
-  {type: 'bit(32)', insert: new Buffer([0, 1, 254, 255])},
+  {type: 'binary(4)', insert: Buffer.from([0, 1, 254, 255])},
+  {type: 'varbinary(4)', insert: Buffer.from([0, 1, 254, 255])},
+  {type: 'tinyblob', insert: Buffer.from([0, 1, 254, 255])},
+  {type: 'mediumblob', insert: Buffer.from([0, 1, 254, 255])},
+  {type: 'longblob', insert: Buffer.from([0, 1, 254, 255])},
+  {type: 'blob', insert: Buffer.from([0, 1, 254, 255])},
+  {type: 'bit(32)', insert: Buffer.from([0, 1, 254, 255])},
   {type: 'char(5)', insert: 'Hello'},
   {type: 'varchar(5)', insert: 'Hello'},
   {type: 'varchar(3) character set utf8 collate utf8_bin', insert: 'bin'},

@@ -1,14 +1,16 @@
 var lib          = __dirname + '/../lib';
+var Buffer       = require('safe-buffer').Buffer;
 var Protocol     = require(lib + '/protocol/protocol');
 var Packets      = require(lib + '/protocol/packets');
 var PacketWriter = require(lib + '/protocol/PacketWriter');
 var Parser       = require(lib + '/protocol/Parser');
 
-var buffers = createBuffers();
 var options = {
   rows       : 100000,
   bufferSize : 64 * 1024
 };
+
+var buffers = createBuffers();
 
 console.error('Config:', options);
 run();
@@ -63,7 +65,7 @@ function createRowDataPacketBuffer(parser) {
 }
 
 function mergeBuffers(buffers) {
-  var mergeBuffer  = new Buffer(options.bufferSize);
+  var mergeBuffer  = Buffer.alloc(options.bufferSize);
   var mergeBuffers = [];
   var offset       = 0;
 
@@ -78,7 +80,7 @@ function mergeBuffers(buffers) {
       buffer.copy(mergeBuffer, offset, 0, bytesRemaining);
       mergeBuffers.push(mergeBuffer);
 
-      mergeBuffer = new Buffer(options.bufferSize);
+      mergeBuffer = Buffer.alloc(options.bufferSize);
       buffer.copy(mergeBuffer, 0, bytesRemaining);
       offset = buffer.length - bytesRemaining;
     }

@@ -1,4 +1,5 @@
 var assert     = require('assert');
+var Buffer     = require('safe-buffer').Buffer;
 var common     = require('../../common');
 var connection = common.createConnection({port: common.fakeServerPort});
 var server     = common.createFakeServer();
@@ -41,27 +42,27 @@ server.on('connection', function(conn) {
         this._sendPacket(new common.Packets.EofPacket());
 
         var writer = new common.PacketWriter();
-        writer.writeLengthCodedBuffer(new Buffer(0));
+        writer.writeLengthCodedBuffer(Buffer.alloc(0));
         this._socket.write(writer.toBuffer(this._parser));
 
         var writer = new common.PacketWriter();
-        writer.writeLengthCodedBuffer(filledBuffer(8, '.'));
+        writer.writeLengthCodedBuffer(Buffer.alloc(8, '.'));
         this._socket.write(writer.toBuffer(this._parser));
 
         var writer = new common.PacketWriter();
-        writer.writeLengthCodedBuffer(filledBuffer((Math.pow(2, 16) - 1), '.'));
+        writer.writeLengthCodedBuffer(Buffer.alloc((Math.pow(2, 16) - 1), '.'));
         this._socket.write(writer.toBuffer(this._parser));
 
         var writer = new common.PacketWriter();
-        writer.writeLengthCodedBuffer(filledBuffer(Math.pow(2, 16), '.'));
+        writer.writeLengthCodedBuffer(Buffer.alloc(Math.pow(2, 16), '.'));
         this._socket.write(writer.toBuffer(this._parser));
 
         var writer = new common.PacketWriter();
-        writer.writeLengthCodedBuffer(filledBuffer((Math.pow(2, 24) - 1), '.'));
+        writer.writeLengthCodedBuffer(Buffer.alloc((Math.pow(2, 24) - 1), '.'));
         this._socket.write(writer.toBuffer(this._parser));
 
         var writer = new common.PacketWriter();
-        writer.writeLengthCodedBuffer(filledBuffer(Math.pow(2, 24), '.'));
+        writer.writeLengthCodedBuffer(Buffer.alloc(Math.pow(2, 24), '.'));
         this._socket.write(writer.toBuffer(this._parser));
 
         this._sendPacket(new common.Packets.EofPacket());
@@ -73,13 +74,3 @@ server.on('connection', function(conn) {
     }
   });
 });
-
-function filledBuffer(size, fill) {
-  if (Buffer.alloc) {
-    return Buffer.alloc(size, fill);
-  }
-
-  var buf = new Buffer(size);
-  buf.fill(fill);
-  return buf;
-}
