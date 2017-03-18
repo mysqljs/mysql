@@ -15,8 +15,8 @@ common.getTestConnection({ rowsAsArray: true }, function (err, connection) {
   });
 
   connection.query({
-    sql: 'SELECT ?',
-    rowsAsArray: false
+    sql         : 'SELECT ?',
+    rowsAsArray : false
   }, [ 1 ], function (err, rows) {
     assert.ifError(err);
     assert.deepEqual(rows, [{1: 1}]);
