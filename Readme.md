@@ -37,7 +37,7 @@
 - [Getting the connection ID](#getting-the-connection-id)
 - [Executing queries in parallel](#executing-queries-in-parallel)
 - [Streaming query rows](#streaming-query-rows)
-- [Piping results with Streams2](#piping-results-with-streams2)
+- [Piping results with Streams](#piping-results-with-streams)
 - [Multiple statement queries](#multiple-statement-queries)
 - [Stored procedures](#stored-procedures)
 - [Joins with overlapping column names](#joins-with-overlapping-column-names)
@@ -909,14 +909,13 @@ stream individual row columns, they will always be buffered up entirely. If you
 have a good use case for streaming large fields to and from MySQL, I'd love to
 get your thoughts and contributions on this.
 
-### Piping results with Streams2
+### Piping results with Streams
 
 The query object provides a convenience method `.stream([options])` that wraps
-query events into a [Readable](http://nodejs.org/api/stream.html#stream_class_stream_readable)
-[Streams2](http://blog.nodejs.org/2012/12/20/streams2/) object. This
-stream can easily be piped downstream and provides automatic pause/resume,
-based on downstream congestion and the optional `highWaterMark`. The
-`objectMode` parameter of the stream is set to `true` and cannot be changed
+query events into a [Readable Stream](http://nodejs.org/api/stream.html#stream_class_stream_readable)
+object. This stream can easily be piped downstream and provides automatic
+pause/resume, based on downstream congestion and the optional `highWaterMark`.
+The `objectMode` parameter of the stream is set to `true` and cannot be changed
 (if you need a byte stream, you will need to use a transform stream, like
 [objstream](https://www.npmjs.com/package/objstream) for example).
 
