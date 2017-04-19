@@ -1,9 +1,8 @@
 var common = exports;
 var fs     = require('fs');
-var mkdirp = require('mkdirp');
 var path   = require('path');
 
-common.lib      = path.resolve(__dirname, '..', (process.env.TEST_COVERAGE || ''), 'lib');
+common.lib      = path.resolve(__dirname, '..', 'lib');
 common.fixtures = path.resolve(__dirname, 'fixtures');
 
 // Useful for triggering ECONNREFUSED errors on connect()
@@ -31,13 +30,6 @@ common.PoolConfig       = require(common.lib + '/PoolConfig');
 common.PoolConnection   = require(common.lib + '/PoolConnection');
 common.SqlString        = require(common.lib + '/protocol/SqlString');
 common.Types            = require(common.lib + '/protocol/constants/types');
-
-// Setup coverage hook
-if (process.env.TEST_COVERAGE) {
-  process.on('exit', function () {
-    writeCoverage(global.__coverage__ || {});
-  });
-}
 
 var Mysql      = require(path.resolve(common.lib, '../index'));
 var FakeServer = require('./FakeServer');
@@ -164,15 +156,4 @@ function mergeTestConfig(config) {
   }, config);
 
   return config;
-}
-
-function writeCoverage(coverage) {
-  var test = path.relative(__dirname, path.resolve(process.argv[1]));
-  var ext  = path.extname(test);
-  var cov  = test.substr(0, test.length - ext.length) + '.json';
-  var out  = path.resolve(__dirname, '..', process.env.TEST_COVERAGE, 'test', cov);
-
-  mkdirp.sync(path.dirname(out));
-
-  fs.writeFileSync(out, JSON.stringify(coverage));
 }

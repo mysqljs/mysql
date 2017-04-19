@@ -25,7 +25,7 @@ cache:
 
 install:
   - ps: Install-Product node $env:nodejs_version
-  - if "%nodejs_version%" equ "0.8" npm rm --save-dev istanbul
+  - if "%nodejs_version%" equ "0.8" npm rm --save-dev nyc
   - npm rm --save-dev eslint
   - if exist node_modules npm prune
   - if exist node_modules npm rebuild
@@ -42,7 +42,7 @@ test_script:
   - node --version
   - npm --version
   - set npm_test_command=test
-  - for /f %%l in ('npm -ps ls istanbul') do set npm_test_command=test-ci
+  - for /f %%l in ('npm -ps ls nyc') do set npm_test_command=test-ci
   - npm run %npm_test_command%
 
 version: "{build}"

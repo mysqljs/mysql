@@ -20,12 +20,9 @@
   "devDependencies": {
     "after": "0.8.2",
     "eslint": "3.19.0",
-    "istanbul": "0.4.5",
-    "require-all": "2.2.0",
-    "rimraf": "2.2.8",
+    "nyc": "10.2.0",
     "seedrandom": "2.4.3",
     "timezone-mock": "0.0.0",
-    "mkdirp": "0.5.1",
     "urun": "0.0.8",
     "utest": "0.0.8"
   },
@@ -42,7 +39,7 @@
   "scripts": {
     "lint": "eslint .",
     "test": "node test/run.js",
-    "test-ci": "node test/run-cov.js lcovonly",
-    "test-cov": "node test/run-cov.js"
+    "test-ci": "nyc --reporter=text npm test",
+    "test-cov": "nyc --reporter=html --reporter=text npm test"
   }
 }
