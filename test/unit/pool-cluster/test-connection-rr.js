@@ -29,12 +29,16 @@ server.listen(common.fakeServerPort, function(err) {
 
   var pool = cluster.of('SLAVE*', 'RR');
 
-  for (var i = 0; i < count; i++) {
+  function getConnection(i) {
     pool.getConnection(function (err, conn) {
       assert.ifError(err);
-      order.push(conn._clusterId);
+      order[i] = conn._clusterId;
       conn.release();
       done();
     });
+  }
+
+  for (var i = 0; i < count; i++) {
+    getConnection(i);
   }
 });
