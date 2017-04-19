@@ -23,7 +23,7 @@
     "istanbul": "0.4.5",
     "require-all": "2.2.0",
     "rimraf": "2.2.8",
-    "seedrandom": "2.4.2",
+    "seedrandom": "2.4.3",
     "timezone-mock": "0.0.0",
     "mkdirp": "0.5.1",
     "urun": "0.0.8",
