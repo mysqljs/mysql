@@ -42,6 +42,7 @@
 - [Stored procedures](#stored-procedures)
 - [Joins with overlapping column names](#joins-with-overlapping-column-names)
 - [Transactions](#transactions)
+- [Ping](#ping)
 - [Timeouts](#timeouts)
 - [Error handling](#error-handling)
 - [Exception Safety](#exception-safety)
