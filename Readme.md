@@ -77,6 +77,8 @@ require compiling, and is 100% MIT licensed.
 
 Here is an example on how to use it:
 
+<a href="https://runnable.com/#felixge/node-mysql/server.js/launch" target="_blank"><img src="https://runnable.com/external/styles/assets/runnablebtn.png" style="width:67px;height:25px;"></a>
+
 ```js
 var mysql      = require('mysql');
 var connection = mysql.createConnection({
