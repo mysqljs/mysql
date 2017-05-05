@@ -1117,6 +1117,8 @@ object. Additionally they typically come with two extra properties:
 * `err.sql`: String, contains the full SQL of the failed query. This can be
   useful when using a higher level interface like an ORM that is generating
   the queries.
+* `err.sqlMessage`: String, contains the message string that provides a
+  textual description of the error. Only populated from [MySQL server error][].
 
 [Error]: https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Error
 [MySQL server error]: http://dev.mysql.com/doc/refman/5.5/en/error-messages-server.html
