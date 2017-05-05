@@ -7,6 +7,7 @@ you spot any mistakes.
 ## HEAD
 
 * Add `sql` property to query `Error` objects #1462 #1628 #1629
+* Update `bignumber.js` to 4.0.2
 * Update `readable-stream` to 2.2.9
 * Use `safe-buffer` for improved Buffer API
 
