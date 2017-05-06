@@ -29,7 +29,6 @@ common.Parser           = require(common.lib + '/protocol/Parser');
 common.PoolConfig       = require(common.lib + '/PoolConfig');
 common.PoolConnection   = require(common.lib + '/PoolConnection');
 common.SqlString        = require(common.lib + '/protocol/SqlString');
-common.Sequence        = require(common.lib + '/protocol/sequences/Sequence');
 common.Types            = require(common.lib + '/protocol/constants/types');
 
 var Mysql      = require(path.resolve(common.lib, '../index'));
