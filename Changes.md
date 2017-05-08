@@ -6,6 +6,7 @@ you spot any mistakes.
 
 ## HEAD
 
+* Add `sqlMessage` property to query `Error` objects [#1714](https://github.com/mysqljs/mysql/pull/1714)
 * Add `sql` property to query `Error` objects #1462 #1628 #1629
 * Update `bignumber.js` to 4.0.2
 * Update `readable-stream` to 2.2.9
