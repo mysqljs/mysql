@@ -1117,6 +1117,11 @@ object. Additionally they typically come with two extra properties:
 * `err.sql`: String, contains the full SQL of the failed query. This can be
   useful when using a higher level interface like an ORM that is generating
   the queries.
+* `err.sqlMessage`: String, contains the message associated with the current
+  SQL State of the database. For example, with
+  `SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = "My Error"`, `err.sqlMessage`
+  would be set to `"My Error"`. When using triggers for data validation, this
+  can be used to pass error messages through from the database to the user.
 
 [Error]: https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Error
 [MySQL server error]: http://dev.mysql.com/doc/refman/5.5/en/error-messages-server.html
