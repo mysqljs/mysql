@@ -25,18 +25,22 @@ common.getTestConnection(function (err, connection) {
     'SIGNAL SQLSTATE \'45000\' SET MESSAGE_TEXT = ?;',
     'END IF;',
     'END;'
-  ].join('\n'), [table, message], assert.ifError);
+  ].join('\n'), [table, message], function (err) {
+    // Clean up table if create trigger fails
+    connection.query('DROP TABLE IF EXISTS ??', [table], assert.ifError);
+    assert.ifError(err);
+  });
 
   // Violates trigger condition, so it will throw an error on insert
   var row = ['bbbbbbbbbb'];
 
-  connection.query('INSERT INTO ?? (name) VALUES ?', [table, [row]], function (err) {
-    assert.equal(err.sqlMessage, message,
-                 'err.sqlMessage is the trigger error message');
-
+  connection.query('INSERT INTO ?? (name) VALUES ?', [table, [row]], function (insertErr) {
+    // Remove table when insert finishes
+    connection.query('DROP TABLE IF EXISTS ??', [table], function (err) {
+      assert.ifError(err);
+      connection.end(assert.ifError);
+      assert.equal(insertErr.sqlMessage, message,
+                   'error sqlMessage property is the trigger error message');
+    });
   });
-
-  connection.query('DROP TABLE IF EXISTS ??', [table], assert.ifError);
-
-  connection.end(assert.ifError);
 });
