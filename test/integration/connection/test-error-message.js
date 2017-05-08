@@ -9,6 +9,7 @@ common.getTestConnection(function (err, connection) {
 
   common.useTestDb(connection);
 
+  // Must use real table because temporary tables cannot have triggers
   connection.query([
     'CREATE TABLE ?? (',
     '`name` varchar(255)',
@@ -33,6 +34,9 @@ common.getTestConnection(function (err, connection) {
     assert.equal(err.sqlMessage, message,
                  'err.sqlMessage is the trigger error message');
 
-    connection.end(assert.ifError);
   });
+
+  connection.query('DROP TABLE IF EXISTS ??', [table], assert.ifError);
+
+  connection.end(assert.ifError);
 });
