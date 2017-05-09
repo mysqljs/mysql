@@ -1369,6 +1369,20 @@ will have:
 * As much debugging output and information about your environment (mysql
   version, node version, os, etc.) as you can gather.
 
+### Logging All Queries from a Connection Pool
+
+To log all the queries from a connection pool, bind to the `enqueue` event on each connection and check for the `mysql` property on the `sequence` object:
+
+```js
+pool.on('connection', function (connection) {
+  connection.on('enqueue', function (sequence) {
+    if (sequence && sequence.sql) {
+      console.log(sequence.sql);
+    }
+  });
+});
+```
+
 ## Contributing
 
 This project welcomes contributions from the community. Contributions are
