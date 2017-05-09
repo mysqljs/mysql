@@ -1054,6 +1054,7 @@ connection.beginTransaction(function(err) {
           });
         }
         console.log('success!');
+        connection.end();
       });
     });
   });
