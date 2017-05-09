@@ -24,6 +24,8 @@
 - [Closing all the connections in a pool](#closing-all-the-connections-in-a-pool)
 - [PoolCluster](#poolcluster)
 - [PoolCluster options](#poolcluster-options)
+- [PoolClusterFarm](#poolclusterfarm)
+- [PoolClusterFarm options](#poolclusterfarm-options)
 - [Switching users and altering connection state](#switching-users-and-altering-connection-state)
 - [Server disconnects](#server-disconnects)
 - [Performing queries](#performing-queries)
@@ -558,6 +560,35 @@ resets any connection state (variables, transactions, etc.).
 
 Errors encountered during this operation are treated as fatal connection errors
 by this module.
+
+## PoolClusterFarm
+
+PoolClusterFarm allows for a complete replicated MySQL farm to be handled with the mysql module. For more information on MySQL replicating, please navigate to http://dev.mysql.com/doc/refman/5.7/en/replication.html. Basically, this module allows an unlimited amount of scaling with 1 to Many Masters and 0 to Many Slaves. In order to use this module, you must set up replication masters and slaves using the tutorial above.
+
+```js
+var mysql = require('mysql');
+var poolClusterFarm = mysql.createPoolClusterFarm();
+
+poolClusterFarm.add('MASTER0','master',{database:'test',user:'admin',password:'somepassword',host:'10.0.0.1'});
+poolClusterFarm.add('MASTER1','master',{database:'test',user:'admin',password:'somepassword',host:'10.0.0.2'});
+
+poolClusterFarm.add('SLAVE0','slave',{database:'test',user:'admin',password:'somepassword',host:'10.0.0.3'});
+poolClusterFarm.add('SLAVE1','slave',{database:'test',user:'admin',password:'somepassword',host:'10.0.0.4'});
+poolClusterFarm.add('SLAVE2','slave',{database:'test',user:'admin',password:'somepassword',host:'10.0.0.5'});
+poolClusterFarm.add('SLAVE3','slave',{database:'test',user:'admin',password:'somepassword',host:'10.0.0.6'});
+
+poolClusterFarm.query('SELECT id,first FROM users WHERE id = 1',function(err,rows) { console.log(err);console.log(rows) });
+poolClusterFarm.query('UPDATE users SET first = "testing" WHERE id = 1',function(err,rows) { console.log(err);console.log(rows) });
+```
+
+### PoolCluster options
+```js
+var clusterConfig = {
+  debug:true
+};
+
+var poolClusterFarm = mysql.createPoolClusterFarm(clusterConfig);
+```
 
 ## Server disconnects
 

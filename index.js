@@ -39,6 +39,18 @@ exports.createPoolCluster = function createPoolCluster(config) {
 };
 
 /**
+* Create a new PoolClusterFarm instance.
+* @param {object} [config] Configuration for pool cluster farm
+* @return {PoolClusterFarm} New MySQL pool cluster farm
+* @public
+*/
+exports.createPoolClusterFarm = function createPoolClusterFarm(config) {
+  var PoolClusterFarm = loadClass('PoolClusterFarm');
+
+  return new PoolClusterFarm(config);
+};
+
+/**
  * Create a new Query instance.
  * @param {string} sql The SQL for the query
  * @param {array} [values] Any values to insert into placeholders in sql
@@ -128,6 +140,9 @@ function loadClass(className) {
       break;
     case 'PoolCluster':
       Class = require('./lib/PoolCluster');
+      break;
+    case 'PoolClusterFarm':
+      Class = require('./lib/PoolClusterFarm');
       break;
     case 'PoolConfig':
       Class = require('./lib/PoolConfig');
