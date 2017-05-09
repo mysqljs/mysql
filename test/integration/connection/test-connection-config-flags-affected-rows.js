@@ -38,5 +38,7 @@ common.getTestConnection({flags: '-FOUND_ROWS'}, function (err, connection) {
     assert.strictEqual(2, result.affectedRows, 'primary key is the same, row is updated');
   });
 
+  connection.query('DROP TABLE ??', [table]);
+
   connection.end(assert.ifError);
 });
