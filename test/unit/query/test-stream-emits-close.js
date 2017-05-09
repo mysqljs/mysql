@@ -15,7 +15,10 @@ server.listen(common.fakeServerPort, function (err) {
   var query  = connection.query('SELECT * FROM stream LIMIT 2');
   var stream = query.stream();
 
-  stream.once('close', done);
+  stream.once('close', function () {
+    assert(stream._readableState.ended, "Stream was still readable when closed.");
+    done();
+  });
 
   stream.on('data', function noop() {});
 
