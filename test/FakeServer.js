@@ -64,6 +64,7 @@ function FakeConnection(socket) {
   this._handshakeInitializationPacket = null;
   this._clientAuthenticationPacket    = null;
   this._oldPasswordPacket             = null;
+  this._authSwitchResponse            = null;
   this._handshakeOptions              = {};
 
   socket.on('data', this._handleData.bind(this));
@@ -269,6 +270,8 @@ FakeConnection.prototype._parsePacket = function(header) {
       this._clientAuthenticationPacket = packet;
       if (this._handshakeOptions.oldPassword) {
         this._sendPacket(new Packets.UseOldPasswordPacket());
+      } else if (this._handshakeOptions.forceAuthSwitch) {
+        this._sendPacket(new Packets.UseOldPasswordPacket({ methodName: 'mysql_native_password', pluginData: Buffer.from('00112233445566778899AABBCCDDEEFF0102030400', 'hex') }));
       } else if (this._handshakeOptions.password === 'passwd') {
         var expected = Buffer.from('3DA0ADA7C9E1BB3A110575DF53306F9D2DE7FD09', 'hex');
         this._sendAuthResponse(packet, expected);
@@ -286,6 +289,13 @@ FakeConnection.prototype._parsePacket = function(header) {
       this._oldPasswordPacket = packet;
 
       var expected = Auth.scramble323(this._handshakeInitializationPacket.scrambleBuff(), this._handshakeOptions.password);
+
+      this._sendAuthResponse(packet, expected);
+      break;
+    case Packets.AuthenticationSwitchResponsePacket:
+      this._authSwitchResponse = packet;
+
+      var expected = Auth.token(this._handshakeOptions.password, Buffer.from('00112233445566778899AABBCCDDEEFF01020304', 'hex'));
 
       this._sendAuthResponse(packet, expected);
       break;
@@ -353,6 +363,10 @@ FakeConnection.prototype._determinePacket = function(header) {
 
   if (this._handshakeOptions.oldPassword && !this._oldPasswordPacket) {
     return Packets.OldPasswordPacket;
+  }
+
+  if (this._handshakeOptions.forceAuthSwitch && !this._authSwitchResponse) {
+    return Packets.AuthenticationSwitchResponsePacket;
   }
 
   var firstByte = this._parser.peak();
