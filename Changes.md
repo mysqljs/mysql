@@ -7,6 +7,7 @@ you spot any mistakes.
 ## HEAD
 
 * Fix typo in insecure auth error message
+* Support `mysql_native_password` auth switch request for Azure #1396 #1729 #1730
 
 ## v2.14.1 (2017-08-01)
 
