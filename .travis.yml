@@ -13,7 +13,11 @@ node_js:
   - "6.10"
   - "7.9"
 env:
-  - "DOCKER_MYSQL_TYPE=mysql DOCKER_MYSQL_VERSION=5.7"
+  global:
+    # Necessary to build Node.js 0.6 on Travis CI images
+    - "CC=gcc-4.6 CXX=g++-4.6"
+  matrix:
+    - "DOCKER_MYSQL_TYPE=mysql DOCKER_MYSQL_VERSION=5.7"
 matrix:
   include:
     - node_js: "6.10"
@@ -28,6 +32,10 @@ matrix:
       env: "DOCKER_MYSQL_TYPE=mariadb DOCKER_MYSQL_VERSION=10.1"
 
 dist: trusty
+addons:
+  apt:
+    packages:
+      - g++-4.6
 sudo: required
 services:
   - docker
