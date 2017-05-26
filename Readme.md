@@ -374,6 +374,22 @@ being taken from the top of the pool and returning to the bottom.
 When a previous connection is retrieved from the pool, a ping packet is sent
 to the server to check if the connection is still good.
 
+## Terminating all the connections in a pool
+
+When you are done using the pool, you have to end all the connections or your
+script will hang until the db server closes them. To end all the connections
+in the pool, use
+[pool.end()](https://github.com/felixge/node-mysql/blob/master/lib/Pool.js#L121)
+
+```js
+var mysql = require('mysql');
+var pool = mysql.createPool(...);
+
+// ... Do your queries
+
+pool.end();
+```
+
 ## Pool options
 
 Pools accept all the same [options as a connection](#connection-options).
