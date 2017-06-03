@@ -5,7 +5,9 @@ var common = require('../../common');
 
 function registerMock() {
   timezone_mock.register('US/Pacific');
-  assert.ok(new Date().getTimezoneOffset() === 420 || new Date().getTimezoneOffset() === 480);
+  var date = new Date(Date.now());
+  var tzo = date.getTimezoneOffset();
+  assert.ok(tzo === 420 || tzo === 480);
 }
 
 var table = 'timezone_test';
