@@ -10,7 +10,7 @@ node_js:
   - "4.2.0" # Test timers regression
   - "4.8"
   - "5.12"
-  - "6.10"
+  - "6.11"
   - "7.10"
 env:
   global:
@@ -20,15 +20,15 @@ env:
     - "DOCKER_MYSQL_TYPE=mysql DOCKER_MYSQL_VERSION=5.7"
 matrix:
   include:
-    - node_js: "6.10"
+    - node_js: "6.11"
       env: "DOCKER_MYSQL_TYPE=mysql DOCKER_MYSQL_VERSION=5.5"
-    - node_js: "6.10"
+    - node_js: "6.11"
       env: "DOCKER_MYSQL_TYPE=mysql DOCKER_MYSQL_VERSION=5.6"
-    - node_js: "6.10"
+    - node_js: "6.11"
       env: "DOCKER_MYSQL_TYPE=mariadb DOCKER_MYSQL_VERSION=5.5"
-    - node_js: "6.10"
+    - node_js: "6.11"
       env: "DOCKER_MYSQL_TYPE=mariadb DOCKER_MYSQL_VERSION=10.0"
-    - node_js: "6.10"
+    - node_js: "6.11"
       env: "DOCKER_MYSQL_TYPE=mariadb DOCKER_MYSQL_VERSION=10.1"
 
 dist: trusty
