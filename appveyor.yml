@@ -16,6 +16,7 @@ environment:
     - nodejs_version: "5.12"
     - nodejs_version: "6.11"
     - nodejs_version: "7.10"
+    - nodejs_version: "8.1"
 
 services:
   - mysql
@@ -25,6 +26,7 @@ cache:
 
 install:
   - ps: Install-Product node $env:nodejs_version
+  - npm config set shrinkwrap false
   - if "%nodejs_version%" equ "0.8" npm rm --save-dev nyc
   - npm rm --save-dev eslint
   - if exist node_modules npm prune

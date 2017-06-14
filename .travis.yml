@@ -12,6 +12,7 @@ node_js:
   - "5.12"
   - "6.11"
   - "7.10"
+  - "8.1"
 env:
   global:
     # Necessary to build Node.js 0.6 on Travis CI images
@@ -45,6 +46,9 @@ cache:
     - node_modules
 
 before_install:
+  # Skip updating shrinkwrap / lock
+  - "npm config set shrinkwrap false"
+
   # Setup Node.js version-specific dependencies
   - "test $TRAVIS_NODE_VERSION != '0.6' || npm rm --save-dev nyc"
   - "test $TRAVIS_NODE_VERSION != '0.8' || npm rm --save-dev nyc"
