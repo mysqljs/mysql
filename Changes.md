@@ -10,7 +10,7 @@ you spot any mistakes.
 * Add `sqlMessage` property to `Error` objects #1714
 * Support Node.js 8.x
 * Update `bignumber.js` to 4.0.2
-* Update `readable-stream` to 2.2.9
+* Update `readable-stream` to 2.3.3
 * Use `safe-buffer` for improved Buffer API
 
 ## v2.13.0 (2017-01-24)
