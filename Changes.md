@@ -8,6 +8,7 @@ you spot any mistakes.
 
 * Add `sql` property to query `Error` objects #1462 #1628 #1629
 * Add `sqlMessage` property to `Error` objects #1714
+* Fix the MySQL 5.7.17 error codes
 * Support Node.js 8.x
 * Update `bignumber.js` to 4.0.2
 * Update `readable-stream` to 2.3.3
