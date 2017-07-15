@@ -140,10 +140,10 @@ function extractMySqlVersion(srcDir) {
 
 function fixupCode(code) {
   return code
-  // remove obsolete markers
-  .replace('ER_OBSOLETE_', 'ER_')
-  // remove unused markers
-  .replace(/(?:_OLD)?_+UNUSED$/, '');
+    // remove obsolete markers
+    .replace('ER_OBSOLETE_', 'ER_')
+    // remove unused markers
+    .replace(/(?:_OLD)?_+UNUSED$/, '');
 }
 
 function keepUnusedCodes(previousCodes, currentCodes) {
