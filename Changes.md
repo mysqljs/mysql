@@ -11,6 +11,7 @@ you spot any mistakes.
 * Fix no password support for old password protocol
 * Remove special case for handshake in determine packet code
 * Small performance improvement starting command sequence
+* Support auth switch in change user flow #1776
 * Support Node.js 11.x
 * Update `bignumber.js` to 6.0.0
 
