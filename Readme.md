@@ -1324,6 +1324,7 @@ The following flags are sent by default on a new connection:
 - `RESERVED` - Old flag for the 4.1 protocol.
 - `SECURE_CONNECTION` - Support native 4.1 authentication.
 - `TRANSACTIONS` - Asks for the transaction status flags.
+- `PLUGIN_AUTH` - Support basic auth plugin protocol, including plugin `mysql_native_password` and `mysql_old_password`.
 
 In addition, the following flag will be sent if the option `multipleStatements`
 is set to `true`:
@@ -1339,7 +1340,6 @@ available to specify.
 - COMPRESS
 - INTERACTIVE
 - NO_SCHEMA
-- PLUGIN_AUTH
 - REMEMBER_OPTIONS
 - SSL
 - SSL_VERIFY_SERVER_CERT

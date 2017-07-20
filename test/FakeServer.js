@@ -65,7 +65,8 @@ function FakeConnection(socket) {
   this._clientAuthenticationPacket    = null;
   this._oldPasswordPacket             = null;
   this._handshakeOptions              = {};
-
+  this._authSwitchResponse            = null;
+  this._duringChangeUserPhase         = false;
   socket.on('data', this._handleData.bind(this));
 }
 
@@ -76,7 +77,10 @@ FakeConnection.prototype.handshake = function(options) {
     scrambleBuff1       : Buffer.from('1020304050607080', 'hex'),
     scrambleBuff2       : Buffer.from('0102030405060708090A0B0C', 'hex'),
     serverCapabilities1 : 512, // only 1 flag, PROTOCOL_41
-    protocol41          : true
+    serverCapabilities2 : 8, // only 1 flag, PLUGIN_AUTH
+    protocol41          : true,
+    clientPluginAuth    : true,
+    authPluginName      : 'mysql_native_password' // This is the default MySQL auth plugin
   }, this._handshakeOptions);
 
   this._handshakeInitializationPacket = new Packets.HandshakeInitializationPacket(packetOpiotns);
@@ -260,8 +264,7 @@ FakeConnection.prototype._handleQueryPacket = function _handleQueryPacket(packet
 
 FakeConnection.prototype._parsePacket = function(header) {
   var Packet = this._determinePacket(header);
-  var packet = new Packet({protocol41: true});
-
+  var packet = new Packet({protocol41: true, clientPluginAuth: this._handshakeInitializationPacket.clientPluginAuth});
   packet.parse(this._parser);
 
   switch (Packet) {
@@ -269,6 +272,10 @@ FakeConnection.prototype._parsePacket = function(header) {
       this._clientAuthenticationPacket = packet;
       if (this._handshakeOptions.oldPassword) {
         this._sendPacket(new Packets.UseOldPasswordPacket());
+      } else if (this._handshakeOptions.forceAuthSwitch) {
+        this._sendPacket(new Packets.UseAuthSwitchPacket({
+          authPluginName : this._handshakeOptions.authSwitchPlugin || this._handshakeInitializationPacket.authPluginName,
+          authPluginData : Buffer.from('3DA0ADA7C9E1BB3A110575DF53306F9D2DE7FD0900', 'hex') }));
       } else if (this._handshakeOptions.password === 'passwd') {
         var expected = Buffer.from('3DA0ADA7C9E1BB3A110575DF53306F9D2DE7FD09', 'hex');
         this._sendAuthResponse(packet, expected);
@@ -288,6 +295,22 @@ FakeConnection.prototype._parsePacket = function(header) {
       var expected = Auth.scramble323(this._handshakeInitializationPacket.scrambleBuff(), this._handshakeOptions.password);
 
       this._sendAuthResponse(packet, expected);
+      break;
+    case Packets.AuthSwitchPacket:
+      this._authSwitchResponse = packet;
+      if (this._duringChangeUserPhase && this._handshakeOptions.password !== 'passwd') {
+        this._sendPacket(new Packets.OkPacket());
+      } else {
+        var expected = Auth.tokenByPlugin(
+          this._handshakeOptions.authSwitchPlugin || this._handshakeInitializationPacket.authPluginName,
+          Buffer.from('3DA0ADA7C9E1BB3A110575DF53306F9D2DE7FD09', 'hex'),
+          this._handshakeOptions.password);
+        this._sendAuthResponse(packet, expected);
+      }
+      if (this._duringChangeUserPhase) {
+        this._duringChangeUserPhase = false;
+        this._parser.resetPacketNumber();
+      }
       break;
     case Packets.ComQueryPacket:
       if (!this.emit('query', packet)) {
@@ -318,17 +341,28 @@ FakeConnection.prototype._parsePacket = function(header) {
       }
 
       this._clientAuthenticationPacket = new Packets.ClientAuthenticationPacket({
-        clientFlags   : this._clientAuthenticationPacket.clientFlags,
-        filler        : this._clientAuthenticationPacket.filler,
-        maxPacketSize : this._clientAuthenticationPacket.maxPacketSize,
-        protocol41    : this._clientAuthenticationPacket.protocol41,
-        charsetNumber : packet.charsetNumber,
-        database      : packet.database,
-        scrambleBuff  : packet.scrambleBuff,
-        user          : packet.user
+        clientFlags      : this._clientAuthenticationPacket.clientFlags,
+        filler           : this._clientAuthenticationPacket.filler,
+        maxPacketSize    : this._clientAuthenticationPacket.maxPacketSize,
+        protocol41       : this._clientAuthenticationPacket.protocol41,
+        clientPluginAuth : this._clientAuthenticationPacket.clientPluginAuth,
+        authPluginName   : this._clientAuthenticationPacket.authPluginName,
+        charsetNumber    : packet.charsetNumber,
+        database         : packet.database,
+        scrambleBuff     : packet.scrambleBuff,
+        user             : packet.user
       });
-      this._sendPacket(new Packets.OkPacket());
-      this._parser.resetPacketNumber();
+
+      if (this._clientAuthenticationPacket.clientPluginAuth) {
+        this._duringChangeUserPhase = true;
+        this._sendPacket(new Packets.UseAuthSwitchPacket({
+          authPluginName : this._handshakeOptions.authSwitchPlugin || this._handshakeInitializationPacket.authPluginName,
+          authPluginData : Buffer.from('3DA0ADA7C9E1BB3A110575DF53306F9D2DE7FD0900', 'hex') }));
+      } else {
+        this._sendPacket(new Packets.OkPacket());
+        this._parser.resetPacketNumber();
+      }
+
       break;
     case Packets.ComQuitPacket:
       if (!this.emit('quit', packet)) {
@@ -353,6 +387,10 @@ FakeConnection.prototype._determinePacket = function(header) {
 
   if (this._handshakeOptions.oldPassword && !this._oldPasswordPacket) {
     return Packets.OldPasswordPacket;
+  }
+
+  if ((this._handshakeOptions.forceAuthSwitch && !this._authSwitchResponse) || this._duringChangeUserPhase) {
+    return Packets.AuthSwitchPacket;
   }
 
   var firstByte = this._parser.peak();
