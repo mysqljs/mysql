@@ -154,6 +154,5 @@ function mergeTestConfig(config) {
     password   : process.env.MYSQL_PASSWORD,
     socketPath : process.env.MYSQL_SOCKET
   }, config);
-
   return config;
 }

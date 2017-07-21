@@ -9,7 +9,7 @@ common.getTestConnection(function (err, connection) {
 
     connection.query('SHOW VARIABLES LIKE \'character_set_client\'', function (err, result) {
       assert.ifError(err);
-      assert.strictEqual(result[0]['Value'], 'koi8r');
+      assert.strictEqual(result[0].Value, 'koi8r');
 
       connection.destroy();
     });

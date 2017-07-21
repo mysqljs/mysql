@@ -1,9 +1,10 @@
 var assert = require('assert');
 var common = require('../../common');
 var pool   = common.createPool({
-  acquireTimeout  : 200,
-  connectionLimit : 1,
-  port            : common.fakeServerPort
+  acquireTimeout       : 200,
+  connectionLimit      : 1,
+  port                 : common.fakeServerPort,
+  testOnBorrowInterval : 0
 });
 var server  = common.createFakeServer();
 
@@ -43,7 +44,6 @@ server.listen(common.fakeServerPort, function (err) {
 });
 
 server.on('connection', function(incomingConnection) {
-  serverConn = incomingConnection;
   incomingConnection.handshake({
     threadId: ++tid
   });
