@@ -392,6 +392,35 @@ constructor. In addition to those options pools accept a few extras:
 * `queueLimit`: The maximum number of connection requests the pool will queue
   before returning an error from `getConnection`. If set to `0`, there is no
   limit to the number of queued connection requests. (Default: `0`)
+* `queueTimeout`: The maximum number of milliseconds that the queued request will
+  wait for a connection when there are no available connections. If set to `0`,
+  wait indefinitely. (Default: `0`)
+* `testOnBorrow`: Indicates whether the connection is validated before borrowed
+  from the pool. If the connection fails to validate, it is dropped from the pool.
+  (Default: `true`)
+* `testOnBorrowInterval`: The number of milliseconds that indicates how often
+  to validate if the connection is working since it was last used. If set too low,
+  performance may decrease on heavy loaded systems. If set to `0`, It is checked
+  every time. (Default: `20000`)
+* `initialSize`: The initial number of connections that are created when the
+  pool is started. If set to `0`, this feature is disabled. (Default: `0`)
+* `maxIdle`: The maximum number of connections that can remain idle in the pool.  
+  If set to `0`, there is no limit. (Default: `10`)
+* `minIdle`: The minimum number of connections that can remain idle in the pool.
+  (Default: `0`)
+* `maxReuseCount`: The maximum connection reuse count allows connections to be
+  gracefully closed and removed from the connection pool after a connection has
+  been borrowed a specific number of times. If set to `0`, this feature is disabled.
+  (Default: `0`)
+* `timeBetweenEvictionRunsMillis` : The number of milliseconds to sleep between
+  runs of examining idle connections. The eviction timer will remove existent
+  idle conntions by `minEvictableIdleTimeMillis` or create new idle connections
+  by `minIdle`. If set to `0`, this feature is disabled. (Default: `0`)
+* `minEvictableIdleTimeMillis`: The minimum amount of time the connection
+  may sit idle in the pool before it is eligible for eviction due to idle time.
+  If set to `0`, no connection will be dropped. (Default: `1800000`)  
+* `numTestsPerEvictionRun` : The number of connections to examine during each run
+  of the eviction timer (if any). (Default: `3`)
 
 ## Pool events
 
@@ -442,6 +471,29 @@ pool.on('release', function (connection) {
 });
 ```
 
+### prepared
+
+The pool will emit a `prepared` event when the pool is ready to use.
+If `initialSize` is set, this is called after all initial connections are created.
+
+```js
+pool.on('prepared', function (count) {
+  if (count > 0) {
+    console.log('Created %d initial connections', count);
+  }
+});
+```
+
+### eviction
+
+The pool will emit a `eviction` event when the eviction timer runs.
+
+```js
+pool.on('eviction', function (result) {
+  console.log('Removed : %d / Created : %d', connection.removed, connection.created);
+});
+```
+
 ## Closing all the connections in a pool
 
 When you are done using the pool, you have to end all the connections or the
@@ -462,6 +514,19 @@ pending queries will still complete and the time to end the pool will vary.
 
 **Once `pool.end()` has been called, `pool.getConnection` and other operations
 can no longer be performed**
+
+## Monitoring the status of a pool
+
+If you want to know about the status of the pool, use the `getStatus` method.
+It provides 4 values(all, use, idle, queue).
+
+```js
+var status = pool.getStatus();
+console.log('All connected connections : %d', status.all);
+console.log('Connections being used : %d', status.use);
+console.log('Idle connections : %d', status.idle);
+console.log('Queued requests : %d', status.queue);
+```
 
 ## PoolCluster
 

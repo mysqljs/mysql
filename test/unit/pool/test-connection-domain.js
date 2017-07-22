@@ -32,6 +32,7 @@ server.listen(common.fakeServerPort, function (err) {
 
     assert.ok(!domain.active, 'no current domain');
     pool.getConnection(function (err, conn) {
+
       assert.ifError(err);
       assert.equal(domain.active, d0, 'current domain is d0');
       assert.equal(conn.domain, d0, 'connection domain is d0');
@@ -41,7 +42,7 @@ server.listen(common.fakeServerPort, function (err) {
   }, 200);
 
   d0.run(function () {
-    pool = common.createPool({port: common.fakeServerPort, connectionLimit: 1});
+    pool = common.createPool({port: common.fakeServerPort, connectionLimit: 1, testOnBorrowInterval: 0 });
     assert.equal(pool.domain, d0, 'pool belongs to d0');
 
     d1.run(function () {

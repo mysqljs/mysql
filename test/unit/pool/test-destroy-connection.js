@@ -10,11 +10,11 @@ server.listen(common.fakeServerPort, function (err) {
   pool.getConnection(function (err, connection) {
     assert.ifError(err);
 
-    assert.strictEqual(connection, pool._allConnections[0]);
+    assert.strictEqual(connection, pool._manager._allConnection.get(connection.getId()));
     connection.destroy();
 
-    assert.strictEqual(pool._allConnections.length, 0);
-    assert.ok(!connection._pool);
+    assert.equal(pool.getStatus().all, 0);
+    assert.equal(connection._pool, null);
 
     assert.doesNotThrow(function () { connection.release(); });
 
