@@ -6,6 +6,7 @@ you spot any mistakes.
 
 ## HEAD
 
+* Add new Amazon RDS eu-west-2 certificate CA to Amazon RDS SSL profile #1770
 * Add `sql` property to query `Error` objects #1462 #1628 #1629
 * Add `sqlMessage` property to `Error` objects #1714
 * Fix the MySQL 5.7.17 error codes
