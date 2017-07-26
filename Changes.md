@@ -4,7 +4,7 @@ This file is a manually maintained list of changes for each release. Feel free
 to add your changes here when sending pull requests. Also send corrections if
 you spot any mistakes.
 
-## HEAD
+## v2.14.0 (2017-07-25)
 
 * Add new Amazon RDS ap-south-1 certificate CA to Amazon RDS SSL profile #1780
 * Add new Amazon RDS eu-west-2 certificate CA to Amazon RDS SSL profile #1770
