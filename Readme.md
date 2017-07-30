@@ -127,7 +127,7 @@ spend more time on it (ordered by time of contribution):
 * [Joyent](http://www.joyent.com/)
 * [pinkbike.com](http://pinkbike.com/)
 * [Holiday Extras](http://www.holidayextras.co.uk/) (they are [hiring](http://join.holidayextras.co.uk/))
-* [Newscope](http://newscope.com/) (they are [hiring](http://www.newscope.com/stellenangebote))
+* [Newscope](http://newscope.com/) (they are [hiring](https://newscope.com/unternehmen/jobs/))
 
 ## Community
 
