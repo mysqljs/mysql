@@ -56,7 +56,7 @@ test('ConnectionConfig#Constructor', {
   },
 
   'ignores empty client flags': function() {
-    var config = new ConnectionConfig({ flags: '-FOUND_ROWS,,+IGNORE_SPACE' });
+    var config = new ConnectionConfig({ flags: ',-FOUND_ROWS,,+IGNORE_SPACE' });
     assert.equal(config.clientFlags & common.ClientConstants.CLIENT_FOUND_ROWS, 0);
     assert.notEqual(config.clientFlags & common.ClientConstants.CLIENT_IGNORE_SPACE, 0);
   },
