@@ -4,7 +4,7 @@ This file is a manually maintained list of changes for each release. Feel free
 to add your changes here when sending pull requests. Also send corrections if
 you spot any mistakes.
 
-## HEAD
+## v2.14.1 (2017-08-01)
 
 * Fix holding first closure for lifetime of connection #1785
 
