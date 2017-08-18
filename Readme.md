@@ -369,7 +369,7 @@ time one is needed.
 Connections are lazily created by the pool. If you configure the pool to allow
 up to 100 connections, but only ever use 5 simultaneously, only 5 connections
 will be made. Connections are also cycled round-robin style, with connections
-being taken from the top of the pool and returning to the bottom.
+being taken from the top of the pool and returning to the bottom. If you want to change cycle strategy, you can set `stackCycle` option in pool options.
 
 When a previous connection is retrieved from the pool, a ping packet is sent
 to the server to check if the connection is still good.
@@ -392,6 +392,7 @@ constructor. In addition to those options pools accept a few extras:
 * `queueLimit`: The maximum number of connection requests the pool will queue
   before returning an error from `getConnection`. If set to `0`, there is no
   limit to the number of queued connection requests. (Default: `0`)
+* `stackCycle`: Determines how the released connections rotates. If `true`, It's cycled stack style. If you need to disconnect a useless connection after suddenly an increase in connection, use the stack strategy. If `false`, It's cycled round-robin style. (Default: `false`)
 
 ## Pool events
 
@@ -1418,7 +1419,7 @@ and no password set for the `root` user, run:
 
 ```sh
 $ mysql -u root -e "CREATE DATABASE IF NOT EXISTS node_mysql_test"
-$ MYSQL_HOST=localhost MYSQL_PORT=3306 MYSQL_DATABASE=node_mysql_test MYSQL_USER=root MYSQL_PASSWORD= FILTER=integration npm test
+$ MYSQL_HOST=localhost MYSQL_PORT=3306 MYSQL_DATABASE=node_mysql_test MYSQL_USER=root MYSQL_PASSWORD=park FILTER=integration npm test
 ```
 
 ## Todo
