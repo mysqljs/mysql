@@ -41,6 +41,7 @@
     "lint": "eslint .",
     "test": "node test/run.js",
     "test-ci": "nyc --reporter=text npm test",
-    "test-cov": "nyc --reporter=html --reporter=text npm test"
+    "test-cov": "nyc --reporter=html --reporter=text npm test",
+    "version": "node tool/version-changes.js"
   }
 }
