@@ -392,6 +392,7 @@ constructor. In addition to those options pools accept a few extras:
 * `queueLimit`: The maximum number of connection requests the pool will queue
   before returning an error from `getConnection`. If set to `0`, there is no
   limit to the number of queued connection requests. (Default: `0`)
+* `gracefulExit`: Determines whether to end gracefully. If `true`, every `pool.getConnection` or `pool.query` called before `pool.end` will success. If `false`, only commands / queries already in progress will complete, others will throw an error.
 
 ## Pool events
 
@@ -461,6 +462,11 @@ all the connections have ended.
 
 **Once `pool.end()` has been called, `pool.getConnection` and other operations
 can no longer be performed**
+
+If `gracefulExit` is set to `true`, the connections end _gracefully_, so all
+ -pending queries will still complete and the time to end the pool will vary.
+
+The default `gracefulExit` is `false`, the following behavior will take effect.
 
 This works by calling `connection.end()` on every active connection in the
 pool, which queues a `QUIT` packet on the connection. And sets a flag to
