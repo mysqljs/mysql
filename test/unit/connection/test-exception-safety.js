@@ -30,12 +30,12 @@ server.listen(common.fakeServerPort, function(err) {
 
   // Row streaming events
   connection.query('SELECT 1')
-  .on('fields', function() {
-    throw new Error('3');
-  })
-  .on('result', function() {
-    throw new Error('4');
-  });
+    .on('fields', function () {
+      throw new Error('3');
+    })
+    .on('result', function () {
+      throw new Error('4');
+    });
 
   // Normal callback with error
   connection.query('INVALID SQL', function(err) {
@@ -45,9 +45,9 @@ server.listen(common.fakeServerPort, function(err) {
 
   // Row streaming 'result' event triggered by Ok Packet (special code path)
   connection.query('USE test')
-  .on('result', function() {
-    throw new Error('6');
-  });
+    .on('result', function () {
+      throw new Error('6');
+    });
 
   // Normal callback (same code path as connect, but in here should that
   // implementation detail change at some point).

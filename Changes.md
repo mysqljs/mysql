@@ -6,10 +6,24 @@ you spot any mistakes.
 
 ## HEAD
 
+* Add new Amazon RDS ca-central-1 certificate CA to Amazon RDS SSL profile #1809
+* Fix typo in insecure auth error message
+* Support `mysql_native_password` auth switch request for Azure #1396 #1729 #1730
+
+## v2.14.1 (2017-08-01)
+
+* Fix holding first closure for lifetime of connection #1785
+
+## v2.14.0 (2017-07-25)
+
+* Add new Amazon RDS ap-south-1 certificate CA to Amazon RDS SSL profile #1780
+* Add new Amazon RDS eu-west-2 certificate CA to Amazon RDS SSL profile #1770
 * Add `sql` property to query `Error` objects #1462 #1628 #1629
 * Add `sqlMessage` property to `Error` objects #1714
+* Fix the MySQL 5.7.17 error codes
+* Support Node.js 8.x
 * Update `bignumber.js` to 4.0.2
-* Update `readable-stream` to 2.2.9
+* Update `readable-stream` to 2.3.3
 * Use `safe-buffer` for improved Buffer API
 
 ## v2.13.0 (2017-01-24)

@@ -127,7 +127,7 @@ spend more time on it (ordered by time of contribution):
 * [Joyent](http://www.joyent.com/)
 * [pinkbike.com](http://pinkbike.com/)
 * [Holiday Extras](http://www.holidayextras.co.uk/) (they are [hiring](http://join.holidayextras.co.uk/))
-* [Newscope](http://newscope.com/) (they are [hiring](http://www.newscope.com/stellenangebote))
+* [Newscope](http://newscope.com/) (they are [hiring](https://newscope.com/unternehmen/jobs/))
 
 ## Community
 
@@ -457,11 +457,27 @@ pool.end(function (err) {
 ```
 
 The `end` method takes an _optional_ callback that you can use to know once
-all the connections have ended. The connections end _gracefully_, so all
-pending queries will still complete and the time to end the pool will vary.
+all the connections have ended.
 
 **Once `pool.end()` has been called, `pool.getConnection` and other operations
 can no longer be performed**
+
+This works by calling `connection.end()` on every active connection in the
+pool, which queues a `QUIT` packet on the connection. And sets a flag to
+prevent `pool.getConnection` from continuing to create any new connections.
+
+Since this queues a `QUIT` packet on each connection, all commands / queries
+already in progress will complete, just like calling `connection.end()`. If
+`pool.end` is called and there are connections that have not yet been released,
+those connections will fail to execute any new commands after the `pool.end`
+since they have a pending `QUIT` packet in their queue; wait until releasing
+all connections back to the pool before calling `pool.end()`.
+
+Since the `pool.query` method is a short-hand for the `pool.getConnection` ->
+`connection.query` -> `connection.release()` flow, calling `pool.end()` before
+all the queries added via `pool.query` have completed, since the underlying
+`pool.getConnection` will fail due to all connections ending and not allowing
+new connections to be created.
 
 ## PoolCluster
 
