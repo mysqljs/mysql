@@ -4,8 +4,7 @@ var pool   = common.createPool({
   connectionLimit    : 1,
   port               : common.fakeServerPort,
   queueLimit         : 5,
-  waitForConnections : true,
-  gracefulExit       : true
+  waitForConnections : true
 });
 
 var server = common.createFakeServer();
@@ -16,7 +15,7 @@ server.listen(common.fakeServerPort, function (err) {
   pool.getConnection(function (err, conn) {
     assert.ifError(err);
 
-    pool.end(function (err) {
+    pool.end(true, function (err) {
       assert.ifError(err);
       server.destroy();
     });

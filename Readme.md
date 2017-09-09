@@ -392,7 +392,6 @@ constructor. In addition to those options pools accept a few extras:
 * `queueLimit`: The maximum number of connection requests the pool will queue
   before returning an error from `getConnection`. If set to `0`, there is no
   limit to the number of queued connection requests. (Default: `0`)
-* `gracefulExit`: Determines whether to end gracefully. If `true`, every `pool.getConnection` or `pool.query` called before `pool.end` will success. If `false`, only commands / queries already in progress will complete, others will throw an error.
 
 ## Pool events
 
@@ -452,25 +451,37 @@ trying to gracefully shutdown a server. To end all the connections in the
 pool, use the `end` method on the pool:
 
 ```js
-pool.end(function (err) {
+pool.end(false, function (err) {
   // all connections in the pool have ended
 });
 ```
 
-The `end` method takes an _optional_ callback that you can use to know once
-all the connections have ended.
+The `end` method takes two _optional_ arguemnts:
+
+* `gracefulExit`: Determines whether to end gracefully. If `true`, every
+`pool.getConnection` or `pool.query` called before `pool.end` will complete.
+If `false`, only commands / queries already in progress will complete,
+others will fail. (Default: `false`)
+
+* `callback`: Will be called once all the connections have ended.
 
 **Once `pool.end()` has been called, `pool.getConnection` and other operations
 can no longer be performed**
 
-If `gracefulExit` is set to `true`, the connections end _gracefully_, so all
- -pending queries will still complete and the time to end the pool will vary.
+### Under the hood
 
-The default `gracefulExit` is `false`, the following behavior will take effect.
+If `gracefulExit` is set to `true`, after calling `pool.end` the poll will
+enter into the `pendingClose` state, all former or queued queries will still
+complete. But the pool will no longer accept new queries.
 
-This works by calling `connection.end()` on every active connection in the
-pool, which queues a `QUIT` packet on the connection. And sets a flag to
-prevent `pool.getConnection` from continuing to create any new connections.
+This works by not queueing the `QUIT` packet on all the connections until there
+is no connection in the aquiring state and no queued queries. All established
+connections will still queue queries which were added before calling `pool.end`.
+
+If `gracefulExit` is set to `false`, `pool.end` works by calling `connection.end()`
+on every active connection in the pool, which queues a `QUIT` packet on the
+connection. And sets a flag to prevent `pool.getConnection` from continuing to
+create any new connections.
 
 Since this queues a `QUIT` packet on each connection, all commands / queries
 already in progress will complete, just like calling `connection.end()`. If
