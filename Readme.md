@@ -850,7 +850,9 @@ connection.query('DELETE FROM posts WHERE title = "wrong"', function (error, res
 You can get the number of changed rows from an update statement.
 
 "changedRows" differs from "affectedRows" in that it does not count updated rows
-whose values were not changed.
+whose values were not changed.  Note - this value is parsed from the server message and
+expects an English response.  If your mysql server's install is in a different language,
+use [affectedRows](#getting-the-number-of-affected-rows).
 
 ```js
 connection.query('UPDATE posts SET ...', function (error, results, fields) {
