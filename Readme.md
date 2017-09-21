@@ -653,6 +653,10 @@ connection.query({
 
 ## Escaping query values
 
+**Caution** These methods of escaping values only works when the
+[NO_BACKSLASH_ESCAPES](https://dev.mysql.com/doc/refman/5.7/en/sql-mode.html#sqlmode_no_backslash_escapes)
+SQL mode is disabled (which is the default state for MySQL servers).
+
 In order to avoid SQL Injection attacks, you should always escape any user
 provided data before using it inside a SQL query. You can do so using the
 `mysql.escape()`, `connection.escape()` or `pool.escape()` methods:
