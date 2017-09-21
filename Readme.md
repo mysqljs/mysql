@@ -676,6 +676,10 @@ connection.query('SELECT * FROM users WHERE id = ?', [userId], function (error, 
 });
 ```
 
+**Caution** These methods of escaping values only work with the default [sql_mode setting](https://dev.mysql.com/doc/refman/5.7/en/sql-mode.html).
+If [NO_BACKSLASH_ESCAPES](https://dev.mysql.com/doc/refman/5.7/en/sql-mode.html#sqlmode_no_backslash_escapes) flag is enabled, strings will not
+be properly escaped, and SQL Injection is still possible.
+
 Multiple placeholders are mapped to values in the same order as passed. For example,
 in the following query `foo` equals `a`, `bar` equals `b`, `baz` equals `c`, and
 `id` will be `userId`:
