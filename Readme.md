@@ -716,8 +716,7 @@ Different value types are escaped differently, here is how:
   to insert them as values will trigger MySQL errors until they implement
   support.
 
-If you paid attention, you may have noticed that this escaping allows you
-to do neat things like this:
+This escaping allows you to do neat things like this:
 
 ```js
 var post  = {id: 1, title: 'Hello MySQL'};
