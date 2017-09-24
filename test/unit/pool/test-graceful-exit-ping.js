@@ -21,7 +21,9 @@ server.listen(common.fakeServerPort, function (err) {
       conn.release();
     });
 
-    pool.end(true, function (err) {
+    pool.end({
+      gracefulExit: true
+    }, function (err) {
       assert.ifError(err);
       server.destroy();
     });

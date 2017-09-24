@@ -1,7 +1,7 @@
 var common = require('../../common');
 var assert = require('assert');
 var pool   = common.createPool({
-  connectionLimit    : 1,
+  connectionLimit    : 2,
   port               : common.fakeServerPort,
   queueLimit         : 5,
   waitForConnections : true
@@ -15,24 +15,24 @@ server.listen(common.fakeServerPort, function (err) {
   pool.getConnection(function (err, conn) {
     assert.ifError(err);
 
-    pool.end({
-      gracefulExit: true
-    }, function (err) {
+    pool.getConnection(function (err, conn2) {
       assert.ifError(err);
-      server.destroy();
+
+      pool.query('SELECT 1', function (err, rows) {
+        assert.ifError(err);
+        assert.equal(rows.length, 1);
+        assert.equal(rows[0]['1'], 1);
+      });
+
+      pool.end({
+        gracefulExit: true
+      }, function (err) {
+        assert.ifError(err);
+        server.destroy();
+      });
+
+      conn.release();
+      conn2.release();
     });
-
-    pool.getConnection(function (err) {
-      assert.ok(err);
-      assert.equal(err.message, 'Pool is closed.');
-      assert.equal(err.code, 'POOL_CLOSED');
-    });
-
-    conn.release();
-  });
-
-  pool.getConnection(function (err, conn) {
-    assert.ifError(err);
-    conn.release();
   });
 });

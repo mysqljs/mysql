@@ -451,14 +451,18 @@ trying to gracefully shutdown a server. To end all the connections in the
 pool, use the `end` method on the pool:
 
 ```js
-pool.end(false, function (err) {
+pool.end({
+  gracefulExit: true
+}, function (err) {
   // all connections in the pool have ended
 });
 ```
 
-The `end` method takes two _optional_ arguemnts:
+The `end` method takes two _optional_ arguments:
 
-* `gracefulExit`: Determines whether to end gracefully. If `true`, every
+* `options`:
+
+  * `gracefulExit`: Determines whether to end gracefully. If `true`, every
 `pool.getConnection` or `pool.query` called before `pool.end` will complete.
 If `false`, only commands / queries already in progress will complete,
 others will fail. (Default: `false`)
@@ -470,7 +474,7 @@ can no longer be performed**
 
 ### Under the hood
 
-If `gracefulExit` is set to `true`, after calling `pool.end` the poll will
+If `options.gracefulExit` is set to `true`, after calling `pool.end` the poll will
 enter into the `pendingClose` state, all former or queued queries will still
 complete. But the pool will no longer accept new queries.
 
@@ -478,7 +482,7 @@ This works by not queueing the `QUIT` packet on all the connections until there
 is no connection in the aquiring state and no queued queries. All established
 connections will still queue queries which were added before calling `pool.end`.
 
-If `gracefulExit` is set to `false`, `pool.end` works by calling `connection.end()`
+If `options.gracefulExit` is set to `false`, `pool.end` works by calling `connection.end()`
 on every active connection in the pool, which queues a `QUIT` packet on the
 connection. And sets a flag to prevent `pool.getConnection` from continuing to
 create any new connections.
