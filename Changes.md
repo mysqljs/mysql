@@ -7,6 +7,7 @@ you spot any mistakes.
 ## HEAD
 
 * Add new Amazon RDS ca-central-1 certificate CA to Amazon RDS SSL profile #1809
+* Add new error codes up to MySQL 5.7.19
 * Add `mysql.raw()` to generate pre-escaped values #877 #1821
 * Fix "changedRows" to work on non-English servers #1819
 * Fix error when server sends RST on `QUIT` #1811
