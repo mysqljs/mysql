@@ -707,6 +707,8 @@ Different value types are escaped differently, here is how:
 * Arrays are turned into list, e.g. `['a', 'b']` turns into `'a', 'b'`
 * Nested arrays are turned into grouped lists (for bulk inserts), e.g. `[['a',
   'b'], ['c', 'd']]` turns into `('a', 'b'), ('c', 'd')`
+* Objects that have a `toSqlString` method will have `.toSqlString()` called
+  and the returned value is used as the raw SQL.
 * Objects are turned into `key = 'val'` pairs for each enumerable property on
   the object. If the property's value is a function, it is skipped; if the
   property's value is an object, toString() is called on it and the returned
@@ -725,7 +727,14 @@ var query = connection.query('INSERT INTO posts SET ?', post, function (error, r
   // Neat!
 });
 console.log(query.sql); // INSERT INTO posts SET `id` = 1, `title` = 'Hello MySQL'
+```
 
+And the `toSqlString` method allows you to form complex queries with functions:
+
+```js
+var CURRENT_TIMESTAMP = { toSqlString: function() { return 'CURRENT_TIMESTAMP()'; } };
+var sql = mysql.format('UPDATE posts SET modified = ? WHERE id = ?', [CURRENT_TIMESTAMP, 42]);
+console.log(sql); // UPDATE posts SET modified = CURRENT_TIMESTAMP() WHERE id = 42
 ```
 
 If you feel the need to escape queries by yourself, you can also use the escaping
