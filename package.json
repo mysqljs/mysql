@@ -20,7 +20,7 @@
   },
   "devDependencies": {
     "after": "0.8.2",
-    "eslint": "4.7.2",
+    "eslint": "4.8.0",
     "nyc": "10.3.2",
     "seedrandom": "2.4.3",
     "timezone-mock": "0.0.5",
