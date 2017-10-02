@@ -9,6 +9,7 @@ you spot any mistakes.
 * Add new Amazon RDS ca-central-1 certificate CA to Amazon RDS SSL profile #1809
 * Add `mysql.raw()` to generate pre-escaped values #877 #1821
 * Fix "changedRows" to work on non-English servers #1819
+* Fix error when server sends RST on `QUIT` #1811
 * Fix typo in insecure auth error message
 * Support `mysql_native_password` auth switch request for Azure #1396 #1729 #1730
 * Update `sqlstring` to 2.3.0
