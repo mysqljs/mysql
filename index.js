@@ -95,6 +95,18 @@ exports.format = function format(sql, values, stringifyObjects, timeZone) {
 };
 
 /**
+ * Wrap raw SQL strings from escape overriding.
+ * @param {string} sql The raw SQL
+ * @return {object} Wrapped object
+ * @public
+ */
+exports.raw = function raw(sql) {
+  var SqlString = loadClass('SqlString');
+
+  return SqlString.raw(sql);
+};
+
+/**
  * The type constants.
  * @public
  */

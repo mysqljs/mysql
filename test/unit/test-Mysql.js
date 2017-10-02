@@ -20,6 +20,16 @@ test('Mysql.format', {
   }
 });
 
+test('Mysql.raw', {
+  'generate object format will not escape': function() {
+    var now = Mysql.raw('NOW()');
+    assert.equal(
+      Mysql.format('SELECT * FROM ?? WHERE ?? >= ?', ['table', 'property', now]),
+      'SELECT * FROM `table` WHERE `property` >= NOW()'
+    );
+  }
+});
+
 test('Mysql.Types', {
   'exported object of types': function() {
     assert.equal(typeof Mysql.Types, 'object');

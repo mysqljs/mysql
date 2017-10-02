@@ -737,6 +737,19 @@ var sql = mysql.format('UPDATE posts SET modified = ? WHERE id = ?', [CURRENT_TI
 console.log(sql); // UPDATE posts SET modified = CURRENT_TIMESTAMP() WHERE id = 42
 ```
 
+To generate objects with a `toSqlString` method, the `mysql.raw()` method can
+be used. This creates an object that will be left un-touched when using in a `?`
+placeholder, useful for using functions as dynamic values:
+
+**Caution** The string provided to `mysql.raw()` will skip all escaping
+functions when used, so be careful when passing in unvalidated input.
+
+```js
+var CURRENT_TIMESTAMP = mysql.raw('CURRENT_TIMESTAMP()');
+var sql = mysql.format('UPDATE posts SET modified = ? WHERE id = ?', [CURRENT_TIMESTAMP, 42]);
+console.log(sql); // UPDATE posts SET modified = CURRENT_TIMESTAMP() WHERE id = 42
+```
+
 If you feel the need to escape queries by yourself, you can also use the escaping
 function directly:
 
