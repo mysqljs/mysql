@@ -5,7 +5,7 @@ var server  = common.createFakeServer();
 
 var poolConfig = common.getTestConfig({port: common.fakeServerPort});
 cluster.add('MASTER', poolConfig);
-cluster.add('SLAVE' , poolConfig);
+cluster.add('SLAVE', poolConfig);
 cluster.add('SLAVE1', poolConfig);
 cluster.add('SLAVE2', poolConfig);
 
