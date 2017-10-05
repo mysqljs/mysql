@@ -4,7 +4,7 @@ This file is a manually maintained list of changes for each release. Feel free
 to add your changes here when sending pull requests. Also send corrections if
 you spot any mistakes.
 
-## HEAD
+## v2.15.0 (2017-10-05)
 
 * Add new Amazon RDS ca-central-1 certificate CA to Amazon RDS SSL profile #1809
 * Add new error codes up to MySQL 5.7.19
