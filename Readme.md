@@ -49,6 +49,7 @@
 - [Type casting](#type-casting)
 - [Connection Flags](#connection-flags)
 - [Debugging and reporting problems](#debugging-and-reporting-problems)
+- [Security issues](#security-issues)
 - [Contributing](#contributing)
 - [Running tests](#running-tests)
 - [Todo](#todo)
@@ -1409,6 +1410,22 @@ will have:
 * The minimal amount of code required to reproduce the problem (if possible)
 * As much debugging output and information about your environment (mysql
   version, node version, os, etc.) as you can gather.
+
+## Security issues
+
+Security issues should not be first reported through GitHub or another public
+forum, but kept private in order for the collaborators to assess the report
+and either (a) devise a fix and plan a release date or (b) assert that is not
+not a security issues (in which case it can be posted in a public forum, like
+a GitHub issue).
+
+The primary private forum is email, either by emailing the module's author or
+opening a GitHub issue simply asking to whom a security issues should be
+addresses to without disclosing the issue or type of issue.
+
+An ideal report would include a clear indication of what the security issue is
+and how it would be exploited, ideally with an accompaning proof of concept
+("PoC") for collaborators to work again and validate potentional fixes against.
 
 ## Contributing
 
