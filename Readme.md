@@ -247,7 +247,7 @@ it uses one of the predefined SSL profiles included. The following profiles are 
   https://s3.amazonaws.com/rds-downloads/rds-combined-ca-bundle.pem
 
 When connecting to other servers, you will need to provide an object of options, in the
-same format as [crypto.createCredentials](http://nodejs.org/api/crypto.html#crypto_crypto_createcredentials_details).
+same format as [tls.createSecureContext](https://nodejs.org/api/tls.html#tls_tls_createsecurecontext_options).
 Please note the arguments expect a string of the certificate, not a file name to the
 certificate. Here is a simple example:
 
