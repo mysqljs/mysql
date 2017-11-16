@@ -6,6 +6,7 @@ you spot any mistakes.
 
 ## HEAD
 
+* Add Amazon RDS GovCloud SSL certificates #1876
 * Include connection ID in debug output
 * Update `bignumber.js` to 4.1.0
 * Update `readable-stream` to 2.3.4
