@@ -1439,7 +1439,7 @@ For a good pull request, we ask you provide the following:
 1. Try to include a clear description of your pull request in the description.
    It should include the basic "what" and "why"s for the request.
 2. The tests should pass as best as you can. See the [Running tests](#running-tests)
-   section on hwo to run the different tests. GitHub will automatically run
+   section on how to run the different tests. GitHub will automatically run
    the tests as well, to act as a safety net.
 3. The pull request should include tests for the change. A new feature should
    have tests for the new feature and bug fixes should include a test that fails
