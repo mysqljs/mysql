@@ -4,6 +4,10 @@ This file is a manually maintained list of changes for each release. Feel free
 to add your changes here when sending pull requests. Also send corrections if
 you spot any mistakes.
 
+## HEAD
+
+* Update `bignumber.js` to 4.1.0
+
 ## v2.15.0 (2017-10-05)
 
 * Add new Amazon RDS ca-central-1 certificate CA to Amazon RDS SSL profile #1809
