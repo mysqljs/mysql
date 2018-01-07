@@ -1415,13 +1415,13 @@ will have:
 
 Security issues should not be first reported through GitHub or another public
 forum, but kept private in order for the collaborators to assess the report
-and either (a) devise a fix and plan a release date or (b) assert that is not
-not a security issues (in which case it can be posted in a public forum, like
+and either (a) devise a fix and plan a release date or (b) assert that it is
+not a security issue (in which case it can be posted in a public forum, like
 a GitHub issue).
 
 The primary private forum is email, either by emailing the module's author or
 opening a GitHub issue simply asking to whom a security issues should be
-addresses to without disclosing the issue or type of issue.
+addressed to without disclosing the issue or type of issue.
 
 An ideal report would include a clear indication of what the security issue is
 and how it would be exploited, ideally with an accompaning proof of concept
