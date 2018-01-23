@@ -1,4 +1,6 @@
 var Classes = Object.create(null);
+var calledAsTemplateTagQuick = require('template-tag-common')
+    .calledAsTemplateTagQuick;
 
 /**
  * Create a new Connection instance.
@@ -46,10 +48,18 @@ exports.createPoolCluster = function createPoolCluster(config) {
  * @return {Query} New query object
  * @public
  */
-exports.createQuery = function createQuery(sql, values, callback) {
+exports.createQuery = function createQuery(...args) {
   var Connection = loadClass('Connection');
-
-  return Connection.createQuery(sql, values, callback);
+  if (calledAsTemplateTagQuick(args[0], args.length)) {
+    var Template = loadClass('Template');
+    const sqlFragment = Template.sql(...args);
+    return function (callback) {
+      return Connection.createQuery(sqlFragment.content, [], callback);
+    };
+  } else {
+    let [ sql, values, callback ] = args
+    return Connection.createQuery(sql, values, callback);
+  }
 };
 
 /**
@@ -106,13 +116,23 @@ exports.raw = function raw(sql) {
   return SqlString.raw(sql);
 };
 
-/**
- * The type constants.
- * @public
- */
-Object.defineProperty(exports, 'Types', {
-  get: loadClass.bind(null, 'Types')
+Object.defineProperties(exports, {
+  /**
+   * The type constants.
+   * @public
+   */
+  'Types': {
+    get: loadClass.bind(null, 'Types')
+  },
+  /**
+   * The SQL template tag.
+   * @public
+   */
+  'sql': {
+    get: loadClass.bind(null, 'Template')
+  }
 });
+
 
 /**
  * Load the given class.
@@ -146,6 +166,9 @@ function loadClass(className) {
       break;
     case 'SqlString':
       Class = require('./lib/protocol/SqlString');
+      break;
+    case 'Template':
+      Class = require('./lib/Template');
       break;
     case 'Types':
       Class = require('./lib/protocol/constants/types');
