@@ -12,10 +12,6 @@ function tokens (...chunks) {
   return out.join(',');
 }
 
-for (let k in Template) {
-  console.log('%s in Template', k);
-}
-
 test('template lexer', {
   'empty string': function () {
     assert.equal(tokens(''), '_');
