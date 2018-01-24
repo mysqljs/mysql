@@ -1,6 +1,6 @@
+var ttCommon = require('template-tag-common');
+
 var Classes = Object.create(null);
-var calledAsTemplateTagQuick = require('template-tag-common')
-  .calledAsTemplateTagQuick;
 
 /**
  * Create a new Connection instance.
@@ -50,14 +50,14 @@ exports.createPoolCluster = function createPoolCluster(config) {
  */
 exports.createQuery = function createQuery(...args) {
   var Connection = loadClass('Connection');
-  if (calledAsTemplateTagQuick(args[0], args.length)) {
+  if (ttCommon.calledAsTemplateTagQuick(args[0], args.length)) {
     var Template = loadClass('Template');
-    const sqlFragment = Template.sql(...args);
+    const sqlFragment = Template(...args);
     return function (callback) {
       return Connection.createQuery(sqlFragment.content, [], callback);
     };
   } else {
-    let [ sql, values, callback ] = args;
+    const [ sql, values, callback ] = args;
     return Connection.createQuery(sql, values, callback);
   }
 };
