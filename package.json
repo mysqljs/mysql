@@ -40,9 +40,9 @@
   },
   "scripts": {
     "lint": "eslint .",
-    "test": "node test/run.js",
-    "test-ci": "nyc --reporter=text npm test",
-    "test-cov": "nyc --reporter=html --reporter=text npm test",
+    "test": "TZ=GMT node test/run.js",
+    "test-ci": "TZ=GMT nyc --reporter=text npm test",
+    "test-cov": "TZ=GMT nyc --reporter=html --reporter=text npm test",
     "version": "node tool/version-changes.js && git add Changes.md"
   }
 }
