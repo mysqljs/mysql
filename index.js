@@ -1,6 +1,6 @@
 var Classes = Object.create(null);
 var calledAsTemplateTagQuick = require('template-tag-common')
-    .calledAsTemplateTagQuick;
+  .calledAsTemplateTagQuick;
 
 /**
  * Create a new Connection instance.
@@ -57,7 +57,7 @@ exports.createQuery = function createQuery(...args) {
       return Connection.createQuery(sqlFragment.content, [], callback);
     };
   } else {
-    let [ sql, values, callback ] = args
+    let [ sql, values, callback ] = args;
     return Connection.createQuery(sql, values, callback);
   }
 };
@@ -132,7 +132,6 @@ Object.defineProperties(exports, {
     get: loadClass.bind(null, 'Template')
   }
 });
-
 
 /**
  * Load the given class.
