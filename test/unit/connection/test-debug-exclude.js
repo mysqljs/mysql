@@ -5,6 +5,7 @@ var connection = common.createConnection({
   port  : common.fakeServerPort
 });
 
+var tid    = 0;
 var server = common.createFakeServer();
 
 server.listen(common.fakeServerPort, function (err) {
@@ -22,12 +23,16 @@ server.listen(common.fakeServerPort, function (err) {
     assert.ifError(err);
     assert.equal(messages.length, 3);
     assert.deepEqual(messages, [
-      '<-- OkPacket',
-      '--> ComPingPacket',
-      '<-- OkPacket'
+      '<-- (1) OkPacket',
+      '--> (1) ComPingPacket',
+      '<-- (1) OkPacket'
     ]);
 
     connection.destroy();
     server.destroy();
   });
+});
+
+server.on('connection', function (conn) {
+  conn.handshake({ threadId: ++tid });
 });
