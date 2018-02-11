@@ -7,6 +7,7 @@ you spot any mistakes.
 ## HEAD
 
 * Update `bignumber.js` to 4.1.0
+* Update `readable-stream` to 2.3.4
 
 ## v2.15.0 (2017-10-05)
 
