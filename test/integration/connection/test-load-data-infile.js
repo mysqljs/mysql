@@ -11,6 +11,9 @@ common.getTestConnection(function (err, connection) {
 
   common.useTestDb(connection);
 
+  // "LOAD DATA LOCAL" is not allowed on MySQL 8 by default
+  connection.query('SET GLOBAL local_infile = true', assert.ifError);
+
   connection.query([
     'CREATE TEMPORARY TABLE ?? (',
     '`id` int(11) unsigned NOT NULL AUTO_INCREMENT,',

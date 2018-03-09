@@ -1399,6 +1399,14 @@ The following flags are sent by default on a new connection:
 - `SECURE_CONNECTION` - Support native 4.1 authentication.
 - `TRANSACTIONS` - Asks for the transaction status flags.
 
+The `local_infile` system variable is disabled by default since MySQL 8.0.2, which
+means the `LOCAL_FILES` flag will only make sense if the feature is explicitely
+enabled on the server.
+
+```sql
+SET GLOBAL local_infile = true;
+```
+
 In addition, the following flag will be sent if the option `multipleStatements`
 is set to `true`:
 
