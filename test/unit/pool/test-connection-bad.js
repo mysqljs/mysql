@@ -42,7 +42,6 @@ server.listen(common.fakeServerPort, function(err){
 });
 
 server.on('connection', function(incomingConnection) {
-  serverConn = incomingConnection;
   incomingConnection.handshake({
     threadId: ++tid
   });
