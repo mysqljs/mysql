@@ -72,15 +72,19 @@ function FakeConnection(socket) {
 
 FakeConnection.prototype.handshake = function(options) {
   this._handshakeOptions = options || {};
+  this._handshakeOptions.pluginData = this._handshakeOptions.pluginData ||
+    this._handshakeOptions.authMethodName || 'caching_sha2_password';
+  this._handshakeOptions.secureAuth = this._handshakeOptions.secureAuth !== undefined
+    ? this._handshakeOptions.secureAuth : true;
 
-  var packetOpiotns = common.extend({
+  var packetOptions = common.extend({
     scrambleBuff1       : Buffer.from('1020304050607080', 'hex'),
     scrambleBuff2       : Buffer.from('0102030405060708090A0B0C', 'hex'),
     serverCapabilities1 : 512, // only 1 flag, PROTOCOL_41
     protocol41          : true
   }, this._handshakeOptions);
 
-  this._handshakeInitializationPacket = new Packets.HandshakeInitializationPacket(packetOpiotns);
+  this._handshakeInitializationPacket = new Packets.HandshakeInitializationPacket(packetOptions);
 
   this._sendPacket(this._handshakeInitializationPacket);
 };
@@ -92,17 +96,37 @@ FakeConnection.prototype.deny = function(message, errno) {
   }));
 };
 
+FakeConnection.prototype._sendError = function _sendError(got, expected) {
+  this._sendPacket(new Packets.ErrorPacket({
+    message : 'expected ' + expected.toString('hex') + ' got ' + got.toString('hex'),
+    errno   : Errors.ER_ACCESS_DENIED_ERROR
+  }));
+};
+
 FakeConnection.prototype._sendAuthResponse = function _sendAuthResponse(got, expected) {
   if (expected.toString('hex') === got.toString('hex')) {
     this._sendPacket(new Packets.OkPacket());
   } else {
-    this._sendPacket(new Packets.ErrorPacket({
-      message : 'expected ' + expected.toString('hex') + ' got ' + got.toString('hex'),
-      errno   : Errors.ER_ACCESS_DENIED_ERROR
-    }));
+    this._sendError(got, expected);
   }
 
   this._parser.resetPacketNumber();
+};
+
+FakeConnection.prototype._sendEncryptedAuthResponse = function _sendEncryptedAuthResponse(got, expected) {
+  if (expected.length === got.length) {
+    this._sendPacket(new Packets.OkPacket());
+  } else {
+    this._sendError(got, expected);
+  }
+};
+
+FakeConnection.prototype._resetAuthProcess = function _resetAuthProcess(got, expected) {
+  if (expected.toString('hex') === got.toString('hex')) {
+    this._sendPacket(new Packets.PerformFullAuthenticationPacket());
+  } else {
+    this._sendError(got, expected);
+  }
 };
 
 FakeConnection.prototype._sendPacket = function(packet) {
@@ -268,11 +292,22 @@ FakeConnection.prototype._parsePacket = function(header) {
       this._clientAuthenticationPacket = packet;
       if (this._handshakeOptions.oldPassword) {
         this._sendPacket(new Packets.UseOldPasswordPacket());
-      } else if (this._handshakeOptions.authMethodName) {
-        this._sendPacket(new Packets.AuthSwitchRequestPacket(this._handshakeOptions));
-      } else if (this._handshakeOptions.password === 'passwd') {
+      } else if (this._handshakeOptions.authMethodName === 'mysql_native_password'
+          && this._handshakeOptions.password === 'passwd') {
         var expected = Buffer.from('3DA0ADA7C9E1BB3A110575DF53306F9D2DE7FD09', 'hex');
         this._sendAuthResponse(packet.scrambleBuff, expected);
+      } else if (this._handshakeOptions.authMethodName === 'caching_sha2_password'
+          && this._handshakeOptions.authSwitchType === 'perform_full_authentication'
+          && this._handshakeOptions.password === 'passwd') {
+        var expected = Buffer.from('490572A245DB857BD76651BF54F350496006B4791334183B8F11ABC9E3D48F9A', 'hex');
+        this._resetAuthProcess(packet.scrambleBuff, expected);
+      } else if (this._handshakeOptions.authMethodName === 'caching_sha2_password'
+          && this._handshakeOptions.authSwitchType === 'fast_auth_success'
+          && this._handshakeOptions.password === 'passwd') {
+        this._sendPacket(new Packets.FastAuthSuccessPacket());
+        this._sendPacket(new Packets.OkPacket());
+      } else if (this._handshakeOptions.authMethodName) {
+        this._sendPacket(new Packets.AuthSwitchRequestPacket(this._handshakeOptions));
       } else if (this._handshakeOptions.user || this._handshakeOptions.password) {
         throw new Error('not implemented');
       } else {
@@ -293,9 +328,30 @@ FakeConnection.prototype._parsePacket = function(header) {
     case Packets.AuthSwitchResponsePacket:
       this._authSwitchResponse = packet;
 
-      var expected = Auth.token(this._handshakeOptions.password, Buffer.from('00112233445566778899AABBCCDDEEFF01020304', 'hex'));
+      var expected = null;
+      var password = this._handshakeOptions.password;
+      var nonce = Buffer.from('00112233445566778899AABBCCDDEEFF01020304', 'hex');
 
-      this._sendAuthResponse(packet.data, expected);
+      var isHandshake = this._handshakeOptions.authMethodName === 'caching_sha2_password'
+        && this._handshakeOptions.authSwitchType === 'perform_full_authentication';
+
+      if (isHandshake && !this._handshakeOptions.secureAuth) {
+        // Password should be sent as plain text.
+        expected = Buffer.from(password + '\0', 'utf8');
+        this._sendAuthResponse(packet.data, expected);
+      } else if (isHandshake && this._handshakeOptions.secureAuth) {
+        // Password should be encrypted using the server public key.
+        nonce = this._handshakeInitializationPacket.scrambleBuff();
+        expected = Auth.encrypt(password, nonce, this._handshakeOptions.secureAuth);
+        this._sendEncryptedAuthResponse(packet.data, expected);
+      } else if (this._handshakeOptions.authMethodName === 'caching_sha2_password') {
+        expected = Auth.sha2Token(password, nonce);
+        this._sendAuthResponse(packet.data, expected);
+      } else {
+        expected = Auth.token(password, nonce);
+        this._sendAuthResponse(packet.data, expected);
+      }
+
       break;
     case Packets.ComQueryPacket:
       if (!this.emit('query', packet)) {
@@ -343,6 +399,11 @@ FakeConnection.prototype._parsePacket = function(header) {
         this._socket.end();
       }
       break;
+    case Packets.HandshakeResponse41Packet:
+      this._sendPacket(new Packets.AuthMoreDataPacket({
+        data: common.getServerPublicKey()
+      }));
+      break;
     default:
       throw new Error('Unexpected packet: ' + Packet.name);
   }
@@ -364,6 +425,12 @@ FakeConnection.prototype._determinePacket = function(header) {
   }
 
   if (this._handshakeOptions.authMethodName && !this._authSwitchResponse) {
+    var secureAuth = this._handshakeOptions.secureAuth;
+
+    if (secureAuth === true || secureAuth && secureAuth.key === true) {
+      return Packets.HandshakeResponse41Packet;
+    }
+
     return Packets.AuthSwitchResponsePacket;
   }
 
