@@ -13,7 +13,7 @@ common.getTestConnection({flags: '-FOUND_ROWS'}, function (err, connection) {
   common.useTestDb(connection);
 
   connection.query([
-    'CREATE TABLE ?? (',
+    'CREATE TEMPORARY TABLE ?? (',
     '`a` int(11) unsigned NOT NULL AUTO_INCREMENT,',
     '`b` int(11),',
     '`c` int(11),',
