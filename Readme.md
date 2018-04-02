@@ -661,7 +661,7 @@ connection.query({
 );
 ```
 
-If there is only one argument `a` in `values`, and `a` is not an array, it can be passwd directly; i.e., the second form can be written as:
+If there is only one argument `a` in `values`, and `a` is not an array, it can be passed directly; i.e., the second form can be written as:
 
 ```js
 connection.query('SELECT * FROM `books` WHERE `author` = ?', 'David', function (error, results, fields) {
