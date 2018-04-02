@@ -661,6 +661,16 @@ connection.query({
 );
 ```
 
+If the there is only one argument `a` in `values`, and `a` is not an array, it can be passwd directly; i.e., The first form can be written as:
+
+```js
+connection.query('SELECT * FROM `books` WHERE `author` = ?', 'David', function (error, results, fields) {
+  // error will be an Error if one occurred during the query
+  // results will contain the results of the query
+  // fields will contain information about the returned results fields (if any)
+});
+```
+
 ## Escaping query values
 
 **Caution** These methods of escaping values only works when the
