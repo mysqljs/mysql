@@ -12,7 +12,7 @@ common.getTestConnection(function (err, connection) {
   var input1 = 1000;
 
   connection.query([
-    'CREATE DEFINER=root@localhost PROCEDURE ?? (IN param0 INT, IN param1 INT)',
+    'CREATE PROCEDURE ?? (IN param0 INT, IN param1 INT)',
     'BEGIN',
     'SELECT param0;',
     'SELECT param1;',
