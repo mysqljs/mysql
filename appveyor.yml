@@ -29,6 +29,7 @@ install:
   - ps: Install-Product node $env:nodejs_version
   - npm config set shrinkwrap false
   - if "%nodejs_version%" equ "0.8" npm rm --save-dev nyc
+  - if "%nodejs_version%" equ "0.8" npm config set strict-ssl false
   - npm rm --save-dev eslint
   - if exist node_modules npm prune
   - if exist node_modules npm rebuild
