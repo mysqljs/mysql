@@ -11,7 +11,7 @@ you spot any mistakes.
 * Support Node.js 9.x
 * Update Amazon RDS SSL certificates
 * Update `bignumber.js` to 4.1.0
-* Update `readable-stream` to 2.3.5
+* Update `readable-stream` to 2.3.6
 * Update `sqlstring` to 2.3.1
   - Fix incorrectly replacing non-placeholders in SQL
 

@@ -14,7 +14,7 @@
   "repository": "mysqljs/mysql",
   "dependencies": {
     "bignumber.js": "4.1.0",
-    "readable-stream": "2.3.5",
+    "readable-stream": "2.3.6",
     "safe-buffer": "5.1.1",
     "sqlstring": "2.3.1"
   },
