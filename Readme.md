@@ -1322,7 +1322,7 @@ connection.query({
   }
 });
 ```
-__WARNING: YOU MUST INVOKE the parser using one of these three field functions in your custom typeCast callback. They can only be called once. (see [#539](https://github.com/mysqljs/mysql/issues/539) for discussion)__
+__WARNING: YOU MUST INVOKE the parser using one of these three field functions in your custom typeCast callback. They can only be called once, otherwise other columns will be consumed in the same execution of your cast function. (see [#539](https://github.com/mysqljs/mysql/issues/539) for discussion)__
 
 ```
 field.string()
