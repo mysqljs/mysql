@@ -111,6 +111,8 @@ From this example, you can learn the following:
 * Every method you invoke on a connection is queued and executed in sequence.
 * Closing the connection is done using `end()` which makes sure all remaining
   queries are executed before sending a quit packet to the mysql server.
+  It is recommended to close the connections but it is not necessary.
+  Idle Mysql sockets will not keep the Event Loop alive.
 
 ## Contributors
 
@@ -311,6 +313,9 @@ connection.destroy();
 
 Unlike `end()` the `destroy()` method does not take a callback argument.
 
+Note that idle Mysql sockets **DO NOT KEEP THE SERVER ALIVE**, so calling the `end()` function is
+ recommended, not necessary.
+
 ## Pooling connections
 
 Rather than creating and managing connections one-by-one, this module also
@@ -454,11 +459,9 @@ pool.on('release', function (connection) {
 
 ## Closing all the connections in a pool
 
-When you are done using the pool, you have to end all the connections or the
-Node.js event loop will stay active until the connections are closed by the
-MySQL server. This is typically done if the pool is used in a script or when
-trying to gracefully shutdown a server. To end all the connections in the
-pool, use the `end` method on the pool:
+When you are done using the pool, you may end all the connections. **The
+Node.js event loop, however, will not stay active unless you have ongoing queries**.
+To end all the connections in the pool, use the `end` method on the pool:
 
 ```js
 pool.end(function (err) {

@@ -11,7 +11,8 @@ common.getTestConnection(function (err, connection) {
   var input = 1;
 
   connection.query([
-    'CREATE DEFINER=root@localhost PROCEDURE ?? (IN param INT)',
+    'CREATE DEFINER=' + (process.env.MYSQL_USER || 'root') + '@' + (process.env.MYSQL_HOST || 'localhost') +
+    ' PROCEDURE ?? (IN param INT)',
     'BEGIN',
     'SELECT param;',
     'END'
