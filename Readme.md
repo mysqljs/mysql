@@ -1388,13 +1388,13 @@ is set to `true`:
 There are other flags available. They may or may not function, but are still
 available to specify.
 
-- COMPRESS
-- INTERACTIVE
-- NO_SCHEMA
-- PLUGIN_AUTH
-- REMEMBER_OPTIONS
-- SSL
-- SSL_VERIFY_SERVER_CERT
+- `COMPRESS`
+- `INTERACTIVE`
+- `NO_SCHEMA`
+- `PLUGIN_AUTH`
+- `REMEMBER_OPTIONS`
+- `SSL`
+- `SSL_VERIFY_SERVER_CERT`
 
 ## Debugging and reporting problems
 
