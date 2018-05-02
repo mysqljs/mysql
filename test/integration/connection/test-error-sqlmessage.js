@@ -18,6 +18,7 @@ common.getTestConnection(function (err, connection) {
       connection.query('DROP TABLE IF EXISTS ??', [table], function (err5) {
         assert.ifError(err5);
         assert.ok(err4);
+        assert.equal(err4.sqlState, '45000');
         assert.equal(err4.sqlMessage, message, 'error sqlMessage property is the trigger error message');
         connection.end(assert.ifError);
       });
