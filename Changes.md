@@ -310,6 +310,7 @@ you spot any mistakes.
 ## v2.0.0-alpha9 (2013-08-27)
 
 * Add query to pool to execute queries directly using the pool
+* Add `sqlState` property to `Error` objects #556
 * Pool option to set queue limit
 * Pool sends 'connection' event when it opens a new connection
 * Added stringifyObjects option to treat input as strings rather than objects (#501)
