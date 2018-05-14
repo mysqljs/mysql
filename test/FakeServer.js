@@ -309,34 +309,36 @@ FakeConnection.prototype._parsePacket = function(header) {
       }
       break;
     case Packets.ComChangeUserPacket:
-      if (packet.user === 'does-not-exist') {
-        this._sendPacket(new Packets.ErrorPacket({
-          errno   : Errors.ER_ACCESS_DENIED_ERROR,
-          message : 'User does not exist'
-        }));
-        this._parser.resetPacketNumber();
-        break;
-      } else if (packet.database === 'does-not-exist') {
-        this._sendPacket(new Packets.ErrorPacket({
-          errno   : Errors.ER_BAD_DB_ERROR,
-          message : 'Database does not exist'
-        }));
-        this._parser.resetPacketNumber();
-        break;
-      }
+      if (!this.emit('changeUser', packet)) {
+        if (packet.user === 'does-not-exist') {
+          this._sendPacket(new Packets.ErrorPacket({
+            errno   : Errors.ER_ACCESS_DENIED_ERROR,
+            message : 'User does not exist'
+          }));
+          this._parser.resetPacketNumber();
+          break;
+        } else if (packet.database === 'does-not-exist') {
+          this._sendPacket(new Packets.ErrorPacket({
+            errno   : Errors.ER_BAD_DB_ERROR,
+            message : 'Database does not exist'
+          }));
+          this._parser.resetPacketNumber();
+          break;
+        }
 
-      this._clientAuthenticationPacket = new Packets.ClientAuthenticationPacket({
-        clientFlags   : this._clientAuthenticationPacket.clientFlags,
-        filler        : this._clientAuthenticationPacket.filler,
-        maxPacketSize : this._clientAuthenticationPacket.maxPacketSize,
-        protocol41    : this._clientAuthenticationPacket.protocol41,
-        charsetNumber : packet.charsetNumber,
-        database      : packet.database,
-        scrambleBuff  : packet.scrambleBuff,
-        user          : packet.user
-      });
-      this._sendPacket(new Packets.OkPacket());
-      this._parser.resetPacketNumber();
+        this._clientAuthenticationPacket = new Packets.ClientAuthenticationPacket({
+          clientFlags   : this._clientAuthenticationPacket.clientFlags,
+          filler        : this._clientAuthenticationPacket.filler,
+          maxPacketSize : this._clientAuthenticationPacket.maxPacketSize,
+          protocol41    : this._clientAuthenticationPacket.protocol41,
+          charsetNumber : packet.charsetNumber,
+          database      : packet.database,
+          scrambleBuff  : packet.scrambleBuff,
+          user          : packet.user
+        });
+        this._sendPacket(new Packets.OkPacket());
+        this._parser.resetPacketNumber();
+      }
       break;
     case Packets.ComQuitPacket:
       if (!this.emit('quit', packet)) {
