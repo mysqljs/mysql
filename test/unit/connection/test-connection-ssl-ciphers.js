@@ -1,10 +1,17 @@
 var assert     = require('assert');
 var common     = require('../../common');
+var tls        = require('tls');
+var tlsCipher = 'RC4-SHA';
+
+if (typeof tls.getCiphers === 'function') {
+  tlsCipher = tls.getCiphers()[0].toUpperCase();
+}
+
 var connection = common.createConnection({
   port : common.fakeServerPort,
   ssl  : {
     ca      : common.getSSLConfig().ca,
-    ciphers : 'RC4-SHA'
+    ciphers : tlsCipher
   }
 });
 
@@ -17,7 +24,7 @@ server.listen(common.fakeServerPort, function (err) {
     assert.ifError(err);
     assert.equal(rows.length, 1);
     assert.equal(rows[0].Variable_name, 'Ssl_cipher');
-    assert.equal(rows[0].Value, 'RC4-SHA');
+    assert.equal(rows[0].Value, tlsCipher);
 
     connection.destroy();
     server.destroy();
