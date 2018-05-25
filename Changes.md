@@ -10,6 +10,7 @@ you spot any mistakes.
 * Add new error codes up to MySQL 5.7.21
 * Include connection ID in debug output
 * Support Node.js 9.x
+* Support Node.js 10.x #2003 #2024 #2026 #2034
 * Update Amazon RDS SSL certificates
 * Update `bignumber.js` to 4.1.0
 * Update `readable-stream` to 2.3.6
