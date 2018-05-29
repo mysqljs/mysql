@@ -351,7 +351,7 @@ pool.getConnection(function(err, connection) {
 });
 ```
 
-When you are done with a connection, just call `connection.release()` and the
+When you are done with a connection, just call `connection.releaseConnection()` and the
 connection will return to the pool, ready to be used again by someone else.
 
 ```js
@@ -362,7 +362,7 @@ pool.getConnection(function(err, connection) {
   // Use the connection
   connection.query('SELECT something FROM sometable', function (error, results, fields) {
     // And done with the connection.
-    connection.release();
+    connection.releaseConnection();
 
     // Handle error after the release.
     if (error) throw error;
@@ -484,7 +484,7 @@ since they have a pending `QUIT` packet in their queue; wait until releasing
 all connections back to the pool before calling `pool.end()`.
 
 Since the `pool.query` method is a short-hand for the `pool.getConnection` ->
-`connection.query` -> `connection.release()` flow, calling `pool.end()` before
+`connection.query` -> `connection.releaseConnection()` flow, calling `pool.end()` before
 all the queries added via `pool.query` have completed, since the underlying
 `pool.getConnection` will fail due to all connections ending and not allowing
 new connections to be created.
