@@ -1419,7 +1419,7 @@ and no password set for the `root` user, run:
 
 ```sh
 $ mysql -u root -e "CREATE DATABASE IF NOT EXISTS node_mysql_test"
-$ MYSQL_HOST=localhost MYSQL_PORT=3306 MYSQL_DATABASE=node_mysql_test MYSQL_USER=root MYSQL_PASSWORD=park FILTER=integration npm test
+$ MYSQL_HOST=localhost MYSQL_PORT=3306 MYSQL_DATABASE=node_mysql_test MYSQL_USER=root MYSQL_PASSWORD= FILTER=integration npm test
 ```
 
 ## Todo
