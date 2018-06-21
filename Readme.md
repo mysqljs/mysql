@@ -317,7 +317,8 @@ Rather than creating and managing connections one-by-one, this module also
 provides built-in connection pooling using `mysql.createPool(config)`.
 [Read more about connection pooling](https://en.wikipedia.org/wiki/Connection_pool).
 
-Use pool directly.
+Create a pool and use it directly:
+
 ```js
 var mysql = require('mysql');
 var pool  = mysql.createPool({
@@ -334,41 +335,26 @@ pool.query('SELECT 1 + 1 AS solution', function (error, results, fields) {
 });
 ```
 
-Connections can be pooled to ease sharing a single connection, or managing
-multiple connections.
-
-```js
-var mysql = require('mysql');
-var pool  = mysql.createPool({
-  host     : 'example.org',
-  user     : 'bob',
-  password : 'secret',
-  database : 'my_db'
-});
-
-pool.getConnection(function(err, connection) {
-  // connected! (unless `err` is set)
-});
-```
-
-When you are done with a connection, just call `connection.release()` and the
-connection will return to the pool, ready to be used again by someone else.
+This is basically a shortcut for `pool.getConnection()`, `connection.query()` and `connection.release()`. You would use this more explicit approach if you want to share a connection for subsequent queries (two calls to `pool.query()` would use two connections and run in parallel) and it is also useful if you need transaction or some state between the queries. This is the basic structure:
 
 ```js
 var mysql = require('mysql');
 var pool  = mysql.createPool(...);
 
 pool.getConnection(function(err, connection) {
-  // Use the connection
-  connection.query('SELECT something FROM sometable', function (error, results, fields) {
-    // And done with the connection.
-    connection.release();
-
-    // Handle error after the release.
-    if (error) throw error;
-
-    // Don't use the connection here, it has been returned to the pool.
-  });
+  if (err) {
+    // not connected!
+  } else {
+    connection.query('SELECT something FROM sometable', function (error, results, fields) {
+        // When done with the connection, release it.
+        connection.release();
+    
+        // Handle error after the release.
+        if (error) throw error;
+    
+        // Don't use the connection here, it has been returned to the pool.
+    });
+  }
 });
 ```
 
