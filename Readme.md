@@ -455,28 +455,19 @@ pool.end(function (err) {
 });
 ```
 
-The `end` method takes an _optional_ callback that you can use to know once
-all the connections have ended.
+The `end` method takes an _optional_ callback that you can use to know when
+all the connections are ended.
 
-**Once `pool.end()` has been called, `pool.getConnection` and other operations
-can no longer be performed**
+**Once `pool.end` is called, `pool.getConnection` and other operations
+can no longer be performed.** Wait until all connections in the pool are
+released before calling `pool.end`. If you use the shortcut method
+`pool.query`, in place of `pool.getConnection` → `connection.query` →
+`connection.release`, wait until it completes.
 
-This works by calling `connection.end()` on every active connection in the
-pool, which queues a `QUIT` packet on the connection. And sets a flag to
-prevent `pool.getConnection` from continuing to create any new connections.
-
-Since this queues a `QUIT` packet on each connection, all commands / queries
-already in progress will complete, just like calling `connection.end()`. If
-`pool.end` is called and there are connections that have not yet been released,
-those connections will fail to execute any new commands after the `pool.end`
-since they have a pending `QUIT` packet in their queue; wait until releasing
-all connections back to the pool before calling `pool.end()`.
-
-Since the `pool.query` method is a short-hand for the `pool.getConnection` ->
-`connection.query` -> `connection.release()` flow, calling `pool.end()` before
-all the queries added via `pool.query` have completed, since the underlying
-`pool.getConnection` will fail due to all connections ending and not allowing
-new connections to be created.
+`pool.end` calls `connection.end` on every active connection in the pool.
+This queues a `QUIT` packet on the connection and sets a flag to prevent
+`pool.getConnection` from creating new connections. All commands / queries
+already in progress will complete, but new commands won't execute.
 
 ## PoolCluster
 
