@@ -71,6 +71,14 @@ function FakeConnection(socket) {
   socket.on('data', this._handleData.bind(this));
 }
 
+FakeConnection.prototype.deny = function deny(message, errno) {
+  this._sendPacket(new Packets.ErrorPacket({
+    message : (message || 'Access Denied'),
+    errno   : (errno || Errors.ER_ACCESS_DENIED_ERROR)
+  }));
+  this._parser.resetPacketNumber();
+};
+
 FakeConnection.prototype.handshake = function(options) {
   this._handshakeOptions = options || {};
 
@@ -86,21 +94,11 @@ FakeConnection.prototype.handshake = function(options) {
   this._sendPacket(this._handshakeInitializationPacket);
 };
 
-FakeConnection.prototype.deny = function(message, errno) {
-  this._sendPacket(new Packets.ErrorPacket({
-    message : message,
-    errno   : errno
-  }));
-};
-
 FakeConnection.prototype._sendAuthResponse = function _sendAuthResponse(got, expected) {
   if (expected.toString('hex') === got.toString('hex')) {
     this._sendPacket(new Packets.OkPacket());
   } else {
-    this._sendPacket(new Packets.ErrorPacket({
-      message : 'expected ' + expected.toString('hex') + ' got ' + got.toString('hex'),
-      errno   : Errors.ER_ACCESS_DENIED_ERROR
-    }));
+    this.deny('expected ' + expected.toString('hex') + ' got ' + got.toString('hex'));
   }
 
   this._parser.resetPacketNumber();
@@ -309,11 +307,7 @@ FakeConnection.prototype._parsePacket = function() {
 
       if (!this.emit('changeUser', packet)) {
         if (packet.user === 'does-not-exist') {
-          this._sendPacket(new Packets.ErrorPacket({
-            errno   : Errors.ER_ACCESS_DENIED_ERROR,
-            message : 'User does not exist'
-          }));
-          this._parser.resetPacketNumber();
+          this.deny('User does not exist');
           break;
         } else if (packet.database === 'does-not-exist') {
           this._sendPacket(new Packets.ErrorPacket({
