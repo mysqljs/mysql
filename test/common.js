@@ -18,6 +18,7 @@ common.fakeServerSocket = __dirname + '/fake_server.sock';
 common.testDatabase = process.env.MYSQL_DATABASE || 'test';
 
 // Export common modules
+common.Auth             = require(common.lib + '/protocol/Auth');
 common.Charsets         = require(common.lib + '/protocol/constants/charsets');
 common.ClientConstants  = require(common.lib + '/protocol/constants/client');
 common.Connection       = require(common.lib + '/Connection');

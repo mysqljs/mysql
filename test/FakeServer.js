@@ -71,6 +71,10 @@ function FakeConnection(socket) {
   socket.on('data', this._handleData.bind(this));
 }
 
+FakeConnection.prototype.authSwitchRequest = function authSwitchRequest(options) {
+  this._sendPacket(new Packets.AuthSwitchRequestPacket(options));
+};
+
 FakeConnection.prototype.deny = function deny(message, errno) {
   message = message || 'Access Denied';
   errno   = errno || Errors.ER_ACCESS_DENIED_ERROR;
@@ -280,6 +284,11 @@ FakeConnection.prototype._parsePacket = function() {
   packet.parse(this._parser);
 
   switch (Packet) {
+    case Packets.AuthSwitchResponsePacket:
+      if (!this.emit('authSwitchResponse', packet)) {
+        this.deny('No auth response handler');
+      }
+      break;
     case Packets.ClientAuthenticationPacket:
       this.database = (packet.database || null);
       this.user     = (packet.user || null);

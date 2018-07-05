@@ -5,7 +5,6 @@ var connection = common.createConnection({
   port     : common.fakeServerPort,
   password : 'authswitch'
 });
-var Auth       = require(common.lib + '/protocol/Auth');
 
 var random = Crypto.pseudoRandomBytes || Crypto.randomBytes; // Depends on node.js version
 var server = common.createFakeServer();
@@ -28,15 +27,15 @@ server.on('connection', function(incomingConnection) {
   random(20, function (err, scramble) {
     assert.ifError(err);
 
-    incomingConnection.on('clientAuthentication', function () {
-      this._sendPacket(new common.Packets.AuthSwitchRequestPacket({
-        authMethodName : 'mysql_native_password',
-        authMethodData : scramble
-      }));
+    incomingConnection.on('authSwitchResponse', function (packet) {
+      this._sendAuthResponse(packet.data, common.Auth.token('authswitch', scramble));
     });
 
-    incomingConnection.on('AuthSwitchResponsePacket', function (packet) {
-      this._sendAuthResponse(packet.data, Auth.token('authswitch', scramble));
+    incomingConnection.on('clientAuthentication', function () {
+      this.authSwitchRequest({
+        authMethodName : 'mysql_native_password',
+        authMethodData : scramble
+      });
     });
 
     incomingConnection.handshake();
