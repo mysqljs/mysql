@@ -1,20 +1,21 @@
 // An experimental fake MySQL server for tricky integration tests. Expanded
 // as needed.
 
-var Buffer       = require('safe-buffer').Buffer;
-var common       = require('./common');
-var Charsets     = common.Charsets;
-var Crypto       = require('crypto');
-var Net          = require('net');
-var tls          = require('tls');
-var Packets      = common.Packets;
-var PacketWriter = common.PacketWriter;
-var Parser       = common.Parser;
-var Types        = common.Types;
-var Auth         = require(common.lib + '/protocol/Auth');
-var Errors       = common.Errors;
-var EventEmitter = require('events').EventEmitter;
-var Util         = require('util');
+var Buffer          = require('safe-buffer').Buffer;
+var common          = require('./common');
+var Charsets        = common.Charsets;
+var ClientConstants = common.ClientConstants;
+var Crypto          = require('crypto');
+var Net             = require('net');
+var tls             = require('tls');
+var Packets         = common.Packets;
+var PacketWriter    = common.PacketWriter;
+var Parser          = common.Parser;
+var Types           = common.Types;
+var Auth            = require(common.lib + '/protocol/Auth');
+var Errors          = common.Errors;
+var EventEmitter    = require('events').EventEmitter;
+var Util            = require('util');
 
 module.exports = FakeServer;
 Util.inherits(FakeServer, EventEmitter);
@@ -257,8 +258,8 @@ FakeConnection.prototype._handleQueryPacket = function _handleQueryPacket(packet
   this._parser.resetPacketNumber();
 };
 
-FakeConnection.prototype._parsePacket = function(header) {
-  var Packet = this._determinePacket(header);
+FakeConnection.prototype._parsePacket = function() {
+  var Packet = this._determinePacket();
   var packet = new Packet({protocol41: true});
 
   packet.parse(this._parser);
@@ -350,15 +351,11 @@ FakeConnection.prototype._parsePacket = function(header) {
   }
 };
 
-FakeConnection.prototype._determinePacket = function(header) {
+FakeConnection.prototype._determinePacket = function _determinePacket() {
   if (!this._clientAuthenticationPacket) {
-    // first packet phase
-
-    if (header.length === 32) {
-      return Packets.SSLRequestPacket;
-    }
-
-    return Packets.ClientAuthenticationPacket;
+    return !this._ssl && (this._parser.peak(1) << 8) & ClientConstants.CLIENT_SSL
+      ? Packets.SSLRequestPacket
+      : Packets.ClientAuthenticationPacket;
   }
 
   if (this._handshakeOptions.oldPassword && !this._oldPasswordPacket) {
