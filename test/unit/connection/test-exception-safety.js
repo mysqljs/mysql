@@ -76,8 +76,7 @@ server.on('connection', function (conn) {
         this.error('Parse error', common.Errors.ER_PARSE_ERROR);
         break;
       case 'USE test':
-        this._sendPacket(new common.Packets.OkPacket());
-        this._parser.resetPacketNumber();
+        this.ok();
         break;
       default:
         this._handleQueryPacket(packet);

@@ -48,8 +48,7 @@ server.on('connection', function(incomingConnection) {
   });
   incomingConnection.on('ping', function() {
     if (!fail) {
-      this._sendPacket(new common.Packets.OkPacket());
-      this._parser.resetPacketNumber();
+      this.ok();
     }
 
     fail = false;

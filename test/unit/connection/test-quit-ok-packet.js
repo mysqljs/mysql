@@ -16,7 +16,6 @@ server.listen(common.fakeServerPort, function (err) {
 server.on('connection', function (conn) {
   conn.handshake();
   conn.on('quit', function () {
-    conn._sendPacket(new common.Packets.OkPacket());
-    conn._parser.resetPacketNumber();
+    conn.ok();
   });
 });

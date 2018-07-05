@@ -100,9 +100,14 @@ FakeConnection.prototype.handshake = function(options) {
   this._sendPacket(this._handshakeInitializationPacket);
 };
 
+FakeConnection.prototype.ok = function ok() {
+  this._sendPacket(new Packets.OkPacket());
+  this._parser.resetPacketNumber();
+};
+
 FakeConnection.prototype._sendAuthResponse = function _sendAuthResponse(got, expected) {
   if (expected.toString('hex') === got.toString('hex')) {
-    this._sendPacket(new Packets.OkPacket());
+    this.ok();
   } else {
     this.deny('expected ' + expected.toString('hex') + ' got ' + got.toString('hex'));
   }
@@ -280,8 +285,7 @@ FakeConnection.prototype._parsePacket = function() {
       this.user     = (packet.user || null);
 
       if (!this.emit('clientAuthentication', packet)) {
-        this._sendPacket(new Packets.OkPacket());
-        this._parser.resetPacketNumber();
+        this.ok();
       }
       break;
     case Packets.SSLRequestPacket:
@@ -294,8 +298,7 @@ FakeConnection.prototype._parsePacket = function() {
       break;
     case Packets.ComPingPacket:
       if (!this.emit('ping', packet)) {
-        this._sendPacket(new Packets.OkPacket());
-        this._parser.resetPacketNumber();
+        this.ok();
       }
       break;
     case Packets.ComChangeUserPacket:
@@ -311,8 +314,7 @@ FakeConnection.prototype._parsePacket = function() {
           break;
         }
 
-        this._sendPacket(new Packets.OkPacket());
-        this._parser.resetPacketNumber();
+        this.ok();
       }
       break;
     case Packets.ComQuitPacket:
