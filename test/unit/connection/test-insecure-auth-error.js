@@ -21,9 +21,9 @@ server.listen(common.fakeServerPort, function (err) {
 });
 
 server.on('connection', function(incomingConnection) {
-  incomingConnection.handshake({
-    user        : connection.config.user,
-    password    : connection.config.password,
-    oldPassword : true
+  incomingConnection.on('clientAuthentication', function () {
+    this._sendPacket(new common.Packets.UseOldPasswordPacket());
   });
+
+  incomingConnection.handshake();
 });

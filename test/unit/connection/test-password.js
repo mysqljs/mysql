@@ -4,30 +4,33 @@ var connection = common.createConnection({
   password : 'passwd'
 });
 var assert     = require('assert');
+var Auth       = require(common.lib + '/protocol/Auth');
+var Crypto     = require('crypto');
 
+var random = Crypto.pseudoRandomBytes || Crypto.randomBytes; // Depends on node.js version
 var server = common.createFakeServer();
 
-var connected;
 server.listen(common.fakeServerPort, function(err) {
-  if (err) throw err;
+  assert.ifError(err);
 
-  connection.connect(function(err, result) {
-    if (err) throw err;
-
-    connected = result;
-
+  connection.connect(function (err) {
+    assert.ifError(err);
     connection.destroy();
     server.destroy();
   });
 });
 
 server.on('connection', function(incomingConnection) {
-  incomingConnection.handshake({
-    user     : connection.config.user,
-    password : connection.config.password
-  });
-});
+  random(20, function (err, scramble) {
+    assert.ifError(err);
 
-process.on('exit', function() {
-  assert.equal(connected.fieldCount, 0);
+    incomingConnection.on('clientAuthentication', function (packet) {
+      this._sendAuthResponse(packet.scrambleBuff, Auth.token('passwd', scramble));
+    });
+
+    incomingConnection.handshake({
+      scrambleBuff1 : scramble.slice(0, 8),
+      scrambleBuff2 : scramble.slice(8, 20)
+    });
+  });
 });

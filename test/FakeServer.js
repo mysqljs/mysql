@@ -12,7 +12,6 @@ var Packets         = common.Packets;
 var PacketWriter    = common.PacketWriter;
 var Parser          = common.Parser;
 var Types           = common.Types;
-var Auth            = require(common.lib + '/protocol/Auth');
 var Errors          = common.Errors;
 var EventEmitter    = require('events').EventEmitter;
 var Util            = require('util');
@@ -75,14 +74,14 @@ function FakeConnection(socket) {
 FakeConnection.prototype.handshake = function(options) {
   this._handshakeOptions = options || {};
 
-  var packetOpiotns = common.extend({
+  var packetOptions = common.extend({
     scrambleBuff1       : Buffer.from('1020304050607080', 'hex'),
     scrambleBuff2       : Buffer.from('0102030405060708090A0B0C', 'hex'),
     serverCapabilities1 : 512, // only 1 flag, PROTOCOL_41
     protocol41          : true
   }, this._handshakeOptions);
 
-  this._handshakeInitializationPacket = new Packets.HandshakeInitializationPacket(packetOpiotns);
+  this._handshakeInitializationPacket = new Packets.HandshakeInitializationPacket(packetOptions);
 
   this._sendPacket(this._handshakeInitializationPacket);
 };
@@ -285,30 +284,13 @@ FakeConnection.prototype._parsePacket = function() {
       this.database = (packet.database || null);
       this.user     = (packet.user || null);
 
-      if (this._handshakeOptions.oldPassword) {
-        this._sendPacket(new Packets.UseOldPasswordPacket());
-      } else if (this._handshakeOptions.authMethodName) {
-        this._sendPacket(new Packets.AuthSwitchRequestPacket(this._handshakeOptions));
-      } else if (this._handshakeOptions.password === 'passwd') {
-        var expected = Buffer.from('3DA0ADA7C9E1BB3A110575DF53306F9D2DE7FD09', 'hex');
-        this._sendAuthResponse(packet.scrambleBuff, expected);
-      } else if (this._handshakeOptions.user || this._handshakeOptions.password) {
-        throw new Error('not implemented');
-      } else {
+      if (!this.emit('clientAuthentication', packet)) {
         this._sendPacket(new Packets.OkPacket());
         this._parser.resetPacketNumber();
       }
       break;
     case Packets.SSLRequestPacket:
       this._startTLS();
-      break;
-    case Packets.OldPasswordPacket:
-      var expected = Auth.scramble323(this._handshakeInitializationPacket.scrambleBuff(), this._handshakeOptions.password);
-      this._sendAuthResponse(packet.scrambleBuff, expected);
-      break;
-    case Packets.AuthSwitchResponsePacket:
-      var expected = Auth.token(this._handshakeOptions.password, Buffer.from('00112233445566778899AABBCCDDEEFF01020304', 'hex'));
-      this._sendAuthResponse(packet.data, expected);
       break;
     case Packets.ComQueryPacket:
       if (!this.emit('query', packet)) {
@@ -322,6 +304,9 @@ FakeConnection.prototype._parsePacket = function() {
       }
       break;
     case Packets.ComChangeUserPacket:
+      this.database = (packet.database || null);
+      this.user     = (packet.user || null);
+
       if (!this.emit('changeUser', packet)) {
         if (packet.user === 'does-not-exist') {
           this._sendPacket(new Packets.ErrorPacket({
@@ -339,9 +324,6 @@ FakeConnection.prototype._parsePacket = function() {
           break;
         }
 
-        this.database = (packet.database || null);
-        this.user     = (packet.user || null);
-
         this._sendPacket(new Packets.OkPacket());
         this._parser.resetPacketNumber();
       }
@@ -352,7 +334,9 @@ FakeConnection.prototype._parsePacket = function() {
       }
       break;
     default:
-      throw new Error('Unexpected packet: ' + Packet.name);
+      if (!this.emit(packet.constructor.name, packet)) {
+        throw new Error('Unexpected packet: ' + Packet.name);
+      }
   }
 };
 

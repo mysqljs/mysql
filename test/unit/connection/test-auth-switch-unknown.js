@@ -23,10 +23,12 @@ server.listen(common.fakeServerPort, function (err) {
 });
 
 server.on('connection', function(incomingConnection) {
-  incomingConnection.handshake({
-    user           : connection.config.user,
-    password       : connection.config.password,
-    authMethodName : 'foo_plugin_password',
-    authMethodData : Buffer.alloc(0)
+  incomingConnection.on('clientAuthentication', function () {
+    this._sendPacket(new common.Packets.AuthSwitchRequestPacket({
+      authMethodName : 'foo_plugin_password',
+      authMethodData : Buffer.alloc(0)
+    }));
   });
+
+  incomingConnection.handshake();
 });
