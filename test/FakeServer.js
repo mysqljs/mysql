@@ -57,15 +57,16 @@ Util.inherits(FakeConnection, EventEmitter);
 function FakeConnection(socket) {
   EventEmitter.call(this);
 
+  this.database = null;
+  this.user     = null;
+
   this._socket = socket;
   this._ssl    = null;
   this._stream = socket;
   this._parser = new Parser({onPacket: this._parsePacket.bind(this)});
 
+  this._expectedNextPacket            = null;
   this._handshakeInitializationPacket = null;
-  this._clientAuthenticationPacket    = null;
-  this._oldPasswordPacket             = null;
-  this._authSwitchResponse            = null;
   this._handshakeOptions              = {};
 
   socket.on('data', this._handleData.bind(this));
@@ -107,6 +108,21 @@ FakeConnection.prototype._sendAuthResponse = function _sendAuthResponse(got, exp
 };
 
 FakeConnection.prototype._sendPacket = function(packet) {
+  switch (packet.constructor) {
+    case Packets.AuthSwitchRequestPacket:
+      this._expectedNextPacket = Packets.AuthSwitchResponsePacket;
+      break;
+    case Packets.HandshakeInitializationPacket:
+      this._expectedNextPacket = Packets.ClientAuthenticationPacket;
+      break;
+    case Packets.UseOldPasswordPacket:
+      this._expectedNextPacket = Packets.OldPasswordPacket;
+      break;
+    default:
+      this._expectedNextPacket = null;
+      break;
+  }
+
   var writer = new PacketWriter();
   packet.write(writer);
   this._stream.write(writer.toBuffer(this._parser));
@@ -164,7 +180,7 @@ FakeConnection.prototype._handleQueryPacket = function _handleQueryPacket(packet
     this._sendPacket(new Packets.EofPacket());
 
     var writer = new PacketWriter();
-    writer.writeLengthCodedString((this._clientAuthenticationPacket.user || '') + '@localhost');
+    writer.writeLengthCodedString((this.user || '') + '@localhost');
     this._socket.write(writer.toBuffer(this._parser));
 
     this._sendPacket(new Packets.EofPacket());
@@ -266,7 +282,9 @@ FakeConnection.prototype._parsePacket = function() {
 
   switch (Packet) {
     case Packets.ClientAuthenticationPacket:
-      this._clientAuthenticationPacket = packet;
+      this.database = (packet.database || null);
+      this.user     = (packet.user || null);
+
       if (this._handshakeOptions.oldPassword) {
         this._sendPacket(new Packets.UseOldPasswordPacket());
       } else if (this._handshakeOptions.authMethodName) {
@@ -285,17 +303,11 @@ FakeConnection.prototype._parsePacket = function() {
       this._startTLS();
       break;
     case Packets.OldPasswordPacket:
-      this._oldPasswordPacket = packet;
-
       var expected = Auth.scramble323(this._handshakeInitializationPacket.scrambleBuff(), this._handshakeOptions.password);
-
       this._sendAuthResponse(packet.scrambleBuff, expected);
       break;
     case Packets.AuthSwitchResponsePacket:
-      this._authSwitchResponse = packet;
-
       var expected = Auth.token(this._handshakeOptions.password, Buffer.from('00112233445566778899AABBCCDDEEFF01020304', 'hex'));
-
       this._sendAuthResponse(packet.data, expected);
       break;
     case Packets.ComQueryPacket:
@@ -327,16 +339,9 @@ FakeConnection.prototype._parsePacket = function() {
           break;
         }
 
-        this._clientAuthenticationPacket = new Packets.ClientAuthenticationPacket({
-          clientFlags   : this._clientAuthenticationPacket.clientFlags,
-          filler        : this._clientAuthenticationPacket.filler,
-          maxPacketSize : this._clientAuthenticationPacket.maxPacketSize,
-          protocol41    : this._clientAuthenticationPacket.protocol41,
-          charsetNumber : packet.charsetNumber,
-          database      : packet.database,
-          scrambleBuff  : packet.scrambleBuff,
-          user          : packet.user
-        });
+        this.database = (packet.database || null);
+        this.user     = (packet.user || null);
+
         this._sendPacket(new Packets.OkPacket());
         this._parser.resetPacketNumber();
       }
@@ -352,18 +357,18 @@ FakeConnection.prototype._parsePacket = function() {
 };
 
 FakeConnection.prototype._determinePacket = function _determinePacket() {
-  if (!this._clientAuthenticationPacket) {
-    return !this._ssl && (this._parser.peak(1) << 8) & ClientConstants.CLIENT_SSL
-      ? Packets.SSLRequestPacket
-      : Packets.ClientAuthenticationPacket;
-  }
+  if (this._expectedNextPacket) {
+    var Packet = this._expectedNextPacket;
 
-  if (this._handshakeOptions.oldPassword && !this._oldPasswordPacket) {
-    return Packets.OldPasswordPacket;
-  }
+    if (Packet === Packets.ClientAuthenticationPacket) {
+      return !this._ssl && (this._parser.peak(1) << 8) & ClientConstants.CLIENT_SSL
+        ? Packets.SSLRequestPacket
+        : Packets.ClientAuthenticationPacket;
+    }
 
-  if (this._handshakeOptions.authMethodName && !this._authSwitchResponse) {
-    return Packets.AuthSwitchResponsePacket;
+    this._expectedNextPacket = null;
+
+    return Packet;
   }
 
   var firstByte = this._parser.peak();
