@@ -11,6 +11,8 @@ common.getTestConnection(function (err, connection) {
 
   common.useTestDb(connection);
 
+  connection.query('SET GLOBAL local_infile = true', assert.ifError);
+
   connection.query([
     'CREATE TEMPORARY TABLE ?? (',
     '`id` int(11) unsigned NOT NULL AUTO_INCREMENT,',

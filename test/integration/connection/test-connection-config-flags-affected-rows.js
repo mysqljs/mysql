@@ -12,6 +12,8 @@ common.getTestConnection({flags: '-FOUND_ROWS'}, function (err, connection) {
 
   common.useTestDb(connection);
 
+  connection.query('DROP TABLE IF EXISTS ??', [table], assert.ifError);
+
   connection.query([
     'CREATE TEMPORARY TABLE ?? (',
     '`a` int(11) unsigned NOT NULL AUTO_INCREMENT,',

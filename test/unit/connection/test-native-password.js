@@ -23,8 +23,9 @@ server.listen(common.fakeServerPort, function(err) {
 
 server.on('connection', function(incomingConnection) {
   incomingConnection.handshake({
-    user     : connection.config.user,
-    password : connection.config.password
+    user           : connection.config.user,
+    password       : connection.config.password,
+    authMethodName : 'mysql_native_password'
   });
 });
 
