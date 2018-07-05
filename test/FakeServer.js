@@ -72,9 +72,15 @@ function FakeConnection(socket) {
 }
 
 FakeConnection.prototype.deny = function deny(message, errno) {
+  message = message || 'Access Denied';
+  errno   = errno || Errors.ER_ACCESS_DENIED_ERROR;
+  this.error(message, errno);
+};
+
+FakeConnection.prototype.error = function deny(message, errno) {
   this._sendPacket(new Packets.ErrorPacket({
-    message : (message || 'Access Denied'),
-    errno   : (errno || Errors.ER_ACCESS_DENIED_ERROR)
+    message : (message || 'Error'),
+    errno   : (errno || Errors.ER_UNKNOWN_COM_ERROR)
   }));
   this._parser.resetPacketNumber();
 };
@@ -255,20 +261,11 @@ FakeConnection.prototype._handleQueryPacket = function _handleQueryPacket(packet
   }
 
   if (/INVALID/i.test(sql)) {
-    this._sendPacket(new Packets.ErrorPacket({
-      errno   : Errors.ER_PARSE_ERROR,
-      message : 'Invalid SQL'
-    }));
-    this._parser.resetPacketNumber();
+    this.error('Invalid SQL', Errors.ER_PARSE_ERROR);
     return;
   }
 
-  this._sendPacket(new Packets.ErrorPacket({
-    errno   : Errors.ER_QUERY_INTERRUPTED,
-    message : 'Interrupted unknown query'
-  }));
-
-  this._parser.resetPacketNumber();
+  this.error('Interrupted unknown query', Errors.ER_QUERY_INTERRUPTED);
 };
 
 FakeConnection.prototype._parsePacket = function() {
@@ -310,11 +307,7 @@ FakeConnection.prototype._parsePacket = function() {
           this.deny('User does not exist');
           break;
         } else if (packet.database === 'does-not-exist') {
-          this._sendPacket(new Packets.ErrorPacket({
-            errno   : Errors.ER_BAD_DB_ERROR,
-            message : 'Database does not exist'
-          }));
-          this._parser.resetPacketNumber();
+          this.error('Database does not exist', Errors.ER_BAD_DB_ERROR);
           break;
         }
 
