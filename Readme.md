@@ -642,7 +642,7 @@ connection.query({
 ```
 
 If the query only has a single replacement character (`?`), and the value is
-not `null`, `undefiend`, or an array, it can be passed directly as the second
+not `null`, `undefined`, or an array, it can be passed directly as the second
 argument to `.query`:
 
 ```js
