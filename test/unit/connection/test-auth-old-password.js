@@ -11,15 +11,11 @@ var Crypto     = require('crypto');
 var random = Crypto.pseudoRandomBytes || Crypto.randomBytes; // Depends on node.js version
 var server = common.createFakeServer();
 
-var connected;
-server.listen(common.fakeServerPort, function(err) {
-  if (err) throw err;
+server.listen(common.fakeServerPort, function (err) {
+  assert.ifError(err);
 
-  connection.connect(function(err, result) {
-    if (err) throw err;
-
-    connected = result;
-
+  connection.connect(function (err) {
+    assert.ifError(err);
     connection.destroy();
     server.destroy();
   });
@@ -42,8 +38,4 @@ server.on('connection', function(incomingConnection) {
       scrambleBuff1: scramble
     });
   });
-});
-
-process.on('exit', function() {
-  assert.equal(connected.fieldCount, 0);
 });
