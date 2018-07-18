@@ -4,7 +4,7 @@ This file is a manually maintained list of changes for each release. Feel free
 to add your changes here when sending pull requests. Also send corrections if
 you spot any mistakes.
 
-## HEAD
+## v2.16.0 (2018-07-17)
 
 * Add Amazon RDS GovCloud SSL certificates #1876
 * Add new error codes up to MySQL 5.7.21
