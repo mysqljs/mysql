@@ -43,5 +43,5 @@ server.listen(common.fakeServerPort, function (err) {
       done();
     });
   };
-  Array.apply(null, {length: numberOfConnections}).map(createIndexedConnection);
+  Array.apply(null, Array(numberOfConnections)).map(createIndexedConnection);
 });
