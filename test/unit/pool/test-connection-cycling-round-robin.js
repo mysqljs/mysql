@@ -4,24 +4,26 @@ var common = require('../../common');
 var pool   = common.createPool({port: common.fakeServerPort});
 
 var server = common.createFakeServer();
-var lastConnectionId = null;
 var numberOfConnections = 4;
+var connectionIds = [];
+var connectionNumber = 0;
 
 server.listen(common.fakeServerPort, function (err) {
   assert.ifError(err);
 
-  var getConnectionAndEnsureItsTheLastConnection = function(cb) {
+  var getConnectionAndEnsureItsTheCorrectOne = function(cb) {
     pool.getConnection(function (err, connection) {
       assert.ifError(err);
-      assert.ok(connection.id === lastConnectionId);
+      assert.ok(connection.id === connectionIds[connectionNumber]);
+      connectionNumber++;
       connection.release();
       if (cb) cb();
     });
   };
 
   var done = after(numberOfConnections, function () {
-    getConnectionAndEnsureItsTheLastConnection(function() {
-      getConnectionAndEnsureItsTheLastConnection(function() {
+    getConnectionAndEnsureItsTheCorrectOne(function() {
+      getConnectionAndEnsureItsTheCorrectOne(function() {
         pool.end(function (err) {
           assert.ifError(err);
           server.destroy();
@@ -34,9 +36,9 @@ server.listen(common.fakeServerPort, function (err) {
 
   var createIndexedConnection = function () {
     pool.getConnection(function (err, connection) {
-      connection.id = counter++;
-      lastConnectionId = connection.id;
       assert.ifError(err);
+      connection.id = counter++;
+      connectionIds.push(connection.id);
       connection.release();
       done();
     });
