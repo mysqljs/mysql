@@ -22,7 +22,7 @@
     "after": "0.8.2",
     "eslint": "4.19.1",
     "nyc": "10.3.2",
-    "seedrandom": "2.4.3",
+    "seedrandom": "2.4.4",
     "timezone-mock": "0.0.7",
     "urun": "0.0.8",
     "utest": "0.0.8"
