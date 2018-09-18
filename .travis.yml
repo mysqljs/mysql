@@ -7,9 +7,6 @@ node_js:
   - "9.11"
   - "10.3"
 env:
-  global:
-    # Necessary to build Node.js 0.6 on Travis CI images
-    - "CC=gcc-4.6 CXX=g++-4.6"
   matrix:
     - "DOCKER_MYSQL_TYPE=mysql DOCKER_MYSQL_VERSION=5.7"
 matrix:
