@@ -212,6 +212,7 @@ issue [#501](https://github.com/mysqljs/mysql/issues/501). (Default: `false`)
   (insecure) authentication method. (Default: `false`)
 * `typeCast`: Determines if column values should be converted to native
    JavaScript types. (Default: `true`)
+* `arrayRow`: Determines if rows should be an array or an object. (Default: `false`)
 * `queryFormat`: A custom query format function. See [Custom format](#custom-format).
 * `supportBigNumbers`: When dealing with big numbers (BIGINT and DECIMAL columns) in the database,
   you should enable this option (Default: `false`).
