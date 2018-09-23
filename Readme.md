@@ -47,6 +47,7 @@
 - [Error handling](#error-handling)
 - [Exception Safety](#exception-safety)
 - [Type casting](#type-casting)
+- [Array row](#array-row)
 - [Connection Flags](#connection-flags)
 - [Debugging and reporting problems](#debugging-and-reporting-problems)
 - [Security issues](#security-issues)
@@ -1334,6 +1335,22 @@ parser.parseLengthCodedBuffer()
 parser.parseGeometryValue()
 ```
 __You can find which field function you need to use by looking at: [RowDataPacket.prototype._typeCast](https://github.com/mysqljs/mysql/blob/master/lib/protocol/packets/RowDataPacket.js#L41)__
+
+
+## Array row
+
+The rows of a table can be returned as an array or an object on query or on connection level (including pooled connections):
+
+```js
+var connection = require('mysql').createConnection({arrayRow: true});
+```
+
+```js
+connection.query({sql: '...', arrayRow: true}, function (err, result, fields) {
+  if (error) throw error;
+  // ...
+});
+```
 
 
 ## Connection Flags
