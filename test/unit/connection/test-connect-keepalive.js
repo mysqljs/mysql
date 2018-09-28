@@ -1,6 +1,6 @@
 var assert     = require('assert');
 var common     = require('../../common');
-var connection = common.createConnection({keepAliveDelay : 60000, port: common.fakeServerPort});
+var connection = common.createConnection({keepAliveDelay: 60000, port: common.fakeServerPort});
 
 var server = common.createFakeServer();
 

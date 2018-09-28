@@ -73,7 +73,7 @@ test('ConnectionConfig#Constructor', {
 
   'Socket keepAlive is set in config': function()
   {
-    var config = new ConnectionConfig({ keepAliveDelay : 60000 });
+    var config = new ConnectionConfig({ keepAliveDelay: 60000 });
     assert.equal(config.keepAliveDelay, 60000);
   }
 });
