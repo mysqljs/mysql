@@ -235,6 +235,7 @@ issue [#501](https://github.com/mysqljs/mysql/issues/501). (Default: `false`)
   also possible to blacklist default ones. For more information, check
   [Connection Flags](#connection-flags).
 * `ssl`: object with ssl parameters or a string containing name of ssl profile. See [SSL options](#ssl-options).
+* `keepAliveDelay`: Delay in milliseconds after which the connection socket will send a keepalive packet. See [Net.socket.setKeepAlive](https://nodejs.org/api/net.html#net_socket_setkeepalive_enable_initialdelay).
 
 
 In addition to passing these options as an object, you can also use a url

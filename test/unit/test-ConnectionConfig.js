@@ -64,6 +64,17 @@ test('ConnectionConfig#Constructor', {
   'blacklists unsupported client flags': function() {
     var config = new ConnectionConfig({ flags: '+CONNECT_ATTRS' });
     assert.equal(config.clientFlags & common.ClientConstants.CLIENT_CONNECT_ATTRS, 0);
+  },
+
+  'Socket keepAlive defaults to 0 (default)': function() {
+    var config = new ConnectionConfig({});
+    assert.equal(config.keepAliveDelay, 0);
+  },
+
+  'Socket keepAlive is set in config': function()
+  {
+    var config = new ConnectionConfig({ keepAliveDelay : 60000 });
+    assert.equal(config.keepAliveDelay, 60000);
   }
 });
 
