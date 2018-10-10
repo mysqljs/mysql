@@ -4,6 +4,10 @@ This file is a manually maintained list of changes for each release. Feel free
 to add your changes here when sending pull requests. Also send corrections if
 you spot any mistakes.
 
+## HEAD
+
+* Small performance improvement starting command sequence
+
 ## v2.16.0 (2018-07-17)
 
 * Add Amazon RDS GovCloud SSL certificates #1876
