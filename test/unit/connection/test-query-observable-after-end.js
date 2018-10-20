@@ -1,0 +1,28 @@
+var after      = require('after');
+var assert     = require('assert');
+var common     = require('../../common');
+var connection = common.createConnection({port: common.fakeServerPort});
+
+var server = common.createFakeServer();
+
+server.listen(common.fakeServerPort, function (err) {
+  assert.ifError(err);
+
+  var done = after(2, function () {
+    server.destroy();
+  });
+
+  connection.connect(assert.ifError);
+
+  connection.end(function (err) {
+    assert.ifError(err);
+    done();
+  });
+
+  connection.queryObservable('SELECT 1').subscribe(function () { }, function(err) {
+    assert.ok(err);
+    assert.equal(err.fatal, false);
+    assert.equal(err.code, 'PROTOCOL_ENQUEUE_AFTER_QUIT');
+    done();
+  });
+});

@@ -1,7 +1,7 @@
 {
   "name": "mysql",
   "description": "A node.js driver for mysql. It is written in JavaScript, does not require compiling, and is 100% MIT licensed.",
-  "version": "2.16.0",
+  "version": "2.16.1",
   "license": "MIT",
   "author": "Felix Geisendörfer <felix@debuggable.com> (http://debuggable.com/)",
   "contributors": [
@@ -15,6 +15,7 @@
   "dependencies": {
     "bignumber.js": "4.1.0",
     "readable-stream": "2.3.6",
+    "rxjs": "^6.3.3",
     "safe-buffer": "5.1.2",
     "sqlstring": "2.3.1"
   },

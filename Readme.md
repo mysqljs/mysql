@@ -38,6 +38,7 @@
 - [Executing queries in parallel](#executing-queries-in-parallel)
 - [Streaming query rows](#streaming-query-rows)
 - [Piping results with Streams](#piping-results-with-streams)
+- [Query data using Observables](#query-data-using-observables)
 - [Multiple statement queries](#multiple-statement-queries)
 - [Stored procedures](#stored-procedures)
 - [Joins with overlapping column names](#joins-with-overlapping-column-names)
@@ -974,6 +975,38 @@ connection.query('SELECT * FROM posts')
   .stream({highWaterMark: 5})
   .pipe(...);
 ```
+
+## Query data using Observables
+
+If you're familiar with ReactiveX Observables and Operators, you can use Subscription-on-Observable instead of callbacks to get your data. Read more about Observables [here](https://rxjs-dev.firebaseapp.com/guide/observable).
+Use `Connection.queryObservable()` or `Pool.queryObservable()`(if you're using a pool) to query data instead of `.query()`.
+`.queryObservable()` returns an Observable which you'll subscribe to.
+Examples:
+
+```js
+var query = connection.queryObservable('SELECT * FROM posts');
+
+var results = []
+query.subscribe(function(row) {
+  // results streaming section
+  results.push(row); // pushes row-by-row to `results` array
+
+}, function(err) {
+  // error handling section
+  console.error(err); 
+
+}, function() {
+  // completion section
+  console.log(results);  // logs all retrieved rows
+
+})
+```
+
+Take these in consideration when using this method:
+* If you want to run the same query multiple times, you don't need to re-create the Observable again, just re-subscribe on the same Observable
+* Subscription section recieves data row-by-row, so avoid using multiple statements in one query because rows will be mixed.
+* Currently, this method doesn't support retrieving `fields` object with results.
+
 
 ## Multiple statement queries
 

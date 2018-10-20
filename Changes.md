@@ -4,6 +4,12 @@ This file is a manually maintained list of changes for each release. Feel free
 to add your changes here when sending pull requests. Also send corrections if
 you spot any mistakes.
 
+## v2.16.1 (2018-10-20)
+
+* Add `rxjs ^6.3.3` to dependencies
+* Add `connection.queryObservable()`
+* Add `pool.queryObservable()`
+
 ## v2.16.0 (2018-07-17)
 
 * Add Amazon RDS GovCloud SSL certificates #1876
