@@ -6,7 +6,7 @@ you spot any mistakes.
 
 ## v2.16.1 (2018-10-20)
 
-* Add `rxjs ^6.3.3` to dependencies
+* Add `rxjs@6.3.3` to dependencies
 * Add `connection.queryObservable()`
 * Add `pool.queryObservable()`
 
