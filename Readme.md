@@ -657,6 +657,25 @@ connection.query(
 );
 ```
 
+Use the option `arrayRows` to get rows as arrays where the values can be obtained using
+the position in the field list instead of the field's name.
+
+```js
+connection.query(
+  {
+    sql: 'SELECT * FROM `books` WHERE `author` = ?',
+    arrayRows: true
+  },
+  'David',
+  function (error, results, fields) {
+    // error will be an Error if one occurred during the query
+    // results will contain the results of the query as an array of arrays
+    // fields will contain information about the returned results fields (if any)
+  }
+);
+```
+
+
 ## Escaping query values
 
 **Caution** These methods of escaping values only works when the
