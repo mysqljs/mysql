@@ -21,7 +21,7 @@ server.listen(common.fakeServerPort, function (err) {
     assert.equal(messages.length, 5);
     assert.deepEqual(messages, [
       '<-- HandshakeInitializationPacket',
-      '--> ClientAuthenticationPacket',
+      '--> (1) ClientAuthenticationPacket',
       '<-- (1) OkPacket',
       '--> (1) ComPingPacket',
       '<-- (1) OkPacket'

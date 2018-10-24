@@ -6,6 +6,7 @@ you spot any mistakes.
 
 ## HEAD
 
+* Fix `connection.threadId` missing on handshake failure
 * Small performance improvement starting command sequence
 
 ## v2.16.0 (2018-07-17)

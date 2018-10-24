@@ -31,7 +31,7 @@ server.listen(common.fakeServerPort, function (err) {
             assert.equal(messages.length, 20);
             assert.deepEqual(messages, [
               '<-- HandshakeInitializationPacket',
-              '--> ClientAuthenticationPacket',
+              '--> (1) ClientAuthenticationPacket',
               '<-- (1) OkPacket',
               '--> (1) ComQueryPacket',
               '<-- (1) ResultSetHeaderPacket',
@@ -40,7 +40,7 @@ server.listen(common.fakeServerPort, function (err) {
               '<-- (1) RowDataPacket',
               '<-- (1) EofPacket',
               '<-- HandshakeInitializationPacket',
-              '--> ClientAuthenticationPacket',
+              '--> (2) ClientAuthenticationPacket',
               '<-- (2) OkPacket',
               '--> (2) ComQueryPacket',
               '<-- (2) ResultSetHeaderPacket',
