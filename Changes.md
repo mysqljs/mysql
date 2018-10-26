@@ -7,6 +7,7 @@ you spot any mistakes.
 ## HEAD
 
 * Fix `connection.threadId` missing on handshake failure
+* Fix duplicte packet name in debug output
 * Remove special case for handshake in determine packet code
 * Small performance improvement starting command sequence
 
