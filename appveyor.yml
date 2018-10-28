@@ -32,7 +32,7 @@ install:
       catch { Update-NodeJsInstallation (Get-NodeJsLatestBuild $env:nodejs_version) }
   - npm config set shrinkwrap false
   - if "%nodejs_version%" equ "0.8" npm config set strict-ssl false
-  - npm rm --silent --save-dev eslint nyc
+  - npm rm --silent --save-dev eslint
   - if exist node_modules npm prune
   - if exist node_modules npm rebuild
   - npm install

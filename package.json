@@ -21,7 +21,6 @@
   "devDependencies": {
     "after": "0.8.2",
     "eslint": "4.19.1",
-    "nyc": "10.3.2",
     "seedrandom": "2.4.4",
     "timezone-mock": "0.0.7",
     "urun": "0.0.8",
@@ -40,8 +39,8 @@
   "scripts": {
     "lint": "eslint .",
     "test": "node test/run.js",
-    "test-ci": "nyc --reporter=text npm test",
-    "test-cov": "nyc --reporter=html --reporter=text npm test",
+    "test-ci": "node tool/install-nyc.js --nyc-optional --reporter=text -- npm test",
+    "test-cov": "node tool/install-nyc.js --reporter=html --reporter=text -- npm test",
     "version": "node tool/version-changes.js && git add Changes.md"
   }
 }
