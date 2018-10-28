@@ -31,9 +31,8 @@ install:
       try { Install-Product node $env:nodejs_version -ErrorAction Stop }
       catch { Update-NodeJsInstallation (Get-NodeJsLatestBuild $env:nodejs_version) }
   - npm config set shrinkwrap false
-  - if "%nodejs_version%" equ "0.8" npm rm --save-dev nyc
   - if "%nodejs_version%" equ "0.8" npm config set strict-ssl false
-  - npm rm --save-dev eslint
+  - npm rm --silent --save-dev eslint nyc
   - if exist node_modules npm prune
   - if exist node_modules npm rebuild
   - npm install
@@ -48,8 +47,6 @@ test_script:
   - mysql --version
   - node --version
   - npm --version
-  - set npm_test_command=test
-  - for /f %%l in ('npm -ps ls nyc') do set npm_test_command=test-ci
-  - npm run %npm_test_command%
+  - npm test
 
 version: "{build}"
