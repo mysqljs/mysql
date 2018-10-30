@@ -65,10 +65,11 @@ before_install:
 
   # Setup environment
   - "export MYSQL_DATABASE=node_mysql"
+  - "export MYSQL_PORT=$(node tool/free-port.js)"
   - "export MYSQL_USER=root"
 
 install:
-  - "docker run -d --name mysql -e MYSQL_ALLOW_EMPTY_PASSWORD=yes -e MYSQL_DATABASE=$MYSQL_DATABASE $DOCKER_MYSQL_TYPE:$DOCKER_MYSQL_VERSION"
+  - "docker run -d --name mysql -e MYSQL_ALLOW_EMPTY_PASSWORD=yes -e MYSQL_DATABASE=$MYSQL_DATABASE -p $MYSQL_PORT:3306 $DOCKER_MYSQL_TYPE:$DOCKER_MYSQL_VERSION"
   - "npm install"
   - "docker run --link mysql:db -e CHECK_PORT=3306 -e CHECK_HOST=db giorgos/takis"
 
