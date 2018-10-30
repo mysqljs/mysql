@@ -75,7 +75,7 @@ install:
 
 before_script:
   - "docker --version"
-  - "docker exec mysql mysql -e 'select version()'"
+  - "node tool/mysql-version.js"
 
 script:
   # Run test script
