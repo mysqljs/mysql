@@ -69,6 +69,12 @@ Installation is done using the
 $ npm install mysql
 ```
 
+You can also install mysqljs using the [Yarn package manager](https://yarnpkg.com/lang/en/docs/install/). Yarn is an alternative to npm, which enables a flat dependency tree.
+
+```sh
+$ yarn add mysql --flat
+```
+
 For information about the previous 0.9.x releases, visit the [v0.9 branch][].
 
 Sometimes I may also ask you to install the latest version from Github to check
@@ -77,6 +83,13 @@ if a bugfix is working. In this case, please do:
 ```sh
 $ npm install mysqljs/mysql
 ```
+
+For Yarn, it look as follows:
+
+```sh
+$ yarn add mysqljs/mysql --flat
+```
+
 
 [v0.9 branch]: https://github.com/mysqljs/mysql/tree/v0.9
 
