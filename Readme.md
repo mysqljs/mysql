@@ -1373,18 +1373,22 @@ The following flags are sent by default on a new connection:
 - `SECURE_CONNECTION` - Support native 4.1 authentication.
 - `TRANSACTIONS` - Asks for the transaction status flags.
 
-In addition, the following flag will be sent if the option `multipleStatements`
+The following flag will be sent if the option `multipleStatements`
 is set to `true`:
 
 - `MULTI_STATEMENTS` - The client may send multiple statement per query or
   statement prepare.
+
+The following flag will be sent if the option `compress` is set to `true`
+and the server indicates support for compression:
+
+- `COMPRESS` - Compress data between client and server.
 
 ### Other Available Flags
 
 There are other flags available. They may or may not function, but are still
 available to specify.
 
-- `COMPRESS`
 - `INTERACTIVE`
 - `NO_SCHEMA`
 - `PLUGIN_AUTH`
