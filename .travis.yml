@@ -15,6 +15,7 @@ node_js:
   - "8.13"
   - "9.11"
   - "10.13"
+  - "11.2"
 env:
   global:
     # Necessary to build Node.js 0.6 on Travis CI images

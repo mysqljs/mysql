@@ -11,6 +11,7 @@ you spot any mistakes.
 * Fix no password support for old password protocol
 * Remove special case for handshake in determine packet code
 * Small performance improvement starting command sequence
+* Support Node.js 11.x
 
 ## v2.16.0 (2018-07-17)
 
