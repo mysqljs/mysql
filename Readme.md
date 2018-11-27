@@ -1,8 +1,8 @@
 # mysql
 
-[![NPM Version][npm-image]][npm-url]
-[![NPM Downloads][downloads-image]][downloads-url]
-[![Node.js Version][node-version-image]][node-version-url]
+[![NPM Version][npm-version-image]][npm-url]
+[![NPM Downloads][npm-downloads-image]][npm-url]
+[![Node.js Version][node-image]][node-url]
 [![Linux Build][travis-image]][travis-url]
 [![Windows Build][appveyor-image]][appveyor-url]
 [![Test Coverage][coveralls-image]][coveralls-url]
@@ -1490,15 +1490,14 @@ $ MYSQL_HOST=localhost MYSQL_PORT=3306 MYSQL_DATABASE=node_mysql_test MYSQL_USER
 * Prepared statements
 * Support for encodings other than UTF-8 / ASCII
 
-[npm-image]: https://img.shields.io/npm/v/mysql.svg
-[npm-url]: https://npmjs.org/package/mysql
-[node-version-image]: https://img.shields.io/node/v/mysql.svg
-[node-version-url]: https://nodejs.org/en/download/
-[travis-image]: https://img.shields.io/travis/mysqljs/mysql/master.svg?label=linux
-[travis-url]: https://travis-ci.org/mysqljs/mysql
-[appveyor-image]: https://img.shields.io/appveyor/ci/dougwilson/node-mysql/master.svg?label=windows
+[appveyor-image]: https://badgen.net/appveyor/ci/dougwilson/node-mysql/master?label=windows
 [appveyor-url]: https://ci.appveyor.com/project/dougwilson/node-mysql
-[coveralls-image]: https://img.shields.io/coveralls/mysqljs/mysql/master.svg
+[coveralls-image]: https://badgen.net/coveralls/c/github/mysqljs/mysql/master
 [coveralls-url]: https://coveralls.io/r/mysqljs/mysql?branch=master
-[downloads-image]: https://img.shields.io/npm/dm/mysql.svg
-[downloads-url]: https://npmjs.org/package/mysql
+[node-image]: https://badgen.net/npm/node/mysql
+[node-url]: https://nodejs.org/en/download
+[npm-downloads-image]: https://badgen.net/npm/dm/mysql
+[npm-url]: https://npmjs.org/package/mysql
+[npm-version-image]: https://badgen.net/npm/v/mysql
+[travis-image]: https://badgen.net/travis/mysqljs/mysql/master
+[travis-url]: https://travis-ci.org/mysqljs/mysql
