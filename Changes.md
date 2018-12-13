@@ -31,6 +31,7 @@ you spot any mistakes.
 * Fix `connection.threadId` missing on handshake failure
 * Fix duplicate packet name in debug output
 * Fix no password support for old password protocol
+* Fix suppression of fatal protocol server errors #2021
 * Remove special case for handshake in determine packet code
 * Small performance improvement starting command sequence
 * Support auth switch in change user flow #1776
