@@ -27,6 +27,7 @@
 - [Switching users and altering connection state](#switching-users-and-altering-connection-state)
 - [Server disconnects](#server-disconnects)
 - [Performing queries](#performing-queries)
+- [Using template literals](#using-template-literals)
 - [Escaping query values](#escaping-query-values)
 - [Escaping query identifiers](#escaping-query-identifiers)
 - [Preparing Queries](#preparing-queries)
@@ -655,6 +656,67 @@ connection.query(
     // fields will contain information about the returned results fields (if any)
   }
 );
+```
+
+### Using Template Literals
+
+Template literals can be used with the mysql module. This allows for cleaner, readable code.
+
+Queries that do not require user provided values can be written as simple template literals as shown below:
+
+```js
+var query = `CREATE TABLE Users(
+  EmailAddress VARCHAR(75) NOT NULL UNIQUE,
+  FirstName VARCHAR(30) NOT NULL,
+  LastName VARCHAR(30) NOT NULL,
+  CONSTRAINT PK_User PRIMARY KEY (EmailAddress)
+  )`;
+```
+
+**However**, queries involving user provided values require escaping values you are inserting into the sql or this will result in sql syntax error. See the [escaping section](#escaping-query-values):
+
+```js
+var email = "user provided email value";
+var first_name = "user provided first name value";
+var last_name = "user provided last name value";
+
+var query = `INSERT INTO Users SET
+    EmailAddress = ${mysql.esacpe(email)},
+    FirstName = ${mysql.escape(first_name)},
+    LastName = ${mysql.escape(last_name)},
+    ON DUPLICATE KEY UPDATE
+    FirstName = ${mysql.escape(first_name)},
+    LastName = ${mysql.escape(last_name)}`;
+```
+
+Placeholder syntax can also be used as follows:
+
+```js
+var email = "user provided email value";
+var first_name = "user provided first name value";
+var last_name = "user provided last name value";
+
+var query = `mysqk.format(INSERT INTO Users SET
+    EmailAddress = ?,
+    FirstName = ?,
+    LastName = ?,
+    ON DUPLICATE KEY UPDATE
+    FirstName = ?,
+    LastName = ?`, [email, first_name, lastname, first_name, last_name]);
+```
+
+Finally, [named placeholders](https://www.npmjs.com/package/named-placeholders) can also be used:
+
+```js
+var toUnamed = require('named-placeholders')();
+
+var [query, values] = toUnamed(`INSERT INTO Users SET
+    EmailAddress = :email,
+    FirstName = :first_name,
+    LastName = :last_name
+    ON DUPLICATE KEY UPDATE
+    FirstName = :first_name,
+    LastName = :last_name`, {email, first_name, last_name,first_name, last_name});
 ```
 
 ## Escaping query values
