@@ -716,7 +716,7 @@ var [query, values] = toUnamed(`INSERT INTO Users SET
     LastName = :last_name
     ON DUPLICATE KEY UPDATE
     FirstName = :first_name,
-    LastName = :last_name`, {email, first_name, last_name, first_name, last_name});
+    LastName = :last_name`, { email, first_name, last_name });
 ```
 
 ## Escaping query values
