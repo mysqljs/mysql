@@ -41,7 +41,7 @@ function getNycVersion() {
   } else if (nodeVersion[0] < 6) {
     return '11.9.0';
   } else {
-    return '13.1.0';
+    return '13.2.0';
   }
 }
 
