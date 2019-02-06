@@ -1159,7 +1159,7 @@ object. Additionally they typically come with two extra properties:
   `'ER_ACCESS_DENIED_ERROR'`), a Node.js error (e.g. `'ECONNREFUSED'`) or an
   internal error (e.g. `'PROTOCOL_CONNECTION_LOST'`).
 * `err.fatal`: Boolean, indicating if this error is terminal to the connection
-  object. If the error is not from a MySQL protocol operation, this properly
+  object. If the error is not from a MySQL protocol operation, this property
   will not be defined.
 * `err.sql`: String, contains the full SQL of the failed query. This can be
   useful when using a higher level interface like an ORM that is generating
@@ -1430,8 +1430,8 @@ opening a GitHub issue simply asking to whom a security issues should be
 addressed to without disclosing the issue or type of issue.
 
 An ideal report would include a clear indication of what the security issue is
-and how it would be exploited, ideally with an accompaning proof of concept
-("PoC") for collaborators to work again and validate potentional fixes against.
+and how it would be exploited, ideally with an accompanying proof of concept
+("PoC") for collaborators to work against and validate potentional fixes against.
 
 ## Contributing
 
