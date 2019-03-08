@@ -1155,9 +1155,10 @@ review carefully in order to write solid applications.
 Most errors created by this module are instances of the JavaScript [Error][]
 object. Additionally they typically come with two extra properties:
 
-* `err.code`: Either a [MySQL server error][] (e.g.
-  `'ER_ACCESS_DENIED_ERROR'`), a Node.js error (e.g. `'ECONNREFUSED'`) or an
-  internal error (e.g. `'PROTOCOL_CONNECTION_LOST'`).
+* `err.code`: String, contains the MySQL server error symbol if the error is
+  a [MySQL server error][] (e.g. `'ER_ACCESS_DENIED_ERROR'`), a Node.js error
+  code if it is a Node.js error (e.g. `'ECONNREFUSED'`), or an internal error
+  code (e.g. `'PROTOCOL_CONNECTION_LOST'`).
 * `err.fatal`: Boolean, indicating if this error is terminal to the connection
   object. If the error is not from a MySQL protocol operation, this property
   will not be defined.
