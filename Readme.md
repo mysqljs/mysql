@@ -1303,37 +1303,58 @@ var query = connection.query(options, function (error, results, fields) {
 });
 ```
 
+### Custom type casting
+
 You can also pass a function and handle type casting yourself. You're given some
 column information like database, table and name and also type and length. If you
 just want to apply a custom type casting to a specific type you can do it and then
-fallback to the default. Here's an example of converting `TINYINT(1)` to boolean:
+fallback to the default.
+
+The function is provided two arguments `field` and `next` and is expected to
+return the value for the given field by invoking the parser functions through
+the `field` object.
+
+The `field` argument is a `Field` object and contains data about the field that
+need to be parsed. The following are some of the properties on a `Field` object:
+
+  * `db` - a string of the database the field came from.
+  * `table` - a string of the table the field came from.
+  * `name` - a string of the field name.
+  * `type` - a string of the field type in all caps.
+  * `length` - a number of the field length, as given by the database.
+
+The `next` argument is a `function` that, when called, will return the default
+type conversaion for the given field.
+
+When getting the field data, the following helper methods are present on the
+`field` object:
+
+  * `.string()` - parse the field into a string.
+  * `.buffer()` - parse the field into a `Buffer`.
+  * `.geometry()` - parse the field as a geometry value.
+
+The MySQL protocol is a text-based protocol. This means that over the wire, all
+field types are represented as a string, which is why only string-like functions
+are available on the `field` object. Based on the type information (like `INT`),
+the type cast should convert the string field into a different JavaScript type
+(like a `number`).
+
+Here's an example of converting `TINYINT(1)` to boolean:
 
 ```js
-connection.query({
-  sql: '...',
+connection = mysql.createConnection({
   typeCast: function (field, next) {
-    if (field.type == 'TINY' && field.length == 1) {
-      return (field.string() == '1'); // 1 = true, 0 = false
+    if (field.type === 'TINY' && field.length === 1) {
+      return (field.string() === '1'); // 1 = true, 0 = false
+    } else {
+      return next();
     }
-    return next();
   }
 });
 ```
-__WARNING: YOU MUST INVOKE the parser using one of these three field functions in your custom typeCast callback. They can only be called once. (see [#539](https://github.com/mysqljs/mysql/issues/539) for discussion)__
 
-```
-field.string()
-field.buffer()
-field.geometry()
-```
-are aliases for
-```
-parser.parseLengthCodedString()
-parser.parseLengthCodedBuffer()
-parser.parseGeometryValue()
-```
-__You can find which field function you need to use by looking at: [RowDataPacket.prototype._typeCast](https://github.com/mysqljs/mysql/blob/master/lib/protocol/packets/RowDataPacket.js#L41)__
-
+__WARNING: YOU MUST INVOKE the parser using one of these three field functions
+in your custom typeCast callback. They can only be called once.__
 
 ## Connection Flags
 
