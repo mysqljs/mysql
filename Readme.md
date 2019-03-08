@@ -696,7 +696,7 @@ var email = "user provided email value";
 var first_name = "user provided first name value";
 var last_name = "user provided last name value";
 
-var query = `mysqk.format(INSERT INTO Users SET
+var query = `mysql.format(INSERT INTO Users SET
     EmailAddress = ?,
     FirstName = ?,
     LastName = ?,
