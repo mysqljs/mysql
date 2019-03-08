@@ -1159,6 +1159,8 @@ object. Additionally they typically come with two extra properties:
   a [MySQL server error][] (e.g. `'ER_ACCESS_DENIED_ERROR'`), a Node.js error
   code if it is a Node.js error (e.g. `'ECONNREFUSED'`), or an internal error
   code (e.g. `'PROTOCOL_CONNECTION_LOST'`).
+* `err.errno`: Number, contains the MySQL server error number. Only populated
+  from [MySQL server error][].
 * `err.fatal`: Boolean, indicating if this error is terminal to the connection
   object. If the error is not from a MySQL protocol operation, this property
   will not be defined.
