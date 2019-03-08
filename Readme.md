@@ -1169,7 +1169,7 @@ object. Additionally they typically come with two extra properties:
   textual description of the error. Only populated from [MySQL server error][].
 
 [Error]: https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Error
-[MySQL server error]: http://dev.mysql.com/doc/refman/5.5/en/error-messages-server.html
+[MySQL server error]: https://dev.mysql.com/doc/refman/5.5/en/server-error-reference.html
 
 Fatal errors are propagated to *all* pending callbacks. In the example below, a
 fatal error is triggered by trying to connect to an invalid port. Therefore the
