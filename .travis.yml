@@ -58,7 +58,7 @@ before_install:
 
   # Setup Node.js version-specific dependencies
   - "node tool/install-nyc.js --nyc-optional"
-  - "test $(echo $TRAVIS_NODE_VERSION | cut -d. -f1) -ge 4 || npm rm --save-dev eslint"
+  - "test $(echo $TRAVIS_NODE_VERSION | cut -d. -f1) -ge 6 || npm rm --save-dev eslint"
 
   # Update Node.js modules
   - "test ! -d node_modules || npm prune"
