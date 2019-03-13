@@ -12,6 +12,7 @@ you spot any mistakes.
 * Remove special case for handshake in determine packet code
 * Small performance improvement starting command sequence
 * Support Node.js 11.x
+* Update `bignumber.js` to 6.0.0
 
 ## v2.16.0 (2018-07-17)
 
