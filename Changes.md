@@ -6,6 +6,7 @@ you spot any mistakes.
 
 ## HEAD
 
+* Add reverse type lookup for small performance gain #2170
 * Fix `connection.threadId` missing on handshake failure
 * Fix duplicate packet name in debug output
 * Fix no password support for old password protocol
