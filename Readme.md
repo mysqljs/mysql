@@ -381,7 +381,9 @@ constructor. In addition to those options pools accept a few extras:
 
 * `acquireTimeout`: The milliseconds before a timeout occurs during the connection
   acquisition. This is slightly different from `connectTimeout`, because acquiring
-  a pool connection does not always involve making a connection. (Default: `10000`)
+  a pool connection does not always involve making a connection. If a connection
+  request is queued, the time the request spends in the queue does not count
+  towards this timeout. (Default: `10000`)
 * `waitForConnections`: Determines the pool's action when no connections are
   available and the limit has been reached. If `true`, the pool will queue the
   connection request and call it when one becomes available. If `false`, the
