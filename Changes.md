@@ -4,6 +4,11 @@ This file is a manually maintained list of changes for each release. Feel free
 to add your changes here when sending pull requests. Also send corrections if
 you spot any mistakes.
 
+## HEAD
+
+* Update `bignumber.js` to 7.2.1 #2206
+  - Fix npm deprecation warning
+
 ## v2.17.0 (2019-04-17)
 
 * Add reverse type lookup for small performance gain #2170
