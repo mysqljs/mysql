@@ -59,8 +59,8 @@ function FakeConnection(socket) {
   this.database = null;
   this.user     = null;
 
+  this._cipher = null;
   this._socket = socket;
-  this._ssl    = null;
   this._stream = socket;
   this._parser = new Parser({onPacket: this._parsePacket.bind(this)});
 
@@ -261,7 +261,7 @@ FakeConnection.prototype._handleQueryPacket = function _handleQueryPacket(packet
 
     var writer = new PacketWriter();
     writer.writeLengthCodedString('Ssl_cipher');
-    writer.writeLengthCodedString(this._ssl ? this._ssl.getCurrentCipher().name : '');
+    writer.writeLengthCodedString(this._cipher ? this._cipher.name : '');
     this._stream.write(writer.toBuffer(this._parser));
 
     this._sendPacket(new Packets.EofPacket());
@@ -343,7 +343,7 @@ FakeConnection.prototype._determinePacket = function _determinePacket() {
     var Packet = this._expectedNextPacket;
 
     if (Packet === Packets.ClientAuthenticationPacket) {
-      return !this._ssl && (this._parser.peak(1) << 8) & ClientConstants.CLIENT_SSL
+      return !this._cipher && (this._parser.peak(1) << 8) & ClientConstants.CLIENT_SSL
         ? Packets.SSLRequestPacket
         : Packets.ClientAuthenticationPacket;
     }
@@ -443,7 +443,7 @@ if (tls.TLSSocket) {
 
     var conn = this;
     secureSocket.on('secure', function () {
-      conn._ssl = this.ssl;
+      conn._cipher = this.getCipher();
     });
 
     // resume
@@ -472,7 +472,7 @@ if (tls.TLSSocket) {
 
     var conn = this;
     securePair.on('secure', function () {
-      conn._ssl = this.ssl;
+      conn._cipher = securePair.cleartext.getCipher();
     });
 
     // resume
