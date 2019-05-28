@@ -650,6 +650,13 @@ terminated, an existing connection object cannot be re-connected by design.
 With Pool, disconnected connections will be removed from the pool freeing up
 space for a new connection to be created on the next getConnection call.
 
+With PoolCluster, disconnected connections will count as errors against the
+related node, incrementing the error code for that node. Once there are more than
+`removeNodeErrorCount` errors on a given node, it is removed from the cluster.
+When this occurs, the PoolCluster may emit a `POOL_NONEONLINE` error if there are
+no longer any matching nodes for the pattern. The `restoreNodeTimeout` config can
+be set to restore offline nodes after a given timeout.
+
 ## Performing queries
 
 The most basic way to perform a query is to call the `.query()` method on an object
