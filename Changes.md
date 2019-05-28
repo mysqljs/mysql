@@ -7,6 +7,7 @@ you spot any mistakes.
 ## HEAD
 
 * Support Node.js 12.x #2211
+* Update `bignumber.js` to 9.0.0
 
 ## v2.17.1 (2019-04-18)
 
