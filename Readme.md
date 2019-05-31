@@ -1343,7 +1343,7 @@ need to be parsed. The following are some of the properties on a `Field` object:
   * `length` - a number of the field length, as given by the database.
 
 The `next` argument is a `function` that, when called, will return the default
-type conversaion for the given field.
+type conversion for the given field.
 
 When getting the field data, the following helper methods are present on the
 `field` object:
