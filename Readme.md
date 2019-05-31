@@ -393,6 +393,9 @@ constructor. In addition to those options pools accept a few extras:
 * `queueLimit`: The maximum number of connection requests the pool will queue
   before returning an error from `getConnection`. If set to `0`, there is no
   limit to the number of queued connection requests. (Default: `0`)
+* `idleConnectionTimeout`: The maximum number of milliseconds a connection can be
+  idle in the pool. If set to `0` connection will live until it is manually
+  destroyed or the pool is closed. (Default: `0`)
 
 ## Pool events
 
