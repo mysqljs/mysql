@@ -12,8 +12,9 @@ var tid  = 0;
 
 server.listen(common.fakeServerPort, function(err){
   assert.ifError(err);
-
+  console.log('before pool.getConnection')
   pool.getConnection(function(err, conn){
+    console.log('after pool.getConnection')
     assert.ifError(err);
     assert.equal(conn.threadId, 1);
     conn.release();
