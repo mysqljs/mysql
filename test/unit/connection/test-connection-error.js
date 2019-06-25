@@ -50,7 +50,7 @@ function end() {
 }
 
 server.on('connection', function(incomingConnection) {
-  incomingConnection.deny('You suck.', common.Errors.ER_HOST_NOT_PRIVILEGED);
+  incomingConnection.deny();
 });
 
 process.on('exit', function() {

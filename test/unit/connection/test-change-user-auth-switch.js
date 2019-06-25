@@ -3,35 +3,37 @@ var Crypto     = require('crypto');
 var common     = require('../../common');
 var connection = common.createConnection({
   port     : common.fakeServerPort,
-  password : 'authswitch'
+  user     : 'user_1',
+  password : 'pass_1'
 });
 
 var random = Crypto.pseudoRandomBytes || Crypto.randomBytes; // Depends on node.js version
 var server = common.createFakeServer();
 
-var connected;
-server.listen(common.fakeServerPort, function (err) {
+server.listen(common.fakeServerPort, function(err) {
   assert.ifError(err);
 
-  connection.connect(function (err, result) {
+  connection.query('SELECT CURRENT_USER()', function (err, result) {
     assert.ifError(err);
+    assert.strictEqual(result[0]['CURRENT_USER()'], 'user_1@localhost');
 
-    connected = result;
-
-    connection.destroy();
-    server.destroy();
+    connection.changeUser({user: 'user_2', password: 'pass_2'}, function (err) {
+      assert.ifError(err);
+      connection.destroy();
+      server.destroy();
+    });
   });
 });
 
-server.on('connection', function(incomingConnection) {
+server.on('connection', function (incomingConnection) {
   random(20, function (err, scramble) {
     assert.ifError(err);
 
     incomingConnection.on('authSwitchResponse', function (packet) {
-      this._sendAuthResponse(packet.data, common.Auth.token('authswitch', scramble));
+      this._sendAuthResponse(packet.data, common.Auth.token('pass_2', scramble));
     });
 
-    incomingConnection.on('clientAuthentication', function () {
+    incomingConnection.on('changeUser', function () {
       this.authSwitchRequest({
         authMethodName : 'mysql_native_password',
         authMethodData : scramble
@@ -40,8 +42,4 @@ server.on('connection', function(incomingConnection) {
 
     incomingConnection.handshake();
   });
-});
-
-process.on('exit', function() {
-  assert.equal(connected.fieldCount, 0);
 });

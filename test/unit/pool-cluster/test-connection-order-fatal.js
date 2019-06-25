@@ -24,16 +24,12 @@ server.listen(common.fakeServerPort, function(err) {
   pool.getConnection(function (err, connection) {
     assert.ifError(err);
     assert.strictEqual(connection._clusterId, 'SLAVE2');
-
-    conn1 = connection;
     done();
   });
 
   pool.getConnection(function (err, connection) {
     assert.ifError(err);
     assert.strictEqual(connection._clusterId, 'SLAVE2');
-
-    conn2 = connection;
     done();
   });
 });

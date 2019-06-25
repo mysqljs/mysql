@@ -8,11 +8,15 @@ node_js:
   - "2.5"
   - "3.3"
   - "4.2.0" # Test timers regression
-  - "4.8"
+  - "4.9"
   - "5.12"
-  - "6.11"
+  - "6.17"
   - "7.10"
-  - "8.1"
+  - &lts "8.16"
+  - "9.11"
+  - "10.15"
+  - "11.14"
+  - "12.0"
 env:
   global:
     # Necessary to build Node.js 0.6 on Travis CI images
@@ -21,16 +25,20 @@ env:
     - "DOCKER_MYSQL_TYPE=mysql DOCKER_MYSQL_VERSION=5.7"
 matrix:
   include:
-    - node_js: "6.11"
+    - node_js: *lts
       env: "DOCKER_MYSQL_TYPE=mysql DOCKER_MYSQL_VERSION=5.5"
-    - node_js: "6.11"
+    - node_js: *lts
       env: "DOCKER_MYSQL_TYPE=mysql DOCKER_MYSQL_VERSION=5.6"
-    - node_js: "6.11"
+    - node_js: *lts
       env: "DOCKER_MYSQL_TYPE=mariadb DOCKER_MYSQL_VERSION=5.5"
-    - node_js: "6.11"
+    - node_js: *lts
       env: "DOCKER_MYSQL_TYPE=mariadb DOCKER_MYSQL_VERSION=10.0"
-    - node_js: "6.11"
+    - node_js: *lts
       env: "DOCKER_MYSQL_TYPE=mariadb DOCKER_MYSQL_VERSION=10.1"
+    - node_js: *lts
+      env: "DOCKER_MYSQL_TYPE=mariadb DOCKER_MYSQL_VERSION=10.2"
+    - node_js: *lts
+      env: "DOCKER_MYSQL_TYPE=mariadb DOCKER_MYSQL_VERSION=10.3"
 
 dist: trusty
 addons:
@@ -50,9 +58,8 @@ before_install:
   - "npm config set shrinkwrap false"
 
   # Setup Node.js version-specific dependencies
-  - "test $TRAVIS_NODE_VERSION != '0.6' || npm rm --save-dev nyc"
-  - "test $TRAVIS_NODE_VERSION != '0.8' || npm rm --save-dev nyc"
-  - "test $(echo $TRAVIS_NODE_VERSION | cut -d. -f1) -ge 4 || npm rm --save-dev eslint"
+  - "node tool/install-nyc.js --nyc-optional"
+  - "test $(echo $TRAVIS_NODE_VERSION | cut -d. -f1) -ge 6 || npm rm --save-dev eslint"
 
   # Update Node.js modules
   - "test ! -d node_modules || npm prune"
@@ -60,22 +67,23 @@ before_install:
 
   # Setup environment
   - "export MYSQL_DATABASE=node_mysql"
+  - "export MYSQL_HOST=localhost"
+  - "export MYSQL_PORT=$(node tool/free-port.js)"
   - "export MYSQL_USER=root"
 
 install:
-  - "docker run -d --name mysql -e MYSQL_ALLOW_EMPTY_PASSWORD=yes -e MYSQL_DATABASE=$MYSQL_DATABASE $DOCKER_MYSQL_TYPE:$DOCKER_MYSQL_VERSION"
+  - "docker run -d --name mysql -e MYSQL_ALLOW_EMPTY_PASSWORD=yes -e MYSQL_DATABASE=$MYSQL_DATABASE -p $MYSQL_PORT:3306 $DOCKER_MYSQL_TYPE:$DOCKER_MYSQL_VERSION"
   - "npm install"
-  - "docker run --link mysql:db -e CHECK_PORT=3306 -e CHECK_HOST=db giorgos/takis"
+  - "node tool/wait-mysql.js $MYSQL_PORT $MYSQL_HOST"
 
 before_script:
   - "docker --version"
-  - "docker exec mysql mysql -e 'select version()'"
+  - "node tool/mysql-version.js"
 
 script:
-  # Run test script, depending on nyc install
-  - "test ! -z $(npm -ps ls nyc) || npm test"
-  - "test   -z $(npm -ps ls nyc) || npm run-script test-ci"
-  - "test   -z $(npm -ps ls eslint) || npm run-script lint"
+  # Run test script
+  - "npm run-script test-ci"
+  - "test -z $(npm -ps ls eslint) || npm run-script lint"
 
 after_script:
   - "test -d .nyc_output && npm install coveralls@2 && nyc report --reporter=text-lcov | coveralls"

@@ -4,7 +4,7 @@ var connection = common.createConnection({
   port : common.fakeServerPort,
   ssl  : {
     ca      : common.getSSLConfig().ca,
-    ciphers : 'RC4-SHA'
+    ciphers : 'AES128-SHA'
   }
 });
 
@@ -17,7 +17,7 @@ server.listen(common.fakeServerPort, function (err) {
     assert.ifError(err);
     assert.equal(rows.length, 1);
     assert.equal(rows[0].Variable_name, 'Ssl_cipher');
-    assert.equal(rows[0].Value, 'RC4-SHA');
+    assert.equal(rows[0].Value, 'AES128-SHA');
 
     connection.destroy();
     server.destroy();

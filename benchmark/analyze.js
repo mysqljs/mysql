@@ -81,7 +81,9 @@ function sdev() {
 }
 
 function variance() {
-  var t = 0, squares = 0, len = numbers.length;
+  var t       = 0;
+  var squares = 0;
+  var len     = numbers.length;
 
   for (var i = 0; i < len; i++) {
     var obs = numbers[i];

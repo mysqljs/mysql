@@ -12,7 +12,7 @@ server.listen(common.fakeServerPort, function(err) {
 
   cluster.getConnection('MASTER', function (err) {
     assert.ok(err);
-    assert.equal(err.code, 'ER_HOST_NOT_PRIVILEGED');
+    assert.equal(err.code, 'ER_ACCESS_DENIED_ERROR');
     assert.equal(err.fatal, true);
     assert.equal(connCount, 1);
 
@@ -25,5 +25,5 @@ server.listen(common.fakeServerPort, function(err) {
 
 server.on('connection', function (conn) {
   connCount += 1;
-  conn.deny('You suck.', common.Errors.ER_HOST_NOT_PRIVILEGED);
+  conn.deny();
 });

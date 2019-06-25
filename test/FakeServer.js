@@ -1,20 +1,20 @@
 // An experimental fake MySQL server for tricky integration tests. Expanded
 // as needed.
 
-var Buffer       = require('safe-buffer').Buffer;
-var common       = require('./common');
-var Charsets     = common.Charsets;
-var Crypto       = require('crypto');
-var Net          = require('net');
-var tls          = require('tls');
-var Packets      = common.Packets;
-var PacketWriter = common.PacketWriter;
-var Parser       = common.Parser;
-var Types        = common.Types;
-var Auth         = require(common.lib + '/protocol/Auth');
-var Errors       = common.Errors;
-var EventEmitter = require('events').EventEmitter;
-var Util         = require('util');
+var Buffer          = require('safe-buffer').Buffer;
+var common          = require('./common');
+var Charsets        = common.Charsets;
+var ClientConstants = common.ClientConstants;
+var Crypto          = require('crypto');
+var Net             = require('net');
+var tls             = require('tls');
+var Packets         = common.Packets;
+var PacketWriter    = common.PacketWriter;
+var Parser          = common.Parser;
+var Types           = common.Types;
+var Errors          = common.Errors;
+var EventEmitter    = require('events').EventEmitter;
+var Util            = require('util');
 
 module.exports = FakeServer;
 Util.inherits(FakeServer, EventEmitter);
@@ -56,56 +56,85 @@ Util.inherits(FakeConnection, EventEmitter);
 function FakeConnection(socket) {
   EventEmitter.call(this);
 
+  this.database = null;
+  this.user     = null;
+
+  this._cipher = null;
   this._socket = socket;
-  this._ssl    = null;
   this._stream = socket;
   this._parser = new Parser({onPacket: this._parsePacket.bind(this)});
 
+  this._expectedNextPacket            = null;
   this._handshakeInitializationPacket = null;
-  this._clientAuthenticationPacket    = null;
-  this._oldPasswordPacket             = null;
-  this._authSwitchResponse            = null;
   this._handshakeOptions              = {};
 
   socket.on('data', this._handleData.bind(this));
 }
 
+FakeConnection.prototype.authSwitchRequest = function authSwitchRequest(options) {
+  this._sendPacket(new Packets.AuthSwitchRequestPacket(options));
+};
+
+FakeConnection.prototype.deny = function deny(message, errno) {
+  message = message || 'Access Denied';
+  errno   = errno || Errors.ER_ACCESS_DENIED_ERROR;
+  this.error(message, errno);
+};
+
+FakeConnection.prototype.error = function deny(message, errno) {
+  this._sendPacket(new Packets.ErrorPacket({
+    message : (message || 'Error'),
+    errno   : (errno || Errors.ER_UNKNOWN_COM_ERROR)
+  }));
+  this._parser.resetPacketNumber();
+};
+
 FakeConnection.prototype.handshake = function(options) {
   this._handshakeOptions = options || {};
 
-  var packetOpiotns = common.extend({
+  var packetOptions = common.extend({
     scrambleBuff1       : Buffer.from('1020304050607080', 'hex'),
     scrambleBuff2       : Buffer.from('0102030405060708090A0B0C', 'hex'),
     serverCapabilities1 : 512, // only 1 flag, PROTOCOL_41
     protocol41          : true
   }, this._handshakeOptions);
 
-  this._handshakeInitializationPacket = new Packets.HandshakeInitializationPacket(packetOpiotns);
+  this._handshakeInitializationPacket = new Packets.HandshakeInitializationPacket(packetOptions);
 
   this._sendPacket(this._handshakeInitializationPacket);
 };
 
-FakeConnection.prototype.deny = function(message, errno) {
-  this._sendPacket(new Packets.ErrorPacket({
-    message : message,
-    errno   : errno
-  }));
+FakeConnection.prototype.ok = function ok() {
+  this._sendPacket(new Packets.OkPacket());
+  this._parser.resetPacketNumber();
 };
 
 FakeConnection.prototype._sendAuthResponse = function _sendAuthResponse(got, expected) {
   if (expected.toString('hex') === got.toString('hex')) {
-    this._sendPacket(new Packets.OkPacket());
+    this.ok();
   } else {
-    this._sendPacket(new Packets.ErrorPacket({
-      message : 'expected ' + expected.toString('hex') + ' got ' + got.toString('hex'),
-      errno   : Errors.ER_ACCESS_DENIED_ERROR
-    }));
+    this.deny('expected ' + expected.toString('hex') + ' got ' + got.toString('hex'));
   }
 
   this._parser.resetPacketNumber();
 };
 
 FakeConnection.prototype._sendPacket = function(packet) {
+  switch (packet.constructor) {
+    case Packets.AuthSwitchRequestPacket:
+      this._expectedNextPacket = Packets.AuthSwitchResponsePacket;
+      break;
+    case Packets.HandshakeInitializationPacket:
+      this._expectedNextPacket = Packets.ClientAuthenticationPacket;
+      break;
+    case Packets.UseOldPasswordPacket:
+      this._expectedNextPacket = Packets.OldPasswordPacket;
+      break;
+    default:
+      this._expectedNextPacket = null;
+      break;
+  }
+
   var writer = new PacketWriter();
   packet.write(writer);
   this._stream.write(writer.toBuffer(this._parser));
@@ -163,7 +192,7 @@ FakeConnection.prototype._handleQueryPacket = function _handleQueryPacket(packet
     this._sendPacket(new Packets.EofPacket());
 
     var writer = new PacketWriter();
-    writer.writeLengthCodedString((this._clientAuthenticationPacket.user || '') + '@localhost');
+    writer.writeLengthCodedString((this.user || '') + '@localhost');
     this._socket.write(writer.toBuffer(this._parser));
 
     this._sendPacket(new Packets.EofPacket());
@@ -232,7 +261,7 @@ FakeConnection.prototype._handleQueryPacket = function _handleQueryPacket(packet
 
     var writer = new PacketWriter();
     writer.writeLengthCodedString('Ssl_cipher');
-    writer.writeLengthCodedString(this._ssl ? this._ssl.getCurrentCipher().name : '');
+    writer.writeLengthCodedString(this._cipher ? this._cipher.name : '');
     this._stream.write(writer.toBuffer(this._parser));
 
     this._sendPacket(new Packets.EofPacket());
@@ -241,61 +270,35 @@ FakeConnection.prototype._handleQueryPacket = function _handleQueryPacket(packet
   }
 
   if (/INVALID/i.test(sql)) {
-    this._sendPacket(new Packets.ErrorPacket({
-      errno   : Errors.ER_PARSE_ERROR,
-      message : 'Invalid SQL'
-    }));
-    this._parser.resetPacketNumber();
+    this.error('Invalid SQL', Errors.ER_PARSE_ERROR);
     return;
   }
 
-  this._sendPacket(new Packets.ErrorPacket({
-    errno   : Errors.ER_QUERY_INTERRUPTED,
-    message : 'Interrupted unknown query'
-  }));
-
-  this._parser.resetPacketNumber();
+  this.error('Interrupted unknown query', Errors.ER_QUERY_INTERRUPTED);
 };
 
-FakeConnection.prototype._parsePacket = function(header) {
-  var Packet = this._determinePacket(header);
+FakeConnection.prototype._parsePacket = function() {
+  var Packet = this._determinePacket();
   var packet = new Packet({protocol41: true});
 
   packet.parse(this._parser);
 
   switch (Packet) {
+    case Packets.AuthSwitchResponsePacket:
+      if (!this.emit('authSwitchResponse', packet)) {
+        this.deny('No auth response handler');
+      }
+      break;
     case Packets.ClientAuthenticationPacket:
-      this._clientAuthenticationPacket = packet;
-      if (this._handshakeOptions.oldPassword) {
-        this._sendPacket(new Packets.UseOldPasswordPacket());
-      } else if (this._handshakeOptions.authMethodName) {
-        this._sendPacket(new Packets.AuthSwitchRequestPacket(this._handshakeOptions));
-      } else if (this._handshakeOptions.password === 'passwd') {
-        var expected = Buffer.from('3DA0ADA7C9E1BB3A110575DF53306F9D2DE7FD09', 'hex');
-        this._sendAuthResponse(packet.scrambleBuff, expected);
-      } else if (this._handshakeOptions.user || this._handshakeOptions.password) {
-        throw new Error('not implemented');
-      } else {
-        this._sendPacket(new Packets.OkPacket());
-        this._parser.resetPacketNumber();
+      this.database = (packet.database || null);
+      this.user     = (packet.user || null);
+
+      if (!this.emit('clientAuthentication', packet)) {
+        this.ok();
       }
       break;
     case Packets.SSLRequestPacket:
       this._startTLS();
-      break;
-    case Packets.OldPasswordPacket:
-      this._oldPasswordPacket = packet;
-
-      var expected = Auth.scramble323(this._handshakeInitializationPacket.scrambleBuff(), this._handshakeOptions.password);
-
-      this._sendAuthResponse(packet.scrambleBuff, expected);
-      break;
-    case Packets.AuthSwitchResponsePacket:
-      this._authSwitchResponse = packet;
-
-      var expected = Auth.token(this._handshakeOptions.password, Buffer.from('00112233445566778899AABBCCDDEEFF01020304', 'hex'));
-
-      this._sendAuthResponse(packet.data, expected);
       break;
     case Packets.ComQueryPacket:
       if (!this.emit('query', packet)) {
@@ -304,39 +307,24 @@ FakeConnection.prototype._parsePacket = function(header) {
       break;
     case Packets.ComPingPacket:
       if (!this.emit('ping', packet)) {
-        this._sendPacket(new Packets.OkPacket());
-        this._parser.resetPacketNumber();
+        this.ok();
       }
       break;
     case Packets.ComChangeUserPacket:
-      if (packet.user === 'does-not-exist') {
-        this._sendPacket(new Packets.ErrorPacket({
-          errno   : Errors.ER_ACCESS_DENIED_ERROR,
-          message : 'User does not exist'
-        }));
-        this._parser.resetPacketNumber();
-        break;
-      } else if (packet.database === 'does-not-exist') {
-        this._sendPacket(new Packets.ErrorPacket({
-          errno   : Errors.ER_BAD_DB_ERROR,
-          message : 'Database does not exist'
-        }));
-        this._parser.resetPacketNumber();
-        break;
-      }
+      this.database = (packet.database || null);
+      this.user     = (packet.user || null);
 
-      this._clientAuthenticationPacket = new Packets.ClientAuthenticationPacket({
-        clientFlags   : this._clientAuthenticationPacket.clientFlags,
-        filler        : this._clientAuthenticationPacket.filler,
-        maxPacketSize : this._clientAuthenticationPacket.maxPacketSize,
-        protocol41    : this._clientAuthenticationPacket.protocol41,
-        charsetNumber : packet.charsetNumber,
-        database      : packet.database,
-        scrambleBuff  : packet.scrambleBuff,
-        user          : packet.user
-      });
-      this._sendPacket(new Packets.OkPacket());
-      this._parser.resetPacketNumber();
+      if (!this.emit('changeUser', packet)) {
+        if (packet.user === 'does-not-exist') {
+          this.deny('User does not exist');
+          break;
+        } else if (packet.database === 'does-not-exist') {
+          this.error('Database does not exist', Errors.ER_BAD_DB_ERROR);
+          break;
+        }
+
+        this.ok();
+      }
       break;
     case Packets.ComQuitPacket:
       if (!this.emit('quit', packet)) {
@@ -344,27 +332,25 @@ FakeConnection.prototype._parsePacket = function(header) {
       }
       break;
     default:
-      throw new Error('Unexpected packet: ' + Packet.name);
+      if (!this.emit(packet.constructor.name, packet)) {
+        throw new Error('Unexpected packet: ' + Packet.name);
+      }
   }
 };
 
-FakeConnection.prototype._determinePacket = function(header) {
-  if (!this._clientAuthenticationPacket) {
-    // first packet phase
+FakeConnection.prototype._determinePacket = function _determinePacket() {
+  if (this._expectedNextPacket) {
+    var Packet = this._expectedNextPacket;
 
-    if (header.length === 32) {
-      return Packets.SSLRequestPacket;
+    if (Packet === Packets.ClientAuthenticationPacket) {
+      return !this._cipher && (this._parser.peak(1) << 8) & ClientConstants.CLIENT_SSL
+        ? Packets.SSLRequestPacket
+        : Packets.ClientAuthenticationPacket;
     }
 
-    return Packets.ClientAuthenticationPacket;
-  }
+    this._expectedNextPacket = null;
 
-  if (this._handshakeOptions.oldPassword && !this._oldPasswordPacket) {
-    return Packets.OldPasswordPacket;
-  }
-
-  if (this._handshakeOptions.authMethodName && !this._authSwitchResponse) {
-    return Packets.AuthSwitchResponsePacket;
+    return Packet;
   }
 
   var firstByte = this._parser.peak();
@@ -457,7 +443,7 @@ if (tls.TLSSocket) {
 
     var conn = this;
     secureSocket.on('secure', function () {
-      conn._ssl = this.ssl;
+      conn._cipher = this.getCipher();
     });
 
     // resume
@@ -486,7 +472,7 @@ if (tls.TLSSocket) {
 
     var conn = this;
     securePair.on('secure', function () {
-      conn._ssl = this.ssl;
+      conn._cipher = securePair.cleartext.getCipher();
     });
 
     // resume

@@ -33,8 +33,7 @@ server.on('connection', function (conn) {
   conn.handshake();
   conn.on('ping', function () {
     setTimeout(function () {
-      conn._sendPacket(new common.Packets.OkPacket());
-      conn._parser.resetPacketNumber();
+      conn.ok();
     }, 100);
   });
 });

@@ -3,7 +3,8 @@ var common     = require('../../common');
 var pool       = common.createPool({port: common.fakeServerPort});
 var server     = common.createFakeServer();
 
-var connCount = 0;
+var connCount  = 0;
+var connection = null;
 
 server.listen(common.fakeServerPort, function (err) {
   assert.ifError(err);
@@ -18,9 +19,11 @@ server.listen(common.fakeServerPort, function (err) {
   pool.query('SELECT 1', function (err) {
     assert.ifError(err);
 
-    pool.getConnection(function (err) {
+    pool.getConnection(function (err, conn) {
       assert.ifError(err);
       assert.equal(connCount, 2);
+
+      connection = conn;
 
       pool.end(function (err) {
         assert.ifError(err);

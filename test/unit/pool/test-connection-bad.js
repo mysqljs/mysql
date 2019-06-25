@@ -42,7 +42,6 @@ server.listen(common.fakeServerPort, function(err){
 });
 
 server.on('connection', function(incomingConnection) {
-  serverConn = incomingConnection;
   incomingConnection.handshake({
     threadId: ++tid
   });
@@ -50,8 +49,7 @@ server.on('connection', function(incomingConnection) {
     if (fail) {
       setTimeout(this.destroy.bind(this), 100);
     } else {
-      this._sendPacket(new common.Packets.OkPacket());
-      this._parser.resetPacketNumber();
+      this.ok();
     }
 
     fail = false;

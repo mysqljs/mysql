@@ -1,9 +1,10 @@
 var assert     = require('assert');
-var Buffer     = require('safe-buffer').Buffer;
 var common     = require('../../common');
 var connection = common.createConnection({
-  port     : common.fakeServerPort,
-  password : 'authswitch'
+  port         : common.fakeServerPort,
+  user         : 'root',
+  password     : null,
+  insecureAuth : true
 });
 
 var server = common.createFakeServer();
@@ -12,11 +13,7 @@ server.listen(common.fakeServerPort, function (err) {
   assert.ifError(err);
 
   connection.connect(function (err) {
-    assert.ok(err);
-    assert.equal(err.code, 'UNSUPPORTED_AUTH_METHOD');
-    assert.equal(err.fatal, true);
-    assert.ok(/foo_plugin_password/.test(err.message));
-
+    assert.ifError(err);
     connection.destroy();
     server.destroy();
   });
@@ -24,10 +21,15 @@ server.listen(common.fakeServerPort, function (err) {
 
 server.on('connection', function(incomingConnection) {
   incomingConnection.on('clientAuthentication', function () {
-    this.authSwitchRequest({
-      authMethodName : 'foo_plugin_password',
-      authMethodData : Buffer.alloc(0)
-    });
+    this._sendPacket(new common.Packets.UseOldPasswordPacket());
+  });
+
+  incomingConnection.on('OldPasswordPacket', function (packet) {
+    if (packet.scrambleBuff.length === 0) {
+      this.ok();
+    } else {
+      this.deny();
+    }
   });
 
   incomingConnection.handshake();

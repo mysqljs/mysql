@@ -4,6 +4,7 @@ environment:
   MYSQL_USER: root
   MYSQL_PASSWORD: Password12!
   MYSQL_PATH: C:\Program Files\MySQL\MySQL Server 5.7
+  MYSQL_PORT: 3306
 
   matrix:
     - nodejs_version: "0.8"
@@ -12,11 +13,15 @@ environment:
     - nodejs_version: "1.8"
     - nodejs_version: "2.5"
     - nodejs_version: "3.3"
-    - nodejs_version: "4.8"
+    - nodejs_version: "4.9"
     - nodejs_version: "5.12"
-    - nodejs_version: "6.11"
+    - nodejs_version: "6.17"
     - nodejs_version: "7.10"
-    - nodejs_version: "8.1"
+    - nodejs_version: "8.16"
+    - nodejs_version: "9.11"
+    - nodejs_version: "10.15"
+    - nodejs_version: "11.14"
+    - nodejs_version: "12.0"
 
 services:
   - mysql
@@ -25,10 +30,12 @@ cache:
   - node_modules
 
 install:
-  - ps: Install-Product node $env:nodejs_version
+  - ps: >-
+      try { Install-Product node $env:nodejs_version -ErrorAction Stop }
+      catch { Update-NodeJsInstallation (Get-NodeJsLatestBuild $env:nodejs_version) }
   - npm config set shrinkwrap false
-  - if "%nodejs_version%" equ "0.8" npm rm --save-dev nyc
-  - npm rm --save-dev eslint
+  - if "%nodejs_version%" equ "0.8" npm config set strict-ssl false
+  - npm rm --silent --save-dev eslint
   - if exist node_modules npm prune
   - if exist node_modules npm rebuild
   - npm install
@@ -37,14 +44,13 @@ build: off
 
 before_test:
   - SET PATH=%MYSQL_PATH%\bin;%PATH%
+  - node tool/wait-mysql.js %MYSQL_PORT% %MYSQL_HOST%
   - mysqladmin --host=%MYSQL_HOST% --user=%MYSQL_USER% --password=%MYSQL_PASSWORD% create %MYSQL_DATABASE%
 
 test_script:
   - mysql --version
   - node --version
   - npm --version
-  - set npm_test_command=test
-  - for /f %%l in ('npm -ps ls nyc') do set npm_test_command=test-ci
-  - npm run %npm_test_command%
+  - npm test
 
 version: "{build}"

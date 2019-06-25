@@ -6,8 +6,51 @@ you spot any mistakes.
 
 ## HEAD
 
+* Support Node.js 12.x #2211
+
+## v2.17.1 (2019-04-18)
+
+* Update `bignumber.js` to 7.2.1 #2206
+  - Fix npm deprecation warning
+
+## v2.17.0 (2019-04-17)
+
+* Add reverse type lookup for small performance gain #2170
+* Fix `connection.threadId` missing on handshake failure
+* Fix duplicate packet name in debug output
+* Fix no password support for old password protocol
+* Remove special case for handshake in determine packet code
+* Small performance improvement starting command sequence
+* Support auth switch in change user flow #1776
+* Support Node.js 11.x
+* Update `bignumber.js` to 6.0.0
+
+## v2.16.0 (2018-07-17)
+
+* Add Amazon RDS GovCloud SSL certificates #1876
+* Add new error codes up to MySQL 5.7.21
+* Include connection ID in debug output
+* Support Node.js 9.x
+* Support Node.js 10.x #2003 #2024 #2026 #2034
+* Update Amazon RDS SSL certificates
+* Update `bignumber.js` to 4.1.0
+* Update `readable-stream` to 2.3.6
+* Update `sqlstring` to 2.3.1
+  - Fix incorrectly replacing non-placeholders in SQL
+
+## v2.15.0 (2017-10-05)
+
+* Add new Amazon RDS ca-central-1 certificate CA to Amazon RDS SSL profile #1809
+* Add new error codes up to MySQL 5.7.19
+* Add `mysql.raw()` to generate pre-escaped values #877 #1821
+* Fix "changedRows" to work on non-English servers #1819
+* Fix error when server sends RST on `QUIT` #1811
 * Fix typo in insecure auth error message
 * Support `mysql_native_password` auth switch request for Azure #1396 #1729 #1730
+* Update `sqlstring` to 2.3.0
+  - Add `.toSqlString()` escape overriding
+  - Small performance improvement on `escapeId`
+* Update `bignumber.js` to 4.0.4
 
 ## v2.14.1 (2017-08-01)
 
@@ -289,6 +332,7 @@ you spot any mistakes.
 ## v2.0.0-alpha9 (2013-08-27)
 
 * Add query to pool to execute queries directly using the pool
+* Add `sqlState` property to `Error` objects #556
 * Pool option to set queue limit
 * Pool sends 'connection' event when it opens a new connection
 * Added stringifyObjects option to treat input as strings rather than objects (#501)

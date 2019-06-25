@@ -43,14 +43,12 @@ server.listen(common.fakeServerPort, function (err) {
 });
 
 server.on('connection', function(incomingConnection) {
-  serverConn = incomingConnection;
   incomingConnection.handshake({
     threadId: ++tid
   });
   incomingConnection.on('ping', function() {
     if (!fail) {
-      this._sendPacket(new common.Packets.OkPacket());
-      this._parser.resetPacketNumber();
+      this.ok();
     }
 
     fail = false;

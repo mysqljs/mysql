@@ -1,8 +1,8 @@
 # mysql
 
-[![NPM Version][npm-image]][npm-url]
-[![NPM Downloads][downloads-image]][downloads-url]
-[![Node.js Version][node-version-image]][node-version-url]
+[![NPM Version][npm-version-image]][npm-url]
+[![NPM Downloads][npm-downloads-image]][npm-url]
+[![Node.js Version][node-image]][node-url]
 [![Linux Build][travis-image]][travis-url]
 [![Windows Build][appveyor-image]][appveyor-url]
 [![Test Coverage][coveralls-image]][coveralls-url]
@@ -49,11 +49,21 @@
 - [Type casting](#type-casting)
 - [Connection Flags](#connection-flags)
 - [Debugging and reporting problems](#debugging-and-reporting-problems)
+- [Security issues](#security-issues)
 - [Contributing](#contributing)
 - [Running tests](#running-tests)
 - [Todo](#todo)
 
 ## Install
+
+This is a [Node.js](https://nodejs.org/en/) module available through the
+[npm registry](https://www.npmjs.com/).
+
+Before installing, [download and install Node.js](https://nodejs.org/en/download/).
+Node.js 0.6 or higher is required.
+
+Installation is done using the
+[`npm install` command](https://docs.npmjs.com/getting-started/installing-npm-packages-locally):
 
 ```sh
 $ npm install mysql
@@ -211,7 +221,7 @@ issue [#501](https://github.com/mysqljs/mysql/issues/501). (Default: `false`)
   objects only when they cannot be accurately represented with [JavaScript Number objects] (http://ecma262-5.com/ELS5_HTML.htm#Section_8.5)
   (which happens when they exceed the [-2^53, +2^53] range), otherwise they will be returned as
   Number objects. This option is ignored if `supportBigNumbers` is disabled.
-* `dateStrings`: Force date types (TIMESTAMP, DATETIME, DATE) to be returned as strings rather then
+* `dateStrings`: Force date types (TIMESTAMP, DATETIME, DATE) to be returned as strings rather than
    inflated into JavaScript Date objects. Can be `true`/`false` or an array of type names to keep as
    strings. (Default: `false`)
 * `debug`: Prints protocol details to stdout. Can be `true`/`false` or an array of packet type names
@@ -247,7 +257,7 @@ it uses one of the predefined SSL profiles included. The following profiles are 
   https://s3.amazonaws.com/rds-downloads/rds-combined-ca-bundle.pem
 
 When connecting to other servers, you will need to provide an object of options, in the
-same format as [crypto.createCredentials](http://nodejs.org/api/crypto.html#crypto_crypto_createcredentials_details).
+same format as [tls.createSecureContext](https://nodejs.org/api/tls.html#tls_tls_createsecurecontext_options).
 Please note the arguments expect a string of the certificate, not a file name to the
 certificate. Here is a simple example:
 
@@ -307,7 +317,8 @@ Rather than creating and managing connections one-by-one, this module also
 provides built-in connection pooling using `mysql.createPool(config)`.
 [Read more about connection pooling](https://en.wikipedia.org/wiki/Connection_pool).
 
-Use pool directly.
+Create a pool and use it directly:
+
 ```js
 var mysql = require('mysql');
 var pool  = mysql.createPool({
@@ -324,34 +335,22 @@ pool.query('SELECT 1 + 1 AS solution', function (error, results, fields) {
 });
 ```
 
-Connections can be pooled to ease sharing a single connection, or managing
-multiple connections.
-
-```js
-var mysql = require('mysql');
-var pool  = mysql.createPool({
-  host     : 'example.org',
-  user     : 'bob',
-  password : 'secret',
-  database : 'my_db'
-});
-
-pool.getConnection(function(err, connection) {
-  // connected! (unless `err` is set)
-});
-```
-
-When you are done with a connection, just call `connection.release()` and the
-connection will return to the pool, ready to be used again by someone else.
+This is a shortcut for the `pool.getConnection()` -> `connection.query()` ->
+`connection.release()` code flow. Using `pool.getConnection()` is useful to
+share connection state for subsequent queries. This is because two calls to
+`pool.query()` may use two different connections and run in parallel. This is
+the basic structure:
 
 ```js
 var mysql = require('mysql');
 var pool  = mysql.createPool(...);
 
 pool.getConnection(function(err, connection) {
+  if (err) throw err; // not connected!
+
   // Use the connection
   connection.query('SELECT something FROM sometable', function (error, results, fields) {
-    // And done with the connection.
+    // When done with the connection, release it.
     connection.release();
 
     // Handle error after the release.
@@ -382,7 +381,9 @@ constructor. In addition to those options pools accept a few extras:
 
 * `acquireTimeout`: The milliseconds before a timeout occurs during the connection
   acquisition. This is slightly different from `connectTimeout`, because acquiring
-  a pool connection does not always involve making a connection. (Default: `10000`)
+  a pool connection does not always involve making a connection. If a connection
+  request is queued, the time the request spends in the queue does not count
+  towards this timeout. (Default: `10000`)
 * `waitForConnections`: Determines the pool's action when no connections are
   available and the limit has been reached. If `true`, the pool will queue the
   connection request and call it when one becomes available. If `false`, the
@@ -467,7 +468,7 @@ The `end` method takes two _optional_ arguments:
 If `false`, only commands / queries already in progress will complete,
 others will fail. (Default: `false`)
 
-* `callback`: Will be called once all the connections have ended.
+* `callback`: Will be called when all the connections are ended.
 
 **Once `pool.end()` has been called, `pool.getConnection` and other operations
 can no longer be performed**
@@ -478,27 +479,20 @@ If `options.gracefulExit` is set to `true`, after calling `pool.end` the poll wi
 enter into the `pendingClose` state, all former or queued queries will still
 complete. But the pool will no longer accept new queries.
 
-This works by not queueing the `QUIT` packet on all the connections until there
+This works by NOT queueing the `QUIT` packet on all the connections until there
 is no connection in the aquiring state and no queued queries. All established
 connections will still queue queries which were added before calling `pool.end`.
 
-If `options.gracefulExit` is set to `false`, `pool.end` works by calling `connection.end()`
-on every active connection in the pool, which queues a `QUIT` packet on the
-connection. And sets a flag to prevent `pool.getConnection` from continuing to
-create any new connections.
+If `options.gracefulExit` is set to `false`, `pool.end` immediately calls 
+`connection.end` on every active connection in the pool. This queues a `QUIT` 
+packet on the connection and sets a flag to prevent `pool.getConnection` from 
+creating new connections. All commands / queries already in progress will complete, 
+but new commands won't execute.
 
-Since this queues a `QUIT` packet on each connection, all commands / queries
-already in progress will complete, just like calling `connection.end()`. If
-`pool.end` is called and there are connections that have not yet been released,
-those connections will fail to execute any new commands after the `pool.end`
-since they have a pending `QUIT` packet in their queue; wait until releasing
-all connections back to the pool before calling `pool.end()`.
+Wait until all connections in the pool are released before calling `pool.end`. 
+If you use the shortcut method `pool.query`, in place of `pool.getConnection` → 
+`connection.query` → `connection.release`, wait until it completes.
 
-Since the `pool.query` method is a short-hand for the `pool.getConnection` ->
-`connection.query` -> `connection.release()` flow, calling `pool.end()` before
-all the queries added via `pool.query` have completed, since the underlying
-`pool.getConnection` will fail due to all connections ending and not allowing
-new connections to be created.
 
 ## PoolCluster
 
@@ -672,7 +666,27 @@ connection.query({
 );
 ```
 
+If the query only has a single replacement character (`?`), and the value is
+not `null`, `undefined`, or an array, it can be passed directly as the second
+argument to `.query`:
+
+```js
+connection.query(
+  'SELECT * FROM `books` WHERE `author` = ?',
+  'David',
+  function (error, results, fields) {
+    // error will be an Error if one occurred during the query
+    // results will contain the results of the query
+    // fields will contain information about the returned results fields (if any)
+  }
+);
+```
+
 ## Escaping query values
+
+**Caution** These methods of escaping values only works when the
+[NO_BACKSLASH_ESCAPES](https://dev.mysql.com/doc/refman/5.7/en/sql-mode.html#sqlmode_no_backslash_escapes)
+SQL mode is disabled (which is the default state for MySQL servers).
 
 In order to avoid SQL Injection attacks, you should always escape any user
 provided data before using it inside a SQL query. You can do so using the
@@ -724,6 +738,8 @@ Different value types are escaped differently, here is how:
 * Arrays are turned into list, e.g. `['a', 'b']` turns into `'a', 'b'`
 * Nested arrays are turned into grouped lists (for bulk inserts), e.g. `[['a',
   'b'], ['c', 'd']]` turns into `('a', 'b'), ('c', 'd')`
+* Objects that have a `toSqlString` method will have `.toSqlString()` called
+  and the returned value is used as the raw SQL.
 * Objects are turned into `key = 'val'` pairs for each enumerable property on
   the object. If the property's value is a function, it is skipped; if the
   property's value is an object, toString() is called on it and the returned
@@ -733,8 +749,7 @@ Different value types are escaped differently, here is how:
   to insert them as values will trigger MySQL errors until they implement
   support.
 
-If you paid attention, you may have noticed that this escaping allows you
-to do neat things like this:
+This escaping allows you to do neat things like this:
 
 ```js
 var post  = {id: 1, title: 'Hello MySQL'};
@@ -743,7 +758,27 @@ var query = connection.query('INSERT INTO posts SET ?', post, function (error, r
   // Neat!
 });
 console.log(query.sql); // INSERT INTO posts SET `id` = 1, `title` = 'Hello MySQL'
+```
 
+And the `toSqlString` method allows you to form complex queries with functions:
+
+```js
+var CURRENT_TIMESTAMP = { toSqlString: function() { return 'CURRENT_TIMESTAMP()'; } };
+var sql = mysql.format('UPDATE posts SET modified = ? WHERE id = ?', [CURRENT_TIMESTAMP, 42]);
+console.log(sql); // UPDATE posts SET modified = CURRENT_TIMESTAMP() WHERE id = 42
+```
+
+To generate objects with a `toSqlString` method, the `mysql.raw()` method can
+be used. This creates an object that will be left un-touched when using in a `?`
+placeholder, useful for using functions as dynamic values:
+
+**Caution** The string provided to `mysql.raw()` will skip all escaping
+functions when used, so be careful when passing in unvalidated input.
+
+```js
+var CURRENT_TIMESTAMP = mysql.raw('CURRENT_TIMESTAMP()');
+var sql = mysql.format('UPDATE posts SET modified = ? WHERE id = ?', [CURRENT_TIMESTAMP, 42]);
+console.log(sql); // UPDATE posts SET modified = CURRENT_TIMESTAMP() WHERE id = 42
 ```
 
 If you feel the need to escape queries by yourself, you can also use the escaping
@@ -1145,20 +1180,24 @@ review carefully in order to write solid applications.
 Most errors created by this module are instances of the JavaScript [Error][]
 object. Additionally they typically come with two extra properties:
 
-* `err.code`: Either a [MySQL server error][] (e.g.
-  `'ER_ACCESS_DENIED_ERROR'`), a Node.js error (e.g. `'ECONNREFUSED'`) or an
-  internal error (e.g. `'PROTOCOL_CONNECTION_LOST'`).
+* `err.code`: String, contains the MySQL server error symbol if the error is
+  a [MySQL server error][] (e.g. `'ER_ACCESS_DENIED_ERROR'`), a Node.js error
+  code if it is a Node.js error (e.g. `'ECONNREFUSED'`), or an internal error
+  code (e.g. `'PROTOCOL_CONNECTION_LOST'`).
+* `err.errno`: Number, contains the MySQL server error number. Only populated
+  from [MySQL server error][].
 * `err.fatal`: Boolean, indicating if this error is terminal to the connection
-  object. If the error is not from a MySQL protocol operation, this properly
+  object. If the error is not from a MySQL protocol operation, this property
   will not be defined.
 * `err.sql`: String, contains the full SQL of the failed query. This can be
   useful when using a higher level interface like an ORM that is generating
   the queries.
+* `err.sqlState`: String, contains the five-character SQLSTATE value. Only populated from [MySQL server error][].
 * `err.sqlMessage`: String, contains the message string that provides a
   textual description of the error. Only populated from [MySQL server error][].
 
 [Error]: https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Error
-[MySQL server error]: http://dev.mysql.com/doc/refman/5.5/en/error-messages-server.html
+[MySQL server error]: https://dev.mysql.com/doc/refman/5.5/en/server-error-reference.html
 
 Fatal errors are propagated to *all* pending callbacks. In the example below, a
 fatal error is triggered by trying to connect to an invalid port. Therefore the
@@ -1292,37 +1331,58 @@ var query = connection.query(options, function (error, results, fields) {
 });
 ```
 
+### Custom type casting
+
 You can also pass a function and handle type casting yourself. You're given some
 column information like database, table and name and also type and length. If you
 just want to apply a custom type casting to a specific type you can do it and then
-fallback to the default. Here's an example of converting `TINYINT(1)` to boolean:
+fallback to the default.
+
+The function is provided two arguments `field` and `next` and is expected to
+return the value for the given field by invoking the parser functions through
+the `field` object.
+
+The `field` argument is a `Field` object and contains data about the field that
+need to be parsed. The following are some of the properties on a `Field` object:
+
+  * `db` - a string of the database the field came from.
+  * `table` - a string of the table the field came from.
+  * `name` - a string of the field name.
+  * `type` - a string of the field type in all caps.
+  * `length` - a number of the field length, as given by the database.
+
+The `next` argument is a `function` that, when called, will return the default
+type conversaion for the given field.
+
+When getting the field data, the following helper methods are present on the
+`field` object:
+
+  * `.string()` - parse the field into a string.
+  * `.buffer()` - parse the field into a `Buffer`.
+  * `.geometry()` - parse the field as a geometry value.
+
+The MySQL protocol is a text-based protocol. This means that over the wire, all
+field types are represented as a string, which is why only string-like functions
+are available on the `field` object. Based on the type information (like `INT`),
+the type cast should convert the string field into a different JavaScript type
+(like a `number`).
+
+Here's an example of converting `TINYINT(1)` to boolean:
 
 ```js
-connection.query({
-  sql: '...',
+connection = mysql.createConnection({
   typeCast: function (field, next) {
-    if (field.type == 'TINY' && field.length == 1) {
-      return (field.string() == '1'); // 1 = true, 0 = false
+    if (field.type === 'TINY' && field.length === 1) {
+      return (field.string() === '1'); // 1 = true, 0 = false
+    } else {
+      return next();
     }
-    return next();
   }
 });
 ```
-__WARNING: YOU MUST INVOKE the parser using one of these three field functions in your custom typeCast callback. They can only be called once. (see [#539](https://github.com/mysqljs/mysql/issues/539) for discussion)__
 
-```
-field.string()
-field.buffer()
-field.geometry()
-```
-are aliases for
-```
-parser.parseLengthCodedString()
-parser.parseLengthCodedBuffer()
-parser.parseGeometryValue()
-```
-__You can find which field function you need to use by looking at: [RowDataPacket.prototype._typeCast](https://github.com/mysqljs/mysql/blob/master/lib/protocol/packets/RowDataPacket.js#L41)__
-
+__WARNING: YOU MUST INVOKE the parser using one of these three field functions
+in your custom typeCast callback. They can only be called once.__
 
 ## Connection Flags
 
@@ -1373,13 +1433,13 @@ is set to `true`:
 There are other flags available. They may or may not function, but are still
 available to specify.
 
-- COMPRESS
-- INTERACTIVE
-- NO_SCHEMA
-- PLUGIN_AUTH
-- REMEMBER_OPTIONS
-- SSL
-- SSL_VERIFY_SERVER_CERT
+- `COMPRESS`
+- `INTERACTIVE`
+- `NO_SCHEMA`
+- `PLUGIN_AUTH`
+- `REMEMBER_OPTIONS`
+- `SSL`
+- `SSL_VERIFY_SERVER_CERT`
 
 ## Debugging and reporting problems
 
@@ -1406,6 +1466,22 @@ will have:
 * As much debugging output and information about your environment (mysql
   version, node version, os, etc.) as you can gather.
 
+## Security issues
+
+Security issues should not be first reported through GitHub or another public
+forum, but kept private in order for the collaborators to assess the report
+and either (a) devise a fix and plan a release date or (b) assert that it is
+not a security issue (in which case it can be posted in a public forum, like
+a GitHub issue).
+
+The primary private forum is email, either by emailing the module's author or
+opening a GitHub issue simply asking to whom a security issues should be
+addressed to without disclosing the issue or type of issue.
+
+An ideal report would include a clear indication of what the security issue is
+and how it would be exploited, ideally with an accompanying proof of concept
+("PoC") for collaborators to work against and validate potentional fixes against.
+
 ## Contributing
 
 This project welcomes contributions from the community. Contributions are
@@ -1418,7 +1494,7 @@ For a good pull request, we ask you provide the following:
 1. Try to include a clear description of your pull request in the description.
    It should include the basic "what" and "why"s for the request.
 2. The tests should pass as best as you can. See the [Running tests](#running-tests)
-   section on hwo to run the different tests. GitHub will automatically run
+   section on how to run the different tests. GitHub will automatically run
    the tests as well, to act as a safety net.
 3. The pull request should include tests for the change. A new feature should
    have tests for the new feature and bug fixes should include a test that fails
@@ -1463,15 +1539,14 @@ $ MYSQL_HOST=localhost MYSQL_PORT=3306 MYSQL_DATABASE=node_mysql_test MYSQL_USER
 * Prepared statements
 * Support for encodings other than UTF-8 / ASCII
 
-[npm-image]: https://img.shields.io/npm/v/mysql.svg
-[npm-url]: https://npmjs.org/package/mysql
-[node-version-image]: https://img.shields.io/node/v/mysql.svg
-[node-version-url]: https://nodejs.org/en/download/
-[travis-image]: https://img.shields.io/travis/mysqljs/mysql/master.svg?label=linux
-[travis-url]: https://travis-ci.org/mysqljs/mysql
-[appveyor-image]: https://img.shields.io/appveyor/ci/dougwilson/node-mysql/master.svg?label=windows
+[appveyor-image]: https://badgen.net/appveyor/ci/dougwilson/node-mysql/master?label=windows
 [appveyor-url]: https://ci.appveyor.com/project/dougwilson/node-mysql
-[coveralls-image]: https://img.shields.io/coveralls/mysqljs/mysql/master.svg
+[coveralls-image]: https://badgen.net/coveralls/c/github/mysqljs/mysql/master
 [coveralls-url]: https://coveralls.io/r/mysqljs/mysql?branch=master
-[downloads-image]: https://img.shields.io/npm/dm/mysql.svg
-[downloads-url]: https://npmjs.org/package/mysql
+[node-image]: https://badgen.net/npm/node/mysql
+[node-url]: https://nodejs.org/en/download
+[npm-downloads-image]: https://badgen.net/npm/dm/mysql
+[npm-url]: https://npmjs.org/package/mysql
+[npm-version-image]: https://badgen.net/npm/v/mysql
+[travis-image]: https://badgen.net/travis/mysqljs/mysql/master
+[travis-url]: https://travis-ci.org/mysqljs/mysql
