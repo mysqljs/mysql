@@ -4,16 +4,16 @@ This file is a manually maintained list of changes for each release. Feel free
 to add your changes here when sending pull requests. Also send corrections if
 you spot any mistakes.
 
-## HEAD
+## [HEAD]
 
 * Support Node.js 12.x #2211
 
-## v2.17.1 (2019-04-18)
+## [v2.17.1] (2019-04-18)
 
 * Update `bignumber.js` to 7.2.1 #2206
   - Fix npm deprecation warning
 
-## v2.17.0 (2019-04-17)
+## [v2.17.0] (2019-04-17)
 
 * Add reverse type lookup for small performance gain #2170
 * Fix `connection.threadId` missing on handshake failure
@@ -25,7 +25,7 @@ you spot any mistakes.
 * Support Node.js 11.x
 * Update `bignumber.js` to 6.0.0
 
-## v2.16.0 (2018-07-17)
+## [v2.16.0] (2018-07-17)
 
 * Add Amazon RDS GovCloud SSL certificates #1876
 * Add new error codes up to MySQL 5.7.21
@@ -38,7 +38,7 @@ you spot any mistakes.
 * Update `sqlstring` to 2.3.1
   - Fix incorrectly replacing non-placeholders in SQL
 
-## v2.15.0 (2017-10-05)
+## [v2.15.0] (2017-10-05)
 
 * Add new Amazon RDS ca-central-1 certificate CA to Amazon RDS SSL profile #1809
 * Add new error codes up to MySQL 5.7.19
@@ -52,11 +52,11 @@ you spot any mistakes.
   - Small performance improvement on `escapeId`
 * Update `bignumber.js` to 4.0.4
 
-## v2.14.1 (2017-08-01)
+## [v2.14.1] (2017-08-01)
 
 * Fix holding first closure for lifetime of connection #1785
 
-## v2.14.0 (2017-07-25)
+## [v2.14.0] (2017-07-25)
 
 * Add new Amazon RDS ap-south-1 certificate CA to Amazon RDS SSL profile #1780
 * Add new Amazon RDS eu-west-2 certificate CA to Amazon RDS SSL profile #1770
@@ -68,7 +68,7 @@ you spot any mistakes.
 * Update `readable-stream` to 2.3.3
 * Use `safe-buffer` for improved Buffer API
 
-## v2.13.0 (2017-01-24)
+## [v2.13.0] (2017-01-24)
 
 * Accept regular expression as pool cluster pattern #1572
 * Accept wildcard anywhere in pool cluster pattern #1570
@@ -80,7 +80,7 @@ you spot any mistakes.
 * Update `bignumber.js` to 3.1.2
 * Use a simple buffer list to improve performance #566 #1590
 
-## v2.12.0 (2016-11-02)
+## [v2.12.0] (2016-11-02)
 
 * Accept array of type names to `dateStrings` option #605 #1481
 * Add `query` method to `PoolNamespace` #1256 #1505 #1506
@@ -95,11 +95,11 @@ you spot any mistakes.
   - Escape invalid `Date` objects as `NULL`
   - Run `buffer.toString()` through escaping
 
-## v2.11.1 (2016-06-07)
+## [v2.11.1] (2016-06-07)
 
 * Fix writing truncated packets starting with large string/buffer #1438
 
-## v2.11.0 (2016-06-06)
+## [v2.11.0] (2016-06-06)
 
 * Add `POOL_CLOSED` code to "Pool is closed." error
 * Add `POOL_CONNLIMIT` code to "No connections available." error #1332
@@ -119,16 +119,16 @@ you spot any mistakes.
 * Update `readable-stream` to 1.1.14
 * Use the `sqlstring` module for SQL escaping and formatting
 
-## v2.10.2 (2016-01-12)
+## [v2.10.2] (2016-01-12)
 
 * Fix exception/hang from certain SSL connection errors #1153
 * Update `bignumber.js` to 2.1.4
 
-## v2.10.1 (2016-01-11)
+## [v2.10.1] (2016-01-11)
 
 * Add new Amazon RDS ap-northeast-2 certificate CA to Amazon RDS SSL profile #1329
 
-## v2.10.0 (2015-12-15)
+## [v2.10.0] (2015-12-15)
 
 * Add new error codes up to MySQL 5.7.9 #1294
 * Add new JSON type constant #1295
@@ -143,12 +143,12 @@ you spot any mistakes.
 * Support Node.js 5.x
 * Update `bignumber.js` to 2.1.2
 
-## v2.9.0 (2015-08-19)
+## [v2.9.0] (2015-08-19)
 
 * Accept the `ciphers` property in connection `ssl` option #1185
 * Fix bad timezone conversion from `Date` to string for certain times #1045 #1155
 
-## v2.8.0 (2015-07-13)
+## [v2.8.0] (2015-07-13)
 
 * Add `connect` event to `Connection` #1129
 * Default `timeout` for `connection.end` to 30 seconds #1057
@@ -156,7 +156,7 @@ you spot any mistakes.
 * Provide static require analysis
 * Re-use connection from pool after `conn.changeUser` is used #837 #1088
 
-## v2.7.0 (2015-05-27)
+## [v2.7.0] (2015-05-27)
 
 * Destroy/end connections removed from the pool on error
 * Delay implied connect until after `.query` argument validation
@@ -164,16 +164,16 @@ you spot any mistakes.
 * Error early if `callback` argument to `.query` is not a function #1060
 * Lazy-load modules from many entry point; reduced memory use
 
-## v2.6.2 (2015-04-14)
+## [v2.6.2] (2015-04-14)
 
 * Fix `Connection.createQuery` for no SQL #1058
 * Update `bignumber.js` to 2.0.7
 
-## v2.6.1 (2015-03-26)
+## [v2.6.1] (2015-03-26)
 
 * Update `bignumber.js` to 2.0.5 #1037 #1038
 
-## v2.6.0 (2015-03-24)
+## [v2.6.0] (2015-03-24)
 
 * Add `poolCluster.remove` to remove pools from the cluster #1006 #1007
 * Add optional callback to `poolCluster.end`
@@ -185,31 +185,31 @@ you spot any mistakes.
 * Improve speed formatting SQL #1019
 * Support io.js
 
-## v2.5.5 (2015-02-23)
+## [v2.5.5] (2015-02-23)
 
 * Store SSL presets in JS instead of JSON #959
 * Support Node.js 0.12
 * Update Amazon RDS SSL certificates #1001
 
-## v2.5.4 (2014-12-16)
+## [v2.5.4] (2014-12-16)
 
 * Fix error if falsy error thrown in callback handler #960
 * Fix various error code strings #954
 
-## v2.5.3 (2014-11-06)
+## [v2.5.3] (2014-11-06)
 
 * Fix `pool.query` streaming interface not emitting connection errors #941
 
-## v2.5.2 (2014-10-10)
+## [v2.5.2] (2014-10-10)
 
 * Fix receiving large text fields #922
 
-## v2.5.1 (2014-09-22)
+## [v2.5.1] (2014-09-22)
 
 * Fix `pool.end` race conditions #915
 * Fix `pool.getConnection` race conditions
 
-## v2.5.0 (2014-09-07)
+## [v2.5.0] (2014-09-07)
 
 * Add code `POOL_ENQUEUELIMIT` to error reaching `queueLimit`
 * Add `enqueue` event to pool #716
@@ -218,21 +218,21 @@ you spot any mistakes.
 * Make only column names enumerable in `RowDataPacket` #549 #895
 * Support Node.js 0.6 #718
 
-## v2.4.3 (2014-08-25)
+## [v2.4.3] (2014-08-25)
 
 * Fix `pool.query` to use `typeCast` configuration
 
-## v2.4.2 (2014-08-03)
+## [v2.4.2] (2014-08-03)
 
 * Fix incorrect sequence packet errors to be catchable #867
 * Fix stray protocol packet errors to be catchable #867
 * Fix timing of fatal protocol errors bubbling to user #879
 
-## v2.4.1 (2014-07-17)
+## [v2.4.1] (2014-07-17)
 
 * Fix `pool.query` not invoking callback on connection error #872
 
-## v2.4.0 (2014-07-13)
+## [v2.4.0] (2014-07-13)
 
 * Add code `POOL_NOEXIST` in PoolCluster error #846
 * Add `acquireTimeout` pool option to specify a timeout for acquiring a connection #821 #854
@@ -248,18 +248,18 @@ you spot any mistakes.
 * Return `Query` object from `pool.query` like `conn.query` #830
 * Use `EventEmitter.listenerCount` when possible for faster counting
 
-## v2.3.2 (2014-05-29)
+## [v2.3.2] (2014-05-29)
 
 * Fix pool leaking connections after `conn.changeUser` #833
 
-## v2.3.1 (2014-05-26)
+## [v2.3.1] (2014-05-26)
 
 * Add database errors to error constants
 * Add global errors to error constants
 * Throw when calling `conn.release` multiple times #824 #827
 * Update known error codes
 
-## v2.3.0 (2014-05-16)
+## [v2.3.0] (2014-05-16)
 
 * Accept MySQL charset (like `UTF8` or `UTF8MB4`) in `charset` option #808
 * Accept pool options in connection string to `mysql.createPool` #811
@@ -271,7 +271,7 @@ you spot any mistakes.
 * Throw on unknown SSL profile name #817
 * User newer TLS functions when available #809
 
-## v2.2.0 (2014-04-27)
+## [v2.2.0] (2014-04-27)
 
 * Use indexOf instead of for loops removing conn from pool #611
 * Make callback to `pool.query` optional like `conn.query` #585
@@ -289,26 +289,26 @@ you spot any mistakes.
 * Fix pool cluster wildcard matching #627
 * Pass query values through to `SqlString.format` #590
 
-## v2.1.1 (2014-03-13)
+## [v2.1.1] (2014-03-13)
 
 * fix authentication w/password failure for node.js 0.10.5 #746 #752
 * fix authentication w/password TypeError exception for node.js 0.10.0-0.10.4 #747
 * fix specifying `values` in `conn.query({...}).on(...)` pattern #755
 * fix long stack trace to include the `pool.query(...)` call #715
 
-## v2.1.0 (2014-02-20)
+## [v2.1.0] (2014-02-20)
 
 * crypto.createHash fix for node.js < 11 #735
 * Add `connectTimeout` option to specify a timeout for establishing a connection #726
 * SSL support #481
 
-## v2.0.1
+## [v2.0.1]
 
 * internal parser speed improvement #702
 * domains support
 * 'trace' connection option to control if long stack traces are generated #713 #710 #439
 
-## v2.0.0 (2014-01-09)
+## [v2.0.0] (2014-01-09)
 
 * stream improvements:
   - node 0.8 support #692
@@ -316,7 +316,7 @@ you spot any mistakes.
 * encoding fix in streaming LOAD DATA LOCAL INFILE #670
 * Doc improvements
 
-## v2.0.0-rc2 (2013-12-07)
+## [v2.0.0-rc2] (2013-12-07)
 
 * Streaming LOAD DATA LOCAL INFILE #668
 * Doc improvements
@@ -329,7 +329,7 @@ you spot any mistakes.
 * Better support for dates in local time zone
 * Doc improvements
 
-## v2.0.0-alpha9 (2013-08-27)
+## [v2.0.0-alpha9] (2013-08-27)
 
 * Add query to pool to execute queries directly using the pool
 * Add `sqlState` property to `Error` objects #556
@@ -340,7 +340,7 @@ you spot any mistakes.
 * Datetime improvements
 * Bug fixes
 
-## v2.0.0-alpha8 (2013-04-30)
+## [v2.0.0-alpha8] (2013-04-30)
 
 * Switch to old mode for Streams 2 (Node.js v 0.10.x)
 * Add stream method to Query Wraps events from the query object into a node v0.10.x Readable stream
@@ -358,7 +358,7 @@ you spot any mistakes.
 * Improved documentation
 * Bug fixes
 
-## v2.0.0-alpha7 (2013-02-03)
+## [v2.0.0-alpha7] (2013-02-03)
 
 * Add connection pooling (#351)
 
@@ -381,7 +381,7 @@ you spot any mistakes.
 * Add Connection.statistics() back from v0.9
 * Add Connection.ping() back from v0.9
 
-## v2.0.0-alpha4 (2012-10-03)
+## [v2.0.0-alpha4] (2012-10-03)
 
 * Fix some OOB errors on resume()
 * Fix quick pause() / resume() usage
@@ -400,7 +400,7 @@ you spot any mistakes.
 * Add connection flags functionality (#237)
 * Exports drain event when queue finishes processing (#272, #271, #306)
 
-## v2.0.0-alpha3 (2012-06-12)
+## [v2.0.0-alpha3] (2012-06-12)
 
 * Implement support for `LOAD DATA LOCAL INFILE` queries (#182).
 * Support OLD\_PASSWORD() accounts like 0.9.x did. You should still upgrade any
@@ -416,7 +416,7 @@ you spot any mistakes.
 * Improve docs for connections settings.
 * Implement url string support for Connection configs.
 
-## v2.0.0-alpha2 (2012-05-31)
+## [v2.0.0-alpha2] (2012-05-31)
 
 * Specify escaping before for NaN / Infinity (they are as unquoted constants).
 * Support for unix domain socket connections (use: {socketPath: '...'}).
@@ -437,7 +437,7 @@ you spot any mistakes.
 * Fix BLOB type casting for `TINY_BLOB`, `MEDIUM_BLOB` and `LONG_BLOB`.
 * Add support for sending and receiving large (> 16 MB) packets.
 
-## v2.0.0-alpha (2012-05-15)
+## [v2.0.0-alpha] (2012-05-15)
 
 This release is a rewrite. You should carefully test your application after
 upgrading to avoid problems. This release features many improvements, most
@@ -497,13 +497,13 @@ to check out so:
 That should be most of it, if you run into anything else, please send a patch
 or open an issue to improve this document.
 
-## v0.9.6 (2012-03-12)
+## [v0.9.6] (2012-03-12)
 
 * Escape array values so they produce sql arrays (Roger Castells, Colin Smith)
 * docs: mention mysql transaction stop gap solution (Blake Miner)
 * docs: Mention affectedRows in FAQ (Michael Baldwin)
 
-## v0.9.5 (2011-11-26)
+## [v0.9.5] (2011-11-26)
 
 * Fix #142 Driver stalls upon reconnect attempt that's immediately closed
 * Add travis build
@@ -512,23 +512,23 @@ or open an issue to improve this document.
 * Remove fast-or-slow dependency for tests
 * Split integration tests into individual files again
 
-## v0.9.4 (2011-08-31)
+## [v0.9.4] (2011-08-31)
 
 * Expose package.json as `mysql.PACKAGE` (#104)
 
-## v0.9.3 (2011-08-22)
+## [v0.9.3] (2011-08-22)
 
 * Set default `client.user` to root
 * Fix #91: Client#format should not mutate params array
 * Fix #94: TypeError in client.js
 * Parse decimals as string (vadimg)
 
-## v0.9.2 (2011-08-07)
+## [v0.9.2] (2011-08-07)
 
 * The underlaying socket connection is now managed implicitly rather than explicitly.
 * Check the [upgrading guide][] for a full list of changes.
 
-## v0.9.1 (2011-02-20)
+## [v0.9.1] (2011-02-20)
 
 * Fix issue #49 / `client.escape()` throwing exceptions on objects. (Nick Payne)
 * Drop < v0.4.x compatibility. From now on you need node v0.4.x to use this module.
@@ -537,21 +537,76 @@ or open an issue to improve this document.
 
 These releases were done before maintaining this file:
 
-* [v0.9.0](https://github.com/mysqljs/mysql/compare/v0.8.0...v0.9.0)
-  (2011-01-04)
-* [v0.8.0](https://github.com/mysqljs/mysql/compare/v0.7.0...v0.8.0)
-  (2010-10-30)
-* [v0.7.0](https://github.com/mysqljs/mysql/compare/v0.6.0...v0.7.0)
-  (2010-10-14)
-* [v0.6.0](https://github.com/mysqljs/mysql/compare/v0.5.0...v0.6.0)
-  (2010-09-28)
-* [v0.5.0](https://github.com/mysqljs/mysql/compare/v0.4.0...v0.5.0)
-  (2010-09-17)
-* [v0.4.0](https://github.com/mysqljs/mysql/compare/v0.3.0...v0.4.0)
-  (2010-09-02)
-* [v0.3.0](https://github.com/mysqljs/mysql/compare/v0.2.0...v0.3.0)
-  (2010-08-25)
-* [v0.2.0](https://github.com/mysqljs/mysql/compare/v0.1.0...v0.2.0)
-  (2010-08-22)
-* [v0.1.0](https://github.com/mysqljs/mysql/commits/v0.1.0)
-  (2010-08-22)
+* [v0.9.0] (2011-01-04)
+* [v0.8.0] (2010-10-30)
+* [v0.7.0] (2010-10-14)
+* [v0.6.0] (2010-09-28)
+* [v0.5.0] (2010-09-17)
+* [v0.4.0] (2010-09-02)
+* [v0.3.0] (2010-08-25)
+* [v0.2.0] (2010-08-22)
+* [v0.1.0] (2010-08-22)
+  
+<!-- Reflinks -->
+[HEAD]: https://github.com/mysqljs/mysql/compare/v2.17.1...master
+[v2.17.1]: https://github.com/mysqljs/mysql/compare/v2.17.0...v2.17.1
+[v2.17.0]: https://github.com/mysqljs/mysql/compare/v2.16.0...v2.17.0
+[v2.16.0]: https://github.com/mysqljs/mysql/compare/v2.15.0...v2.16.0
+[v2.15.0]: https://github.com/mysqljs/mysql/compare/v2.14.1...v2.15.0
+[v2.14.1]: https://github.com/mysqljs/mysql/compare/v2.14.0...v2.14.1
+[v2.14.0]: https://github.com/mysqljs/mysql/compare/v2.13.0...v2.14.0
+[v2.13.0]: https://github.com/mysqljs/mysql/compare/v2.12.0...v2.13.0
+[v2.12.0]: https://github.com/mysqljs/mysql/compare/v2.11.1...v2.12.0
+[v2.11.1]: https://github.com/mysqljs/mysql/compare/v2.11.1...v2.11.1
+[v2.11.0]: https://github.com/mysqljs/mysql/compare/v2.10.2...v2.11.0
+[v2.10.2]: https://github.com/mysqljs/mysql/compare/v2.10.1...v2.10.2
+[v2.10.1]: https://github.com/mysqljs/mysql/compare/v2.10.0...v2.10.1
+[v2.10.0]: https://github.com/mysqljs/mysql/compare/v2.9.0...v2.10.0
+[v2.9.0]: https://github.com/mysqljs/mysql/compare/v2.8.0...v2.9.0
+[v2.8.0]: https://github.com/mysqljs/mysql/compare/v2.7.0...v2.8.0
+[v2.7.0]: https://github.com/mysqljs/mysql/compare/v2.6.2...v2.7.0
+[v2.6.2]: https://github.com/mysqljs/mysql/compare/v2.6.1...v2.6.2
+[v2.6.1]: https://github.com/mysqljs/mysql/compare/v2.6.0...v2.6.1
+[v2.6.0]: https://github.com/mysqljs/mysql/compare/v2.5.5...v2.6.0
+[v2.5.5]: https://github.com/mysqljs/mysql/compare/v2.5.4...v2.5.5
+[v2.5.4]: https://github.com/mysqljs/mysql/compare/v2.5.3...v2.5.4
+[v2.5.3]: https://github.com/mysqljs/mysql/compare/v2.5.2...v2.5.3
+[v2.5.2]: https://github.com/mysqljs/mysql/compare/v2.5.1...v2.5.2
+[v2.5.1]: https://github.com/mysqljs/mysql/compare/v2.5.0...v2.5.1
+[v2.5.0]: https://github.com/mysqljs/mysql/compare/v2.4.3...v2.5.0
+[v2.4.3]: https://github.com/mysqljs/mysql/compare/v2.4.2...v2.4.3
+[v2.4.2]: https://github.com/mysqljs/mysql/compare/v2.4.1...v2.4.2
+[v2.4.1]: https://github.com/mysqljs/mysql/compare/v2.4.0...v2.4.1
+[v2.4.0]: https://github.com/mysqljs/mysql/compare/v2.3.2...v2.4.0
+[v2.3.2]: https://github.com/mysqljs/mysql/compare/v2.3.1...v2.3.2
+[v2.3.1]: https://github.com/mysqljs/mysql/compare/v2.3.0...v2.3.1
+[v2.3.0]: https://github.com/mysqljs/mysql/compare/v2.2.0...v2.3.0
+[v2.2.0]: https://github.com/mysqljs/mysql/compare/v2.1.0...v2.2.0
+[v2.1.1]: https://github.com/mysqljs/mysql/compare/v2.1.0...v2.1.1
+[v2.1.0]: https://github.com/mysqljs/mysql/compare/v2.0.1...v2.1.0
+[v2.0.1]: https://github.com/mysqljs/mysql/compare/v2.0.0...v2.0.1
+[v2.0.0]: https://github.com/mysqljs/mysql/compare/v2.0.0-rc2...v2.0.0
+[v2.0.0-rc2]: https://github.com/mysqljs/mysql/compare/v2.0.0-preview...v2.0.0-rc2
+[v2.0.0-preview]: https://github.com/mysqljs/mysql/compare/v2.0.0-alpha9...v2.0.0-preview
+[v2.0.0-alpha9]: https://github.com/mysqljs/mysql/compare/v2.0.0-alpha8...v2.0.0-alpha9
+[v2.0.0-alpha8]: https://github.com/mysqljs/mysql/compare/v2.0.0-alpha7...v2.0.0-alpha8
+[v2.0.0-alpha7]: https://github.com/mysqljs/mysql/compare/v2.0.0-alpha4...v2.0.0-alpha7
+[v2.0.0-alpha4]: https://github.com/mysqljs/mysql/compare/v2.0.0-alpha3...v2.0.0-alpha4
+[v2.0.0-alpha3]: https://github.com/mysqljs/mysql/compare/v2.0.0-alpha2...v2.0.0-alpha3
+[v2.0.0-alpha2]: https://github.com/mysqljs/mysql/compare/v2.0.0-alpha...v2.0.0-alpha2
+[v2.0.0-alpha]: https://github.com/mysqljs/mysql/compare/v0.9.6...v2.0.0-alpha
+[v0.9.6]: https://github.com/mysqljs/mysql/compare/v0.9.5...v0.9.6
+[v0.9.5]: https://github.com/mysqljs/mysql/compare/v0.9.4...v0.9.5
+[v0.9.4]: https://github.com/mysqljs/mysql/compare/v0.9.3...v0.9.4
+[v0.9.3]: https://github.com/mysqljs/mysql/compare/v0.9.2...v0.9.3
+[v0.9.2]: https://github.com/mysqljs/mysql/compare/v0.9.1...v0.9.2
+[v0.9.1]: https://github.com/mysqljs/mysql/compare/v0.9.0...v0.9.1
+[v0.9.0]: https://github.com/mysqljs/mysql/compare/v0.8.0...v0.9.0
+[v0.8.0]: https://github.com/mysqljs/mysql/compare/v0.7.0...v0.8.0
+[v0.7.0]: https://github.com/mysqljs/mysql/compare/v0.6.0...v0.7.0
+[v0.6.0]: https://github.com/mysqljs/mysql/compare/v0.5.0...v0.6.0
+[v0.5.0]: https://github.com/mysqljs/mysql/compare/v0.4.0...v0.5.0
+[v0.4.0]: https://github.com/mysqljs/mysql/compare/v0.3.0...v0.4.0
+[v0.3.0]: https://github.com/mysqljs/mysql/compare/v0.2.0...v0.3.0
+[v0.2.0]: https://github.com/mysqljs/mysql/compare/v0.1.0...v0.2.0
+[v0.1.0]: https://github.com/mysqljs/mysql/commits/v0.1.0
