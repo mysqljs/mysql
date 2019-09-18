@@ -16,6 +16,7 @@
 - [Community](#community)
 - [Establishing connections](#establishing-connections)
 - [Connection options](#connection-options)
+- [Authentication options](#authentication-options)
 - [SSL options](#ssl-options)
 - [Terminating connections](#terminating-connections)
 - [Pooling connections](#pooling-connections)
@@ -235,6 +236,7 @@ issue [#501](https://github.com/mysqljs/mysql/issues/501). (Default: `false`)
   also possible to blacklist default ones. For more information, check
   [Connection Flags](#connection-flags).
 * `ssl`: object with ssl parameters or a string containing name of ssl profile. See [SSL options](#ssl-options).
+* `secureAuth`: required to support `caching_sha2_password` handshakes over insecure connections (default behavior on MySQL 8.0.4 or higher). See [Authentication options](#authentication-options).
 
 
 In addition to passing these options as an object, you can also use a url
@@ -246,6 +248,82 @@ var connection = mysql.createConnection('mysql://user:pass@host/db?debug=true&ch
 
 Note: The query values are first attempted to be parsed as JSON, and if that
 fails assumed to be plaintext strings.
+
+### Authentication options
+
+MySQL 8.0 introduces a new default authentication plugin - [`caching_sha2_password`](https://dev.mysql.com/doc/refman/8.0/en/caching-sha2-pluggable-authentication.html).
+This is a breaking change from MySQL 5.7 wherein [`mysql_native_password`](https://dev.mysql.com/doc/refman/8.0/en/native-pluggable-authentication.html) was used by default.
+
+The initial handshake for this plugin will only work if the connection is secure or the server
+uses a valid RSA public key for the given type of authentication (both default MySQL 8 settings).
+By default, if the connection is not secure, the client will fetch the public key from the server
+and use it (alongside a server-generated nonce) to encrypt the password.
+
+After a successful initial handshake, any subsequent handshakes will always work, until the
+server shuts down or the password is somehow removed from the server authentication cache.
+
+The default connection options provide compatibility with both MySQL 5.7 and MySQL 8 servers.
+
+```js
+// default options
+var connection = mysql.createConnection({
+  ssl        : false,
+  secureAuth : true
+});
+```
+
+If you are in control of the server public key, you can also provide it explicitly and avoid
+the additional round-trip.
+
+```js
+var connection = mysql.createConnection({
+  ssl        : false,
+  secureAuth : {
+    key: fs.readFileSync(__dirname + '/mysql-pub.key')
+  }
+});
+```
+
+As an alternative to providing just the key, you can provide additional options, in the same
+format as [crypto.publicEncrypt](https://nodejs.org/docs/latest-v4.x/api/crypto.html#crypto_crypto_publicencrypt_public_key_buffer),
+which means you can also specify the key padding type.
+
+**Caution** MySQL 8.0.4 specifically requires `RSA_PKCS1_PADDING` whereas MySQL 8.0.11 GA (and above) require `RSA_PKCS1_OAEP_PADDING` (which is the default value).
+
+```js
+var constants = require('constants');
+
+var connection = mysql.createConnection({
+  ssl        : false,
+  secureAuth : {
+    key: fs.readFileSync(__dirname + '/mysql-pub.key'),
+    padding: constants.RSA_PKCS1_PADDING
+  }
+});
+```
+
+At least one of these options needs to be enabled for the initial handshake to work. So, the
+following flavour will also work.
+
+```js
+var connection = mysql.createConnection({
+  ssl        : true, // or a valid ssl configuration object
+  secureAuth : false
+});
+```
+
+If both `secureAuth` and `ssl` options are disabled, the connection will fail.
+
+```js
+var connection = mysql.createConnection({
+  ssl        : false,
+  secureAuth : false
+});
+
+connection.connect(function (err) {
+  console.log(err.message); // 'Authentication requires secure connection'
+});
+```
 
 ### SSL options
 
@@ -560,6 +638,7 @@ The available options for this feature are:
 * `password`: The password of the new user (defaults to the previous one).
 * `charset`: The new charset (defaults to the previous one).
 * `database`: The new database (defaults to the previous one).
+* `timeout`: An optional [timeout](#timeouts).
 
 A sometimes useful side effect of this functionality is that this function also
 resets any connection state (variables, transactions, etc.).
@@ -611,7 +690,7 @@ connection.query('SELECT * FROM `books` WHERE `author` = ?', ['David'], function
 The third form `.query(options, callback)` comes when using various advanced
 options on the query, like [escaping query values](#escaping-query-values),
 [joins with overlapping column names](#joins-with-overlapping-column-names),
-[timeouts](#timeout), and [type casting](#type-casting).
+[timeouts](#timeouts), and [type casting](#type-casting).
 
 ```js
 connection.query({
@@ -1393,11 +1472,20 @@ The following flags are sent by default on a new connection:
 - `LONG_PASSWORD` - Use the improved version of Old Password Authentication.
 - `MULTI_RESULTS` - Can handle multiple resultsets for COM_QUERY.
 - `ODBC` Old; no effect.
+- `PLUGIN_AUTH` - Support different authentication plugins.
 - `PROTOCOL_41` - Uses the 4.1 protocol.
 - `PS_MULTI_RESULTS` - Can handle multiple resultsets for COM_STMT_EXECUTE.
 - `RESERVED` - Old flag for the 4.1 protocol.
 - `SECURE_CONNECTION` - Support native 4.1 authentication.
 - `TRANSACTIONS` - Asks for the transaction status flags.
+
+The `local_infile` system variable is disabled by default since MySQL 8.0.2, which
+means the `LOCAL_FILES` flag will only make sense if the feature is explicitely
+enabled on the server.
+
+```sql
+SET GLOBAL local_infile = true;
+```
 
 In addition, the following flag will be sent if the option `multipleStatements`
 is set to `true`:

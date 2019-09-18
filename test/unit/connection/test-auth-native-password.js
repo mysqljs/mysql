@@ -29,8 +29,9 @@ server.on('connection', function(incomingConnection) {
     });
 
     incomingConnection.handshake({
-      scrambleBuff1 : scramble.slice(0, 8),
-      scrambleBuff2 : scramble.slice(8, 20)
+      authMethodName : 'mysql_native_password',
+      scrambleBuff1  : scramble.slice(0, 8),
+      scrambleBuff2  : scramble.slice(8, 20)
     });
   });
 });

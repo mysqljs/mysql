@@ -1,6 +1,7 @@
-var common = exports;
-var fs     = require('fs');
-var path   = require('path');
+var common    = exports;
+var fs        = require('fs');
+var path      = require('path');
+var constants = require('constants');
 
 common.lib      = path.resolve(__dirname, '..', 'lib');
 common.fixtures = path.resolve(__dirname, 'fixtures');
@@ -31,6 +32,9 @@ common.PoolConfig       = require(common.lib + '/PoolConfig');
 common.PoolConnection   = require(common.lib + '/PoolConnection');
 common.SqlString        = require(common.lib + '/protocol/SqlString');
 common.Types            = require(common.lib + '/protocol/constants/types');
+
+// Export Node.js constants
+common.PlatformConstants = constants;
 
 var Mysql      = require(path.resolve(common.lib, '../index'));
 var FakeServer = require('./FakeServer');
@@ -145,6 +149,10 @@ common.getSSLConfig = function() {
     ciphers : 'ECDHE-RSA-AES128-SHA256:AES128-GCM-SHA256:AES128-SHA:HIGH:!MD5:!aNULL:!EDH',
     key     : fs.readFileSync(path.join(common.fixtures, 'server.key'), 'ascii')
   };
+};
+
+common.getServerPublicKey = function() {
+  return fs.readFileSync(path.join(common.fixtures, 'server-public.key'), 'ascii');
 };
 
 function mergeTestConfig(config) {
