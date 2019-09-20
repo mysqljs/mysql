@@ -17,6 +17,7 @@
 - [Establishing connections](#establishing-connections)
 - [Connection options](#connection-options)
   - [SSL options](#ssl-options)
+  - [Connection flags](#connection-flags)
 - [Terminating connections](#terminating-connections)
 - [Pooling connections](#pooling-connections)
 - [Pool options](#pool-options)
@@ -56,10 +57,6 @@
   - [Buffer](#buffer)
   - [String](#string)
   - [Custom type casting](#custom-type-casting)
-- [Connection Flags](#connection-flags)
-  - [Example](#example)
-  - [Default Flags](#default-flags)
-  - [Other Available Flags](#other-available-flags)
 - [Debugging and reporting problems](#debugging-and-reporting-problems)
 - [Security issues](#security-issues)
 - [Contributing](#contributing)
@@ -297,6 +294,62 @@ var connection = mysql.createConnection({
   }
 });
 ```
+
+### Connection flags
+
+If, for any reason, you would like to change the default connection flags, you
+can use the connection option `flags`. Pass a string with a comma separated list
+of items to add to the default flags. If you don't want a default flag to be used
+prepend the flag with a minus sign. To add a flag that is not in the default list,
+just write the flag name, or prefix it with a plus (case insensitive).
+
+```js
+var connection = mysql.createConnection({
+  // disable FOUND_ROWS flag, enable IGNORE_SPACE flag
+  flags: '-FOUND_ROWS,IGNORE_SPACE'
+});
+```
+
+The following flags are available:
+
+- `COMPRESS` - Enable protocol compression. This feature is not currently supported
+  by the Node.js implementation so cannot be turned on. (Default off)
+- `CONNECT_WITH_DB` - Ability to specify the database on connection. (Default on)
+- `FOUND_ROWS` - Send the found rows instead of the affected rows as `affectedRows`.
+  (Default on)
+- `IGNORE_SIGPIPE` - Don't issue SIGPIPE if network failures. This flag has no effect
+  on this Node.js implementation. (Default on)
+- `IGNORE_SPACE` - Let the parser ignore spaces before the `(` in queries. (Default on)
+- `INTERACTIVE` - Indicates to the MySQL server this is an "interactive" client. This
+  will use the interactive timeouts on the MySQL server and report as interactive in
+  the process list. (Default off)
+- `LOCAL_FILES` - Can use `LOAD DATA LOCAL`. (Default on)
+- `LONG_FLAG` - Longer flags in Protocol::ColumnDefinition320. (Default on)
+- `LONG_PASSWORD` - Use the improved version of Old Password Authentication.
+  (Default on)
+- `MULTI_RESULTS` - Can handle multiple resultsets for queries. (Default on)
+- `MULTI_STATEMENTS` - The client may send multiple statement per query or
+  statement prepare (separated by `;`). This flag is controlled by the connection
+  option `multipleStatements`. (Default off)
+- `NO_SCHEMA`
+- `ODBC` Special handling of ODBC behaviour. This flag has no effect on this Node.js
+  implementation. (Default on)
+- `PLUGIN_AUTH` - Uses the plugin authentication mechanism when connecting to the
+  MySQL server. This feature is not currently supported by the Node.js implementation
+  so cannot be turned on. (Default off)
+- `PROTOCOL_41` - Uses the 4.1 protocol. (Default on)
+- `PS_MULTI_RESULTS` - Can handle multiple resultsets for execute. (Default on)
+- `REMEMBER_OPTIONS` - This is specific to the C client, and has no effect on this
+  Node.js implementation. (Default off)
+- `RESERVED` - Old flag for the 4.1 protocol. (Default on)
+- `SECURE_CONNECTION` - Support native 4.1 authentication. (Default on)
+- `SSL` - Use SSL after handshake to encrypt data in transport. This feature is
+  controlled though the `ssl` connection option, so the flag has no effect.
+  (Default off)
+- `SSL_VERIFY_SERVER_CERT` - Verify the server certificate during SSL set up. This
+  feature is controlled though the `ssl.rejectUnauthorized` connection option, so
+  the flag has no effect. (Default off)
+- `TRANSACTIONS` - Asks for the transaction status flags. (Default on)
 
 ## Terminating connections
 
@@ -1374,63 +1427,6 @@ connection = mysql.createConnection({
 
 __WARNING: YOU MUST INVOKE the parser using one of these three field functions
 in your custom typeCast callback. They can only be called once.__
-
-## Connection Flags
-
-If, for any reason, you would like to change the default connection flags, you
-can use the connection option `flags`. Pass a string with a comma separated list
-of items to add to the default flags. If you don't want a default flag to be used
-prepend the flag with a minus sign. To add a flag that is not in the default list,
-just write the flag name, or prefix it with a plus (case insensitive).
-
-**Please note that some available flags that are not supported (e.g.: Compression),
-are still not allowed to be specified.**
-
-### Example
-
-The next example blacklists FOUND_ROWS flag from default connection flags.
-
-```js
-var connection = mysql.createConnection("mysql://localhost/test?flags=-FOUND_ROWS");
-```
-
-### Default Flags
-
-The following flags are sent by default on a new connection:
-
-- `CONNECT_WITH_DB` - Ability to specify the database on connection.
-- `FOUND_ROWS` - Send the found rows instead of the affected rows as `affectedRows`.
-- `IGNORE_SIGPIPE` - Old; no effect.
-- `IGNORE_SPACE` - Let the parser ignore spaces before the `(` in queries.
-- `LOCAL_FILES` - Can use `LOAD DATA LOCAL`.
-- `LONG_FLAG`
-- `LONG_PASSWORD` - Use the improved version of Old Password Authentication.
-- `MULTI_RESULTS` - Can handle multiple resultsets for COM_QUERY.
-- `ODBC` Old; no effect.
-- `PROTOCOL_41` - Uses the 4.1 protocol.
-- `PS_MULTI_RESULTS` - Can handle multiple resultsets for COM_STMT_EXECUTE.
-- `RESERVED` - Old flag for the 4.1 protocol.
-- `SECURE_CONNECTION` - Support native 4.1 authentication.
-- `TRANSACTIONS` - Asks for the transaction status flags.
-
-In addition, the following flag will be sent if the option `multipleStatements`
-is set to `true`:
-
-- `MULTI_STATEMENTS` - The client may send multiple statement per query or
-  statement prepare.
-
-### Other Available Flags
-
-There are other flags available. They may or may not function, but are still
-available to specify.
-
-- `COMPRESS`
-- `INTERACTIVE`
-- `NO_SCHEMA`
-- `PLUGIN_AUTH`
-- `REMEMBER_OPTIONS`
-- `SSL`
-- `SSL_VERIFY_SERVER_CERT`
 
 ## Debugging and reporting problems
 
