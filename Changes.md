@@ -7,6 +7,7 @@ you spot any mistakes.
 ## HEAD
 
 * Add `localInfile` option to control `LOAD DATA LOCAL INFILE`
+* Add new Amazon RDS Root 2019 CA to Amazon RDS SSL profile #2280
 * Add new error codes up to MySQL 5.7.29
 * Fix early detection of bad callback to `connection.query`
 * Support Node.js 12.x #2211
