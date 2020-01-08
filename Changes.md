@@ -6,6 +6,7 @@ you spot any mistakes.
 
 ## HEAD
 
+* Fix early detection of bad callback to `connection.query`
 * Support Node.js 12.x #2211
 * Support Node.js 13.x
 * Update `bignumber.js` to 9.0.0
