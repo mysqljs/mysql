@@ -9,6 +9,7 @@ you spot any mistakes.
 * Support Node.js 12.x #2211
 * Support Node.js 13.x
 * Update `bignumber.js` to 9.0.0
+* Update `readable-stream` to 2.3.7
 
 ## v2.17.1 (2019-04-18)
 
