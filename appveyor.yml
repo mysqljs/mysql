@@ -22,7 +22,7 @@ environment:
     - nodejs_version: "10.18"
     - nodejs_version: "11.15"
     - nodejs_version: "12.14"
-    - nodejs_version: "13.1"
+    - nodejs_version: "13.6"
 
 services:
   - mysql
