@@ -11,6 +11,10 @@ server.listen(common.fakeServerPort, function (err) {
     connection.query('SELECT ?', [1], 'oops');
   }, /TypeError: argument callback must be a function when provided/);
 
+  assert.throws(function () {
+    connection.query({ sql: 'SELECT ?' }, [1], 'oops');
+  }, /TypeError: argument callback must be a function when provided/);
+
   connection.destroy();
   server.destroy();
 });
