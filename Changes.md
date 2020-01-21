@@ -4,7 +4,7 @@ This file is a manually maintained list of changes for each release. Feel free
 to add your changes here when sending pull requests. Also send corrections if
 you spot any mistakes.
 
-## HEAD
+## v2.18.0 (2020-01-21)
 
 * Add `localInfile` option to control `LOAD DATA LOCAL INFILE`
 * Add new Amazon RDS Root 2019 CA to Amazon RDS SSL profile #2280
