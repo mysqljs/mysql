@@ -42,9 +42,10 @@ common.getTestConnection(function (err, connection) {
     assert.equal(rows[4].title, 'this is a long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long string');
   });
 
-  connection.query(sql, [badPath, table, ',', newline], function (err) {
+  connection.query(sql, [badPath, table, ',', newline], function (err, result) {
     assert.ok(err);
     assert.equal(err.code, 'ENOENT');
+    assert.equal(result.affectedRows, 0);
   });
 
   connection.end(assert.ifError);

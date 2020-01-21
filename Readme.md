@@ -240,6 +240,7 @@ issue [#501](https://github.com/mysqljs/mysql/issues/501). (Default: `false`)
 * `trace`: Generates stack traces on `Error` to include call site of library
    entrance ("long stack traces"). Slight performance penalty for most calls.
    (Default: `true`)
+* `localInfile`: Allow `LOAD DATA INFILE` to use the `LOCAL` modifier. (Default: `true`)
 * `multipleStatements`: Allow multiple mysql statements per query. Be careful
   with this, it could increase the scope of SQL injection attacks. (Default: `false`)
 * `flags`: List of connection flags to use other than the default ones. It is
@@ -323,7 +324,8 @@ The following flags are available:
 - `INTERACTIVE` - Indicates to the MySQL server this is an "interactive" client. This
   will use the interactive timeouts on the MySQL server and report as interactive in
   the process list. (Default off)
-- `LOCAL_FILES` - Can use `LOAD DATA LOCAL`. (Default on)
+- `LOCAL_FILES` - Can use `LOAD DATA LOCAL`. This flag is controlled by the connection
+  option `localInfile`. (Default on)
 - `LONG_FLAG` - Longer flags in Protocol::ColumnDefinition320. (Default on)
 - `LONG_PASSWORD` - Use the improved version of Old Password Authentication.
   (Default on)

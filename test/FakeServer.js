@@ -277,8 +277,8 @@ FakeConnection.prototype._handleQueryPacket = function _handleQueryPacket(packet
   this.error('Interrupted unknown query', Errors.ER_QUERY_INTERRUPTED);
 };
 
-FakeConnection.prototype._parsePacket = function() {
-  var Packet = this._determinePacket();
+FakeConnection.prototype._parsePacket = function _parsePacket(packetHeader) {
+  var Packet = this._determinePacket(packetHeader);
   var packet = new Packet({protocol41: true});
 
   packet.parse(this._parser);
@@ -338,7 +338,7 @@ FakeConnection.prototype._parsePacket = function() {
   }
 };
 
-FakeConnection.prototype._determinePacket = function _determinePacket() {
+FakeConnection.prototype._determinePacket = function _determinePacket(packetHeader) {
   if (this._expectedNextPacket) {
     var Packet = this._expectedNextPacket;
 
@@ -351,6 +351,10 @@ FakeConnection.prototype._determinePacket = function _determinePacket() {
     this._expectedNextPacket = null;
 
     return Packet;
+  }
+
+  if (packetHeader.length === 0) {
+    return Packets.EmptyPacket;
   }
 
   var firstByte = this._parser.peak();
