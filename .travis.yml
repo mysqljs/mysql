@@ -46,7 +46,6 @@ addons:
   apt:
     packages:
       - g++-4.6
-sudo: required
 services:
   - docker
 
