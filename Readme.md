@@ -280,6 +280,10 @@ following options:
 * `ciphers`: The ciphers to use to use in the SSL handshake instead of the default ones for Node.js. This
   is passed as the `ciphers` option for [`tls.createSecureContext()`] call (or underlying [`crypto.createCredentials()`]
   if using Node.js below 0.12).
+* `maxVersion`: This is passed as the `maxVersion` option for the underlying [`tls.createSecureContext()`]
+  call.
+* `minVersion`: This is passed as the `minVersion` option for the underlying [`tls.createSecureContext()`]
+  call.
 * `key`: This is passed as the `key` option for [`tls.createSecureContext()`] call (or underlying
   [`crypto.createCredentials()`] if using Node.js below 0.12).
 * `passphrase`: This is passed as the `passphrase` option for [`tls.createSecureContext()`] call (or
