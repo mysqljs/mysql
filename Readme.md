@@ -912,13 +912,13 @@ Here's an example of how to implement another format:
 
 ```js
 connection.config.queryFormat = function(query, values) {
-    if (!values) return query;
-    return query.replace(/\:(%|_+)?(\w+)(%|_+)?/g, function(txt, prefix = '', key, suffix = '') {
-        if (values.hasOwnProperty(key)) {
-            return this.escape(prefix + values[key] + suffix);
-        }
-        return txt;
-    }.bind(this));
+  if (!values) return query;
+  return query.replace(/\:(%|_+)?(\w+)(%|_+)?/g, function(txt, prefix = '', key, suffix = '') {
+    if (values.hasOwnProperty(key)) {
+      return this.escape(prefix + values[key] + suffix);
+    }
+    return txt;
+  }.bind(this));
 };
 
 connection.query("UPDATE posts SET title = :title", { title: "Hello MySQL" });
