@@ -911,17 +911,25 @@ If you prefer to have another type of query escape format, there's a connection 
 Here's an example of how to implement another format:
 
 ```js
-connection.config.queryFormat = function (query, values) {
-  if (!values) return query;
-  return query.replace(/\:(\w+)/g, function (txt, key) {
-    if (values.hasOwnProperty(key)) {
-      return this.escape(values[key]);
-    }
-    return txt;
-  }.bind(this));
+connection.config.queryFormat = function(query, values) {
+    if (!values) return query;
+    return query.replace(/\:(%|_+)?(\w+)(%|_+)?/g, function(txt, prefix = '', key, suffix = '') {
+        if (values.hasOwnProperty(key)) {
+            return this.escape(prefix + values[key] + suffix);
+        }
+        return txt;
+    }.bind(this));
 };
 
 connection.query("UPDATE posts SET title = :title", { title: "Hello MySQL" });
+// -> UPDATE posts SET title = 'Hello MySQL'
+
+connection.query('SELECT * FROM movies WHERE movies.name LIKE :%movieName%', { movieName: 'knight' });
+// -> SELECT * FROM movies WHERE movies.name LIKE '%knight%'
+
+connection.query('SELECT * FROM movies WHERE movies.name LIKE :__movieName', { movieName: 'knight' });
+// -> SELECT * FROM movies WHERE movies.name LIKE '__knight'
+
 ```
 
 ## Getting the id of an inserted row
