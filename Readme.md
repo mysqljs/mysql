@@ -924,6 +924,34 @@ connection.config.queryFormat = function (query, values) {
 connection.query("UPDATE posts SET title = :title", { title: "Hello MySQL" });
 ```
 
+While the above function works correctly if you are moving an existing project from using ? placeholders to using the above named parameters the ? placeholders will stop working to update the custom formatter to handle both. Also if you use a := assignment in any of your queries then the named parameters would fail with the above code.  The followign function handles if the key is an equals sign and replaces it back in.
+
+NOTE:: you can choose to use one or the other type of SQL but not both at the same time.
+
+```
+connection.config.queryFormat = (query, values) => {
+    if (!values) return query;
+    if (query.indexOf('?') > 0) {
+        const parts = query.split(/\?/);
+        let newQuestionQuery = parts[0];
+        for (let index = 1; index < parts.length; index++) {
+            newQuestionQuery += this.escape(values[index - 1]) + parts[index];
+        }
+        return newQuestionQuery;
+    }
+    const newQuery = query.replace(/\:(\w+)/g, (txt, key) => {
+        if (key === '=') {
+            return ':='; // needed in SQL business change widget
+        }
+        if (values[key]) {
+            return this.escape(values[key]);
+        }
+        return txt;
+    });
+    return newQuery;
+};
+```
+
 ## Getting the id of an inserted row
 
 If you are inserting a row into a table with an auto increment primary key, you
