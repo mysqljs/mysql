@@ -662,7 +662,7 @@ be set to restore offline nodes after a given timeout.
 The most basic way to perform a query is to call the `.query()` method on an object
 (like a `Connection`, `Pool`, or `PoolNamespace` instance).
 
-The simplest form of .`query()` is `.query(sqlString, callback)`, where a SQL string
+The simplest form of `.query()` is `.query(sqlString, callback)`, where a SQL string
 is the first argument and the second is a callback:
 
 ```js
