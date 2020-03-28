@@ -2,7 +2,10 @@ var assert     = require('assert');
 var common     = require('../../common');
 var connection = common.createConnection({
   port     : common.fakeServerPort,
-  password : 'authswitch'
+  password : 'authswitch',
+  ssl      : {
+    rejectUnauthorized: false
+  }
 });
 
 var server = common.createFakeServer();
