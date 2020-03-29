@@ -95,7 +95,7 @@ FakeConnection.prototype.handshake = function(options) {
   var packetOptions = common.extend({
     scrambleBuff1       : Buffer.from('1020304050607080', 'hex'),
     scrambleBuff2       : Buffer.from('0102030405060708090A0B0C', 'hex'),
-    serverCapabilities1 : 512 | 1 << 11, // only 2 flags, PROTOCOL_41 and SSL
+    serverCapabilities1 : 512, // only 1 flag, PROTOCOL_41
     protocol41          : true
   }, this._handshakeOptions);
 
