@@ -1,4 +1,5 @@
 var assert     = require('assert');
+var Buffer     = require('safe-buffer').Buffer;
 var common     = require('../../common');
 var connection = common.createConnection({
   port     : common.fakeServerPort,
