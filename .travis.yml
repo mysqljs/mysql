@@ -60,7 +60,7 @@ before_install:
 
   # Setup Node.js version-specific dependencies
   - "node tool/install-nyc.js --nyc-optional"
-  - "test $(echo $TRAVIS_NODE_VERSION | cut -d. -f1) -ge 8 || npm rm --save-dev eslint"
+  - "test $(echo $TRAVIS_NODE_VERSION | cut -d. -f1) -ge 10 || npm rm --save-dev eslint"
 
   # Update Node.js modules
   - "test ! -d node_modules || npm prune"
@@ -84,7 +84,7 @@ before_script:
 script:
   # Run test script
   - "npm run-script test-ci"
-  - "test -z $(npm -ps ls eslint) || npm run-script lint"
+  - "npm -ps ls eslint | grep -vq eslint || npm run-script lint"
 
 after_script:
   - "test -d .nyc_output && npm install coveralls@2 && nyc report --reporter=text-lcov | coveralls"
