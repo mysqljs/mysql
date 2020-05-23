@@ -7,6 +7,8 @@ you spot any mistakes.
 ## HEAD
 
 * Support Node.js 14.x
+* Update `sqlstring` to 2.3.2
+  - perf: remove outdated array pattern
 
 ## v2.18.1 (2020-01-23)
 

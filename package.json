@@ -16,7 +16,7 @@
     "bignumber.js": "9.0.0",
     "readable-stream": "2.3.7",
     "safe-buffer": "5.1.2",
-    "sqlstring": "2.3.1"
+    "sqlstring": "2.3.2"
   },
   "devDependencies": {
     "after": "0.8.2",
