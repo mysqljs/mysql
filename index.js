@@ -1,6 +1,7 @@
 var Classes = Object.create(null);
 
 /**
+  * JUST IGNORE IT
  * Create a new Connection instance.
  * @param {object|string} config Configuration or connection string for new MySQL connection
  * @return {Connection} A new MySQL connection
