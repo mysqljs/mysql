@@ -105,8 +105,9 @@ function appendDatabseErrorCodes(srcDir, codes) {
 }
 
 function appendSqlErrorCodes(srcDir, codes) {
-  var errorFile = path.join(srcDir, 'sql', 'share', 'errmsg-utf8.txt');
-  var contents  = fs.readFileSync(errorFile, 'utf-8');
+  var errorFile = version.startsWith("5.") ?
+	path.join(srcDir, 'sql', 'share', 'errmsg-utf8.txt') : path.join(srcDir, 'share', 'messages_to_clients.txt');
+  var contents  = fs.readFileSync(errorFile, 'utf-8').replace(/^#.*$/gm,"");
   var sections  = contents.split(/^start-error-number (\d+)$/m);
 
   for (var i = 1; i < sections.length; i += 2) {
