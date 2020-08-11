@@ -62,8 +62,8 @@ for (var i = 0; i < codes.length; i++) {
 
 console.log('Wrote constants to ' + targetFile);
 
-function keepOldDefinitionIfMarkedObsolete(codes, num, code) {
-  if (!codes[num] || !code.startsWith('OBSOLETE_')) {
+function addIfNotDefined(codes, num, code) {
+  if (!codes[num]) {
     codes[num] = code;
   }
 }
@@ -90,7 +90,7 @@ function appendGlobalErrorCodes(srcDir, codes) {
       break;
     }
 
-    keepOldDefinitionIfMarkedObsolete(codes, num, code);
+    addIfNotDefined(codes, num, code);
   }
 
   return codes;
@@ -118,7 +118,7 @@ function appendDatabseErrorCodes(srcDir, codes) {
       break;
     }
 
-    keepOldDefinitionIfMarkedObsolete(codes, num, code);
+    addIfNotDefined(codes, num, code);
   }
 
   return codes;
@@ -133,7 +133,7 @@ function appendSqlErrorCodes(srcDir, codes, errorFile) {
     var names  = sections[i + 1].match(/^([A-Z0-9_]+)/mg).map(fixupCode);
 
     for (var j = 0; j < names.length; j++) {
-      keepOldDefinitionIfMarkedObsolete(codes, offset + j, names[j]);
+      addIfNotDefined(codes, offset + j, names[j]);
     }
   }
 
