@@ -687,7 +687,7 @@ connection.query('SELECT * FROM `books` WHERE `author` = ?', ['David'], function
 The third form `.query(options, callback)` comes when using various advanced
 options on the query, like [escaping query values](#escaping-query-values),
 [joins with overlapping column names](#joins-with-overlapping-column-names),
-[timeouts](#timeout), and [type casting](#type-casting).
+[timeouts](#timeouts), and [type casting](#type-casting).
 
 ```js
 connection.query({
