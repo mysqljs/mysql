@@ -158,3 +158,19 @@ function mergeTestConfig(config) {
 
   return config;
 }
+
+/**
+ * Indicate if connection use a MariaDB or MySQL server
+ * @param {String=} connection current connection
+ * @returns {boolean} true if MariaDB server
+ */
+common.isMariaDB = function(connection) {
+  var serverVersion = '';
+  if (connection && connection._protocol && connection._protocol._handshakeInitializationPacket) {
+    serverVersion = connection._protocol._handshakeInitializationPacket.serverVersion;
+  }
+  // MariaDB prefix server string with '5.5.5-'
+  // Since https://jira.mariadb.org/browse/MDEV-7780 server version can skipped '5.5.5-' prefix
+  // so adding test containing 'MariaDB'
+  return (serverVersion.startsWith('5.5.5-') || serverVersion.includes('MariaDB'));
+};
