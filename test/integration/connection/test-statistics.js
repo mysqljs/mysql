@@ -13,7 +13,9 @@ common.getTestConnection(function (err, connection) {
     assert.ok(data.hasOwnProperty('questions'));
     assert.ok(data.hasOwnProperty('slow_queries'));
     assert.ok(data.hasOwnProperty('opens'));
-    assert.ok(data.hasOwnProperty('flush_tables'));
+    if (!common.isMariaDB(connection)) {
+      assert.ok(data.hasOwnProperty('flush_tables'));
+    }
     assert.ok(data.hasOwnProperty('open_tables'));
     assert.ok(data.hasOwnProperty('queries_per_second_avg'));
     connection.end(assert.ifError);

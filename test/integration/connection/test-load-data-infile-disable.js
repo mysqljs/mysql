@@ -10,29 +10,39 @@ common.getTestConnection({localInfile: false}, function (err, connection) {
 
   common.useTestDb(connection);
 
-  connection.query([
-    'CREATE TEMPORARY TABLE ?? (',
-    '`id` int(11) unsigned NOT NULL AUTO_INCREMENT,',
-    '`title` varchar(400),',
-    'PRIMARY KEY (`id`)',
-    ') ENGINE=InnoDB DEFAULT CHARSET=utf8'
-  ].join('\n'), [table], assert.ifError);
-
-  var sql =
-    'LOAD DATA LOCAL INFILE ? INTO TABLE ?? CHARACTER SET utf8 ' +
-    'FIELDS TERMINATED BY ? ' +
-    'LINES TERMINATED BY ? ' +
-    '(id, title)';
-
-  connection.query(sql, [path, table, ',', newline], function (err) {
-    assert.ok(err);
-    assert.equal(err.code, 'ER_NOT_ALLOWED_COMMAND');
-  });
-
-  connection.query('SELECT * FROM ??', [table], function (err, rows) {
+  // only test result if server permits local infile
+  connection.query('SELECT @@local_infile', function (err, rows) {
     assert.ifError(err);
-    assert.equal(rows.length, 0);
-  });
+    if (rows[0]['@@local_infile'] === 1) {
+      connection.query([
+        'CREATE TEMPORARY TABLE ?? (',
+        '`id` int(11) unsigned NOT NULL AUTO_INCREMENT,',
+        '`title` varchar(400),',
+        'PRIMARY KEY (`id`)',
+        ') ENGINE=InnoDB DEFAULT CHARSET=utf8'
+      ].join('\n'), [table], assert.ifError);
 
-  connection.end(assert.ifError);
+      var sql =
+          'LOAD DATA LOCAL INFILE ? INTO TABLE ?? CHARACTER SET utf8 ' +
+          'FIELDS TERMINATED BY ? ' +
+          'LINES TERMINATED BY ? ' +
+          '(id, title)';
+
+      connection.query(sql, [path, table, ',', newline], function (err) {
+        assert.ok(err);
+        if (common.isMariaDB(connection) && common.minVersion(connection, 10, 5, 0)) {
+          // mariadb specific error ER_LOAD_INFILE_CAPABILITY_DISABLED
+          assert.equal(err.errno, 4166);
+        } else {
+          assert.equal(err.code, 'ER_NOT_ALLOWED_COMMAND');
+        }
+      });
+
+      connection.query('SELECT * FROM ??', [table], function (err, rows) {
+        assert.ifError(err);
+        assert.equal(rows.length, 0);
+      });
+    }
+    connection.end(assert.ifError);
+  });
 });

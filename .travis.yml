@@ -41,6 +41,10 @@ matrix:
       env: "DOCKER_MYSQL_TYPE=mariadb DOCKER_MYSQL_VERSION=10.2"
     - node_js: *lts
       env: "DOCKER_MYSQL_TYPE=mariadb DOCKER_MYSQL_VERSION=10.3"
+    - node_js: *lts
+      env: "DOCKER_MYSQL_TYPE=mariadb DOCKER_MYSQL_VERSION=10.4"
+    - node_js: *lts
+      env: "DOCKER_MYSQL_TYPE=mariadb DOCKER_MYSQL_VERSION=10.5"
 
 dist: trusty
 addons:
