@@ -158,3 +158,90 @@ function mergeTestConfig(config) {
 
   return config;
 }
+
+/**
+ * Indicate if connection use a MariaDB or MySQL server
+ * @param {String=} connection current connection
+ * @returns {boolean} true if MariaDB server
+ */
+common.isMariaDB = function(connection) {
+  var serverVersion = '';
+  if (connection && connection._protocol && connection._protocol._handshakeInitializationPacket) {
+    serverVersion = connection._protocol._handshakeInitializationPacket.serverVersion + '';
+  }
+  // MariaDB prefix server string with '5.5.5-'
+  // Since https://jira.mariadb.org/browse/MDEV-7780 server version can skipped '5.5.5-' prefix
+  // so adding test containing 'MariaDB'
+  return (serverVersion.indexOf('5.5.5-') === 0 || serverVersion.indexOf('MariaDB') !== -1);
+};
+
+/**
+ * Return true if connection has minimum version
+ *
+ * @param {Object=} connection current connection
+ * @param {Number=} major major server version
+ * @param {Number=} minor minor server version
+ * @param {Number=} patch patch server version
+ * @returns {boolean} true is server version is >= to major.minor.patch version.
+ */
+common.minVersion = function(connection, major, minor, patch) {
+  var versionString = '';
+  if (connection && connection._protocol && connection._protocol._handshakeInitializationPacket) {
+    versionString = connection._protocol._handshakeInitializationPacket.serverVersion;
+  }
+  if (!versionString) throw new Error('unknown server version');
+  if (!major) throw new Error('a major version must be set');
+  if (!minor) minor = 0;
+  if (!patch) patch = 0;
+  var ver = parseVersionString(versionString);
+
+  return (
+    ver.major > major ||
+      (ver.major === major && ver.minor > minor) ||
+      (ver.major === major && ver.minor === minor && ver.patch >= patch)
+  );
+};
+
+/**
+ * Utility function to return JSON object from versionString.
+ * Example:
+ *   '5.5.5-10.4.13-MariaDB' => { "major": 10, "minor": 4, "patch": 13 }
+ * @param {String=} versionString Server verion string
+ * @returns {{major: number, minor: number, patch: number}} JSON server version
+ */
+var parseVersionString = function(versionString) {
+  var ver = versionString.indexOf('5.5.5-') === 0 ? versionString.substring(6) : versionString;
+  var char;
+  var offset = 0;
+  var type = 0;
+  var val = 0;
+
+  var result = {
+    major : 0,
+    minor : 0,
+    patch : 0
+  };
+  for (; offset < ver.length; offset++) {
+    char = ver.charCodeAt(offset);
+    if (char < 48 || char > 57) {
+      switch (type) {
+        case 0:
+          result.major = val;
+          break;
+        case 1:
+          result.minor = val;
+          break;
+        case 2:
+          result.patch = val;
+          return result;
+      }
+      type++;
+      val = 0;
+    } else {
+      val = val * 10 + char - 48;
+    }
+  }
+  //serverVersion finished by number like "5.5.57", assign patchVersion
+  if (type === 2) result.patch = val;
+  return result;
+};
