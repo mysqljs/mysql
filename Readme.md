@@ -1249,7 +1249,7 @@ object. Additionally they typically come with two extra properties:
 * `err.sqlMessage`: String, contains the message string that provides a
   textual description of the error. Only populated from [MySQL server error][].
 
-[Error]: https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Error
+[Error]: https://developer.mozilla.org/en-us/docs/Web/JavaScript/Reference/Global_Objects/Error
 [MySQL server error]: https://dev.mysql.com/doc/refman/5.5/en/server-error-reference.html
 
 Fatal errors are propagated to *all* pending callbacks. In the example below, a
