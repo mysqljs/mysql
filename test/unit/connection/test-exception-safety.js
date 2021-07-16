@@ -73,15 +73,10 @@ server.on('connection', function (conn) {
   conn.on('query', function(packet) {
     switch (packet.sql) {
       case 'INVALID SQL':
-        this._sendPacket(new common.Packets.ErrorPacket({
-          errno   : common.Errors.ER_PARSE_ERROR,
-          message : 'Parse error'
-        }));
-        this._parser.resetPacketNumber();
+        this.error('Parse error', common.Errors.ER_PARSE_ERROR);
         break;
       case 'USE test':
-        this._sendPacket(new common.Packets.OkPacket());
-        this._parser.resetPacketNumber();
+        this.ok();
         break;
       default:
         this._handleQueryPacket(packet);

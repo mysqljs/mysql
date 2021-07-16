@@ -37,7 +37,7 @@ server.listen(common.fakeServerPort, function (err) {
 
 server.on('connection', function (conn) {
   if (count === 0) {
-    conn.deny('You suck.', common.Errors.ER_ACCESS_DENIED_ERROR);
+    conn.deny();
     return;
   }
 

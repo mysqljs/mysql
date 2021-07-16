@@ -18,6 +18,7 @@ common.fakeServerSocket = __dirname + '/fake_server.sock';
 common.testDatabase = process.env.MYSQL_DATABASE || 'test';
 
 // Export common modules
+common.Auth             = require(common.lib + '/protocol/Auth');
 common.Charsets         = require(common.lib + '/protocol/constants/charsets');
 common.ClientConstants  = require(common.lib + '/protocol/constants/client');
 common.Connection       = require(common.lib + '/Connection');
@@ -141,7 +142,7 @@ common.getSSLConfig = function() {
   return {
     ca      : fs.readFileSync(path.join(common.fixtures, 'server.crt'), 'ascii'),
     cert    : fs.readFileSync(path.join(common.fixtures, 'server.crt'), 'ascii'),
-    ciphers : 'ECDHE-RSA-AES128-SHA256:AES128-GCM-SHA256:RC4:HIGH:!MD5:!aNULL:!EDH',
+    ciphers : 'ECDHE-RSA-AES128-SHA256:AES128-GCM-SHA256:AES128-SHA:HIGH:!MD5:!aNULL:!EDH',
     key     : fs.readFileSync(path.join(common.fixtures, 'server.key'), 'ascii')
   };
 };

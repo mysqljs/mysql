@@ -1,11 +1,12 @@
 var assert     = require('assert');
-var Buffer     = require('safe-buffer').Buffer;
+var Crypto     = require('crypto');
 var common     = require('../../common');
 var connection = common.createConnection({
   port     : common.fakeServerPort,
   password : 'authswitch'
 });
 
+var random = Crypto.pseudoRandomBytes || Crypto.randomBytes; // Depends on node.js version
 var server = common.createFakeServer();
 
 var connected;
@@ -23,11 +24,21 @@ server.listen(common.fakeServerPort, function (err) {
 });
 
 server.on('connection', function(incomingConnection) {
-  incomingConnection.handshake({
-    user           : connection.config.user,
-    password       : connection.config.password,
-    authMethodName : 'mysql_native_password',
-    authMethodData : Buffer.from('00112233445566778899AABBCCDDEEFF0102030400', 'hex')
+  random(20, function (err, scramble) {
+    assert.ifError(err);
+
+    incomingConnection.on('authSwitchResponse', function (packet) {
+      this._sendAuthResponse(packet.data, common.Auth.token('authswitch', scramble));
+    });
+
+    incomingConnection.on('clientAuthentication', function () {
+      this.authSwitchRequest({
+        authMethodName : 'mysql_native_password',
+        authMethodData : scramble
+      });
+    });
+
+    incomingConnection.handshake();
   });
 });
 

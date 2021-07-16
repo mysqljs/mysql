@@ -1,8 +1,8 @@
 # mysql
 
-[![NPM Version][npm-image]][npm-url]
-[![NPM Downloads][downloads-image]][downloads-url]
-[![Node.js Version][node-version-image]][node-version-url]
+[![NPM Version][npm-version-image]][npm-url]
+[![NPM Downloads][npm-downloads-image]][npm-url]
+[![Node.js Version][node-image]][node-url]
 [![Linux Build][travis-image]][travis-url]
 [![Windows Build][appveyor-image]][appveyor-url]
 [![Test Coverage][coveralls-image]][coveralls-url]
@@ -16,28 +16,33 @@
 - [Community](#community)
 - [Establishing connections](#establishing-connections)
 - [Connection options](#connection-options)
-- [SSL options](#ssl-options)
+  - [SSL options](#ssl-options)
+  - [Connection flags](#connection-flags)
 - [Terminating connections](#terminating-connections)
 - [Pooling connections](#pooling-connections)
 - [Pool options](#pool-options)
 - [Pool events](#pool-events)
+  - [acquire](#acquire)
+  - [connection](#connection)
+  - [enqueue](#enqueue)
+  - [release](#release)
 - [Closing all the connections in a pool](#closing-all-the-connections-in-a-pool)
 - [PoolCluster](#poolcluster)
-- [PoolCluster options](#poolcluster-options)
+  - [PoolCluster options](#poolcluster-options)
 - [Switching users and altering connection state](#switching-users-and-altering-connection-state)
 - [Server disconnects](#server-disconnects)
 - [Performing queries](#performing-queries)
 - [Escaping query values](#escaping-query-values)
 - [Escaping query identifiers](#escaping-query-identifiers)
-- [Preparing Queries](#preparing-queries)
-- [Custom format](#custom-format)
+  - [Preparing Queries](#preparing-queries)
+  - [Custom format](#custom-format)
 - [Getting the id of an inserted row](#getting-the-id-of-an-inserted-row)
 - [Getting the number of affected rows](#getting-the-number-of-affected-rows)
 - [Getting the number of changed rows](#getting-the-number-of-changed-rows)
 - [Getting the connection ID](#getting-the-connection-id)
 - [Executing queries in parallel](#executing-queries-in-parallel)
 - [Streaming query rows](#streaming-query-rows)
-- [Piping results with Streams](#piping-results-with-streams)
+  - [Piping results with Streams](#piping-results-with-streams)
 - [Multiple statement queries](#multiple-statement-queries)
 - [Stored procedures](#stored-procedures)
 - [Joins with overlapping column names](#joins-with-overlapping-column-names)
@@ -47,11 +52,17 @@
 - [Error handling](#error-handling)
 - [Exception Safety](#exception-safety)
 - [Type casting](#type-casting)
-- [Connection Flags](#connection-flags)
+  - [Number](#number)
+  - [Date](#date)
+  - [Buffer](#buffer)
+  - [String](#string)
+  - [Custom type casting](#custom-type-casting)
 - [Debugging and reporting problems](#debugging-and-reporting-problems)
 - [Security issues](#security-issues)
 - [Contributing](#contributing)
 - [Running tests](#running-tests)
+  - [Running unit tests](#running-unit-tests)
+  - [Running integration tests](#running-integration-tests)
 - [Todo](#todo)
 
 ## Install
@@ -136,7 +147,7 @@ spend more time on it (ordered by time of contribution):
   video encoding as a service, check it out)
 * [Joyent](http://www.joyent.com/)
 * [pinkbike.com](http://pinkbike.com/)
-* [Holiday Extras](http://www.holidayextras.co.uk/) (they are [hiring](http://join.holidayextras.co.uk/))
+* [Holiday Extras](https://www.holidayextras.com/) (they are [hiring](https://join.holidayextras.co.uk/))
 * [Newscope](http://newscope.com/) (they are [hiring](https://newscope.com/unternehmen/jobs/))
 
 ## Community
@@ -221,7 +232,7 @@ issue [#501](https://github.com/mysqljs/mysql/issues/501). (Default: `false`)
   objects only when they cannot be accurately represented with [JavaScript Number objects] (http://ecma262-5.com/ELS5_HTML.htm#Section_8.5)
   (which happens when they exceed the [-2^53, +2^53] range), otherwise they will be returned as
   Number objects. This option is ignored if `supportBigNumbers` is disabled.
-* `dateStrings`: Force date types (TIMESTAMP, DATETIME, DATE) to be returned as strings rather then
+* `dateStrings`: Force date types (TIMESTAMP, DATETIME, DATE) to be returned as strings rather than
    inflated into JavaScript Date objects. Can be `true`/`false` or an array of type names to keep as
    strings. (Default: `false`)
 * `debug`: Prints protocol details to stdout. Can be `true`/`false` or an array of packet type names
@@ -229,6 +240,7 @@ issue [#501](https://github.com/mysqljs/mysql/issues/501). (Default: `false`)
 * `trace`: Generates stack traces on `Error` to include call site of library
    entrance ("long stack traces"). Slight performance penalty for most calls.
    (Default: `true`)
+* `localInfile`: Allow `LOAD DATA INFILE` to use the `LOCAL` modifier. (Default: `true`)
 * `multipleStatements`: Allow multiple mysql statements per query. Be careful
   with this, it could increase the scope of SQL injection attacks. (Default: `false`)
 * `flags`: List of connection flags to use other than the default ones. It is
@@ -284,6 +296,63 @@ var connection = mysql.createConnection({
 });
 ```
 
+### Connection flags
+
+If, for any reason, you would like to change the default connection flags, you
+can use the connection option `flags`. Pass a string with a comma separated list
+of items to add to the default flags. If you don't want a default flag to be used
+prepend the flag with a minus sign. To add a flag that is not in the default list,
+just write the flag name, or prefix it with a plus (case insensitive).
+
+```js
+var connection = mysql.createConnection({
+  // disable FOUND_ROWS flag, enable IGNORE_SPACE flag
+  flags: '-FOUND_ROWS,IGNORE_SPACE'
+});
+```
+
+The following flags are available:
+
+- `COMPRESS` - Enable protocol compression. This feature is not currently supported
+  by the Node.js implementation so cannot be turned on. (Default off)
+- `CONNECT_WITH_DB` - Ability to specify the database on connection. (Default on)
+- `FOUND_ROWS` - Send the found rows instead of the affected rows as `affectedRows`.
+  (Default on)
+- `IGNORE_SIGPIPE` - Don't issue SIGPIPE if network failures. This flag has no effect
+  on this Node.js implementation. (Default on)
+- `IGNORE_SPACE` - Let the parser ignore spaces before the `(` in queries. (Default on)
+- `INTERACTIVE` - Indicates to the MySQL server this is an "interactive" client. This
+  will use the interactive timeouts on the MySQL server and report as interactive in
+  the process list. (Default off)
+- `LOCAL_FILES` - Can use `LOAD DATA LOCAL`. This flag is controlled by the connection
+  option `localInfile`. (Default on)
+- `LONG_FLAG` - Longer flags in Protocol::ColumnDefinition320. (Default on)
+- `LONG_PASSWORD` - Use the improved version of Old Password Authentication.
+  (Default on)
+- `MULTI_RESULTS` - Can handle multiple resultsets for queries. (Default on)
+- `MULTI_STATEMENTS` - The client may send multiple statement per query or
+  statement prepare (separated by `;`). This flag is controlled by the connection
+  option `multipleStatements`. (Default off)
+- `NO_SCHEMA`
+- `ODBC` Special handling of ODBC behaviour. This flag has no effect on this Node.js
+  implementation. (Default on)
+- `PLUGIN_AUTH` - Uses the plugin authentication mechanism when connecting to the
+  MySQL server. This feature is not currently supported by the Node.js implementation
+  so cannot be turned on. (Default off)
+- `PROTOCOL_41` - Uses the 4.1 protocol. (Default on)
+- `PS_MULTI_RESULTS` - Can handle multiple resultsets for execute. (Default on)
+- `REMEMBER_OPTIONS` - This is specific to the C client, and has no effect on this
+  Node.js implementation. (Default off)
+- `RESERVED` - Old flag for the 4.1 protocol. (Default on)
+- `SECURE_CONNECTION` - Support native 4.1 authentication. (Default on)
+- `SSL` - Use SSL after handshake to encrypt data in transport. This feature is
+  controlled though the `ssl` connection option, so the flag has no effect.
+  (Default off)
+- `SSL_VERIFY_SERVER_CERT` - Verify the server certificate during SSL set up. This
+  feature is controlled though the `ssl.rejectUnauthorized` connection option, so
+  the flag has no effect. (Default off)
+- `TRANSACTIONS` - Asks for the transaction status flags. (Default on)
+
 ## Terminating connections
 
 There are two ways to end a connection. Terminating a connection gracefully is
@@ -317,7 +386,8 @@ Rather than creating and managing connections one-by-one, this module also
 provides built-in connection pooling using `mysql.createPool(config)`.
 [Read more about connection pooling](https://en.wikipedia.org/wiki/Connection_pool).
 
-Use pool directly.
+Create a pool and use it directly:
+
 ```js
 var mysql = require('mysql');
 var pool  = mysql.createPool({
@@ -334,34 +404,22 @@ pool.query('SELECT 1 + 1 AS solution', function (error, results, fields) {
 });
 ```
 
-Connections can be pooled to ease sharing a single connection, or managing
-multiple connections.
-
-```js
-var mysql = require('mysql');
-var pool  = mysql.createPool({
-  host     : 'example.org',
-  user     : 'bob',
-  password : 'secret',
-  database : 'my_db'
-});
-
-pool.getConnection(function(err, connection) {
-  // connected! (unless `err` is set)
-});
-```
-
-When you are done with a connection, just call `connection.release()` and the
-connection will return to the pool, ready to be used again by someone else.
+This is a shortcut for the `pool.getConnection()` -> `connection.query()` ->
+`connection.release()` code flow. Using `pool.getConnection()` is useful to
+share connection state for subsequent queries. This is because two calls to
+`pool.query()` may use two different connections and run in parallel. This is
+the basic structure:
 
 ```js
 var mysql = require('mysql');
 var pool  = mysql.createPool(...);
 
 pool.getConnection(function(err, connection) {
+  if (err) throw err; // not connected!
+
   // Use the connection
   connection.query('SELECT something FROM sometable', function (error, results, fields) {
-    // And done with the connection.
+    // When done with the connection, release it.
     connection.release();
 
     // Handle error after the release.
@@ -392,7 +450,9 @@ constructor. In addition to those options pools accept a few extras:
 
 * `acquireTimeout`: The milliseconds before a timeout occurs during the connection
   acquisition. This is slightly different from `connectTimeout`, because acquiring
-  a pool connection does not always involve making a connection. (Default: `10000`)
+  a pool connection does not always involve making a connection. If a connection
+  request is queued, the time the request spends in the queue does not count
+  towards this timeout. (Default: `10000`)
 * `waitForConnections`: Determines the pool's action when no connections are
   available and the limit has been reached. If `true`, the pool will queue the
   connection request and call it when one becomes available. If `false`, the
@@ -470,28 +530,19 @@ pool.end(function (err) {
 });
 ```
 
-The `end` method takes an _optional_ callback that you can use to know once
-all the connections have ended.
+The `end` method takes an _optional_ callback that you can use to know when
+all the connections are ended.
 
-**Once `pool.end()` has been called, `pool.getConnection` and other operations
-can no longer be performed**
+**Once `pool.end` is called, `pool.getConnection` and other operations
+can no longer be performed.** Wait until all connections in the pool are
+released before calling `pool.end`. If you use the shortcut method
+`pool.query`, in place of `pool.getConnection` → `connection.query` →
+`connection.release`, wait until it completes.
 
-This works by calling `connection.end()` on every active connection in the
-pool, which queues a `QUIT` packet on the connection. And sets a flag to
-prevent `pool.getConnection` from continuing to create any new connections.
-
-Since this queues a `QUIT` packet on each connection, all commands / queries
-already in progress will complete, just like calling `connection.end()`. If
-`pool.end` is called and there are connections that have not yet been released,
-those connections will fail to execute any new commands after the `pool.end`
-since they have a pending `QUIT` packet in their queue; wait until releasing
-all connections back to the pool before calling `pool.end()`.
-
-Since the `pool.query` method is a short-hand for the `pool.getConnection` ->
-`connection.query` -> `connection.release()` flow, calling `pool.end()` before
-all the queries added via `pool.query` have completed, since the underlying
-`pool.getConnection` will fail due to all connections ending and not allowing
-new connections to be created.
+`pool.end` calls `connection.end` on every active connection in the pool.
+This queues a `QUIT` packet on the connection and sets a flag to prevent
+`pool.getConnection` from creating new connections. All commands / queries
+already in progress will complete, but new commands won't execute.
 
 ## PoolCluster
 
@@ -603,6 +654,13 @@ terminated, an existing connection object cannot be re-connected by design.
 With Pool, disconnected connections will be removed from the pool freeing up
 space for a new connection to be created on the next getConnection call.
 
+With PoolCluster, disconnected connections will count as errors against the
+related node, incrementing the error code for that node. Once there are more than
+`removeNodeErrorCount` errors on a given node, it is removed from the cluster.
+When this occurs, the PoolCluster may emit a `POOL_NONEONLINE` error if there are
+no longer any matching nodes for the pattern. The `restoreNodeTimeout` config can
+be set to restore offline nodes after a given timeout.
+
 ## Performing queries
 
 The most basic way to perform a query is to call the `.query()` method on an object
@@ -633,7 +691,7 @@ connection.query('SELECT * FROM `books` WHERE `author` = ?', ['David'], function
 The third form `.query(options, callback)` comes when using various advanced
 options on the query, like [escaping query values](#escaping-query-values),
 [joins with overlapping column names](#joins-with-overlapping-column-names),
-[timeouts](#timeout), and [type casting](#type-casting).
+[timeouts](#timeouts), and [type casting](#type-casting).
 
 ```js
 connection.query({
@@ -657,6 +715,22 @@ connection.query({
     timeout: 40000, // 40s
   },
   ['David'],
+  function (error, results, fields) {
+    // error will be an Error if one occurred during the query
+    // results will contain the results of the query
+    // fields will contain information about the returned results fields (if any)
+  }
+);
+```
+
+If the query only has a single replacement character (`?`), and the value is
+not `null`, `undefined`, or an array, it can be passed directly as the second
+argument to `.query`:
+
+```js
+connection.query(
+  'SELECT * FROM `books` WHERE `author` = ?',
+  'David',
   function (error, results, fields) {
     // error will be an Error if one occurred during the query
     // results will contain the results of the query
@@ -1163,20 +1237,24 @@ review carefully in order to write solid applications.
 Most errors created by this module are instances of the JavaScript [Error][]
 object. Additionally they typically come with two extra properties:
 
-* `err.code`: Either a [MySQL server error][] (e.g.
-  `'ER_ACCESS_DENIED_ERROR'`), a Node.js error (e.g. `'ECONNREFUSED'`) or an
-  internal error (e.g. `'PROTOCOL_CONNECTION_LOST'`).
+* `err.code`: String, contains the MySQL server error symbol if the error is
+  a [MySQL server error][] (e.g. `'ER_ACCESS_DENIED_ERROR'`), a Node.js error
+  code if it is a Node.js error (e.g. `'ECONNREFUSED'`), or an internal error
+  code (e.g. `'PROTOCOL_CONNECTION_LOST'`).
+* `err.errno`: Number, contains the MySQL server error number. Only populated
+  from [MySQL server error][].
 * `err.fatal`: Boolean, indicating if this error is terminal to the connection
-  object. If the error is not from a MySQL protocol operation, this properly
+  object. If the error is not from a MySQL protocol operation, this property
   will not be defined.
 * `err.sql`: String, contains the full SQL of the failed query. This can be
   useful when using a higher level interface like an ORM that is generating
   the queries.
+* `err.sqlState`: String, contains the five-character SQLSTATE value. Only populated from [MySQL server error][].
 * `err.sqlMessage`: String, contains the message string that provides a
   textual description of the error. Only populated from [MySQL server error][].
 
 [Error]: https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Error
-[MySQL server error]: http://dev.mysql.com/doc/refman/5.5/en/error-messages-server.html
+[MySQL server error]: https://dev.mysql.com/doc/refman/5.5/en/server-error-reference.html
 
 Fatal errors are propagated to *all* pending callbacks. In the example below, a
 fatal error is triggered by trying to connect to an invalid port. Therefore the
@@ -1310,94 +1388,58 @@ var query = connection.query(options, function (error, results, fields) {
 });
 ```
 
+### Custom type casting
+
 You can also pass a function and handle type casting yourself. You're given some
 column information like database, table and name and also type and length. If you
 just want to apply a custom type casting to a specific type you can do it and then
-fallback to the default. Here's an example of converting `TINYINT(1)` to boolean:
+fallback to the default.
+
+The function is provided two arguments `field` and `next` and is expected to
+return the value for the given field by invoking the parser functions through
+the `field` object.
+
+The `field` argument is a `Field` object and contains data about the field that
+need to be parsed. The following are some of the properties on a `Field` object:
+
+  * `db` - a string of the database the field came from.
+  * `table` - a string of the table the field came from.
+  * `name` - a string of the field name.
+  * `type` - a string of the field type in all caps.
+  * `length` - a number of the field length, as given by the database.
+
+The `next` argument is a `function` that, when called, will return the default
+type conversion for the given field.
+
+When getting the field data, the following helper methods are present on the
+`field` object:
+
+  * `.string()` - parse the field into a string.
+  * `.buffer()` - parse the field into a `Buffer`.
+  * `.geometry()` - parse the field as a geometry value.
+
+The MySQL protocol is a text-based protocol. This means that over the wire, all
+field types are represented as a string, which is why only string-like functions
+are available on the `field` object. Based on the type information (like `INT`),
+the type cast should convert the string field into a different JavaScript type
+(like a `number`).
+
+Here's an example of converting `TINYINT(1)` to boolean:
 
 ```js
-connection.query({
-  sql: '...',
+connection = mysql.createConnection({
   typeCast: function (field, next) {
-    if (field.type == 'TINY' && field.length == 1) {
-      return (field.string() == '1'); // 1 = true, 0 = false
+    if (field.type === 'TINY' && field.length === 1) {
+      return (field.string() === '1'); // 1 = true, 0 = false
+    } else {
+      return next();
     }
-    return next();
   }
 });
 ```
-__WARNING: YOU MUST INVOKE the parser using one of these three field functions in your custom typeCast callback. They can only be called once. (see [#539](https://github.com/mysqljs/mysql/issues/539) for discussion)__
 
-```
-field.string()
-field.buffer()
-field.geometry()
-```
-are aliases for
-```
-parser.parseLengthCodedString()
-parser.parseLengthCodedBuffer()
-parser.parseGeometryValue()
-```
-__You can find which field function you need to use by looking at: [RowDataPacket.prototype._typeCast](https://github.com/mysqljs/mysql/blob/master/lib/protocol/packets/RowDataPacket.js#L41)__
-
-
-## Connection Flags
-
-If, for any reason, you would like to change the default connection flags, you
-can use the connection option `flags`. Pass a string with a comma separated list
-of items to add to the default flags. If you don't want a default flag to be used
-prepend the flag with a minus sign. To add a flag that is not in the default list,
-just write the flag name, or prefix it with a plus (case insensitive).
-
-**Please note that some available flags that are not supported (e.g.: Compression),
-are still not allowed to be specified.**
-
-### Example
-
-The next example blacklists FOUND_ROWS flag from default connection flags.
-
-```js
-var connection = mysql.createConnection("mysql://localhost/test?flags=-FOUND_ROWS");
-```
-
-### Default Flags
-
-The following flags are sent by default on a new connection:
-
-- `CONNECT_WITH_DB` - Ability to specify the database on connection.
-- `FOUND_ROWS` - Send the found rows instead of the affected rows as `affectedRows`.
-- `IGNORE_SIGPIPE` - Old; no effect.
-- `IGNORE_SPACE` - Let the parser ignore spaces before the `(` in queries.
-- `LOCAL_FILES` - Can use `LOAD DATA LOCAL`.
-- `LONG_FLAG`
-- `LONG_PASSWORD` - Use the improved version of Old Password Authentication.
-- `MULTI_RESULTS` - Can handle multiple resultsets for COM_QUERY.
-- `ODBC` Old; no effect.
-- `PROTOCOL_41` - Uses the 4.1 protocol.
-- `PS_MULTI_RESULTS` - Can handle multiple resultsets for COM_STMT_EXECUTE.
-- `RESERVED` - Old flag for the 4.1 protocol.
-- `SECURE_CONNECTION` - Support native 4.1 authentication.
-- `TRANSACTIONS` - Asks for the transaction status flags.
-
-In addition, the following flag will be sent if the option `multipleStatements`
-is set to `true`:
-
-- `MULTI_STATEMENTS` - The client may send multiple statement per query or
-  statement prepare.
-
-### Other Available Flags
-
-There are other flags available. They may or may not function, but are still
-available to specify.
-
-- COMPRESS
-- INTERACTIVE
-- NO_SCHEMA
-- PLUGIN_AUTH
-- REMEMBER_OPTIONS
-- SSL
-- SSL_VERIFY_SERVER_CERT
+__WARNING: YOU MUST INVOKE the parser using one of these three field functions
+in your custom typeCast callback. They can only be called once.__
 
 ## Debugging and reporting problems
 
@@ -1437,8 +1479,8 @@ opening a GitHub issue simply asking to whom a security issues should be
 addressed to without disclosing the issue or type of issue.
 
 An ideal report would include a clear indication of what the security issue is
-and how it would be exploited, ideally with an accompaning proof of concept
-("PoC") for collaborators to work again and validate potentional fixes against.
+and how it would be exploited, ideally with an accompanying proof of concept
+("PoC") for collaborators to work against and validate potentional fixes against.
 
 ## Contributing
 
@@ -1497,15 +1539,14 @@ $ MYSQL_HOST=localhost MYSQL_PORT=3306 MYSQL_DATABASE=node_mysql_test MYSQL_USER
 * Prepared statements
 * Support for encodings other than UTF-8 / ASCII
 
-[npm-image]: https://img.shields.io/npm/v/mysql.svg
-[npm-url]: https://npmjs.org/package/mysql
-[node-version-image]: https://img.shields.io/node/v/mysql.svg
-[node-version-url]: https://nodejs.org/en/download/
-[travis-image]: https://img.shields.io/travis/mysqljs/mysql/master.svg?label=linux
-[travis-url]: https://travis-ci.org/mysqljs/mysql
-[appveyor-image]: https://img.shields.io/appveyor/ci/dougwilson/node-mysql/master.svg?label=windows
+[appveyor-image]: https://badgen.net/appveyor/ci/dougwilson/node-mysql/master?label=windows
 [appveyor-url]: https://ci.appveyor.com/project/dougwilson/node-mysql
-[coveralls-image]: https://img.shields.io/coveralls/mysqljs/mysql/master.svg
+[coveralls-image]: https://badgen.net/coveralls/c/github/mysqljs/mysql/master
 [coveralls-url]: https://coveralls.io/r/mysqljs/mysql?branch=master
-[downloads-image]: https://img.shields.io/npm/dm/mysql.svg
-[downloads-url]: https://npmjs.org/package/mysql
+[node-image]: https://badgen.net/npm/node/mysql
+[node-url]: https://nodejs.org/en/download
+[npm-downloads-image]: https://badgen.net/npm/dm/mysql
+[npm-url]: https://npmjs.org/package/mysql
+[npm-version-image]: https://badgen.net/npm/v/mysql
+[travis-image]: https://badgen.net/travis/mysqljs/mysql/master
+[travis-url]: https://travis-ci.org/mysqljs/mysql

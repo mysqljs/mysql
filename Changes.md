@@ -6,10 +6,50 @@ you spot any mistakes.
 
 ## HEAD
 
+* Support Node.js 14.x
+* Update `sqlstring` to 2.3.2
+  - perf: remove outdated array pattern
+
+## v2.18.1 (2020-01-23)
+
+* Fix Amazon RDS profile for yaSSL MySQL servers with 2019 CA #2292
+
+## v2.18.0 (2020-01-21)
+
+* Add `localInfile` option to control `LOAD DATA LOCAL INFILE`
+* Add new Amazon RDS Root 2019 CA to Amazon RDS SSL profile #2280
+* Add new error codes up to MySQL 5.7.29
+* Fix early detection of bad callback to `connection.query`
+* Support Node.js 12.x #2211
+* Support Node.js 13.x
+* Support non-enumerable properties in object argument to `connection.query` #2253
+* Update `bignumber.js` to 9.0.0
+* Update `readable-stream` to 2.3.7
+
+## v2.17.1 (2019-04-18)
+
+* Update `bignumber.js` to 7.2.1 #2206
+  - Fix npm deprecation warning
+
+## v2.17.0 (2019-04-17)
+
+* Add reverse type lookup for small performance gain #2170
+* Fix `connection.threadId` missing on handshake failure
+* Fix duplicate packet name in debug output
+* Fix no password support for old password protocol
+* Remove special case for handshake in determine packet code
+* Small performance improvement starting command sequence
+* Support auth switch in change user flow #1776
+* Support Node.js 11.x
+* Update `bignumber.js` to 6.0.0
+
+## v2.16.0 (2018-07-17)
+
 * Add Amazon RDS GovCloud SSL certificates #1876
 * Add new error codes up to MySQL 5.7.21
 * Include connection ID in debug output
 * Support Node.js 9.x
+* Support Node.js 10.x #2003 #2024 #2026 #2034
 * Update Amazon RDS SSL certificates
 * Update `bignumber.js` to 4.1.0
 * Update `readable-stream` to 2.3.6
@@ -310,6 +350,7 @@ you spot any mistakes.
 ## v2.0.0-alpha9 (2013-08-27)
 
 * Add query to pool to execute queries directly using the pool
+* Add `sqlState` property to `Error` objects #556
 * Pool option to set queue limit
 * Pool sends 'connection' event when it opens a new connection
 * Added stringifyObjects option to treat input as strings rather than objects (#501)

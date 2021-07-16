@@ -10,8 +10,7 @@ server.listen(common.fakeServerPort, function(err) {
   connection.connect(function(err) {
     assert.ifError(err);
 
-    serverConn._sendPacket(new common.Packets.OkPacket());
-    serverConn._parser.resetPacketNumber();
+    serverConn.ok();
 
     connection.end(function(err) {
       assert.ok(err);

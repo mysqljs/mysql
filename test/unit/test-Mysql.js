@@ -37,12 +37,24 @@ test('Mysql.Types', {
     assert.equal(Mysql.Types, common.Types);
   },
 
-  'string names to integer values': function() {
+  'contains string to integer values': function() {
     var types = Object.keys(Mysql.Types);
     assert.ok(types.length > 0);
     types.forEach(function (type) {
-      assert.ok(/^[A-Z_]+/.test(type));
-      assert.equal(typeof Mysql.Types[type], 'number');
+      if (!/^[0-9]+$/.test(type)) {
+        assert.ok(/^[A-Z_]+/.test(type));
+        assert.equal(typeof Mysql.Types[type], 'number');
+      }
+    });
+  },
+
+  'contains integer values to string names': function() {
+    var types = Object.keys(Mysql.Types);
+    assert.ok(types.length > 0);
+    types.forEach(function (type) {
+      if (/^[0-9]+$/.test(type)) {
+        assert.equal(typeof Mysql.Types[type], 'string');
+      }
     });
   }
 });

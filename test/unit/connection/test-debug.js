@@ -1,6 +1,7 @@
 var assert     = require('assert');
 var common     = require('../../common');
 var connection = common.createConnection({debug: true, port: common.fakeServerPort});
+var util       = require('util');
 
 var tid    = 0;
 var server = common.createFakeServer();
@@ -10,9 +11,10 @@ server.listen(common.fakeServerPort, function (err) {
 
   var messages = [];
 
-  console.log = function (str) {
-    if (typeof str === 'string' && str.length !== 0) {
-      messages.push(str);
+  console.log = function () {
+    var msg = util.format.apply(this, arguments);
+    if (String(msg).indexOf('--') !== -1) {
+      messages.push(msg.split(' {')[0]);
     }
   };
 
@@ -21,7 +23,7 @@ server.listen(common.fakeServerPort, function (err) {
     assert.equal(messages.length, 5);
     assert.deepEqual(messages, [
       '<-- HandshakeInitializationPacket',
-      '--> ClientAuthenticationPacket',
+      '--> (1) ClientAuthenticationPacket',
       '<-- (1) OkPacket',
       '--> (1) ComPingPacket',
       '<-- (1) OkPacket'

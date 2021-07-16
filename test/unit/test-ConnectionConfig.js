@@ -1,4 +1,5 @@
 var common           = require('../common');
+var Crypto           = require('crypto');
 var test             = require('utest');
 var assert           = require('assert');
 var ConnectionConfig = common.ConnectionConfig;
@@ -168,13 +169,24 @@ test('ConnectionConfig#Constructor.ssl', {
     assert.equal(config.ssl, false);
   },
 
-  'string loads pre-defined profile': function() {
+  'string "Amazon RDS" loads valid profile': function() {
     var config = new ConnectionConfig({
       ssl: 'Amazon RDS'
     });
 
     assert.ok(config.ssl);
-    assert.ok(/-----BEGIN CERTIFICATE-----/.test(config.ssl.ca));
+    assert.ok(Array.isArray(config.ssl.ca));
+
+    config.ssl.ca.forEach(function (ca) {
+      assert.equal(typeof ca, 'string', 'ca is a string');
+
+      if (Crypto.createPublicKey) {
+        var key = null;
+
+        assert.doesNotThrow(function () { key = Crypto.createPublicKey(ca); });
+        assert.equal(key.type, 'public');
+      }
+    });
   },
 
   'throws on unknown profile name': function() {

@@ -4,6 +4,7 @@ var connection = common.createConnection({
   debug : ['OkPacket', 'ComPingPacket'],
   port  : common.fakeServerPort
 });
+var util       = require('util');
 
 var tid    = 0;
 var server = common.createFakeServer();
@@ -13,9 +14,10 @@ server.listen(common.fakeServerPort, function (err) {
 
   var messages = [];
 
-  console.log = function (str) {
-    if (typeof str === 'string' && str.length !== 0) {
-      messages.push(str);
+  console.log = function () {
+    var msg = util.format.apply(this, arguments);
+    if (String(msg).indexOf('--') !== -1) {
+      messages.push(msg.split(' {')[0]);
     }
   };
 
