@@ -14,7 +14,7 @@ exports.createConnection = function createConnection(config) {
 };
 
 /**
- * Create a new Pool instance.
+ * Create a new Pool instance
  * @param {object|string} config Configuration or connection string for new MySQL connections
  * @return {Pool} A new MySQL pool
  * @public
