@@ -131,47 +131,47 @@ jobs:
           docker-mysql-version: "5.7"
 
         - name: Node.js 14.x
-          node-version: "14.2"
+          node-version: "14.18"
           docker-mysql-type: mysql
           docker-mysql-version: "5.7"
 
         - name: MySql 5.5
-          node-version: "12.22"
+          node-version: "14.18"
           docker-mysql-type: mysql
           docker-mysql-version: "5.5"
 
         - name: MySql 5.6
-          node-version: "12.22"
+          node-version: "14.18"
           docker-mysql-type: mysql
           docker-mysql-version: "5.6"
 
         - name: MySql 5.7
-          node-version: "12.22"
+          node-version: "14.18"
           docker-mysql-type: mysql
           docker-mysql-version: "5.7"
 
         - name: MariaDB 5.5
-          node-version: "12.22"
+          node-version: "14.18"
           docker-mysql-type: mariadb
           docker-mysql-version: "5.5"
 
         - name: MariaDB 10.0
-          node-version: "12.22"
+          node-version: "14.18"
           docker-mysql-type: mariadb
           docker-mysql-version: "10.0"
 
         - name: MariaDB 10.1
-          node-version: "12.22"
+          node-version: "14.18"
           docker-mysql-type: mariadb
           docker-mysql-version: "10.1"
 
         - name: MariaDB 10.2
-          node-version: "12.22"
+          node-version: "14.18"
           docker-mysql-type: mariadb
           docker-mysql-version: "10.2"
 
         - name: MariaDB 10.3
-          node-version: "12.22"
+          node-version: "14.18"
           docker-mysql-type: mariadb
           docker-mysql-version: "10.3"
 
