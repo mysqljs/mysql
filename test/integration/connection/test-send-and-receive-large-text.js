@@ -37,7 +37,7 @@ function increaseMaxAllowedPacketIfNeeded(connection) {
 
     // We need to wait for the re-connect to happen before starting the actual
     // test. That's because our buffer to hex shim in 0.4.x takes ~12 sec on
-    // TravisCI, causing a MySQL connection timeout otherwise.
+    // CI, causing a MySQL connection timeout otherwise.
     connection.connect(function (err) {
       assert.ifError(err);
 

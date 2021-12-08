@@ -7,7 +7,6 @@ environment:
   MYSQL_PORT: 3306
 
   matrix:
-    - nodejs_version: "0.8"
     - nodejs_version: "0.10"
     - nodejs_version: "0.12"
     - nodejs_version: "1.8"
@@ -36,7 +35,7 @@ install:
       try { Install-Product node $env:nodejs_version -ErrorAction Stop }
       catch { Update-NodeJsInstallation (Get-NodeJsLatestBuild $env:nodejs_version) }
   - npm config set shrinkwrap false
-  - if "%nodejs_version%" equ "0.8" npm config set strict-ssl false
+  - if "%nodejs_version%" equ "0.10" npm config set strict-ssl false
   - npm rm --silent --save-dev eslint
   - if exist node_modules npm prune
   - if exist node_modules npm rebuild

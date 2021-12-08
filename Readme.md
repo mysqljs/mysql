@@ -3,7 +3,7 @@
 [![NPM Version][npm-version-image]][npm-url]
 [![NPM Downloads][npm-downloads-image]][npm-url]
 [![Node.js Version][node-image]][node-url]
-[![Linux Build][travis-image]][travis-url]
+[![Linux Build][github-actions-ci-image]][github-actions-ci-url]
 [![Windows Build][appveyor-image]][appveyor-url]
 [![Test Coverage][coveralls-image]][coveralls-url]
 
@@ -1539,10 +1539,10 @@ $ MYSQL_HOST=localhost MYSQL_PORT=3306 MYSQL_DATABASE=node_mysql_test MYSQL_USER
 [appveyor-url]: https://ci.appveyor.com/project/dougwilson/node-mysql
 [coveralls-image]: https://badgen.net/coveralls/c/github/mysqljs/mysql/master
 [coveralls-url]: https://coveralls.io/r/mysqljs/mysql?branch=master
+[github-actions-ci-image]: https://badgen.net/github/checks/mysqljs/mysql/master?label=linux
+[github-actions-ci-url]: https://github.com/mysqljs/mysql/actions/workflows/ci.yml
 [node-image]: https://badgen.net/npm/node/mysql
 [node-url]: https://nodejs.org/en/download
 [npm-downloads-image]: https://badgen.net/npm/dm/mysql
 [npm-url]: https://npmjs.org/package/mysql
 [npm-version-image]: https://badgen.net/npm/v/mysql
-[travis-image]: https://badgen.net/travis/mysqljs/mysql/master
-[travis-url]: https://travis-ci.org/mysqljs/mysql

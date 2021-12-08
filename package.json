@@ -39,7 +39,7 @@
   "scripts": {
     "lint": "eslint . && node tool/lint-readme.js",
     "test": "node test/run.js",
-    "test-ci": "node tool/install-nyc.js --nyc-optional --reporter=text -- npm test",
+    "test-ci": "node tool/install-nyc.js --nyc-optional --reporter=lcovonly --reporter=text -- npm test",
     "test-cov": "node tool/install-nyc.js --reporter=html --reporter=text -- npm test",
     "version": "node tool/version-changes.js && git add Changes.md"
   }

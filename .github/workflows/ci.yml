@@ -1,0 +1,269 @@
+name: ci
+
+on:
+- pull_request
+- push
+
+jobs:
+  test:
+    runs-on: ubuntu-18.04
+    strategy:
+      fail-fast: false
+      matrix:
+        name:
+        - Node.js 0.6
+        - Node.js 0.8
+        - Node.js 0.10
+        - Node.js 0.12
+        - io.js 1.x
+        - io.js 2.x
+        - io.js 3.x
+        - Node.js 4.2 # test timers regression
+        - Node.js 4.x
+        - Node.js 5.x
+        - Node.js 6.x
+        - Node.js 7.x
+        - Node.js 8.x
+        - Node.js 9.x
+        - Node.js 10.x
+        - Node.js 11.x
+        - Node.js 12.x
+        - Node.js 13.x
+        - Node.js 14.x
+        - MySql 5.5
+        - MySql 5.6
+        - MySql 5.7
+        - MariaDB 5.5
+        - MariaDB 10.0
+        - MariaDB 10.1
+        - MariaDB 10.2
+        - MariaDB 10.3
+
+        include:
+        - name: Node.js 0.6
+          node-version: "0.6"
+          docker-mysql-type: mysql
+          docker-mysql-version: "5.7"
+
+        - name: Node.js 0.8
+          node-version: "0.8"
+          docker-mysql-type: mysql
+          docker-mysql-version: "5.7"
+
+        - name: Node.js 0.10
+          node-version: "0.10"
+          docker-mysql-type: mysql
+          docker-mysql-version: "5.7"
+
+        - name: Node.js 0.12
+          node-version: "0.12"
+          docker-mysql-type: mysql
+          docker-mysql-version: "5.7"
+
+        - name: io.js 1.x
+          node-version: "1.8"
+          docker-mysql-type: mysql
+          docker-mysql-version: "5.7"
+
+        - name: io.js 2.x
+          node-version: "2.5"
+          docker-mysql-type: mysql
+          docker-mysql-version: "5.7"
+
+        - name: io.js 3.x
+          node-version: "3.3"
+          docker-mysql-type: mysql
+          docker-mysql-version: "5.7"
+
+        - name: Node.js 4.2
+          node-version: "4.2.0"
+          docker-mysql-type: mysql
+          docker-mysql-version: "5.7"
+
+        - name: Node.js 4.x
+          node-version: "4.9"
+          docker-mysql-type: mysql
+          docker-mysql-version: "5.7"
+
+        - name: Node.js 5.x
+          node-version: "5.12"
+          docker-mysql-type: mysql
+          docker-mysql-version: "5.7"
+
+        - name: Node.js 6.x
+          node-version: "6.17"
+          docker-mysql-type: mysql
+          docker-mysql-version: "5.7"
+
+        - name: Node.js 7.x
+          node-version: "7.10"
+          docker-mysql-type: mysql
+          docker-mysql-version: "5.7"
+
+        - name: Node.js 8.x
+          node-version: "8.17"
+          docker-mysql-type: mysql
+          docker-mysql-version: "5.7"
+
+        - name: Node.js 9.x
+          node-version: "9.11"
+          docker-mysql-type: mysql
+          docker-mysql-version: "5.7"
+
+        - name: Node.js 10.x
+          node-version: "10.21"
+          docker-mysql-type: mysql
+          docker-mysql-version: "5.7"
+
+        - name: Node.js 11.x
+          node-version: "11.15"
+          docker-mysql-type: mysql
+          docker-mysql-version: "5.7"
+
+        - name: Node.js 12.x
+          node-version: "12.18"
+          docker-mysql-type: mysql
+          docker-mysql-version: "5.7"
+
+        - name: Node.js 13.x
+          node-version: "13.13"
+          docker-mysql-type: mysql
+          docker-mysql-version: "5.7"
+
+        - name: Node.js 14.x
+          node-version: "14.2"
+          docker-mysql-type: mysql
+          docker-mysql-version: "5.7"
+
+        - name: MySql 5.5
+          node-version: "12.18"
+          docker-mysql-type: mysql
+          docker-mysql-version: "5.5"
+
+        - name: MySql 5.6
+          node-version: "12.18"
+          docker-mysql-type: mysql
+          docker-mysql-version: "5.6"
+
+        - name: MySql 5.7
+          node-version: "12.18"
+          docker-mysql-type: mysql
+          docker-mysql-version: "5.7"
+
+        - name: MariaDB 5.5
+          node-version: "12.18"
+          docker-mysql-type: mariadb
+          docker-mysql-version: "5.5"
+
+        - name: MariaDB 10.0
+          node-version: "12.18"
+          docker-mysql-type: mariadb
+          docker-mysql-version: "10.0"
+
+        - name: MariaDB 10.1
+          node-version: "12.18"
+          docker-mysql-type: mariadb
+          docker-mysql-version: "10.1"
+
+        - name: MariaDB 10.2
+          node-version: "12.18"
+          docker-mysql-type: mariadb
+          docker-mysql-version: "10.2"
+
+        - name: MariaDB 10.3
+          node-version: "12.18"
+          docker-mysql-type: mariadb
+          docker-mysql-version: "10.3"
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Install Node.js ${{ matrix.node-version }}
+      shell: bash -eo pipefail -l {0}
+      run: |
+        if [[ "${{ matrix.node-version }}" == 0.6* ]]; then
+          sudo apt-get install g++-4.8 gcc-4.8 libssl1.0-dev
+          export CC=/usr/bin/gcc-4.8
+          export CXX=/usr/bin/g++-4.8
+        fi
+        nvm install --default ${{ matrix.node-version }}
+        if [[ "${{ matrix.node-version }}" == 0.* && "$(cut -d. -f2 <<< "${{ matrix.node-version }}")" -lt 10 ]]; then
+          nvm install --alias=npm 0.10
+          nvm use ${{ matrix.node-version }}
+          if [[ "$(npm -v)" == 1.1.* ]]; then
+            nvm exec npm npm install -g npm@1.1
+            ln -fs "$(which npm)" "$(dirname "$(nvm which npm)")/npm"
+          else
+            sed -i '1s;^.*$;'"$(printf '#!%q' "$(nvm which npm)")"';' "$(readlink -f "$(which npm)")"
+          fi
+          npm config set strict-ssl false
+        fi
+        dirname "$(nvm which ${{ matrix.node-version }})" >> "$GITHUB_PATH"
+
+    - name: Configure npm
+      run: npm config set shrinkwrap false
+
+    - name: Remove non-test npm modules
+      run: npm rm --silent --save-dev benchmark beautify-benchmark
+
+    - name: Setup Node.js version-specific dependencies
+      shell: bash
+      run: |
+        node tool/install-nyc.js --nyc-optional
+        test $(echo "${{ matrix.node-version }}" | cut -d. -f1) -ge 10 || npm rm --save-dev eslint
+
+    - name: Setup environment
+      shell: bash
+      run: |
+        echo "MYSQL_DATABASE=node_mysql" >> "$GITHUB_ENV"
+        echo "MYSQL_HOST=localhost" >> "$GITHUB_ENV"
+        echo "MYSQL_PORT=$(node tool/free-port.js)" >> "$GITHUB_ENV"
+        echo "MYSQL_USER=root" >> "$GITHUB_ENV"
+
+    - name: Install MySQL
+      run: docker run -d --name mysql -e MYSQL_ALLOW_EMPTY_PASSWORD=yes -e MYSQL_DATABASE=$MYSQL_DATABASE -p $MYSQL_PORT:3306 $DOCKER_MYSQL_TYPE:$DOCKER_MYSQL_VERSION
+      env:
+        DOCKER_MYSQL_TYPE: ${{ matrix.docker-mysql-type }}
+        DOCKER_MYSQL_VERSION: ${{ matrix.docker-mysql-version }}
+
+    - name: Install Node.js dependencies
+      run: npm install
+
+    - name: Wait for MySQL running
+      run: node tool/wait-mysql.js $MYSQL_PORT $MYSQL_HOST
+
+    - name: List environment
+      id: list_env
+      shell: bash
+      run: |
+        docker --version
+        echo "mysql-server@$(node tool/mysql-version.js)"
+        echo "node@$(node -v)"
+        echo "npm@$(npm -v)"
+        npm -s ls ||:
+        (npm -s ls --depth=0 ||:) | awk -F'[ @]' 'NR>1 && $2 { print "::set-output name=" $2 "::" $3 }'
+
+    - name: Run tests
+      run: npm run test-ci
+
+    - name: Lint code
+      if: steps.list_env.outputs.eslint != ''
+      run: npm run lint
+
+    - name: Collect code coverage
+      uses: coverallsapp/github-action@master
+      if: steps.list_env.outputs.nyc != ''
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        flag-name: run-${{ matrix.test_number }}
+        parallel: true
+
+  coverage:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+    - name: Upload code coverage
+      uses: coverallsapp/github-action@master
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        parallel-finished: true
