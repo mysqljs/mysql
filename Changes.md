@@ -7,6 +7,7 @@ you spot any mistakes.
 ## HEAD
 
 * Support Node.js 14.x
+* Update `bignumber.js` to 9.0.2
 * Update `sqlstring` to 2.3.2
   - perf: remove outdated array pattern
 
