@@ -30,6 +30,7 @@ jobs:
         - Node.js 12.x
         - Node.js 13.x
         - Node.js 14.x
+        - Node.js 15.x
         - MySql 5.5
         - MySql 5.6
         - MySql 5.7
@@ -132,6 +133,11 @@ jobs:
 
         - name: Node.js 14.x
           node-version: "14.18"
+          docker-mysql-type: mysql
+          docker-mysql-version: "5.7"
+
+        - name: Node.js 15.x
+          node-version: "15.14"
           docker-mysql-type: mysql
           docker-mysql-version: "5.7"
 
