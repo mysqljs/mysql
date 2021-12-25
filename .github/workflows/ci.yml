@@ -112,7 +112,7 @@ jobs:
           docker-mysql-version: "5.7"
 
         - name: Node.js 10.x
-          node-version: "10.21"
+          node-version: "10.24"
           docker-mysql-type: mysql
           docker-mysql-version: "5.7"
 
