@@ -8,6 +8,7 @@ you spot any mistakes.
 
 * Support Node.js 14.x
 * Support Node.js 15.x
+* Support Node.js 16.x
 * Update `bignumber.js` to 9.0.2
 * Update `sqlstring` to 2.3.2
   - perf: remove outdated array pattern
