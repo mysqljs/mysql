@@ -21,6 +21,8 @@ you spot any mistakes.
 * Add new error codes up to MySQL 5.7.29
 * Fix early detection of bad callback to `connection.query`
 * Support Node.js 12.x #2211
+* Add `idleConnectionTimeout` to pool options
+* Add `connectionMinLimit` to pool options
 * Support Node.js 13.x
 * Support non-enumerable properties in object argument to `connection.query` #2253
 * Update `bignumber.js` to 9.0.0
