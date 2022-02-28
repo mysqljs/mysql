@@ -9,6 +9,7 @@ you spot any mistakes.
 * Support Node.js 14.x
 * Support Node.js 15.x
 * Support Node.js 16.x
+* Support Node.js 17.x
 * Update `bignumber.js` to 9.0.2
 * Update `safe-buffer` to 5.2.1
 * Update `sqlstring` to 2.3.2
