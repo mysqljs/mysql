@@ -6,6 +6,10 @@ you spot any mistakes.
 
 ## HEAD
 
+* Drop support for Node.js < 0.10
+
+## HEAD
+
 * Support Node.js 14.x
 * Support Node.js 15.x
 * Support Node.js 16.x
