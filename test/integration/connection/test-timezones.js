@@ -1,23 +1,12 @@
-var timezone_mock = require('timezone-mock');
-
 var assert = require('assert');
 var common = require('../../common');
 
-function registerMock() {
-  timezone_mock.register('US/Pacific');
-  var date = new Date(Date.now());
-  var tzo = date.getTimezoneOffset();
-  assert.ok(tzo === 420 || tzo === 480);
-}
-
 var table = 'timezone_test';
-var pre_statements = ['', 'SET TIME_ZONE="+00:00"', 'SET TIME_ZONE="SYSTEM"', registerMock];
+var pre_statements = ['', 'SET TIME_ZONE="+00:00"', 'SET TIME_ZONE="SYSTEM"'];
 var pre_idx = 0;
 var test_days = ['01-01', '03-07', '03-08', '03-09', '12-31'].map(function (day) {
-  // Choosing this because 2015-03-08 02:30 Pacific does not exist (due to DST),
-  // so if anything is using a local date object it will fail (at least if the
-  // test system is in Pacific Time).
-  return '2015-' + day + 'T02:32:11.000Z';
+  // Choosing this time because it is outsite of standard DST transitions
+  return '2015-' + day + 'T12:32:11.000Z';
 });
 var day_idx = 0;
 var test_timezones = ['Z', 'local', 0, 1, 5, 12, 23, -1, -5, -20];
@@ -50,11 +39,7 @@ function testNextDate(connection) {
       connection.end(assert.ifError);
       return;
     } else {
-      if (typeof pre_statements[pre_idx] === 'function') {
-        pre_statements[pre_idx]();
-      } else {
-        connection.query(pre_statements[pre_idx], assert.ifError);
-      }
+      connection.query(pre_statements[pre_idx], assert.ifError);
       day_idx = tz_idx = 0;
     }
   }
