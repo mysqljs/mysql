@@ -1,17 +1,18 @@
-var assert     = require('assert');
-var common     = require('../../common');
-var connection = common.createConnection({
-  port : common.fakeServerPort,
-  ssl  : {
-    ca      : common.getSSLConfig().ca,
-    ciphers : 'AES128-SHA'
-  }
-});
+var assert = require('assert');
+var common = require('../../common');
 
 var server = common.createFakeServer();
 
-server.listen(common.fakeServerPort, function (err) {
+server.listen(0, function (err) {
   assert.ifError(err);
+
+  var connection = common.createConnection({
+    port : server.port(),
+    ssl  : {
+      ca      : common.getSSLConfig().ca,
+      ciphers : 'AES128-SHA'
+    }
+  });
 
   connection.query('SHOW STATUS LIKE \'Ssl_cipher\';', function (err, rows) {
     assert.ifError(err);

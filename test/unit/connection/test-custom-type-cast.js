@@ -1,9 +1,5 @@
-var assert     = require('assert');
-var common     = require('../../common');
-var connection = common.createConnection({
-  port     : common.fakeServerPort,
-  typeCast : typeCast
-});
+var assert = require('assert');
+var common = require('../../common');
 
 function typeCast(field, next) {
   if (field.type !== 'TINY') {
@@ -21,8 +17,13 @@ function typeCast(field, next) {
 
 var server = common.createFakeServer();
 
-server.listen(common.fakeServerPort, function (err) {
+server.listen(0, function (err) {
   assert.ifError(err);
+
+  var connection = common.createConnection({
+    port     : server.port(),
+    typeCast : typeCast
+  });
 
   connection.query('SELECT value FROM typecast', function (err, rows) {
     assert.ifError(err);

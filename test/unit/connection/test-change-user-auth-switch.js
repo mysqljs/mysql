@@ -1,17 +1,18 @@
-var assert     = require('assert');
-var Crypto     = require('crypto');
-var common     = require('../../common');
-var connection = common.createConnection({
-  port     : common.fakeServerPort,
-  user     : 'user_1',
-  password : 'pass_1'
-});
+var assert = require('assert');
+var Crypto = require('crypto');
+var common = require('../../common');
 
 var random = Crypto.pseudoRandomBytes || Crypto.randomBytes; // Depends on node.js version
 var server = common.createFakeServer();
 
-server.listen(common.fakeServerPort, function(err) {
+server.listen(0, function(err) {
   assert.ifError(err);
+
+  var connection = common.createConnection({
+    port     : server.port(),
+    user     : 'user_1',
+    password : 'pass_1'
+  });
 
   connection.query('SELECT CURRENT_USER()', function (err, result) {
     assert.ifError(err);

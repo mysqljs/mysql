@@ -1,17 +1,18 @@
-var assert     = require('assert');
-var common     = require('../../common');
-var connection = common.createConnection({
-  port : common.fakeServerPort,
-  ssl  : 'Amazon RDS'
-});
-
-// Ignore bad SSL
-connection.config.ssl.rejectUnauthorized = false;
+var assert = require('assert');
+var common = require('../../common');
 
 var server = common.createFakeServer();
 
-server.listen(common.fakeServerPort, function(err) {
+server.listen(0, function(err) {
   if (err) throw err;
+
+  var connection = common.createConnection({
+    port : server.port(),
+    ssl  : 'Amazon RDS'
+  });
+
+  // Ignore bad SSL
+  connection.config.ssl.rejectUnauthorized = false;
 
   connection.connect(function(err) {
     assert.ifError(err);

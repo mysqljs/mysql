@@ -1,18 +1,19 @@
-var assert     = require('assert');
-var common     = require('../../common');
-var connection = common.createConnection({port: common.fakeServerPort});
+var assert = require('assert');
+var common = require('../../common');
 
-var endErr;
-connection.on('end', function(err) {
-  assert.ok(!endErr);
-  endErr = err;
-});
+var endErr   = null;
+var queryErr = null;
+var server   = common.createFakeServer();
 
-var queryErr;
+server.listen(0, function (err) {
+  assert.ifError(err);
 
-var server = common.createFakeServer();
-server.listen(common.fakeServerPort, function(err) {
-  if (err) throw err;
+  var connection = common.createConnection({port: server.port()});
+
+  connection.on('end', function (err) {
+    assert.ok(!endErr);
+    endErr = err;
+  });
 
   connection.query('SELECT 1', function(err) {
     assert.ok(!queryErr);

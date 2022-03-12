@@ -3,7 +3,7 @@ var assert = require('assert');
 var common = require('../../common');
 var server = common.createFakeServer();
 
-server.listen(common.fakeServerPort, function (err) {
+server.listen(0, function (err) {
   assert.ifError(err);
 
   var done = after(4, function () {
@@ -11,7 +11,7 @@ server.listen(common.fakeServerPort, function (err) {
   });
 
   var conn1 = common.createConnection({
-    port     : common.fakeServerPort,
+    port     : server.port(),
     timezone : 'Z'
   });
   conn1.query('SELECT value FROM date_rows', function (err, rows) {
@@ -28,7 +28,7 @@ server.listen(common.fakeServerPort, function (err) {
 
   var conn2 = common.createConnection({
     dateStrings : true,
-    port        : common.fakeServerPort,
+    port        : server.port(),
     timezone    : 'Z'
   });
   conn2.query('SELECT value FROM date_rows', function (err, rows) {
@@ -44,7 +44,7 @@ server.listen(common.fakeServerPort, function (err) {
 
   var conn3 = common.createConnection({
     dateStrings : ['DATE'],
-    port        : common.fakeServerPort,
+    port        : server.port(),
     timezone    : 'Z'
   });
   conn3.query('SELECT value FROM date_rows', function (err, rows) {
@@ -60,7 +60,7 @@ server.listen(common.fakeServerPort, function (err) {
 
   var conn4 = common.createConnection({
     dateStrings : ['DATETIME', 'TIMESTAMP'],
-    port        : common.fakeServerPort,
+    port        : server.port(),
     timezone    : 'Z'
   });
   conn4.query('SELECT value FROM date_rows', function (err, rows) {

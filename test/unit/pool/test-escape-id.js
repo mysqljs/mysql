@@ -1,11 +1,12 @@
 var assert = require('assert');
 var common = require('../../common');
-var pool   = common.createPool({port: common.fakeServerPort});
 
 var server = common.createFakeServer();
 
-server.listen(common.fakeServerPort, function (err) {
+server.listen(0, function (err) {
   assert.ifError(err);
+
+  var pool = common.createPool({port: server.port()});
 
   assert.equal(pool.escapeId('id'), '`id`');
 

@@ -4,15 +4,17 @@
 // the connection instance ending up in a bad state where it doesn't work
 // properly or doesn't execute the next sequence anymore.
 
-var assert     = require('assert');
-var common     = require('../../common');
-var connection = common.createConnection({port: common.fakeServerPort});
-var server     = common.createFakeServer();
+var assert = require('assert');
+var common = require('../../common');
 
-server.listen(common.fakeServerPort, function(err) {
+var server = common.createFakeServer();
+
+server.listen(0, function (err) {
   assert.ifError(err);
 
-  var errors = [];
+  var connection = common.createConnection({port: server.port()});
+  var errors     = [];
+
   process.on('uncaughtException', function(err) {
     errors.push(err);
   });

@@ -30,6 +30,10 @@ FakeServer.prototype.listen = function(port, cb) {
   this._server.listen(port, cb);
 };
 
+FakeServer.prototype.port = function() {
+  return this._server.address().port;
+};
+
 FakeServer.prototype._handleConnection = function(socket) {
   var connection = new FakeConnection(socket);
 

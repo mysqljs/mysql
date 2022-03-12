@@ -11,8 +11,6 @@ common.bogusPort     = 47378;
 common.bogusPassword = 'INVALID PASSWORD';
 
 // Used for simulating a fake mysql server
-common.fakeServerPort = 32893;
-// Used for simulating a fake mysql server
 common.fakeServerSocket = __dirname + '/fake_server.sock';
 
 common.testDatabase = process.env.MYSQL_DATABASE || 'test';

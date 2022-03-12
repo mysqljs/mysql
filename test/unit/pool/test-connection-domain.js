@@ -22,7 +22,7 @@ var done = after(2, function () {
   });
 });
 
-server.listen(common.fakeServerPort, function (err) {
+server.listen(0, function (err) {
   assert.ifError(err);
 
   var released = false;
@@ -41,7 +41,7 @@ server.listen(common.fakeServerPort, function (err) {
   }, 200);
 
   d0.run(function () {
-    pool = common.createPool({port: common.fakeServerPort, connectionLimit: 1});
+    pool = common.createPool({port: server.port(), connectionLimit: 1});
     assert.equal(pool.domain, d0, 'pool belongs to d0');
 
     d1.run(function () {

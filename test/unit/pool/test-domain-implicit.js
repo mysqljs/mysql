@@ -12,12 +12,12 @@ var d0 = domain.create();
 
 var server = common.createFakeServer();
 
-server.listen(common.fakeServerPort, function (err) {
+server.listen(0, function (err) {
   assert.ifError(err);
 
   d0.run(function () {
     var members = d0.members.slice(0);
-    var conn    = common.createConnection({port: common.fakeServerPort});
+    var conn    = common.createConnection({port: server.port()});
 
     assert.equal(conn.domain, d0, 'connection is bound to domain d0');
     assert.equal(d0.members.indexOf(conn), -1, 'connection is not an explicit member of domain d0');
@@ -31,7 +31,7 @@ server.listen(common.fakeServerPort, function (err) {
     });
 
     var members = d0.members.slice(0);
-    var pool    = common.createPool({port: common.fakeServerPort});
+    var pool    = common.createPool({port: server.port()});
 
     assert.equal(pool.domain, d0, 'pool is bound to domain d0');
     assert.equal(d0.members.indexOf(pool), -1, 'pool is not an explicit member of domain d0');

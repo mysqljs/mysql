@@ -1,6 +1,5 @@
-var assert     = require('assert');
-var common     = require('../../common');
-var connection = common.createConnection({port: common.fakeServerPort, queryFormat: queryFormat});
+var assert = require('assert');
+var common = require('../../common');
 
 function queryFormat(query, values) {
   if (!values) {
@@ -19,8 +18,13 @@ function queryFormat(query, values) {
 
 var server = common.createFakeServer();
 
-server.listen(common.fakeServerPort, function (err) {
+server.listen(0, function (err) {
   assert.ifError(err);
+
+  var connection = common.createConnection({
+    port        : server.port(),
+    queryFormat : queryFormat
+  });
 
   assert.equal(connection.format('SELECT :a1, :a2', { a1: 1, a2: 'two' }), 'SELECT 1, \'two\'');
   assert.equal(connection.format('SELECT :a1', []), 'SELECT :a1');

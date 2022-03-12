@@ -1,14 +1,15 @@
-var assert     = require('assert');
-var common     = require('../../common');
-var connection = common.createConnection({port: common.fakeServerPort});
-var server     = common.createFakeServer();
+var assert = require('assert');
+var common = require('../../common');
 
-var timer = setTimeout(function () {
+var server = common.createFakeServer();
+var timer  = setTimeout(function () {
   throw new Error('test timeout');
 }, 2000);
 
-server.listen(common.fakeServerPort, function(err) {
-  if (err) throw err;
+server.listen(0, function (err) {
+  assert.ifError(err);
+
+  var connection = common.createConnection({port: server.port()});
 
   connection.query({sql: 'SELECT 1', timeout: 200}, function (err) {
     assert.ok(err);

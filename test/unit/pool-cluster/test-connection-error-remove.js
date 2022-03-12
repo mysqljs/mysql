@@ -1,5 +1,6 @@
-var assert  = require('assert');
-var common  = require('../../common');
+var assert = require('assert');
+var common = require('../../common');
+
 var cluster = common.createPoolCluster({
   canRetry             : true,
   removeNodeErrorCount : 1
@@ -8,14 +9,15 @@ var cluster = common.createPoolCluster({
 var connCount = 0;
 var server1   = common.createFakeServer();
 var server2   = common.createFakeServer();
-cluster.add('SLAVE1', common.getTestConfig({port: common.fakeServerPort + 0}));
-cluster.add('SLAVE2', common.getTestConfig({port: common.fakeServerPort + 1}));
 
-server1.listen(common.fakeServerPort + 0, function (err) {
+server1.listen(0, function (err) {
   assert.ifError(err);
 
-  server2.listen(common.fakeServerPort + 1, function (err) {
+  server2.listen(0, function (err) {
     assert.ifError(err);
+
+    cluster.add('SLAVE1', common.getTestConfig({port: server1.port()}));
+    cluster.add('SLAVE2', common.getTestConfig({port: server2.port()}));
 
     var pool = cluster.of('*', 'RR');
     var removedNodeId;

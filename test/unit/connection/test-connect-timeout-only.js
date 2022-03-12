@@ -1,11 +1,12 @@
-var assert     = require('assert');
-var common     = require('../../common');
-var connection = common.createConnection({connectTimeout: 2000, port: common.fakeServerPort});
+var assert = require('assert');
+var common = require('../../common');
 
 var server = common.createFakeServer();
 
-server.listen(common.fakeServerPort, function (err) {
+server.listen(0, function (err) {
   assert.ifError(err);
+
+  var connection = common.createConnection({connectTimeout: 2000, port: server.port()});
 
   connection.query('SELECT SLEEP(3)', function (err, rows) {
     assert.ifError(err);

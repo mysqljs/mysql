@@ -1,15 +1,16 @@
-var assert     = require('assert');
-var common     = require('../../common');
-var connection = common.createConnection({
-  port : common.fakeServerPort,
-  ssl  : 'Amazon RDS'
-});
+var assert = require('assert');
+var common = require('../../common');
 
 var server = common.createFakeServer();
 
 var connectErr;
-server.listen(common.fakeServerPort, function(err) {
-  if (err) throw err;
+server.listen(0, function (err) {
+  assert.ifError(err);
+
+  var connection = common.createConnection({
+    port : server.port(),
+    ssl  : 'Amazon RDS'
+  });
 
   connection.connect(function(err) {
     connectErr = err;

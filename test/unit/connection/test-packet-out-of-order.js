@@ -1,11 +1,13 @@
-var assert     = require('assert');
-var common     = require('../../common');
-var connection = common.createConnection({port: common.fakeServerPort});
+var assert = require('assert');
+var common = require('../../common');
+
 var server     = common.createFakeServer();
 var serverConn = null;
 
-server.listen(common.fakeServerPort, function(err) {
+server.listen(0, function (err) {
   assert.ifError(err);
+
+  var connection = common.createConnection({port: server.port()});
 
   connection.connect(function(err) {
     assert.ifError(err);

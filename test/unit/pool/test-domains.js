@@ -24,11 +24,11 @@ var done = after(4, function () {
   });
 });
 
-server.listen(common.fakeServerPort, function (err) {
+server.listen(0, function (err) {
   assert.ifError(err);
 
   d0.run(function () {
-    pool = common.createPool({connectionLimit: 1, port: common.fakeServerPort});
+    pool = common.createPool({connectionLimit: 1, port: server.port()});
 
     d1.run(function () {
       pool.getConnection(function (err, connection) {

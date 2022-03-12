@@ -1,15 +1,15 @@
-var assert     = require('assert');
-var common     = require('../../common');
-var connection = common.createConnection({debug: true, port: common.fakeServerPort});
-var util       = require('util');
+var assert = require('assert');
+var common = require('../../common');
+var util   = require('util');
 
 var tid    = 0;
 var server = common.createFakeServer();
 
-server.listen(common.fakeServerPort, function (err) {
+server.listen(0, function (err) {
   assert.ifError(err);
 
-  var messages = [];
+  var connection = common.createConnection({debug: true, port: server.port()});
+  var messages   = [];
 
   console.log = function () {
     var msg = util.format.apply(this, arguments);

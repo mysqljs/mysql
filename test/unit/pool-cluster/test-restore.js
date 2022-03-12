@@ -7,13 +7,14 @@ var cluster = common.createPoolCluster({
 });
 var server  = common.createFakeServer();
 
-var connCount  = 0;
-var offline    = true;
-var poolConfig = common.getTestConfig({port: common.fakeServerPort});
-cluster.add('MASTER', poolConfig);
+var connCount = 0;
+var offline   = true;
 
-server.listen(common.fakeServerPort, function (err) {
+server.listen(0, function (err) {
   assert.ifError(err);
+
+  var poolConfig = common.getTestConfig({port: server.port()});
+  cluster.add('MASTER', poolConfig);
 
   cluster.getConnection('MASTER', function (err) {
     assert.ok(err);

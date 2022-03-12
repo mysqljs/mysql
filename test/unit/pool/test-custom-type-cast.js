@@ -1,9 +1,6 @@
 var assert = require('assert');
 var common = require('../../common');
-var pool   = common.createPool({
-  port     : common.fakeServerPort,
-  typeCast : typeCast
-});
+
 var server = common.createFakeServer();
 
 function typeCast(field, next) {
@@ -20,8 +17,13 @@ function typeCast(field, next) {
   return (Number(val) > 0);
 }
 
-server.listen(common.fakeServerPort, function (err) {
+server.listen(0, function (err) {
   assert.ifError(err);
+
+  var pool   = common.createPool({
+    port     : server.port(),
+    typeCast : typeCast
+  });
 
   pool.query('SELECT value FROM typecast', function (err, rows) {
     assert.ifError(err);

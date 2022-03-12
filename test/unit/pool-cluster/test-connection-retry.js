@@ -1,17 +1,19 @@
-var assert  = require('assert');
-var common  = require('../../common');
+var assert = require('assert');
+var common = require('../../common');
+
 var cluster = common.createPoolCluster({
   canRetry             : true,
   removeNodeErrorCount : 5
 });
 
-var connCount  = 0;
-var poolConfig = common.getTestConfig({port: common.fakeServerPort});
-var server     = common.createFakeServer();
-cluster.add('MASTER', poolConfig);
+var connCount = 0;
+var server    = common.createFakeServer();
 
-server.listen(common.fakeServerPort, function (err) {
+server.listen(0, function (err) {
   assert.ifError(err);
+
+  var poolConfig = common.getTestConfig({port: server.port()});
+  cluster.add('MASTER', poolConfig);
 
   cluster.getConnection('MASTER', function (err, connection) {
     assert.ifError(err);

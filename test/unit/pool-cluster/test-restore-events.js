@@ -11,11 +11,12 @@ var connCount     = 0;
 var offline       = true;
 var offlineEvents = 0;
 var onlineEvents  = 0;
-var poolConfig    = common.getTestConfig({port: common.fakeServerPort});
-cluster.add('MASTER', poolConfig);
 
-server.listen(common.fakeServerPort, function (err) {
+server.listen(0, function (err) {
   assert.ifError(err);
+
+  var poolConfig = common.getTestConfig({port: server.port()});
+  cluster.add('MASTER', poolConfig);
 
   cluster.on('offline', function (id) {
     assert.equal(++offlineEvents, 1);

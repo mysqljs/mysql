@@ -1,10 +1,12 @@
-var assert     = require('assert');
-var common     = require('../../common');
-var connection = common.createConnection({port: common.fakeServerPort});
-var server     = common.createFakeServer();
+var assert = require('assert');
+var common = require('../../common');
 
-server.listen(common.fakeServerPort, function(err) {
+var server = common.createFakeServer();
+
+server.listen(0, function (err) {
   assert.ifError(err);
+
+  var connection = common.createConnection({port: server.port()});
 
   connection.query('SELECT value FROM stuff', function (err) {
     assert.ok(err, 'got err');

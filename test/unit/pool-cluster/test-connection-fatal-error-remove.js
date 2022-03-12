@@ -3,13 +3,14 @@ var common  = require('../../common');
 var cluster = common.createPoolCluster({removeNodeErrorCount: 1});
 
 var server = common.createFakeServer();
-cluster.add('MASTER', common.getTestConfig({
-  acquireTimeout : 100,
-  port           : common.fakeServerPort
-}));
 
-server.listen(common.fakeServerPort, function (err) {
+server.listen(0, function (err) {
   assert.ifError(err);
+
+  cluster.add('MASTER', common.getTestConfig({
+    acquireTimeout : 100,
+    port           : server.port()
+  }));
 
   var pool = cluster.of('*', 'RR');
 

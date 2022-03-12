@@ -1,6 +1,5 @@
-var assert     = require('assert');
-var common     = require('../../common');
-var connection = common.createConnection({port: common.fakeServerPort});
+var assert = require('assert');
+var common = require('../../common');
 
 var server = common.createFakeServer();
 
@@ -10,9 +9,11 @@ var queryErr1;
 var queryErr2;
 var queryErr3;
 var timeout;
-server.listen(common.fakeServerPort, function(err) {
+server.listen(0, function(err) {
   if (err) throw err;
   var waitCount = 4;
+
+  var connection = common.createConnection({port: server.port()});
 
   connection.connect(function(err) {
     connectErr = err;

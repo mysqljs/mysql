@@ -12,10 +12,10 @@ var d0 = domain.create();
 
 var server = common.createFakeServer();
 
-server.listen(common.fakeServerPort, function (err) {
+server.listen(0, function (err) {
   assert.ifError(err);
 
-  var connection = common.createConnection({port: common.fakeServerPort});
+  var connection = common.createConnection({port: server.port()});
   var timer      = setInterval(function () {
     if (connection.state !== 'authenticated') return;
     clearInterval(timer);

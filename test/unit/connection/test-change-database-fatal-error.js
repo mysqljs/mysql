@@ -3,14 +3,15 @@
 // cause unexpected behavior for queries that were enqueued under the
 // assumption of changeUser to succeed.
 
-var assert     = require('assert');
-var common     = require('../../common');
-var connection = common.createConnection({port: common.fakeServerPort});
+var assert = require('assert');
+var common = require('../../common');
 
 var server = common.createFakeServer();
 
-server.listen(common.fakeServerPort, function (err) {
+server.listen(0, function (err) {
   assert.ifError(err);
+
+  var connection = common.createConnection({port: server.port()});
 
   connection.changeUser({database: 'does-not-exist'}, function (err) {
     assert.ok(err, 'got error');

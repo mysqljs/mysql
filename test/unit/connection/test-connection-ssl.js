@@ -1,16 +1,17 @@
-var assert     = require('assert');
-var common     = require('../../common');
-var connection = common.createConnection({
-  port : common.fakeServerPort,
-  ssl  : {
-    ca: common.getSSLConfig().ca
-  }
-});
+var assert = require('assert');
+var common = require('../../common');
 
 var server = common.createFakeServer();
 
-server.listen(common.fakeServerPort, function(err) {
-  if (err) throw err;
+server.listen(0, function (err) {
+  assert.ifError(err);
+
+  var connection = common.createConnection({
+    port : server.port(),
+    ssl  : {
+      ca: common.getSSLConfig().ca
+    }
+  });
 
   connection.ping(function(err) {
     assert.ifError(err);

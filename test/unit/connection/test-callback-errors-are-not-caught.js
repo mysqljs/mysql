@@ -1,14 +1,14 @@
-var assert     = require('assert');
-var common     = require('../../common');
-var connection = common.createConnection({port: common.fakeServerPort});
+var assert = require('assert');
+var common = require('../../common');
 
 var error  = new Error('uncaught exception');
 var server = common.createFakeServer();
 
-server.listen(common.fakeServerPort, function (err) {
+server.listen(0, function (err) {
   assert.ifError(err);
 
-  var caughtErr = null;
+  var caughtErr  = null;
+  var connection = common.createConnection({port: server.port()});
 
   connection.connect(function (err) {
     assert.ifError(err);

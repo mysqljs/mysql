@@ -1,10 +1,15 @@
-var assert     = require('assert');
-var common     = require('../../common');
-var connection = common.createConnection({port: common.fakeServerPort, localInfile: false});
-var server     = common.createFakeServer();
+var assert = require('assert');
+var common = require('../../common');
 
-server.listen(common.fakeServerPort, function (err) {
+var server = common.createFakeServer();
+
+server.listen(0, function (err) {
   assert.ifError(err);
+
+  var connection = common.createConnection({
+    port        : server.port(),
+    localInfile : false
+  });
 
   connection.query('LOAD DATA LOCAL INFILE ? INTO TABLE ??', ['data.csv', 'foo'], function (err, result) {
     assert.ok(err);

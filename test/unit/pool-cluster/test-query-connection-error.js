@@ -4,12 +4,11 @@ var common = require('../../common');
 var cluster = common.createPoolCluster();
 var server  = common.createFakeServer();
 
-var poolConfig = common.getTestConfig({port: common.fakeServerPort});
-cluster.add('SLAVE1', poolConfig);
-// cluster.add('SLAVE2', poolConfig);
-
-server.listen(common.fakeServerPort, function (err) {
+server.listen(0, function (err) {
   assert.ifError(err);
+
+  var poolConfig = common.getTestConfig({port: server.port()});
+  cluster.add('SLAVE1', poolConfig);
 
   var pool = cluster.of('SLAVE*', 'ORDER');
 

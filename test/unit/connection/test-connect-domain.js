@@ -13,7 +13,7 @@ var d1 = domain.create();
 
 var server = common.createFakeServer();
 
-server.listen(common.fakeServerPort, function (err) {
+server.listen(0, function (err) {
   assert.ifError(err);
 
   var connection = null;
@@ -32,7 +32,7 @@ server.listen(common.fakeServerPort, function (err) {
   }, 200);
 
   d0.run(function () {
-    connection = common.createConnection({port: common.fakeServerPort});
+    connection = common.createConnection({port: server.port()});
     assert.equal(connection.domain, d0, 'connection belongs to d0');
 
     d1.run(function () {

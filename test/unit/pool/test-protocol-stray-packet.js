@@ -1,13 +1,14 @@
-var assert     = require('assert');
-var common     = require('../../common');
-var pool       = common.createPool({port: common.fakeServerPort});
-var server     = common.createFakeServer();
+var assert = require('assert');
+var common = require('../../common');
 
 var connCount  = 0;
 var connection = null;
+var server     = common.createFakeServer();
 
-server.listen(common.fakeServerPort, function (err) {
+server.listen(0, function (err) {
   assert.ifError(err);
+
+  var pool = common.createPool({port: server.port()});
 
   pool.on('error', function (err) {
     assert.equal(err.code, 'PROTOCOL_STRAY_PACKET');

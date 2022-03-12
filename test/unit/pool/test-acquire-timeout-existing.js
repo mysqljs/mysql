@@ -1,18 +1,20 @@
 var assert = require('assert');
 var common = require('../../common');
-var pool   = common.createPool({
-  acquireTimeout  : 200,
-  connectionLimit : 1,
-  port            : common.fakeServerPort
-});
-var server  = common.createFakeServer();
+
+var server = common.createFakeServer();
 
 var fail = false;
 var seq  = 0;
 var tid  = 0;
 
-server.listen(common.fakeServerPort, function (err) {
+server.listen(0, function (err) {
   assert.ifError(err);
+
+  var pool   = common.createPool({
+    acquireTimeout  : 200,
+    connectionLimit : 1,
+    port            : server.port()
+  });
 
   pool.getConnection(function (err, conn) {
     assert.ifError(err);

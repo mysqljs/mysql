@@ -1,6 +1,5 @@
-var assert     = require('assert');
-var common     = require('../../common');
-var connection = common.createConnection({port: common.fakeServerPort});
+var assert = require('assert');
+var common = require('../../common');
 
 var server = common.createFakeServer();
 var sqlQuery = Object.create(null, {
@@ -16,8 +15,10 @@ var sqlQuery = Object.create(null, {
   }
 });
 
-server.listen(common.fakeServerPort, function (err) {
+server.listen(0, function (err) {
   assert.ifError(err);
+
+  var connection = common.createConnection({port: server.port()});
 
   connection.query(sqlQuery, [99], function (err, rows) {
     assert.ifError(err);

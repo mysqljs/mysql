@@ -21,7 +21,7 @@ var done = after(2, function () {
   });
 });
 
-server.listen(common.fakeServerPort, function (err) {
+server.listen(0, function (err) {
   assert.ifError(err);
 
   var released = false;
@@ -39,7 +39,7 @@ server.listen(common.fakeServerPort, function (err) {
     });
   }, 200);
 
-  pool = common.createPool({port: common.fakeServerPort, connectionLimit: 1});
+  pool = common.createPool({port: server.port(), connectionLimit: 1});
   assert.equal(pool.domain, null, 'pool is not bound to domain');
 
   d0.run(function () {

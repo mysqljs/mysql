@@ -1,14 +1,15 @@
 var assert = require('assert');
 var common = require('../../common');
-var pool   = common.createPool({
-  user : 'user_1',
-  port : common.fakeServerPort
-});
 
 var server = common.createFakeServer();
 
-server.listen(common.fakeServerPort, function(err) {
+server.listen(0, function (err) {
   assert.ifError(err);
+
+  var pool = common.createPool({
+    user : 'user_1',
+    port : server.port()
+  });
 
   assert.strictEqual(pool.config.connectionConfig.user, 'user_1');
 

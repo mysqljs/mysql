@@ -20,11 +20,11 @@ var done = after(4, function () {
   server.destroy();
 });
 
-server.listen(common.fakeServerPort, function (err) {
+server.listen(0, function (err) {
   assert.ifError(err);
 
   d0.run(function () {
-    var connection = common.createConnection({port: common.fakeServerPort});
+    var connection = common.createConnection({port: server.port()});
 
     d1.run(function () {
       connection.connect(function (err) {

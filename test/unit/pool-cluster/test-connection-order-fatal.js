@@ -1,16 +1,17 @@
-var after   = require('after');
-var assert  = require('assert');
-var common  = require('../../common');
+var after  = require('after');
+var assert = require('assert');
+var common = require('../../common');
+
 var cluster = common.createPoolCluster();
 var server  = common.createFakeServer();
 
-var poolConfig1 = common.getTestConfig({port: common.bogusPort});
-var poolConfig2 = common.getTestConfig({port: common.fakeServerPort});
-cluster.add('SLAVE1', poolConfig1);
-cluster.add('SLAVE2', poolConfig2);
-
-server.listen(common.fakeServerPort, function(err) {
+server.listen(0, function (err) {
   assert.ifError(err);
+
+  var poolConfig1 = common.getTestConfig({port: common.bogusPort});
+  var poolConfig2 = common.getTestConfig({port: server.port()});
+  cluster.add('SLAVE1', poolConfig1);
+  cluster.add('SLAVE2', poolConfig2);
 
   var pool = cluster.of('SLAVE*', 'ORDER');
 

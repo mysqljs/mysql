@@ -1,15 +1,16 @@
-var assert     = require('assert');
-var Buffer     = require('safe-buffer').Buffer;
-var common     = require('../../common');
-var connection = common.createConnection({
-  port     : common.fakeServerPort,
-  password : 'authswitch'
-});
+var assert = require('assert');
+var Buffer = require('safe-buffer').Buffer;
+var common = require('../../common');
 
 var server = common.createFakeServer();
 
-server.listen(common.fakeServerPort, function (err) {
+server.listen(0, function (err) {
   assert.ifError(err);
+
+  var connection = common.createConnection({
+    port     : server.port(),
+    password : 'authswitch'
+  });
 
   connection.connect(function (err) {
     assert.ok(err);
