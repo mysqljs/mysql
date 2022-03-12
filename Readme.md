@@ -268,10 +268,28 @@ it uses one of the predefined SSL profiles included. The following profiles are 
   certificates from https://rds.amazonaws.com/doc/rds-ssl-ca-cert.pem and
   https://s3.amazonaws.com/rds-downloads/rds-combined-ca-bundle.pem
 
-When connecting to other servers, you will need to provide an object of options, in the
-same format as [tls.createSecureContext](https://nodejs.org/api/tls.html#tls_tls_createsecurecontext_options).
-Please note the arguments expect a string of the certificate, not a file name to the
-certificate. Here is a simple example:
+When connecting to other servers, you will need to provide an object with any of the
+following options:
+
+* `ca`: The certificate(s) to trust instead of the ones Node.js is configured to trust. This refers
+  to the value of the certificate(s) and not a filename of the certificate(s). This is passed as the
+  `ca` option for the underlying [`tls.createSecureContext()`] call (or underlying [`crypto.createCredentials()`]
+  if using Node.js below 0.12).
+* `cert`: The client certificate to use in the SSL handshake. This is passed as the `cert` option for
+  the underlying [`tls.createSecureContext()`] call (or underlying [`crypto.createCredentials()`] if
+  using Node.js below 0.12).
+* `ciphers`: The ciphers to use to use in the SSL handshake instead of the default ones for Node.js. This
+  is passed as the `ciphers` option for [`tls.createSecureContext()`] call (or underlying [`crypto.createCredentials()`]
+  if using Node.js below 0.12).
+* `key`: This is passed as the `key` option for [`tls.createSecureContext()`] call (or underlying
+  [`crypto.createCredentials()`] if using Node.js below 0.12).
+* `passphrase`: This is passed as the `passphrase` option for [`tls.createSecureContext()`] call (or
+  underlying [`crypto.createCredentials()`] if using Node.js below 0.12).
+
+[`crypto.createCredentials()`]: https://nodejs.org/docs/latest-v0.10.x/api/crypto.html#crypto_crypto_createcredentials_details
+[`tls.createSecureContext()`]: https://nodejs.org/api/tls.html#tls_tls_createsecurecontext_options
+
+Here is a simple example:
 
 ```js
 var connection = mysql.createConnection({
