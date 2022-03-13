@@ -18,11 +18,12 @@ var Util            = require('util');
 
 module.exports = FakeServer;
 Util.inherits(FakeServer, EventEmitter);
-function FakeServer() {
+function FakeServer(options) {
   EventEmitter.call(this);
 
-  this._server      = null;
   this._connections = [];
+  this._options     = options || {};
+  this._server      = null;
 }
 
 FakeServer.prototype.listen = function(port, cb) {
@@ -35,7 +36,7 @@ FakeServer.prototype.port = function() {
 };
 
 FakeServer.prototype._handleConnection = function(socket) {
-  var connection = new FakeConnection(socket);
+  var connection = new FakeConnection(this, socket);
 
   if (!this.emit('connection', connection)) {
     connection.handshake();
@@ -57,13 +58,14 @@ FakeServer.prototype.destroy = function() {
 };
 
 Util.inherits(FakeConnection, EventEmitter);
-function FakeConnection(socket) {
+function FakeConnection(server, socket) {
   EventEmitter.call(this);
 
   this.database = null;
   this.user     = null;
 
   this._cipher = null;
+  this._server = server;
   this._socket = socket;
   this._stream = socket;
   this._parser = new Parser({onPacket: this._parsePacket.bind(this)});
@@ -439,7 +441,7 @@ if (tls.TLSSocket) {
     this._socket.removeAllListeners('data');
 
     // socket <-> encrypted
-    var secureContext = tls.createSecureContext(common.getSSLConfig());
+    var secureContext = tls.createSecureContext(common.getSSLConfig(this._server._options.ssl));
     var secureSocket  = new tls.TLSSocket(this._socket, {
       secureContext : secureContext,
       isServer      : true

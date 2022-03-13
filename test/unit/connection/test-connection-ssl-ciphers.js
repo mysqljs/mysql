@@ -1,7 +1,11 @@
 var assert = require('assert');
 var common = require('../../common');
 
-var server = common.createFakeServer();
+var server = common.createFakeServer({
+  ssl: {
+    ciphers: 'ECDHE-RSA-AES128-SHA256:AES128-GCM-SHA256:AES128-SHA:HIGH:!MD5:!aNULL:!EDH'
+  }
+});
 
 server.listen(0, function (err) {
   assert.ifError(err);
