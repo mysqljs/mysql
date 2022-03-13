@@ -217,8 +217,7 @@ When establishing a connection, you can set the following options:
 * `timezone`: The timezone configured on the MySQL server. This is used to type cast server date/time values to JavaScript `Date` object and vice versa. This can be `'local'`, `'Z'`, or an offset in the form `+HH:MM` or `-HH:MM`. (Default: `'local'`)
 * `connectTimeout`: The milliseconds before a timeout occurs during the initial connection
   to the MySQL server. (Default: `10000`)
-* `stringifyObjects`: Stringify objects instead of converting to values. See
-issue [#501](https://github.com/mysqljs/mysql/issues/501). (Default: `false`)
+* `stringifyObjects`: Stringify objects instead of converting to values. (Default: `false`)
 * `insecureAuth`: Allow connecting to MySQL instances that ask for the old
   (insecure) authentication method. (Default: `false`)
 * `typeCast`: Determines if column values should be converted to native
