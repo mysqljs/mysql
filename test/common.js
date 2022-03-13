@@ -34,8 +34,7 @@ var Mysql      = require(path.resolve(common.lib, '../index'));
 var FakeServer = require('./FakeServer');
 
 common.createConnection = function(config) {
-  config = mergeTestConfig(config);
-  return Mysql.createConnection(config);
+  return Mysql.createConnection(common.getTestConfig(config));
 };
 
 common.createQuery = Mysql.createQuery;
@@ -54,14 +53,12 @@ common.createTestDatabase = function createTestDatabase(connection, callback) {
 };
 
 common.createPool = function(config) {
-  config = mergeTestConfig(config);
-  config.connectionConfig = mergeTestConfig(config.connectionConfig);
-  return Mysql.createPool(config);
+  return Mysql.createPool(common.extend({}, config, {
+    connectionConfig: common.getTestConfig(config.connectionConfig)
+  }));
 };
 
 common.createPoolCluster = function(config) {
-  config = mergeTestConfig(config);
-  config.createConnection = common.createConnection;
   return Mysql.createPoolCluster(config);
 };
 
@@ -77,9 +74,12 @@ common.detectNewline = function detectNewline(path) {
   return crlf > lf ? '\r\n' : '\n';
 };
 
-common.extend = function extend(dest, src) {
-  for (var key in src) {
-    dest[key] = src[key];
+common.extend = function extend(dest) {
+  for (var i = 1; i < arguments.length; i++) {
+    var src = arguments[i];
+    for (var key in src) {
+      dest[key] = src[key];
+    }
   }
 
   return dest;
@@ -133,7 +133,13 @@ common.useTestDb = function(connection) {
 };
 
 common.getTestConfig = function(config) {
-  return mergeTestConfig(config);
+  return common.extend({
+    host       : process.env.MYSQL_HOST,
+    port       : process.env.MYSQL_PORT,
+    user       : process.env.MYSQL_USER,
+    password   : process.env.MYSQL_PASSWORD,
+    socketPath : process.env.MYSQL_SOCKET
+  }, config);
 };
 
 common.getSSLConfig = function() {
@@ -144,15 +150,3 @@ common.getSSLConfig = function() {
     key     : fs.readFileSync(path.join(common.fixtures, 'server.key'), 'ascii')
   };
 };
-
-function mergeTestConfig(config) {
-  config = common.extend({
-    host       : process.env.MYSQL_HOST,
-    port       : process.env.MYSQL_PORT,
-    user       : process.env.MYSQL_USER,
-    password   : process.env.MYSQL_PASSWORD,
-    socketPath : process.env.MYSQL_SOCKET
-  }, config);
-
-  return config;
-}
