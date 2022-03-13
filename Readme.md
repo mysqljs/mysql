@@ -759,6 +759,18 @@ connection.query(
 [NO_BACKSLASH_ESCAPES](https://dev.mysql.com/doc/refman/5.7/en/sql-mode.html#sqlmode_no_backslash_escapes)
 SQL mode is disabled (which is the default state for MySQL servers).
 
+**Caution** This library performs client-side escaping, as this is a library
+to generate SQL strings on the client side. The syntax for functions like
+`mysql.format` may look similar to a prepared statement, but it is not
+and the escaping rules from this module are used to generate a resulting SQL
+string. The purpose of escaping input is to avoid SQL Injection attacks.
+In order to support enhanced support like `SET` and `IN` formatting, this
+module will escape based on the shape of the passed in JavaScript value,
+and the resulting escaped string may be more than a single value. When
+structured user input is provided as the value to escape, care should be taken
+to validate the shape of the input to validate the output will be what is
+expected.
+
 In order to avoid SQL Injection attacks, you should always escape any user
 provided data before using it inside a SQL query. You can do so using the
 `mysql.escape()`, `connection.escape()` or `pool.escape()` methods:
