@@ -284,6 +284,8 @@ following options:
   [`crypto.createCredentials()`] if using Node.js below 0.12).
 * `passphrase`: This is passed as the `passphrase` option for [`tls.createSecureContext()`] call (or
   underlying [`crypto.createCredentials()`] if using Node.js below 0.12).
+* `rejectUnauthorized`: The server certificate is verified against the list of supplied CAs and the
+  hostname, and if no match is found, the SSL connection will fail. (Default: `true`)
 
 [`crypto.createCredentials()`]: https://nodejs.org/docs/latest-v0.10.x/api/crypto.html#crypto_crypto_createcredentials_details
 [`tls.createSecureContext()`]: https://nodejs.org/api/tls.html#tls_tls_createsecurecontext_options
