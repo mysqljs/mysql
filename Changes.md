@@ -12,7 +12,8 @@ you spot any mistakes.
 * Support Node.js 17.x
 * Update `bignumber.js` to 9.0.2
 * Update `safe-buffer` to 5.2.1
-* Update `sqlstring` to 2.3.2
+* Update `sqlstring` to 2.3.3
+  - Fix escaping `Date` objects from foreign isolates
   - perf: remove outdated array pattern
 
 ## v2.18.1 (2020-01-23)
