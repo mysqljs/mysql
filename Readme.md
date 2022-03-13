@@ -360,8 +360,7 @@ The following flags are available:
 - `ODBC` Special handling of ODBC behaviour. This flag has no effect on this Node.js
   implementation. (Default on)
 - `PLUGIN_AUTH` - Uses the plugin authentication mechanism when connecting to the
-  MySQL server. This feature is not currently supported by the Node.js implementation
-  so cannot be turned on. (Default off)
+  MySQL server.  Support auth plugin method "mysql_native_password" (Default on)
 - `PROTOCOL_41` - Uses the 4.1 protocol. (Default on)
 - `PS_MULTI_RESULTS` - Can handle multiple resultsets for execute. (Default on)
 - `REMEMBER_OPTIONS` - This is specific to the C client, and has no effect on this
