@@ -1284,12 +1284,12 @@ object. Additionally they typically come with two extra properties:
 [MySQL server error]: https://dev.mysql.com/doc/refman/5.5/en/server-error-reference.html
 
 Fatal errors are propagated to *all* pending callbacks. In the example below, a
-fatal error is triggered by trying to connect to an invalid port. Therefore the
+fatal error is triggered by trying to connect to a blocked port. Therefore the
 error object is propagated to both pending callbacks:
 
 ```js
 var connection = require('mysql').createConnection({
-  port: 84943, // WRONG PORT
+  port: 1 // example blocked port
 });
 
 connection.connect(function(err) {
