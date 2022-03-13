@@ -1352,7 +1352,8 @@ one of your callback functions throws an error which you're catching using
 ## Type casting
 
 For your convenience, this driver will cast mysql types into native JavaScript
-types by default. The following mappings exist:
+types by default. The default behavior can be changed through various
+[Connection options](#connection-options). The following mappings exist:
 
 ### Number
 
@@ -1363,6 +1364,7 @@ types by default. The following mappings exist:
 * YEAR
 * FLOAT
 * DOUBLE
+* BIGINT
 
 ### Date
 
@@ -1394,7 +1396,6 @@ than a string.
 * ENUM
 * SET
 * DECIMAL (may exceed float precision)
-* BIGINT (may exceed float precision)
 * TIME (could be mapped to Date, but what date would be set?)
 * GEOMETRY (never used those, get in touch if you do)
 
