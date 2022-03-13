@@ -41,6 +41,7 @@ jobs:
         - MariaDB 10.1
         - MariaDB 10.2
         - MariaDB 10.3
+        - MariaDB 10.4
 
         include:
         - name: Node.js 0.6
@@ -192,6 +193,11 @@ jobs:
           node-version: "14.18"
           docker-mysql-type: mariadb
           docker-mysql-version: "10.3"
+
+        - name: MariaDB 10.4
+          node-version: "14.18"
+          docker-mysql-type: mariadb
+          docker-mysql-version: "10.4"
 
     steps:
     - uses: actions/checkout@v2
