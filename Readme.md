@@ -208,6 +208,8 @@ When establishing a connection, you can set the following options:
 * `localAddress`: The source IP address to use for TCP connection. (Optional)
 * `socketPath`: The path to a unix domain socket to connect to. When used `host`
   and `port` are ignored.
+* `stream`: A function that returns a Stream object that will be used
+  instead of the standard Net socket.
 * `user`: The MySQL user to authenticate as.
 * `password`: The password of that MySQL user.
 * `database`: Name of the database to use for this connection (Optional).
