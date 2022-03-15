@@ -338,8 +338,8 @@ FakeConnection.prototype._parsePacket = function _parsePacket(packetHeader) {
       }
       break;
     default:
-      if (!this.emit(packet.constructor.name, packet)) {
-        throw new Error('Unexpected packet: ' + Packet.name);
+      if (!this.emit(packet._id, packet)) {
+        throw new Error('Unexpected packet: ' + packet._id);
       }
   }
 };
