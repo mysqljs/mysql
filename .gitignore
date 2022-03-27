@@ -2,4 +2,6 @@
 coverage/
 node_modules/
 npm-debug.log
+.vscode
+.idea
 package-lock.json
