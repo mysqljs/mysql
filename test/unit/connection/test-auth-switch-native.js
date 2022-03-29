@@ -39,7 +39,9 @@ server.on('connection', function(incomingConnection) {
       });
     });
 
-    incomingConnection.handshake();
+    incomingConnection.handshake({
+      serverCapabilities1: 512 | 1 << 11 // PROTOCOL_41 and SSL
+    });
   });
 });
 
