@@ -544,24 +544,47 @@ trying to gracefully shutdown a server. To end all the connections in the
 pool, use the `end` method on the pool:
 
 ```js
-pool.end(function (err) {
+pool.end({
+  gracefulExit: true
+}, function (err) {
   // all connections in the pool have ended
 });
 ```
 
-The `end` method takes an _optional_ callback that you can use to know when
-all the connections are ended.
+The `end` method takes two _optional_ arguments:
 
-**Once `pool.end` is called, `pool.getConnection` and other operations
-can no longer be performed.** Wait until all connections in the pool are
-released before calling `pool.end`. If you use the shortcut method
-`pool.query`, in place of `pool.getConnection` → `connection.query` →
-`connection.release`, wait until it completes.
+* `options`:
 
-`pool.end` calls `connection.end` on every active connection in the pool.
-This queues a `QUIT` packet on the connection and sets a flag to prevent
-`pool.getConnection` from creating new connections. All commands / queries
-already in progress will complete, but new commands won't execute.
+  * `gracefulExit`: Determines whether to end gracefully. If `true`, every
+`pool.getConnection` or `pool.query` called before `pool.end` will complete.
+If `false`, only commands / queries already in progress will complete,
+others will fail. (Default: `false`)
+
+* `callback`: Will be called when all the connections are ended.
+
+**Once `pool.end()` has been called, `pool.getConnection` and other operations
+can no longer be performed**
+
+### Under the hood
+
+If `options.gracefulExit` is set to `true`, after calling `pool.end` the poll will
+enter into the `pendingClose` state, all former or queued queries will still
+complete. But the pool will no longer accept new queries.
+
+This works by NOT queueing the `QUIT` packet on all the connections until there
+is no connection in the aquiring state and no queued queries. All established
+connections will still queue queries which were added before calling `pool.end`.
+
+If `options.gracefulExit` is set to `false`, `pool.end` immediately calls 
+`connection.end` on every active connection in the pool. This queues a `QUIT` 
+packet on the connection and sets a flag to prevent `pool.getConnection` from 
+creating new connections. All commands / queries already in progress will complete, 
+but new commands won't execute.
+
+Wait until all connections in the pool are released before calling `pool.end`. 
+If you use the shortcut method `pool.query`, in place of `pool.getConnection` → 
+`connection.query` → `connection.release`, wait until it completes.
+
 
 ## PoolCluster
 
