@@ -9,7 +9,7 @@ common.getTestConnection(function (err, connection) {
   common.useTestDb(connection);
 
   connection.query([
-    'CREATE TEMPORARY TABLE ?? (',
+    'CREATE TABLE ?? (',
     '`id` int(11) unsigned NOT NULL AUTO_INCREMENT,',
     '`title` varchar(255),',
     'PRIMARY KEY (`id`)',
@@ -31,6 +31,15 @@ common.getTestConnection(function (err, connection) {
     assert.equal(rows[0].nested_test_id, 1);
     assert.equal(rows[0].nested_test_title, 'test');
   });
+
+  connection.query({nestTables: true, sql: 'SELECT ??.id, (SELECT title FROM ?? WHERE title = \'test\') as title FROM ??', values: [table, table, table]}, function (err, rows) {
+    assert.ifError(err);
+    assert.equal(rows.length, 1);
+    assert.equal(rows[0].nested_test.id, 1);
+    assert.equal(rows[0].title, 'test');
+  });
+
+  connection.query('DROP TABLE ??', [table]);
 
   connection.end(assert.ifError);
 });
