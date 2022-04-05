@@ -459,8 +459,7 @@ time one is needed.
 
 Connections are lazily created by the pool. If you configure the pool to allow
 up to 100 connections, but only ever use 5 simultaneously, only 5 connections
-will be made. Connections are also cycled round-robin style, with connections
-being taken from the top of the pool and returning to the bottom.
+will be made.
 
 When a previous connection is retrieved from the pool, a ping packet is sent
 to the server to check if the connection is still good.
@@ -485,6 +484,9 @@ constructor. In addition to those options pools accept a few extras:
 * `queueLimit`: The maximum number of connection requests the pool will queue
   before returning an error from `getConnection`. If set to `0`, there is no
   limit to the number of queued connection requests. (Default: `0`)
+* `roundRobinConnectionCycling`: Whether the pool should cycle through connections
+  or not. If set to false, connections will be retrieved and returned to the pool
+  on a last in first out basis. (Default: `true`)
 
 ## Pool events
 
