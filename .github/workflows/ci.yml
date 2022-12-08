@@ -6,7 +6,7 @@ on:
 
 jobs:
   test:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
     strategy:
       fail-fast: false
       matrix:
@@ -215,7 +215,10 @@ jobs:
       shell: bash -eo pipefail -l {0}
       run: |
         if [[ "${{ matrix.node-version }}" == 0.6* ]]; then
-          sudo apt-get install g++-4.8 gcc-4.8 libssl1.0-dev
+          sudo sh -c 'echo "deb http://us.archive.ubuntu.com/ubuntu/ bionic universe" >> /etc/apt/sources.list'
+          sudo sh -c 'echo "deb http://security.ubuntu.com/ubuntu bionic-security main" >> /etc/apt/sources.list'
+          sudo apt-get update
+          sudo apt-get install g++-4.8 gcc-4.8 libssl1.0-dev python2 python-is-python2
           export CC=/usr/bin/gcc-4.8
           export CXX=/usr/bin/g++-4.8
         fi
