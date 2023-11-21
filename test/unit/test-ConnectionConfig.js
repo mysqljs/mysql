@@ -3,7 +3,6 @@ var Crypto           = require('crypto');
 var test             = require('utest');
 var assert           = require('assert');
 var ConnectionConfig = common.ConnectionConfig;
-var usesWhatwgUrl    = (typeof URL == 'function' && typeof URL.prototype == 'object');
 
 test('ConnectionConfig#Constructor', {
   'takes user,pw,host,port,db from url string': function() {
@@ -24,7 +23,7 @@ test('ConnectionConfig#Constructor', {
     assert.equal(config.host, 'myhost');
     assert.equal(config.port, 3333);
     assert.equal(config.user, 'myuser');
-    assert.equal(config.password, usesWhatwgUrl ? 'my%3Apass' : 'my:pass');
+    assert.equal(config.password, 'my:pass');
     assert.equal(config.database, 'mydb');
   },
 
