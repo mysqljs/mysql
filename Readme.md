@@ -1,4 +1,4 @@
-# mysql
+# no sql
 
 [![NPM Version][npm-version-image]][npm-url]
 [![NPM Downloads][npm-downloads-image]][npm-url]
