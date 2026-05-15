@@ -96,6 +96,9 @@ $ npm install mysqljs/mysql
 This is a node.js driver for mysql. It is written in JavaScript, does not
 require compiling, and is 100% MIT licensed.
 
+The driver implements the MySQL wire protocol and is tested against MySQL and
+MariaDB in CI (see `.github/workflows/ci.yml`).
+
 Here is an example on how to use it:
 
 ```js
@@ -1543,7 +1546,7 @@ For a good pull request, we ask you provide the following:
 
 The test suite is split into two parts: unit tests and integration tests.
 The unit tests run on any machine while the integration tests require a
-MySQL server instance to be setup.
+MySQL-protocol-compatible database server (MySQL or MariaDB) to be setup.
 
 ### Running unit tests
 
@@ -1558,7 +1561,10 @@ Set the environment variables `MYSQL_DATABASE`, `MYSQL_HOST`, `MYSQL_PORT`,
 of `MYSQL_HOST` and `MYSQL_PORT` to connect over a UNIX socket. Then run
 `npm test`.
 
-For example, if you have an installation of mysql running on localhost:3306
+The project's CI workflow runs integration tests against multiple MySQL and
+MariaDB versions; see `.github/workflows/ci.yml` for the full matrix.
+
+For example, if you have an installation of MySQL or MariaDB running on localhost:3306
 and no password set for the `root` user, run:
 
 ```sh
