@@ -169,6 +169,17 @@ test('ConnectionConfig#Constructor.ssl', {
     assert.equal(config.ssl, false);
   },
 
+  'does not mutate ssl options object': function() {
+    var ssl = {};
+    var config = new ConnectionConfig({
+      ssl: ssl
+    });
+
+    assert.notEqual(config.ssl, ssl);
+    assert.deepEqual(ssl, {});
+    assert.equal(config.ssl.rejectUnauthorized, true);
+  },
+
   'string "Amazon RDS" loads valid profile': function() {
     var config = new ConnectionConfig({
       ssl: 'Amazon RDS'
@@ -187,6 +198,21 @@ test('ConnectionConfig#Constructor.ssl', {
         assert.equal(key.type, 'public');
       }
     });
+  },
+
+  'string "Amazon RDS" does not mutate profile object': function() {
+    var SSLProfiles = require(common.lib + '/protocol/constants/ssl_profiles');
+    var profile = SSLProfiles['Amazon RDS'];
+
+    delete profile.rejectUnauthorized;
+
+    var config = new ConnectionConfig({
+      ssl: 'Amazon RDS'
+    });
+
+    assert.notEqual(config.ssl, profile);
+    assert.equal(profile.rejectUnauthorized, undefined);
+    assert.equal(config.ssl.rejectUnauthorized, true);
   },
 
   'throws on unknown profile name': function() {
