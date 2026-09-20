@@ -6,6 +6,7 @@ you spot any mistakes.
 
 ## HEAD
 
+* Forward socket write failures (e.g. `EPIPE`) during query send to the query callback #2021
 * Accept the `maxVersion` and `minVersion` properties in connection `ssl` option #2301 #2304
 * Support Node.js 14.x
 * Support Node.js 15.x
